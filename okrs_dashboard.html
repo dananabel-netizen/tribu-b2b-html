@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!-- v3 -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tablero Producto B2B - HTML · H1 FY27</title>
+<style>
+:root{--bg:#f4f5f7;--surface:#fff;--surface2:#f8f9fa;--border:#e8e0f0;--border2:#d5c8e8;--purple:#6D28D9;--text:#1f2328;--muted:#57606a;--radius:8px;--shadow:0 1px 4px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI',sans-serif;font-size:14px;min-height:100vh}
+header{background:linear-gradient(90deg,#5B21B6,#7C3AED);padding:0 28px;height:72px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(91,33,182,.4)}
+.logo-main{color:#fff;font-size:15px;font-weight:700}.logo-main span{color:#C4B5FD}
+.logo-sub{color:rgba(196,181,253,.65);font-size:10px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+.upd{color:rgba(255,255,255,.5);font-size:11px}
+.filter-bar{display:flex;gap:24px;padding:14px 28px;background:#fff;border-bottom:1px solid var(--border);align-items:center;flex-wrap:wrap;position:sticky;top:72px;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.filter-group{display:flex;align-items:center;gap:8px}
+.filter-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.pill{padding:5px 16px;border-radius:20px;border:1.5px solid var(--border2);background:#fff;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;line-height:1.4}
+.pill:hover{border-color:var(--purple);color:var(--purple)}
+.pill.active{background:var(--purple);border-color:var(--purple);color:#fff}
+main{padding:28px;max-width:1200px;margin:0 auto}
+.sec-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--border);margin-top:28px}
+.sec-title:first-child{margin-top:0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:auto;margin-bottom:8px}
+.card-hdr{background:#5457D9;color:#fff;padding:14px 20px;font-size:15px;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#7C7FFF;color:#fff;padding:10px 8px;text-align:center;font-weight:700;font-size:11px;white-space:nowrap;border-right:1px solid rgba(255,255,255,.15)}
+th.th-kr{text-align:left;padding-left:16px;width:340px}
+th.th-q{background:#5457D9;border-left:2px solid rgba(255,255,255,.25)}
+td{padding:11px 8px;text-align:center;border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
+td.td-kr{text-align:left;padding-left:16px;font-weight:500}
+td.td-q{border-left:2px solid var(--border2);font-weight:700}
+tbody tr:hover{background:var(--surface2)}
+tbody tr:last-child td{border-bottom:none}
+.chip{display:inline-block;padding:4px 10px;border-radius:5px;font-size:12px;font-weight:700;min-width:44px;text-align:center}
+.ok{background:#d4f4dd;color:#16a34a}.warn{background:#fff7cd;color:#b45309}.bad{background:#ffd8d3;color:#cf222e}.na{background:#f0f0f0;color:#999;font-size:11px;font-weight:400}
+footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="logo-main">Tablero Producto B2B <span>HTML</span></div>
+    <div class="logo-sub">H1 FY27 · Abril — Septiembre 2026</div>
+  </div>
+  <span class="upd">Actualizado: 2026-07-27 15:12</span>
+</header>
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label">Quarter</span>
+    <button class="pill qpill active" onclick="setQ('all',this)">Todos</button>
+    <button class="pill qpill" onclick="setQ('q1',this)">Q1</button>
+    <button class="pill qpill" onclick="setQ('q2',this)">Q2</button>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Squad</span>
+    <button class="pill sqpill active" onclick="setSq('all',this)">Todos</button>
+    <button class="pill sqpill" onclick="setSq('ce',this)">C&amp;E</button>
+    <button class="pill sqpill" onclick="setSq('es',this)">E&amp;S</button>
+  </div>
+  <div class="filter-group" style="margin-left:auto">
+    <span class="filter-label">Vista</span>
+    <button class="pill tabpill active" onclick="setTab('mensual',this)">Mensual</button>
+    <button class="pill tabpill" onclick="setTab('semanal',this)">Semanal</button>
+  </div>
+</div>
+<main id="root"></main>
+<footer>Datos del Datalake de Despegar (Trino)</footer>
+<script>
+var DATA = {"kr21": [{"mes_deadline": "2026-04-01", "total_reservas": 12739, "reservas_timeout_client": 2933, "pct_timeout_client": 23.0}, {"mes_deadline": "2026-05-01", "total_reservas": 14553, "reservas_timeout_client": 3662, "pct_timeout_client": 25.2}, {"mes_deadline": "2026-06-01", "total_reservas": 14219, "reservas_timeout_client": 3464, "pct_timeout_client": 24.4}, {"mes_deadline": "2026-07-01", "total_reservas": 14922, "reservas_timeout_client": 3083, "pct_timeout_client": 20.7}, {"mes_deadline": "2026-08-01", "total_reservas": 11259, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-09-01", "total_reservas": 9898, "reservas_timeout_client": 2, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-10-01", "total_reservas": 7926, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-11-01", "total_reservas": 6280, "reservas_timeout_client": 1, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-12-01", "total_reservas": 4143, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-01-01", "total_reservas": 1838, "reservas_timeout_client": 1, "pct_timeout_client": 0.1}, {"mes_deadline": "2027-02-01", "total_reservas": 762, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-03-01", "total_reservas": 755, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-04-01", "total_reservas": 637, "reservas_timeout_client": 1, "pct_timeout_client": 0.2}, {"mes_deadline": "2027-05-01", "total_reservas": 467, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-06-01", "total_reservas": 263, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-07-01", "total_reservas": 224, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-08-01", "total_reservas": 172, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-09-01", "total_reservas": 190, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-10-01", "total_reservas": 87, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-11-01", "total_reservas": 67, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-12-01", "total_reservas": 3, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2028-01-01", "total_reservas": 1, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}], "kr22": [{"cant_staff": 8612, "cant_no_staff": 15344, "cant_total": 23956, "cant_agencias_unicas": 4250, "creation_yearmonth": "2026-04"}, {"cant_staff": 9375, "cant_no_staff": 17800, "cant_total": 27175, "cant_agencias_unicas": 4667, "creation_yearmonth": "2026-05"}, {"cant_staff": 9945, "cant_no_staff": 19325, "cant_total": 29270, "cant_agencias_unicas": 4837, "creation_yearmonth": "2026-06"}, {"cant_staff": 9207, "cant_no_staff": 19752, "cant_total": 28959, "cant_agencias_unicas": 4953, "creation_yearmonth": "2026-07"}], "kr31": [{"periodo": "2026-04", "net_rev_real": 4504274.14, "net_rev_target": 3622885.32}, {"periodo": "2026-05", "net_rev_real": 4714901.55, "net_rev_target": 4063502.87}, {"periodo": "2026-06", "net_rev_real": 4631705.47, "net_rev_target": 3888578.27}, {"periodo": "2026-07", "net_rev_real": 4279670.659999999, "net_rev_target": 3830895.45}, {"periodo": "2026-08", "net_rev_real": null, "net_rev_target": 3717242.61}, {"periodo": "2026-09", "net_rev_real": null, "net_rev_target": 3908286.36}], "kr32": [{"mes": "2026-04-01", "agencias_cotizadoras": 6588, "agencias_cotizaron_y_vendieron": 4684, "pct_activacion_comercial": 71.1}, {"mes": "2026-05-01", "agencias_cotizadoras": 6788, "agencias_cotizaron_y_vendieron": 4912, "pct_activacion_comercial": 72.4}, {"mes": "2026-06-01", "agencias_cotizadoras": 6865, "agencias_cotizaron_y_vendieron": 4920, "pct_activacion_comercial": 71.7}, {"mes": "2026-07-01", "agencias_cotizadoras": 6843, "agencias_cotizaron_y_vendieron": 4728, "pct_activacion_comercial": 69.1}], "kr33": [{"mes_previo": 202603, "mes_evaluacion": 202604, "agencias_1_3_previo": 4677, "agencias_aumentaron": 1581, "pct_aumento": 33.8}, {"mes_previo": 202604, "mes_evaluacion": 202605, "agencias_1_3_previo": 4762, "agencias_aumentaron": 1676, "pct_aumento": 35.2}, {"mes_previo": 202605, "mes_evaluacion": 202606, "agencias_1_3_previo": 4824, "agencias_aumentaron": 1614, "pct_aumento": 33.5}, {"mes_previo": 202606, "mes_evaluacion": 202607, "agencias_1_3_previo": 5093, "agencias_aumentaron": 1647, "pct_aumento": 32.3}, {"mes_previo": 202607, "mes_evaluacion": 202608, "agencias_1_3_previo": 5120, "agencias_aumentaron": 0, "pct_aumento": 0.0}]};
+
+var MONTHS=["2026-04","2026-05","2026-06","2026-07","2026-08","2026-09"];
+var LABELS=["Abr","May","Jun","Jul","Ago","Sep"];
+
+var KRS=[
+  {id:"kr21",squad:"es",label:"KR 2.1 - Disminuir cancelación de bookings por falta pago",targets:[22,20,18.25,16.85,15.75,15],inverted:true,
+   fmtA:function(v){return v!==null?v.toFixed(2)+"%":null;},fmtT:function(v){return v+"%";},
+   getActual:function(i){
+     var m=MONTHS[i],rows=DATA.kr21.filter(function(r){return String(r.mes_deadline||"").substring(0,7)===m;});
+     if(!rows.length)return null;
+     var total=rows.reduce(function(s,r){return s+(r.total_reservas||0);},0);
+     var timeout=rows.reduce(function(s,r){return s+(r.reservas_timeout_client||0);},0);
+     return total>0?timeout/total*100:null;
+   }},
+  {id:"kr22",squad:"es",label:"KR 2.2 - Aumentar la cantidad de agencias que utilizan herramientas de gestión/postventa",targets:[4500,4500,5025,5445,5775,6000],inverted:false,
+   fmtA:function(v){return v!==null?Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return v.toLocaleString("es-AR");},
+   getActual:function(i){
+     var m=MONTHS[i],row=DATA.kr22.find(function(r){return String(r.creation_yearmonth||"").substring(0,7)===m;});
+     return row?row.cant_agencias_unicas:null;
+   }},
+  {id:"kr31",squad:"ce",label:"KR 3.1 - Net Revenue B2B Minorista",targets:null,inverted:false,
+   fmtA:function(v){return v!==null?"$"+Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return v!==null?"$"+Math.round(v).toLocaleString("es-AR"):"N/A";},
+   getActual:function(i){
+     var m=MONTHS[i],row=DATA.kr31.find(function(r){return String(r.periodo||"").substring(0,7)===m;});
+     return row?row.net_rev_real:null;
+   },
+   getTarget:function(i){
+     var m=MONTHS[i],row=DATA.kr31.find(function(r){return String(r.periodo||"").substring(0,7)===m;});
+     return row?row.net_rev_target:null;
+   }},
+  {id:"kr32",squad:"ce",label:"KR 3.2 - Aumentar agencias compradoras que utilizan cotizaciones",targets:[70,70,73,74,75,77],inverted:false,
+   fmtA:function(v){return v!==null?v.toFixed(1)+"%":null;},fmtT:function(v){return v+"%";},
+   getActual:function(i){
+     var m=MONTHS[i],row=DATA.kr32.find(function(r){return String(r.mes||"").substring(0,7)===m;});
+     return row?row.pct_activacion_comercial:null;
+   }},
+  {id:"kr33",squad:"ce",label:"KR 3.3 - Frecuencia de compra",targets:[35,35,35,35,35,35],inverted:false,
+   fmtA:function(v){return v!==null?v.toFixed(1)+"%":null;},fmtT:function(v){return v+"%";},
+   getActual:function(i){
+     var m=MONTHS[i];
+     var ym=parseInt(m.slice(0,4)+m.slice(5,7),10);
+     var row=DATA.kr33.find(function(r){return r.mes_evaluacion===ym;});
+     return row?row.pct_aumento:null;
+   }}
+];
+
+var activeQ='all',activeSq='all',activeTab='mensual';
+
+function setQ(q,btn){
+  activeQ=q;
+  document.querySelectorAll('.qpill').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  render();
+}
+function setSq(sq,btn){
+  activeSq=sq;
+  document.querySelectorAll('.sqpill').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  render();
+}
+function setTab(tab,btn){
+  activeTab=tab;
+  document.querySelectorAll('.tabpill').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  render();
+}
+function visibleIdxs(){return activeQ==='q1'?[0,1,2]:activeQ==='q2'?[3,4,5]:[0,1,2,3,4,5];}
+function filteredKRS(){return activeSq==='ce'?KRS.filter(function(k){return k.squad==='ce';}):activeSq==='es'?KRS.filter(function(k){return k.squad==='es';}):KRS;}
+function compliance(a,t,inv){if(a===null||t===null||t===0)return null;return Math.min(inv?t/a*100:a/t*100,130);}
+function chip(pct){if(pct===null)return'<span class="chip na">N/D</span>';var cls=pct>=100?"ok":pct>=80?"warn":"bad";return'<span class="chip '+cls+'">'+Math.round(pct)+'%</span>';}
+function avg(arr){var v=arr.filter(function(x){return x!==null;});return v.length?v.reduce(function(a,b){return a+b;},0)/v.length:null;}
+function nowYm(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()<9?"0":"")+(d.getMonth()+1);}
+
+function renderMensual(){
+  var idxs=visibleIdxs();
+  var krs=filteredKRS();
+  var closed=nowYm();
+  var showQ1=activeQ!=='q2',showQ2=activeQ!=='q1';
+  var html='';
+
+  html+='<p class="sec-title">OKR Status FY27</p>';
+  html+='<div class="card"><div class="card-hdr">Tablero Producto B2B - HTML · H1 FY27</div>';
+  html+='<table><thead><tr><th class="th-kr">KR</th>';
+  idxs.forEach(function(i){html+='<th>'+LABELS[i]+'</th>';});
+  if(showQ1)html+='<th class="th-q">Q1</th>';
+  if(showQ2)html+='<th class="th-q">Q2</th>';
+  html+='</tr></thead><tbody>';
+  krs.forEach(function(kr){
+    var comps=MONTHS.map(function(m,i){
+      var a=kr.getActual(i);
+      var t=kr.targets!==null?kr.targets[i]:(kr.getTarget?kr.getTarget(i):null);
+      return m<=closed?compliance(a,t,kr.inverted):null;
+    });
+    var q1=avg([comps[0],comps[1],comps[2]]),q2=avg([comps[3],comps[4],comps[5]]);
+    html+='<tr><td class="td-kr">'+kr.label+'</td>';
+    idxs.forEach(function(i){html+='<td>'+(MONTHS[i]<=closed?chip(comps[i]):'-')+'</td>';});
+    if(showQ1)html+='<td class="td-q">'+chip(q1)+'</td>';
+    if(showQ2)html+='<td class="td-q">'+chip(q2)+'</td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+
+  html+='<p class="sec-title">Targets</p><div class="card"><table><thead><tr><th class="th-kr">KR</th>';
+  idxs.forEach(function(i){html+='<th>'+LABELS[i]+'</th>';});
+  html+='</tr></thead><tbody>';
+  krs.forEach(function(kr){
+    html+='<tr><td class="td-kr">'+kr.label+'</td>';
+    idxs.forEach(function(i){
+      var t=kr.targets!==null?kr.targets[i]:(kr.getTarget?kr.getTarget(i):null);
+      html+='<td>'+(t!==null?kr.fmtT(t):'<span class="chip na">N/A</span>')+'</td>';
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+
+  html+='<p class="sec-title">Actuals</p><div class="card"><table><thead><tr><th class="th-kr">KR</th>';
+  idxs.forEach(function(i){html+='<th>'+LABELS[i]+'</th>';});
+  html+='</tr></thead><tbody>';
+  krs.forEach(function(kr){
+    html+='<tr><td class="td-kr">'+kr.label+'</td>';
+    idxs.forEach(function(i){
+      var a=kr.getActual(i);
+      html+='<td>'+(MONTHS[i]<=closed?(a!==null?kr.fmtA(a):'<span class="chip na">N/D</span>'):'-')+'</td>';
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+
+  return html;
+}
+
+function renderSemanal(){
+  var krs=filteredKRS();
+  var closed=nowYm();
+  var latestM=MONTHS.filter(function(m){return m<=closed;}).pop()||MONTHS[0];
+  var latestI=MONTHS.indexOf(latestM);
+  var html='';
+
+  html+='<p class="sec-title">Estado Actual — '+LABELS[latestI]+' 2026</p>';
+  html+='<div class="card" style="margin-bottom:24px">';
+  html+='<table><thead><tr><th class="th-kr" style="width:380px">KR</th><th>Actual</th><th>Target</th><th>Cumplimiento</th><th>Delta vs Target</th></tr></thead><tbody>';
+  krs.forEach(function(kr){
+    var a=kr.getActual(latestI);
+    var t=kr.targets!==null?kr.targets[latestI]:(kr.getTarget?kr.getTarget(latestI):null);
+    var comp=compliance(a,t,kr.inverted);
+    var delta='—',deltaColor='var(--muted)';
+    if(a!==null&&t!==null){
+      var diff=a-t;
+      var fmtSample=kr.fmtA(1)||'';
+      if(fmtSample.indexOf('%')>=0){
+        delta=(diff>=0?'+':'')+diff.toFixed(2)+'pp';
+      } else if(fmtSample.indexOf('$')>=0){
+        delta=(diff>=0?'+':'-')+'$'+Math.round(Math.abs(diff)).toLocaleString('es-AR');
+      } else {
+        delta=(diff>=0?'+':'')+Math.round(diff).toLocaleString('es-AR');
+      }
+      var isGood=kr.inverted?(a<=t):(a>=t);
+      deltaColor=isGood?'#16a34a':'#cf222e';
+    }
+    html+='<tr>';
+    html+='<td class="td-kr">'+kr.label+'</td>';
+    html+='<td style="font-weight:700">'+(a!==null?kr.fmtA(a):'<span class="chip na">N/D</span>')+'</td>';
+    html+='<td>'+(t!==null?kr.fmtT(t):'<span class="chip na">N/A</span>')+'</td>';
+    html+='<td>'+chip(comp)+'</td>';
+    html+='<td style="font-weight:700;color:'+deltaColor+'">'+delta+'</td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+
+  html+='<p class="sec-title">Progreso al Target</p>';
+  krs.forEach(function(kr){
+    var a=kr.getActual(latestI);
+    var t=kr.targets!==null?kr.targets[latestI]:(kr.getTarget?kr.getTarget(latestI):null);
+    var comp=compliance(a,t,kr.inverted);
+    var barPct=comp!==null?Math.min(comp,100):0;
+    var barColor=comp!==null?(comp>=100?'#16a34a':comp>=80?'#b45309':'#cf222e'):'#ddd';
+    html+='<div class="card" style="padding:16px 20px;margin-bottom:8px">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">';
+    html+='<span style="font-weight:600;font-size:13px">'+kr.label+'</span>';
+    html+='<span style="font-size:13px">'+(a!==null?kr.fmtA(a)+' / '+(t!==null?kr.fmtT(t):'?'):'N/D')+'&nbsp;&nbsp;'+chip(comp)+'</span>';
+    html+='</div>';
+    html+='<div style="background:#f0f0f0;border-radius:6px;height:10px">';
+    html+='<div style="background:'+barColor+';width:'+barPct+'%;height:10px;border-radius:6px;transition:width .4s"></div>';
+    html+='</div>';
+    html+='</div>';
+  });
+
+  return html;
+}
+
+function render(){
+  document.getElementById('root').innerHTML=activeTab==='semanal'?renderSemanal():renderMensual();
+}
+
+render();
+</script>
+</body>
+</html>

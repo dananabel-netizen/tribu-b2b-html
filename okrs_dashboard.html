@@ -44,10 +44,22 @@ footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
     <div class="logo-main">Tablero Producto B2B <span>HTML</span></div>
     <div class="logo-sub">H1 FY27 · Abril — Septiembre 2026</div>
   </div>
-  <span class="upd">Actualizado: 2026-07-28 09:13</span>
+  <span class="upd">Actualizado: 2026-07-28 09:20</span>
 </header>
 <div class="filter-bar">
-  <div class="filter-group">
+  <div class="filter-group" id="q-filter" style="display:none">
+    <span class="filter-label">Quarter</span>
+    <button class="pill qpill active" onclick="setQ('all',this)">Todos</button>
+    <button class="pill qpill" onclick="setQ('q1',this)">Q1</button>
+    <button class="pill qpill" onclick="setQ('q2',this)">Q2</button>
+  </div>
+  <div class="filter-group" id="sq-filter" style="display:none">
+    <span class="filter-label">Squad</span>
+    <button class="pill sqpill active" onclick="setSq('all',this)">Todos</button>
+    <button class="pill sqpill" onclick="setSq('ce',this)">C&amp;E</button>
+    <button class="pill sqpill" onclick="setSq('es',this)">E&amp;S</button>
+  </div>
+  <div class="filter-group" style="margin-left:auto">
     <span class="filter-label">Vista</span>
     <button class="pill tabpill active" onclick="setTab('mensual',this)">Mensual</button>
     <button class="pill tabpill" onclick="setTab('progreso',this)">Progreso</button>
@@ -56,7 +68,7 @@ footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
 <main id="root"></main>
 <footer>Datos del Datalake de Despegar (Trino)</footer>
 <script>
-var DATA = {"kr21": [{"mes_deadline": "2026-04-01", "total_reservas": 12739, "reservas_timeout_client": 2933, "pct_timeout_client": 23.0}, {"mes_deadline": "2026-05-01", "total_reservas": 14553, "reservas_timeout_client": 3662, "pct_timeout_client": 25.2}, {"mes_deadline": "2026-06-01", "total_reservas": 14219, "reservas_timeout_client": 3464, "pct_timeout_client": 24.4}, {"mes_deadline": "2026-07-01", "total_reservas": 14945, "reservas_timeout_client": 3221, "pct_timeout_client": 21.6}, {"mes_deadline": "2026-08-01", "total_reservas": 11402, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-09-01", "total_reservas": 10006, "reservas_timeout_client": 2, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-10-01", "total_reservas": 8012, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-11-01", "total_reservas": 6332, "reservas_timeout_client": 1, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-12-01", "total_reservas": 4182, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-01-01", "total_reservas": 1870, "reservas_timeout_client": 1, "pct_timeout_client": 0.1}, {"mes_deadline": "2027-02-01", "total_reservas": 808, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-03-01", "total_reservas": 774, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-04-01", "total_reservas": 650, "reservas_timeout_client": 1, "pct_timeout_client": 0.2}, {"mes_deadline": "2027-05-01", "total_reservas": 471, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-06-01", "total_reservas": 272, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-07-01", "total_reservas": 229, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-08-01", "total_reservas": 176, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-09-01", "total_reservas": 192, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-10-01", "total_reservas": 87, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-11-01", "total_reservas": 69, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-12-01", "total_reservas": 3, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2028-01-01", "total_reservas": 1, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}], "kr22": [{"cant_staff": 8612, "cant_no_staff": 15344, "cant_total": 23956, "cant_agencias_unicas": 4250, "creation_yearmonth": "2026-04"}, {"cant_staff": 9375, "cant_no_staff": 17800, "cant_total": 27175, "cant_agencias_unicas": 4667, "creation_yearmonth": "2026-05"}, {"cant_staff": 9945, "cant_no_staff": 19325, "cant_total": 29270, "cant_agencias_unicas": 4837, "creation_yearmonth": "2026-06"}, {"cant_staff": 9658, "cant_no_staff": 20844, "cant_total": 30502, "cant_agencias_unicas": 5088, "creation_yearmonth": "2026-07"}], "kr31": [{"periodo": "2026-04", "net_rev_real": 4504274.139999999, "net_rev_target": 3622885.32}, {"periodo": "2026-05", "net_rev_real": 4714901.549999999, "net_rev_target": 4063502.87}, {"periodo": "2026-06", "net_rev_real": 4631716.51, "net_rev_target": 3888578.27}, {"periodo": "2026-07", "net_rev_real": 4475977.369999999, "net_rev_target": 3830895.45}, {"periodo": "2026-08", "net_rev_real": null, "net_rev_target": 3717242.61}, {"periodo": "2026-09", "net_rev_real": null, "net_rev_target": 3908286.36}], "kr32": [{"mes": "2026-04-01", "agencias_cotizadoras": 6588, "agencias_cotizaron_y_vendieron": 4684, "pct_activacion_comercial": 71.1}, {"mes": "2026-05-01", "agencias_cotizadoras": 6788, "agencias_cotizaron_y_vendieron": 4912, "pct_activacion_comercial": 72.4}, {"mes": "2026-06-01", "agencias_cotizadoras": 6865, "agencias_cotizaron_y_vendieron": 4920, "pct_activacion_comercial": 71.7}, {"mes": "2026-07-01", "agencias_cotizadoras": 6980, "agencias_cotizaron_y_vendieron": 4861, "pct_activacion_comercial": 69.6}], "kr33": [{"mes_previo": 202603, "mes_evaluacion": 202604, "agencias_1_3_previo": 4677, "agencias_aumentaron": 1581, "pct_aumento": 33.8}, {"mes_previo": 202604, "mes_evaluacion": 202605, "agencias_1_3_previo": 4760, "agencias_aumentaron": 1674, "pct_aumento": 35.2}, {"mes_previo": 202605, "mes_evaluacion": 202606, "agencias_1_3_previo": 4827, "agencias_aumentaron": 1610, "pct_aumento": 33.4}, {"mes_previo": 202606, "mes_evaluacion": 202607, "agencias_1_3_previo": 5097, "agencias_aumentaron": 1724, "pct_aumento": 33.8}, {"mes_previo": 202607, "mes_evaluacion": 202608, "agencias_1_3_previo": 5113, "agencias_aumentaron": 0, "pct_aumento": 0.0}]};
+var DATA = {"kr21": [{"mes_deadline": "2026-04-01", "total_reservas": 12739, "reservas_timeout_client": 2933, "pct_timeout_client": 23.0}, {"mes_deadline": "2026-05-01", "total_reservas": 14553, "reservas_timeout_client": 3662, "pct_timeout_client": 25.2}, {"mes_deadline": "2026-06-01", "total_reservas": 14219, "reservas_timeout_client": 3464, "pct_timeout_client": 24.4}, {"mes_deadline": "2026-07-01", "total_reservas": 14945, "reservas_timeout_client": 3221, "pct_timeout_client": 21.6}, {"mes_deadline": "2026-08-01", "total_reservas": 11402, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-09-01", "total_reservas": 10006, "reservas_timeout_client": 2, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-10-01", "total_reservas": 8012, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-11-01", "total_reservas": 6332, "reservas_timeout_client": 1, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-12-01", "total_reservas": 4182, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-01-01", "total_reservas": 1870, "reservas_timeout_client": 1, "pct_timeout_client": 0.1}, {"mes_deadline": "2027-02-01", "total_reservas": 808, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-03-01", "total_reservas": 774, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-04-01", "total_reservas": 650, "reservas_timeout_client": 1, "pct_timeout_client": 0.2}, {"mes_deadline": "2027-05-01", "total_reservas": 471, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-06-01", "total_reservas": 272, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-07-01", "total_reservas": 229, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-08-01", "total_reservas": 176, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-09-01", "total_reservas": 192, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-10-01", "total_reservas": 87, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-11-01", "total_reservas": 69, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-12-01", "total_reservas": 3, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2028-01-01", "total_reservas": 1, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}], "kr22": [{"cant_staff": 8612, "cant_no_staff": 15344, "cant_total": 23956, "cant_agencias_unicas": 4250, "creation_yearmonth": "2026-04"}, {"cant_staff": 9375, "cant_no_staff": 17800, "cant_total": 27175, "cant_agencias_unicas": 4667, "creation_yearmonth": "2026-05"}, {"cant_staff": 9945, "cant_no_staff": 19325, "cant_total": 29270, "cant_agencias_unicas": 4837, "creation_yearmonth": "2026-06"}, {"cant_staff": 9658, "cant_no_staff": 20844, "cant_total": 30502, "cant_agencias_unicas": 5088, "creation_yearmonth": "2026-07"}], "kr31": [{"periodo": "2026-04", "net_rev_real": 4504274.140000001, "net_rev_target": 3622885.32}, {"periodo": "2026-05", "net_rev_real": 4714901.549999997, "net_rev_target": 4063502.87}, {"periodo": "2026-06", "net_rev_real": 4631716.51, "net_rev_target": 3888578.27}, {"periodo": "2026-07", "net_rev_real": 4475977.370000001, "net_rev_target": 3830895.45}, {"periodo": "2026-08", "net_rev_real": null, "net_rev_target": 3717242.61}, {"periodo": "2026-09", "net_rev_real": null, "net_rev_target": 3908286.36}], "kr32": [{"mes": "2026-04-01", "agencias_cotizadoras": 6588, "agencias_cotizaron_y_vendieron": 4684, "pct_activacion_comercial": 71.1}, {"mes": "2026-05-01", "agencias_cotizadoras": 6788, "agencias_cotizaron_y_vendieron": 4912, "pct_activacion_comercial": 72.4}, {"mes": "2026-06-01", "agencias_cotizadoras": 6865, "agencias_cotizaron_y_vendieron": 4920, "pct_activacion_comercial": 71.7}, {"mes": "2026-07-01", "agencias_cotizadoras": 6980, "agencias_cotizaron_y_vendieron": 4861, "pct_activacion_comercial": 69.6}], "kr33": [{"mes_previo": 202603, "mes_evaluacion": 202604, "agencias_1_3_previo": 4677, "agencias_aumentaron": 1581, "pct_aumento": 33.8}, {"mes_previo": 202604, "mes_evaluacion": 202605, "agencias_1_3_previo": 4760, "agencias_aumentaron": 1674, "pct_aumento": 35.2}, {"mes_previo": 202605, "mes_evaluacion": 202606, "agencias_1_3_previo": 4827, "agencias_aumentaron": 1610, "pct_aumento": 33.4}, {"mes_previo": 202606, "mes_evaluacion": 202607, "agencias_1_3_previo": 5097, "agencias_aumentaron": 1724, "pct_aumento": 33.8}, {"mes_previo": 202607, "mes_evaluacion": 202608, "agencias_1_3_previo": 5113, "agencias_aumentaron": 0, "pct_aumento": 0.0}]};
 
 var MONTHS=["2026-04","2026-05","2026-06","2026-07","2026-08","2026-09"];
 var LABELS=["Abr","May","Jun","Jul","Ago","Sep"];
@@ -103,13 +115,32 @@ var KRS=[
    }}
 ];
 
-var activeTab='mensual';
+var activeTab='mensual', activeQ='all', activeSq='all';
 
 function setTab(tab,btn){
   activeTab=tab;
   document.querySelectorAll('.tabpill').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
+  var showFilters=tab==='progreso'?'flex':'none';
+  document.getElementById('q-filter').style.display=showFilters;
+  document.getElementById('sq-filter').style.display=showFilters;
   render();
+}
+function setQ(q,btn){
+  activeQ=q;
+  document.querySelectorAll('.qpill').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  render();
+}
+function setSq(sq,btn){
+  activeSq=sq;
+  document.querySelectorAll('.sqpill').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  render();
+}
+function filteredKRS(){
+  return activeSq==='ce'?KRS.filter(function(k){return k.squad==='ce';}):
+         activeSq==='es'?KRS.filter(function(k){return k.squad==='es';}):KRS;
 }
 function compliance(a,t,inv){if(a===null||t===null||t===0)return null;return Math.min(inv?t/a*100:a/t*100,130);}
 function chip(pct){if(pct===null)return'<span class="chip na">N/D</span>';var cls=pct>=100?"ok":pct>=80?"warn":"bad";return'<span class="chip '+cls+'">'+Math.round(pct)+'%</span>';}
@@ -172,9 +203,10 @@ function renderMensual(){
 }
 
 function renderProgreso(){
-  var krs=KRS;
+  var krs=filteredKRS();
   var closed=nowYm();
-  var latestM=MONTHS.filter(function(m){return m<=closed;}).pop()||MONTHS[0];
+  var qMonths=activeQ==='q1'?MONTHS.slice(0,3):activeQ==='q2'?MONTHS.slice(3,6):MONTHS;
+  var latestM=qMonths.filter(function(m){return m<=closed;}).pop()||qMonths[0];
   var latestI=MONTHS.indexOf(latestM);
   var html='';
 

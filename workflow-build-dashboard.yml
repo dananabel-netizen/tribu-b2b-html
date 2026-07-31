@@ -3,7 +3,7 @@ name: Build Dashboard HTML
 on:
   push:
     paths:
-      - 'data.json'
+      - "data.json"
     branches:
       - tablero-live
 
@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
       - name: Generate HTML
         run: python build_html.py data.json
       - name: Commit and push

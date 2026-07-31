@@ -6,787 +6,104 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tablero Producto B2B - HTML · H1 FY27</title>
 <style>
-:root{--bg:#f4f5f7;--surface:#fff;--surface2:#f8f9fa;--border:#e8e0f0;--border2:#d5c8e8;--purple:#6D28D9;--text:#1f2328;--muted:#57606a;--radius:8px;--shadow:0 1px 4px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI',sans-serif;font-size:14px;min-height:100vh}
-header{background:linear-gradient(90deg,#5B21B6,#7C3AED);padding:0 28px;height:72px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(91,33,182,.4)}
-.logo-main{color:#fff;font-size:15px;font-weight:700}.logo-main span{color:#C4B5FD}
-.logo-sub{color:rgba(196,181,253,.65);font-size:10px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
-.upd{color:rgba(255,255,255,.5);font-size:11px}
-.filter-bar{display:flex;gap:24px;padding:14px 28px;background:#fff;border-bottom:1px solid var(--border);align-items:center;flex-wrap:wrap;position:sticky;top:72px;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.filter-group{display:flex;align-items:center;gap:8px}
-.filter-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
-.pill{padding:5px 16px;border-radius:20px;border:1.5px solid var(--border2);background:#fff;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;line-height:1.4}
-.pill:hover{border-color:var(--purple);color:var(--purple)}
-.pill.active{background:var(--purple);border-color:var(--purple);color:#fff}
-main{padding:28px;max-width:1200px;margin:0 auto}
-.sec-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--border);margin-top:28px}
-.sec-title:first-child{margin-top:0}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:auto;margin-bottom:8px}
-.card-hdr{background:#5457D9;color:#fff;padding:14px 20px;font-size:15px;font-weight:700}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{background:#7C7FFF;color:#fff;padding:10px 8px;text-align:center;font-weight:700;font-size:11px;white-space:nowrap;border-right:1px solid rgba(255,255,255,.15)}
-th.th-kr{text-align:left;padding-left:16px;width:340px}
-th.th-q{background:#5457D9;border-left:2px solid rgba(255,255,255,.25)}
-td{padding:11px 8px;text-align:center;border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
-td.td-kr{text-align:left;padding-left:16px;font-weight:500}
-td.td-q{border-left:2px solid var(--border2);font-weight:700}
-tbody tr:hover{background:var(--surface2)}
-tbody tr:last-child td{border-bottom:none}
-.chip{display:inline-block;padding:4px 10px;border-radius:5px;font-size:12px;font-weight:700;min-width:44px;text-align:center}
-.ok{background:#d4f4dd;color:#16a34a}.warn{background:#fff7cd;color:#b45309}.bad{background:#ffd8d3;color:#cf222e}.na{background:#f0f0f0;color:#999;font-size:11px;font-weight:400}
-footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
-body.dark{--bg:#0f172a;--surface:#1e293b;--surface2:#162032;--border:#334155;--border2:#475569;--text:#e2e8f0;--muted:#94a3b8;--purple:#A78BFA}
-body.dark .ok{background:#14532d;color:#86efac}body.dark .warn{background:#713f12;color:#fde68a}body.dark .bad{background:#7f1d1d;color:#fca5a5}body.dark .na{background:#1e293b;color:#64748b}
-body.dark .filter-bar{background:var(--surface)}
-body.dark .pill{background:var(--surface2);color:var(--muted);border-color:var(--border2)}
-body.dark .pill.active{background:var(--purple);border-color:var(--purple);color:#fff}
-body.dark tbody tr:hover{background:#1e3a5f22}
-body,main,.card,.filter-bar{transition:background .25s,border-color .25s,color .25s}
-#theme-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:6px;padding:5px 10px;font-size:15px;cursor:pointer;line-height:1;transition:background .2s}
-#theme-btn:hover{background:rgba(255,255,255,.25)}
+:root{--violet:#3F1B6B;--violet-l:#5D2DA0;--violet-l2:#8E5DD3;--violet-bg:#F3EDFB;--violet-bg2:#E8DEF8;--bg:#FAFAFB;--card:#FFF;--text:#1A1A2E;--text-s:#5C5C6F;--green:#1A936F;--green-bg:#E0F5EF;--red:#C0392B;--red-bg:#FDEAEA;--yellow:#E6A817;--yellow-bg:#FEF6E4;--border:#E5E5EC;--radius:14px;--shadow:0 2px 12px rgba(60,27,107,.08);--mono:'SF Mono','Fira Code','Courier New',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.container{max-width:1280px;margin:0 auto;padding:24px 16px}
+header{text-align:center;margin-bottom:28px}
+header h1{color:var(--violet);font-size:1.6rem;font-weight:700}
+header .sub{color:var(--text-s);font-size:.85rem;margin-top:4px}
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--violet);margin-bottom:24px;flex-wrap:wrap}
+.tab{padding:10px 20px;background:none;border:none;cursor:pointer;font-size:.9rem;font-weight:500;color:var(--text-s);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s}
+.tab:hover{color:var(--violet)}
+.tab.active{color:var(--violet);border-bottom-color:var(--violet);font-weight:600}
+.tab-content{display:none}
+.tab-content.active{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:20px;border:1px solid var(--border)}
+.card h3{color:var(--violet);font-size:1rem;font-weight:600;margin-bottom:12px}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:20px}
+.kpi{background:var(--card);border-radius:var(--radius);padding:16px 18px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.kpi .label{font-size:.75rem;color:var(--text-s);text-transform:uppercase;letter-spacing:.5px;font-weight:500}
+.kpi .value{font-size:1.5rem;font-weight:700;color:var(--text);margin:4px 0 2px}
+.kpi .target{font-size:.75rem;color:var(--text-s)}
+.kpi .delta{display:inline-block;font-size:.75rem;padding:2px 8px;border-radius:6px;font-weight:600}
+.delta.pos{background:var(--green-bg);color:var(--green)}
+.delta.neg{background:var(--red-bg);color:var(--red)}
+.delta.neu{background:var(--yellow-bg);color:var(--yellow)}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+th{color:var(--violet);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.3px;background:var(--violet-bg);position:sticky;top:0}
+td.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+tr:hover td{background:var(--violet-bg)}
+.chart-wrap{position:relative;height:280px;margin:12px 0}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bar-label{width:70px;font-size:.78rem;color:var(--text-s);text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:24px;background:var(--violet-bg);border-radius:6px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:6px;transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.72rem;font-weight:600;color:#fff}
+.bar-fill.violet{background:linear-gradient(90deg,var(--violet),var(--violet-l))}
+.bar-fill.green{background:linear-gradient(90deg,#1A936F,#2DB98A)}
+.bar-fill.red{background:linear-gradient(90deg,#C0392B,#E55A4A)}
+.bar-fill.yellow{background:linear-gradient(90deg,#E6A817,#F0BC3A)}
+.filter-bar{display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.filter-bar select,.filter-bar input{padding:6px 12px;border:1px solid var(--border);border-radius:8px;font-size:.82rem;background:var(--card);color:var(--text)}
+.filter-bar label{font-size:.78rem;color:var(--text-s);font-weight:500}
+.section-title{color:var(--violet);font-size:1.05rem;font-weight:600;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.progress-ring{display:inline-flex;align-items:center;gap:12px}
+.progress-ring svg{transform:rotate(-90deg)}
+.progress-ring .ring-bg{stroke:var(--violet-bg)}
+.progress-ring .ring-fg{stroke:var(--violet-l);stroke-linecap:round;transition:stroke-dashoffset .5s}
+.progress-ring .ring-text{font-size:1.1rem;font-weight:700;color:var(--violet)}
+.note{font-size:.72rem;color:var(--text-s);margin-top:6px;font-style:italic}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:.68rem;font-weight:600}
+.badge.pos{background:var(--green-bg);color:var(--green)}
+.badge.neg{background:var(--red-bg);color:var(--red)}
+.badge.neu{background:var(--yellow-bg);color:var(--yellow)}
+.updated-bar{text-align:center;font-size:.72rem;color:var(--text-s);margin-bottom:16px;padding:6px;background:var(--violet-bg);border-radius:8px}
+.scroll-x{overflow-x:auto}
+.week-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.week-cell{background:var(--violet-bg);border-radius:8px;padding:10px;text-align:center}
+.week-cell .wk{font-size:.68rem;color:var(--text-s)}
+.week-cell .val{font-size:1.1rem;font-weight:700;color:var(--violet)}
+.week-cell .tgt{font-size:.68rem;color:var(--text-s)}
+@media(max-width:768px){.kpi-row{grid-template-columns:1fr 1fr}.bar-label{width:50px}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
+<div class="container">
 <header>
-  <div>
-    <div class="logo-main">Tablero Producto B2B <span>HTML</span></div>
-    <div class="logo-sub">H1 FY27 · Abril — Septiembre 2026</div>
-  </div>
-  <div style="display:flex;align-items:center;gap:14px">
-    <span class="upd">Actualizado: 2026-07-31 10:12</span>
-    <button id="theme-btn" onclick="toggleTheme()" title="Modo noche/día">🌙</button>
-  </div>
+<h1>Tablero Producto B2B — H1 FY27</h1>
+<div class="sub">HotelDO B2B · OKRs Semanales · <span id="updated"></span></div>
 </header>
-<div class="filter-bar">
-  <div class="filter-group" id="sq-filter" style="display:none">
-    <span class="filter-label">Squad</span>
-    <button class="pill sqpill active" onclick="setSq('all',this)">Todos</button>
-    <button class="pill sqpill" onclick="setSq('ce',this)">C&amp;E</button>
-    <button class="pill sqpill" onclick="setSq('es',this)">E&amp;S</button>
-  </div>
-  <div class="filter-group" id="mes-filter" style="display:none">
-    <span class="filter-label">Mes</span>
-    <button class="pill mespill" data-mes="all" onclick="setPulsoMes('all',this)">Todos</button>
-    <button class="pill mespill" data-mes="2026-04" onclick="setPulsoMes('2026-04',this)">Abr</button>
-    <button class="pill mespill" data-mes="2026-05" onclick="setPulsoMes('2026-05',this)">May</button>
-    <button class="pill mespill" data-mes="2026-06" onclick="setPulsoMes('2026-06',this)">Jun</button>
-    <button class="pill mespill" data-mes="2026-07" onclick="setPulsoMes('2026-07',this)">Jul</button>
-    <button class="pill mespill" data-mes="2026-08" onclick="setPulsoMes('2026-08',this)">Ago</button>
-    <button class="pill mespill" data-mes="2026-09" onclick="setPulsoMes('2026-09',this)">Sep</button>
-  </div>
-  <div class="filter-group" style="margin-left:auto">
-    <button class="pill tabpill active" onclick="setTab('mensual',this)">Mensual</button>
-    <button class="pill tabpill" onclick="setTab('semanal',this)">Semanal</button>
-    <button class="pill tabpill" onclick="setTab('progreso',this)">Progreso</button>
-    <button class="pill tabpill" onclick="setTab('monitor',this)">Monitor</button>
-  </div>
+<div class="updated-bar">Última actualización: <span id="upd2"></span></div>
+<!-- TABS -->
+<div class="tabs">
+<button class="tab active" data-tab="summary">Resumen</button>
+<button class="tab" data-tab="kr21">KR 2.1 — Timeouts</button>
+<button class="tab" data-tab="kr22">KR 2.2 — Postventa</button>
+<button class="tab" data-tab="kr31">KR 3.1 — Net Rev</button>
+<button class="tab" data-tab="kr32">KR 3.2 — Activación</button>
+<button class="tab" data-tab="kr33">KR 3.3 — Frecuencia</button>
 </div>
-<main id="root"></main>
-<footer>Datos del Datalake de Despegar (Trino)</footer>
+<!-- SUMMARY -->
+<div id="summary" class="tab-content active">
+<!-- placeholder, filled by JS below -->
+</div>
+<!-- KR 2.1 -->
+<div id="kr21" class="tab-content">
+<!-- placeholder -->
+</div>
+<!-- KR 2.2 -->
+<div id="kr22" class="tab-content">
+</div>
+<!-- KR 3.1 -->
+<div id="kr31" class="tab-content">
+</div>
+<!-- KR 3.2 -->
+<div id="kr32" class="tab-content">
+</div>
+<!-- KR 3.3 -->
+<div id="kr33" class="tab-content">
+</div>
+</div>
 <script>
-var DATA = {"kr21": [{"mes_deadline": "2026-04-01", "total_reservas": 12739, "reservas_timeout_client": 2933, "pct_timeout_client": 23.0}, {"mes_deadline": "2026-05-01", "total_reservas": 14553, "reservas_timeout_client": 3662, "pct_timeout_client": 25.2}, {"mes_deadline": "2026-06-01", "total_reservas": 14219, "reservas_timeout_client": 3464, "pct_timeout_client": 24.4}, {"mes_deadline": "2026-07-01", "total_reservas": 15008, "reservas_timeout_client": 3603, "pct_timeout_client": 24.0}, {"mes_deadline": "2026-08-01", "total_reservas": 11924, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-09-01", "total_reservas": 10426, "reservas_timeout_client": 2, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-10-01", "total_reservas": 8316, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-11-01", "total_reservas": 6529, "reservas_timeout_client": 1, "pct_timeout_client": 0.0}, {"mes_deadline": "2026-12-01", "total_reservas": 4345, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-01-01", "total_reservas": 2001, "reservas_timeout_client": 1, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-02-01", "total_reservas": 879, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-03-01", "total_reservas": 814, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-04-01", "total_reservas": 677, "reservas_timeout_client": 1, "pct_timeout_client": 0.1}, {"mes_deadline": "2027-05-01", "total_reservas": 501, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-06-01", "total_reservas": 288, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-07-01", "total_reservas": 234, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-08-01", "total_reservas": 192, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-09-01", "total_reservas": 206, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-10-01", "total_reservas": 95, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-11-01", "total_reservas": 74, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2027-12-01", "total_reservas": 4, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"mes_deadline": "2028-01-01", "total_reservas": 2, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}], "kr22": [{"cant_staff": 8612, "cant_no_staff": 15344, "cant_total": 23956, "cant_agencias_unicas": 4250, "creation_yearmonth": "2026-04"}, {"cant_staff": 9375, "cant_no_staff": 17802, "cant_total": 27177, "cant_agencias_unicas": 4667, "creation_yearmonth": "2026-05"}, {"cant_staff": 9947, "cant_no_staff": 19324, "cant_total": 29271, "cant_agencias_unicas": 4837, "creation_yearmonth": "2026-06"}, {"cant_staff": 10955, "cant_no_staff": 23503, "cant_total": 34458, "cant_agencias_unicas": 5387, "creation_yearmonth": "2026-07"}], "kr31": [{"periodo": "2026-04", "net_rev_real": 4504274.140000001, "net_rev_target": 3622885.32}, {"periodo": "2026-05", "net_rev_real": 4714901.549999999, "net_rev_target": 4063502.87}, {"periodo": "2026-06", "net_rev_real": 4630751.339999999, "net_rev_target": 3888578.27}, {"periodo": "2026-07", "net_rev_real": 4953123.78, "net_rev_target": 3830895.45}, {"periodo": "2026-08", "net_rev_real": null, "net_rev_target": 3717242.61}, {"periodo": "2026-09", "net_rev_real": null, "net_rev_target": 3908286.36}], "kr32": [{"mes": "2026-04-01", "agencias_cotizadoras": 6588, "agencias_cotizaron_y_vendieron": 4684, "pct_activacion_comercial": 71.1}, {"mes": "2026-05-01", "agencias_cotizadoras": 6788, "agencias_cotizaron_y_vendieron": 4913, "pct_activacion_comercial": 72.4}, {"mes": "2026-06-01", "agencias_cotizadoras": 6865, "agencias_cotizaron_y_vendieron": 4921, "pct_activacion_comercial": 71.7}, {"mes": "2026-07-01", "agencias_cotizadoras": 7299, "agencias_cotizaron_y_vendieron": 5198, "pct_activacion_comercial": 71.2}], "kr33": [{"mes_previo": 202501, "mes_evaluacion": 202502, "agencias_total_previo": 6101, "agencias_total_evaluado": 6247, "agencias_1_3_previo": 3508, "agencias_aumentaron": 1203, "pct_aumento": 34.3}, {"mes_previo": 202502, "mes_evaluacion": 202503, "agencias_total_previo": 6247, "agencias_total_evaluado": 6652, "agencias_1_3_previo": 3531, "agencias_aumentaron": 1273, "pct_aumento": 36.1}, {"mes_previo": 202503, "mes_evaluacion": 202504, "agencias_total_previo": 6652, "agencias_total_evaluado": 6568, "agencias_1_3_previo": 3659, "agencias_aumentaron": 1120, "pct_aumento": 30.6}, {"mes_previo": 202504, "mes_evaluacion": 202505, "agencias_total_previo": 6568, "agencias_total_evaluado": 6894, "agencias_1_3_previo": 3739, "agencias_aumentaron": 1330, "pct_aumento": 35.6}, {"mes_previo": 202505, "mes_evaluacion": 202506, "agencias_total_previo": 6894, "agencias_total_evaluado": 6735, "agencias_1_3_previo": 3877, "agencias_aumentaron": 1241, "pct_aumento": 32.0}, {"mes_previo": 202506, "mes_evaluacion": 202507, "agencias_total_previo": 6735, "agencias_total_evaluado": 7108, "agencias_1_3_previo": 3781, "agencias_aumentaron": 1319, "pct_aumento": 34.9}, {"mes_previo": 202507, "mes_evaluacion": 202508, "agencias_total_previo": 7108, "agencias_total_evaluado": 6945, "agencias_1_3_previo": 4001, "agencias_aumentaron": 1181, "pct_aumento": 29.5}, {"mes_previo": 202508, "mes_evaluacion": 202509, "agencias_total_previo": 6945, "agencias_total_evaluado": 7167, "agencias_1_3_previo": 4054, "agencias_aumentaron": 1360, "pct_aumento": 33.5}, {"mes_previo": 202509, "mes_evaluacion": 202510, "agencias_total_previo": 7167, "agencias_total_evaluado": 7479, "agencias_1_3_previo": 4091, "agencias_aumentaron": 1468, "pct_aumento": 35.9}, {"mes_previo": 202510, "mes_evaluacion": 202511, "agencias_total_previo": 7479, "agencias_total_evaluado": 7658, "agencias_1_3_previo": 4215, "agencias_aumentaron": 1333, "pct_aumento": 31.6}, {"mes_previo": 202511, "mes_evaluacion": 202512, "agencias_total_previo": 7658, "agencias_total_evaluado": 7272, "agencias_1_3_previo": 4425, "agencias_aumentaron": 1246, "pct_aumento": 28.2}, {"mes_previo": 202512, "mes_evaluacion": 202601, "agencias_total_previo": 7272, "agencias_total_evaluado": 8209, "agencias_1_3_previo": 4408, "agencias_aumentaron": 1814, "pct_aumento": 41.2}, {"mes_previo": 202601, "mes_evaluacion": 202602, "agencias_total_previo": 8209, "agencias_total_evaluado": 7999, "agencias_1_3_previo": 4544, "agencias_aumentaron": 1372, "pct_aumento": 30.2}, {"mes_previo": 202602, "mes_evaluacion": 202603, "agencias_total_previo": 7999, "agencias_total_evaluado": 8653, "agencias_1_3_previo": 4579, "agencias_aumentaron": 1817, "pct_aumento": 39.7}, {"mes_previo": 202603, "mes_evaluacion": 202604, "agencias_total_previo": 8653, "agencias_total_evaluado": 8726, "agencias_1_3_previo": 4677, "agencias_aumentaron": 1581, "pct_aumento": 33.8}, {"mes_previo": 202604, "mes_evaluacion": 202605, "agencias_total_previo": 8726, "agencias_total_evaluado": 9005, "agencias_1_3_previo": 4763, "agencias_aumentaron": 1675, "pct_aumento": 35.2}, {"mes_previo": 202605, "mes_evaluacion": 202606, "agencias_total_previo": 9005, "agencias_total_evaluado": 9124, "agencias_1_3_previo": 4830, "agencias_aumentaron": 1607, "pct_aumento": 33.3}, {"mes_previo": 202606, "mes_evaluacion": 202607, "agencias_total_previo": 9124, "agencias_total_evaluado": 9586, "agencias_1_3_previo": 5093, "agencias_aumentaron": 1932, "pct_aumento": 37.9}, {"mes_previo": 202607, "mes_evaluacion": 202608, "agencias_total_previo": 9586, "agencias_total_evaluado": null, "agencias_1_3_previo": 5118, "agencias_aumentaron": 0, "pct_aumento": 0.0}], "kr21_sem": [{"semana_inicio": "2026-03-30", "total_reservas": 2021, "reservas_timeout_client": 420, "pct_timeout_client": 20.8}, {"semana_inicio": "2026-04-06", "total_reservas": 2694, "reservas_timeout_client": 578, "pct_timeout_client": 21.5}, {"semana_inicio": "2026-04-13", "total_reservas": 2975, "reservas_timeout_client": 725, "pct_timeout_client": 24.4}, {"semana_inicio": "2026-04-20", "total_reservas": 3275, "reservas_timeout_client": 838, "pct_timeout_client": 25.6}, {"semana_inicio": "2026-04-27", "total_reservas": 3181, "reservas_timeout_client": 713, "pct_timeout_client": 22.4}, {"semana_inicio": "2026-05-04", "total_reservas": 3466, "reservas_timeout_client": 868, "pct_timeout_client": 25.0}, {"semana_inicio": "2026-05-11", "total_reservas": 3729, "reservas_timeout_client": 966, "pct_timeout_client": 25.9}, {"semana_inicio": "2026-05-18", "total_reservas": 3185, "reservas_timeout_client": 794, "pct_timeout_client": 24.9}, {"semana_inicio": "2026-05-25", "total_reservas": 2766, "reservas_timeout_client": 693, "pct_timeout_client": 25.1}, {"semana_inicio": "2026-06-01", "total_reservas": 3026, "reservas_timeout_client": 798, "pct_timeout_client": 26.4}, {"semana_inicio": "2026-06-08", "total_reservas": 3171, "reservas_timeout_client": 765, "pct_timeout_client": 24.1}, {"semana_inicio": "2026-06-15", "total_reservas": 3630, "reservas_timeout_client": 867, "pct_timeout_client": 23.9}, {"semana_inicio": "2026-06-22", "total_reservas": 3396, "reservas_timeout_client": 754, "pct_timeout_client": 22.2}, {"semana_inicio": "2026-06-29", "total_reservas": 3320, "reservas_timeout_client": 843, "pct_timeout_client": 25.4}, {"semana_inicio": "2026-07-06", "total_reservas": 3409, "reservas_timeout_client": 822, "pct_timeout_client": 24.1}, {"semana_inicio": "2026-07-13", "total_reservas": 3642, "reservas_timeout_client": 879, "pct_timeout_client": 24.1}, {"semana_inicio": "2026-07-20", "total_reservas": 3238, "reservas_timeout_client": 693, "pct_timeout_client": 21.4}, {"semana_inicio": "2026-07-27", "total_reservas": 3259, "reservas_timeout_client": 646, "pct_timeout_client": 19.8}, {"semana_inicio": "2026-08-03", "total_reservas": 2755, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-08-10", "total_reservas": 2836, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-08-17", "total_reservas": 2743, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-08-24", "total_reservas": 2334, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-08-31", "total_reservas": 2488, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-09-07", "total_reservas": 2892, "reservas_timeout_client": 2, "pct_timeout_client": 0.1}, {"semana_inicio": "2026-09-14", "total_reservas": 2466, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-09-21", "total_reservas": 1907, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-09-28", "total_reservas": 2378, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-10-05", "total_reservas": 1996, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-10-12", "total_reservas": 1926, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-10-19", "total_reservas": 1678, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-10-26", "total_reservas": 1636, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-11-02", "total_reservas": 1698, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-11-09", "total_reservas": 1366, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-11-16", "total_reservas": 1623, "reservas_timeout_client": 1, "pct_timeout_client": 0.1}, {"semana_inicio": "2026-11-23", "total_reservas": 1462, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-11-30", "total_reservas": 1222, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-12-07", "total_reservas": 914, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-12-14", "total_reservas": 817, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-12-21", "total_reservas": 1103, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2026-12-28", "total_reservas": 721, "reservas_timeout_client": 1, "pct_timeout_client": 0.1}, {"semana_inicio": "2027-01-04", "total_reservas": 542, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-01-11", "total_reservas": 485, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-01-18", "total_reservas": 368, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-01-25", "total_reservas": 321, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-02-01", "total_reservas": 256, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-02-08", "total_reservas": 227, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-02-15", "total_reservas": 190, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-02-22", "total_reservas": 206, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-03-01", "total_reservas": 186, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-03-08", "total_reservas": 170, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-03-15", "total_reservas": 239, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-03-22", "total_reservas": 169, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-03-29", "total_reservas": 168, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-04-05", "total_reservas": 162, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-04-12", "total_reservas": 120, "reservas_timeout_client": 1, "pct_timeout_client": 0.8}, {"semana_inicio": "2027-04-19", "total_reservas": 163, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-04-26", "total_reservas": 134, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-05-03", "total_reservas": 125, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-05-10", "total_reservas": 173, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-05-17", "total_reservas": 108, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-05-24", "total_reservas": 67, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-05-31", "total_reservas": 56, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-06-07", "total_reservas": 81, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-06-14", "total_reservas": 69, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-06-21", "total_reservas": 56, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-06-28", "total_reservas": 52, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-07-05", "total_reservas": 67, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-07-12", "total_reservas": 92, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-07-19", "total_reservas": 33, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-07-26", "total_reservas": 30, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-08-02", "total_reservas": 18, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-08-09", "total_reservas": 44, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-08-16", "total_reservas": 63, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-08-23", "total_reservas": 41, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-08-30", "total_reservas": 57, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-09-06", "total_reservas": 60, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-09-13", "total_reservas": 41, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-09-20", "total_reservas": 58, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-09-27", "total_reservas": 21, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-10-04", "total_reservas": 34, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-10-11", "total_reservas": 21, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-10-18", "total_reservas": 14, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-10-25", "total_reservas": 15, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-11-01", "total_reservas": 30, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-11-08", "total_reservas": 11, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-11-15", "total_reservas": 8, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-11-22", "total_reservas": 23, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-11-29", "total_reservas": 3, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-12-06", "total_reservas": 1, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2027-12-13", "total_reservas": 2, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}, {"semana_inicio": "2028-01-03", "total_reservas": 2, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}], "kr21_sem_cum": [{"semana_inicio": "2026-03-30", "mes_deadline": "2026-04-01", "total_reservas_acum": 2021, "timeouts_acum": 420, "pct_timeout_acum": 20.8}, {"semana_inicio": "2026-04-06", "mes_deadline": "2026-04-01", "total_reservas_acum": 4715, "timeouts_acum": 998, "pct_timeout_acum": 21.2}, {"semana_inicio": "2026-04-13", "mes_deadline": "2026-04-01", "total_reservas_acum": 7690, "timeouts_acum": 1723, "pct_timeout_acum": 22.4}, {"semana_inicio": "2026-04-20", "mes_deadline": "2026-04-01", "total_reservas_acum": 10965, "timeouts_acum": 2561, "pct_timeout_acum": 23.4}, {"semana_inicio": "2026-04-27", "mes_deadline": "2026-04-01", "total_reservas_acum": 12739, "timeouts_acum": 2933, "pct_timeout_acum": 23.0}, {"semana_inicio": "2026-04-27", "mes_deadline": "2026-05-01", "total_reservas_acum": 1407, "timeouts_acum": 341, "pct_timeout_acum": 24.2}, {"semana_inicio": "2026-05-04", "mes_deadline": "2026-05-01", "total_reservas_acum": 4873, "timeouts_acum": 1209, "pct_timeout_acum": 24.8}, {"semana_inicio": "2026-05-11", "mes_deadline": "2026-05-01", "total_reservas_acum": 8602, "timeouts_acum": 2175, "pct_timeout_acum": 25.3}, {"semana_inicio": "2026-05-18", "mes_deadline": "2026-05-01", "total_reservas_acum": 11787, "timeouts_acum": 2969, "pct_timeout_acum": 25.2}, {"semana_inicio": "2026-05-25", "mes_deadline": "2026-05-01", "total_reservas_acum": 14553, "timeouts_acum": 3662, "pct_timeout_acum": 25.2}, {"semana_inicio": "2026-06-01", "mes_deadline": "2026-06-01", "total_reservas_acum": 3026, "timeouts_acum": 798, "pct_timeout_acum": 26.4}, {"semana_inicio": "2026-06-08", "mes_deadline": "2026-06-01", "total_reservas_acum": 6197, "timeouts_acum": 1563, "pct_timeout_acum": 25.2}, {"semana_inicio": "2026-06-15", "mes_deadline": "2026-06-01", "total_reservas_acum": 9827, "timeouts_acum": 2430, "pct_timeout_acum": 24.7}, {"semana_inicio": "2026-06-22", "mes_deadline": "2026-06-01", "total_reservas_acum": 13223, "timeouts_acum": 3184, "pct_timeout_acum": 24.1}, {"semana_inicio": "2026-06-29", "mes_deadline": "2026-06-01", "total_reservas_acum": 14219, "timeouts_acum": 3464, "pct_timeout_acum": 24.4}, {"semana_inicio": "2026-06-29", "mes_deadline": "2026-07-01", "total_reservas_acum": 2324, "timeouts_acum": 563, "pct_timeout_acum": 24.2}, {"semana_inicio": "2026-07-06", "mes_deadline": "2026-07-01", "total_reservas_acum": 5733, "timeouts_acum": 1385, "pct_timeout_acum": 24.2}, {"semana_inicio": "2026-07-13", "mes_deadline": "2026-07-01", "total_reservas_acum": 9375, "timeouts_acum": 2264, "pct_timeout_acum": 24.1}, {"semana_inicio": "2026-07-20", "mes_deadline": "2026-07-01", "total_reservas_acum": 12613, "timeouts_acum": 2957, "pct_timeout_acum": 23.4}, {"semana_inicio": "2026-07-27", "mes_deadline": "2026-07-01", "total_reservas_acum": 15008, "timeouts_acum": 3603, "pct_timeout_acum": 24.0}, {"semana_inicio": "2026-07-27", "mes_deadline": "2026-08-01", "total_reservas_acum": 864, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-08-03", "mes_deadline": "2026-08-01", "total_reservas_acum": 3619, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-08-10", "mes_deadline": "2026-08-01", "total_reservas_acum": 6455, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-08-17", "mes_deadline": "2026-08-01", "total_reservas_acum": 9198, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-08-24", "mes_deadline": "2026-08-01", "total_reservas_acum": 11532, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-08-31", "mes_deadline": "2026-08-01", "total_reservas_acum": 11924, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-08-31", "mes_deadline": "2026-09-01", "total_reservas_acum": 2096, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-09-07", "mes_deadline": "2026-09-01", "total_reservas_acum": 4988, "timeouts_acum": 2, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-09-14", "mes_deadline": "2026-09-01", "total_reservas_acum": 7454, "timeouts_acum": 2, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-09-21", "mes_deadline": "2026-09-01", "total_reservas_acum": 9361, "timeouts_acum": 2, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-09-28", "mes_deadline": "2026-09-01", "total_reservas_acum": 10426, "timeouts_acum": 2, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-09-28", "mes_deadline": "2026-10-01", "total_reservas_acum": 1313, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-10-05", "mes_deadline": "2026-10-01", "total_reservas_acum": 3309, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-10-12", "mes_deadline": "2026-10-01", "total_reservas_acum": 5235, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-10-19", "mes_deadline": "2026-10-01", "total_reservas_acum": 6913, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-10-26", "mes_deadline": "2026-10-01", "total_reservas_acum": 8316, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-10-26", "mes_deadline": "2026-11-01", "total_reservas_acum": 233, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-11-02", "mes_deadline": "2026-11-01", "total_reservas_acum": 1931, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-11-09", "mes_deadline": "2026-11-01", "total_reservas_acum": 3297, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-11-16", "mes_deadline": "2026-11-01", "total_reservas_acum": 4920, "timeouts_acum": 1, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-11-23", "mes_deadline": "2026-11-01", "total_reservas_acum": 6382, "timeouts_acum": 1, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-11-30", "mes_deadline": "2026-11-01", "total_reservas_acum": 6529, "timeouts_acum": 1, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-11-30", "mes_deadline": "2026-12-01", "total_reservas_acum": 1075, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-12-07", "mes_deadline": "2026-12-01", "total_reservas_acum": 1989, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-12-14", "mes_deadline": "2026-12-01", "total_reservas_acum": 2806, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-12-21", "mes_deadline": "2026-12-01", "total_reservas_acum": 3909, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-12-28", "mes_deadline": "2026-12-01", "total_reservas_acum": 4345, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2026-12-28", "mes_deadline": "2027-01-01", "total_reservas_acum": 285, "timeouts_acum": 1, "pct_timeout_acum": 0.4}, {"semana_inicio": "2027-01-04", "mes_deadline": "2027-01-01", "total_reservas_acum": 827, "timeouts_acum": 1, "pct_timeout_acum": 0.1}, {"semana_inicio": "2027-01-11", "mes_deadline": "2027-01-01", "total_reservas_acum": 1312, "timeouts_acum": 1, "pct_timeout_acum": 0.1}, {"semana_inicio": "2027-01-18", "mes_deadline": "2027-01-01", "total_reservas_acum": 1680, "timeouts_acum": 1, "pct_timeout_acum": 0.1}, {"semana_inicio": "2027-01-25", "mes_deadline": "2027-01-01", "total_reservas_acum": 2001, "timeouts_acum": 1, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-02-01", "mes_deadline": "2027-02-01", "total_reservas_acum": 256, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-02-08", "mes_deadline": "2027-02-01", "total_reservas_acum": 483, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-02-15", "mes_deadline": "2027-02-01", "total_reservas_acum": 673, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-02-22", "mes_deadline": "2027-02-01", "total_reservas_acum": 879, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-03-01", "mes_deadline": "2027-03-01", "total_reservas_acum": 186, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-03-08", "mes_deadline": "2027-03-01", "total_reservas_acum": 356, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-03-15", "mes_deadline": "2027-03-01", "total_reservas_acum": 595, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-03-22", "mes_deadline": "2027-03-01", "total_reservas_acum": 764, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-03-29", "mes_deadline": "2027-03-01", "total_reservas_acum": 814, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-03-29", "mes_deadline": "2027-04-01", "total_reservas_acum": 118, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-04-05", "mes_deadline": "2027-04-01", "total_reservas_acum": 280, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-04-12", "mes_deadline": "2027-04-01", "total_reservas_acum": 400, "timeouts_acum": 1, "pct_timeout_acum": 0.3}, {"semana_inicio": "2027-04-19", "mes_deadline": "2027-04-01", "total_reservas_acum": 563, "timeouts_acum": 1, "pct_timeout_acum": 0.2}, {"semana_inicio": "2027-04-26", "mes_deadline": "2027-04-01", "total_reservas_acum": 677, "timeouts_acum": 1, "pct_timeout_acum": 0.1}, {"semana_inicio": "2027-04-26", "mes_deadline": "2027-05-01", "total_reservas_acum": 20, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-05-03", "mes_deadline": "2027-05-01", "total_reservas_acum": 145, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-05-10", "mes_deadline": "2027-05-01", "total_reservas_acum": 318, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-05-17", "mes_deadline": "2027-05-01", "total_reservas_acum": 426, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-05-24", "mes_deadline": "2027-05-01", "total_reservas_acum": 493, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-05-31", "mes_deadline": "2027-05-01", "total_reservas_acum": 501, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-05-31", "mes_deadline": "2027-06-01", "total_reservas_acum": 48, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-06-07", "mes_deadline": "2027-06-01", "total_reservas_acum": 129, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-06-14", "mes_deadline": "2027-06-01", "total_reservas_acum": 198, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-06-21", "mes_deadline": "2027-06-01", "total_reservas_acum": 254, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-06-28", "mes_deadline": "2027-06-01", "total_reservas_acum": 288, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-06-28", "mes_deadline": "2027-07-01", "total_reservas_acum": 18, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-07-05", "mes_deadline": "2027-07-01", "total_reservas_acum": 85, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-07-12", "mes_deadline": "2027-07-01", "total_reservas_acum": 177, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-07-19", "mes_deadline": "2027-07-01", "total_reservas_acum": 210, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-07-26", "mes_deadline": "2027-07-01", "total_reservas_acum": 234, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-07-26", "mes_deadline": "2027-08-01", "total_reservas_acum": 6, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-08-02", "mes_deadline": "2027-08-01", "total_reservas_acum": 24, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-08-09", "mes_deadline": "2027-08-01", "total_reservas_acum": 68, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-08-16", "mes_deadline": "2027-08-01", "total_reservas_acum": 131, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-08-23", "mes_deadline": "2027-08-01", "total_reservas_acum": 172, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-08-30", "mes_deadline": "2027-08-01", "total_reservas_acum": 192, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-08-30", "mes_deadline": "2027-09-01", "total_reservas_acum": 37, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-09-06", "mes_deadline": "2027-09-01", "total_reservas_acum": 97, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-09-13", "mes_deadline": "2027-09-01", "total_reservas_acum": 138, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-09-20", "mes_deadline": "2027-09-01", "total_reservas_acum": 196, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-09-27", "mes_deadline": "2027-09-01", "total_reservas_acum": 206, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-09-27", "mes_deadline": "2027-10-01", "total_reservas_acum": 11, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-10-04", "mes_deadline": "2027-10-01", "total_reservas_acum": 45, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-10-11", "mes_deadline": "2027-10-01", "total_reservas_acum": 66, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-10-18", "mes_deadline": "2027-10-01", "total_reservas_acum": 80, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-10-25", "mes_deadline": "2027-10-01", "total_reservas_acum": 95, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-11-01", "mes_deadline": "2027-11-01", "total_reservas_acum": 30, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-11-08", "mes_deadline": "2027-11-01", "total_reservas_acum": 41, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-11-15", "mes_deadline": "2027-11-01", "total_reservas_acum": 49, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-11-22", "mes_deadline": "2027-11-01", "total_reservas_acum": 72, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-11-29", "mes_deadline": "2027-11-01", "total_reservas_acum": 74, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-11-29", "mes_deadline": "2027-12-01", "total_reservas_acum": 1, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-12-06", "mes_deadline": "2027-12-01", "total_reservas_acum": 2, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2027-12-13", "mes_deadline": "2027-12-01", "total_reservas_acum": 4, "timeouts_acum": 0, "pct_timeout_acum": 0.0}, {"semana_inicio": "2028-01-03", "mes_deadline": "2028-01-01", "total_reservas_acum": 2, "timeouts_acum": 0, "pct_timeout_acum": 0.0}], "kr22_sem": [{"semana_inicio": "2026-03-30", "cant_agencias_unicas": 1083}, {"semana_inicio": "2026-04-06", "cant_agencias_unicas": 1787}, {"semana_inicio": "2026-04-13", "cant_agencias_unicas": 1753}, {"semana_inicio": "2026-04-20", "cant_agencias_unicas": 1603}, {"semana_inicio": "2026-04-27", "cant_agencias_unicas": 1678}, {"semana_inicio": "2026-05-04", "cant_agencias_unicas": 1852}, {"semana_inicio": "2026-05-11", "cant_agencias_unicas": 1850}, {"semana_inicio": "2026-05-18", "cant_agencias_unicas": 1988}, {"semana_inicio": "2026-05-25", "cant_agencias_unicas": 1986}, {"semana_inicio": "2026-06-01", "cant_agencias_unicas": 1930}, {"semana_inicio": "2026-06-08", "cant_agencias_unicas": 2023}, {"semana_inicio": "2026-06-15", "cant_agencias_unicas": 1966}, {"semana_inicio": "2026-06-22", "cant_agencias_unicas": 2134}, {"semana_inicio": "2026-06-29", "cant_agencias_unicas": 2055}, {"semana_inicio": "2026-07-06", "cant_agencias_unicas": 2099}, {"semana_inicio": "2026-07-13", "cant_agencias_unicas": 2163}, {"semana_inicio": "2026-07-20", "cant_agencias_unicas": 2714}, {"semana_inicio": "2026-07-27", "cant_agencias_unicas": 1740}], "kr22_sem_cum": [{"semana_inicio": "2026-03-30", "cant_agencias_acum_mes": 1083}, {"semana_inicio": "2026-04-06", "cant_agencias_acum_mes": 2373}, {"semana_inicio": "2026-04-13", "cant_agencias_acum_mes": 3228}, {"semana_inicio": "2026-04-20", "cant_agencias_acum_mes": 3828}, {"semana_inicio": "2026-04-27", "cant_agencias_acum_mes": 4365}, {"semana_inicio": "2026-05-04", "cant_agencias_acum_mes": 2120}, {"semana_inicio": "2026-05-11", "cant_agencias_acum_mes": 3111}, {"semana_inicio": "2026-05-18", "cant_agencias_acum_mes": 3977}, {"semana_inicio": "2026-05-25", "cant_agencias_acum_mes": 4667}, {"semana_inicio": "2026-06-01", "cant_agencias_acum_mes": 1930}, {"semana_inicio": "2026-06-08", "cant_agencias_acum_mes": 3092}, {"semana_inicio": "2026-06-15", "cant_agencias_acum_mes": 3923}, {"semana_inicio": "2026-06-22", "cant_agencias_acum_mes": 4653}, {"semana_inicio": "2026-06-29", "cant_agencias_acum_mes": 5222}, {"semana_inicio": "2026-07-06", "cant_agencias_acum_mes": 2970}, {"semana_inicio": "2026-07-13", "cant_agencias_acum_mes": 3919}, {"semana_inicio": "2026-07-20", "cant_agencias_acum_mes": 4948}, {"semana_inicio": "2026-07-27", "cant_agencias_acum_mes": 5387}], "kr31_sem": [{"semana_inicio": "2026-03-30", "net_revenue_real": 541174.53}, {"semana_inicio": "2026-04-06", "net_revenue_real": 1016652.8}, {"semana_inicio": "2026-04-13", "net_revenue_real": 1148234.89}, {"semana_inicio": "2026-04-20", "net_revenue_real": 1052589.97}, {"semana_inicio": "2026-04-27", "net_revenue_real": 997901.84}, {"semana_inicio": "2026-05-04", "net_revenue_real": 1076302.72}, {"semana_inicio": "2026-05-11", "net_revenue_real": 1146918.77}, {"semana_inicio": "2026-05-18", "net_revenue_real": 1037575.06}, {"semana_inicio": "2026-05-25", "net_revenue_real": 1201825.14}, {"semana_inicio": "2026-06-01", "net_revenue_real": 1229508.77}, {"semana_inicio": "2026-06-08", "net_revenue_real": 1017678.56}, {"semana_inicio": "2026-06-15", "net_revenue_real": 1082950.4}, {"semana_inicio": "2026-06-22", "net_revenue_real": 992504.54}, {"semana_inicio": "2026-06-29", "net_revenue_real": 1056340.28}, {"semana_inicio": "2026-07-06", "net_revenue_real": 1142418.54}, {"semana_inicio": "2026-07-13", "net_revenue_real": 1224200.17}, {"semana_inicio": "2026-07-20", "net_revenue_real": 1152146.41}, {"semana_inicio": "2026-07-27", "net_revenue_real": 686127.48}], "kr31_sem_cum": [{"semana_inicio": "2026-03-30", "net_revenue_acum_mes": 541174.53}, {"semana_inicio": "2026-04-06", "net_revenue_acum_mes": 1557827.33}, {"semana_inicio": "2026-04-13", "net_revenue_acum_mes": 2706062.21}, {"semana_inicio": "2026-04-20", "net_revenue_acum_mes": 3758652.18}, {"semana_inicio": "2026-04-27", "net_revenue_acum_mes": 4756554.02}, {"semana_inicio": "2026-05-04", "net_revenue_acum_mes": 1328582.57}, {"semana_inicio": "2026-05-11", "net_revenue_acum_mes": 2475501.35}, {"semana_inicio": "2026-05-18", "net_revenue_acum_mes": 3513076.41}, {"semana_inicio": "2026-05-25", "net_revenue_acum_mes": 4714901.55}, {"semana_inicio": "2026-06-01", "net_revenue_acum_mes": 1229508.77}, {"semana_inicio": "2026-06-08", "net_revenue_acum_mes": 2247187.33}, {"semana_inicio": "2026-06-15", "net_revenue_acum_mes": 3330137.73}, {"semana_inicio": "2026-06-22", "net_revenue_acum_mes": 4322642.28}, {"semana_inicio": "2026-06-29", "net_revenue_acum_mes": 5378982.55}, {"semana_inicio": "2026-07-06", "net_revenue_acum_mes": 1890649.72}, {"semana_inicio": "2026-07-13", "net_revenue_acum_mes": 3114849.89}, {"semana_inicio": "2026-07-20", "net_revenue_acum_mes": 4266996.3}, {"semana_inicio": "2026-07-27", "net_revenue_acum_mes": 4953123.78}], "kr32_sem": [{"semana_inicio": "2026-03-30", "agencias_cotizadoras": 2582, "agencias_cotizaron_y_vendieron": 1026, "pct_activacion_comercial": 39.7}, {"semana_inicio": "2026-04-06", "agencias_cotizadoras": 3966, "agencias_cotizaron_y_vendieron": 1930, "pct_activacion_comercial": 48.7}, {"semana_inicio": "2026-04-13", "agencias_cotizadoras": 3971, "agencias_cotizaron_y_vendieron": 1989, "pct_activacion_comercial": 50.1}, {"semana_inicio": "2026-04-20", "agencias_cotizadoras": 3882, "agencias_cotizaron_y_vendieron": 1854, "pct_activacion_comercial": 47.8}, {"semana_inicio": "2026-04-27", "agencias_cotizadoras": 3703, "agencias_cotizaron_y_vendieron": 1709, "pct_activacion_comercial": 46.2}, {"semana_inicio": "2026-05-04", "agencias_cotizadoras": 4015, "agencias_cotizaron_y_vendieron": 1954, "pct_activacion_comercial": 48.7}, {"semana_inicio": "2026-05-11", "agencias_cotizadoras": 4020, "agencias_cotizaron_y_vendieron": 2064, "pct_activacion_comercial": 51.3}, {"semana_inicio": "2026-05-18", "agencias_cotizadoras": 3995, "agencias_cotizaron_y_vendieron": 1978, "pct_activacion_comercial": 49.5}, {"semana_inicio": "2026-05-25", "agencias_cotizadoras": 4167, "agencias_cotizaron_y_vendieron": 2074, "pct_activacion_comercial": 49.8}, {"semana_inicio": "2026-06-01", "agencias_cotizadoras": 4083, "agencias_cotizaron_y_vendieron": 2104, "pct_activacion_comercial": 51.5}, {"semana_inicio": "2026-06-08", "agencias_cotizadoras": 4013, "agencias_cotizaron_y_vendieron": 1967, "pct_activacion_comercial": 49.0}, {"semana_inicio": "2026-06-15", "agencias_cotizadoras": 4019, "agencias_cotizaron_y_vendieron": 1941, "pct_activacion_comercial": 48.3}, {"semana_inicio": "2026-06-22", "agencias_cotizadoras": 4037, "agencias_cotizaron_y_vendieron": 1847, "pct_activacion_comercial": 45.8}, {"semana_inicio": "2026-06-29", "agencias_cotizadoras": 4037, "agencias_cotizaron_y_vendieron": 1912, "pct_activacion_comercial": 47.4}, {"semana_inicio": "2026-07-06", "agencias_cotizadoras": 4248, "agencias_cotizaron_y_vendieron": 2149, "pct_activacion_comercial": 50.6}, {"semana_inicio": "2026-07-13", "agencias_cotizadoras": 4275, "agencias_cotizaron_y_vendieron": 2108, "pct_activacion_comercial": 49.3}, {"semana_inicio": "2026-07-20", "agencias_cotizadoras": 4335, "agencias_cotizaron_y_vendieron": 2116, "pct_activacion_comercial": 48.8}, {"semana_inicio": "2026-07-27", "agencias_cotizadoras": 3926, "agencias_cotizaron_y_vendieron": 1654, "pct_activacion_comercial": 42.1}], "kr32_sem_cum": [{"semana_inicio": "2026-03-30", "agencias_cotizadoras_acum": 2582, "agencias_compraron_acum": 1026, "pct_activacion_acum": 39.7}, {"semana_inicio": "2026-04-06", "agencias_cotizadoras_acum": 4573, "agencias_compraron_acum": 2565, "pct_activacion_acum": 56.1}, {"semana_inicio": "2026-04-13", "agencias_cotizadoras_acum": 5538, "agencias_compraron_acum": 3562, "pct_activacion_acum": 64.3}, {"semana_inicio": "2026-04-20", "agencias_cotizadoras_acum": 6211, "agencias_compraron_acum": 4293, "pct_activacion_acum": 69.1}, {"semana_inicio": "2026-04-27", "agencias_cotizadoras_acum": 6675, "agencias_compraron_acum": 4728, "pct_activacion_acum": 70.8}, {"semana_inicio": "2026-05-04", "agencias_cotizadoras_acum": 4271, "agencias_compraron_acum": 2237, "pct_activacion_acum": 52.4}, {"semana_inicio": "2026-05-11", "agencias_cotizadoras_acum": 5397, "agencias_compraron_acum": 3424, "pct_activacion_acum": 63.4}, {"semana_inicio": "2026-05-18", "agencias_cotizadoras_acum": 6131, "agencias_compraron_acum": 4205, "pct_activacion_acum": 68.6}, {"semana_inicio": "2026-05-25", "agencias_cotizadoras_acum": 6788, "agencias_compraron_acum": 4913, "pct_activacion_acum": 72.4}, {"semana_inicio": "2026-06-01", "agencias_cotizadoras_acum": 4083, "agencias_compraron_acum": 2104, "pct_activacion_acum": 51.5}, {"semana_inicio": "2026-06-08", "agencias_cotizadoras_acum": 5324, "agencias_compraron_acum": 3268, "pct_activacion_acum": 61.4}, {"semana_inicio": "2026-06-15", "agencias_cotizadoras_acum": 6105, "agencias_compraron_acum": 4122, "pct_activacion_acum": 67.5}, {"semana_inicio": "2026-06-22", "agencias_cotizadoras_acum": 6706, "agencias_compraron_acum": 4764, "pct_activacion_acum": 71.0}, {"semana_inicio": "2026-06-29", "agencias_cotizadoras_acum": 7215, "agencias_compraron_acum": 5109, "pct_activacion_acum": 70.8}, {"semana_inicio": "2026-07-06", "agencias_cotizadoras_acum": 5147, "agencias_compraron_acum": 3008, "pct_activacion_acum": 58.4}, {"semana_inicio": "2026-07-13", "agencias_cotizadoras_acum": 6111, "agencias_compraron_acum": 3966, "pct_activacion_acum": 64.9}, {"semana_inicio": "2026-07-20", "agencias_cotizadoras_acum": 6837, "agencias_compraron_acum": 4723, "pct_activacion_acum": 69.1}, {"semana_inicio": "2026-07-27", "agencias_cotizadoras_acum": 7299, "agencias_compraron_acum": 5198, "pct_activacion_acum": 71.2}]};
-
-var MONTHS=["2026-04","2026-05","2026-06","2026-07","2026-08","2026-09"];
-var LABELS=["Abr","May","Jun","Jul","Ago","Sep"];
-
-var KRS=[
-  {id:"kr21",squad:"es",peso:7,label:"KR 2.1 - Disminuir cancelación de bookings por falta pago",targets:[22,20,18.25,16.85,15.75,15],inverted:true,
-   fmtA:function(v){return v!==null?v.toFixed(2)+"%":null;},fmtT:function(v){return v+"%";},
-   getActual:function(i){
-     var m=MONTHS[i],rows=DATA.kr21.filter(function(r){return String(r.mes_deadline||"").substring(0,7)===m;});
-     if(!rows.length)return null;
-     var total=rows.reduce(function(s,r){return s+(r.total_reservas||0);},0);
-     var timeout=rows.reduce(function(s,r){return s+(r.reservas_timeout_client||0);},0);
-     return total>0?timeout/total*100:null;
-   }},
-  {id:"kr22",squad:"es",peso:13,label:"KR 2.2 - Aumentar la cantidad de agencias que utilizan herramientas de gestión/postventa",targets:[4500,4500,5025,5445,5775,6000],inverted:false,
-   fmtA:function(v){return v!==null?Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return v.toLocaleString("es-AR");},
-   getActual:function(i){
-     var m=MONTHS[i],row=DATA.kr22.find(function(r){return String(r.creation_yearmonth||"").substring(0,7)===m;});
-     return row?row.cant_agencias_unicas:null;
-   }},
-  {id:"kr31",squad:"ce",peso:16,label:"KR 3.1 - Net Revenue B2B Minorista",targets:null,inverted:false,
-   fmtA:function(v){return v!==null?"$"+Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return v!==null?"$"+Math.round(v).toLocaleString("es-AR"):"N/A";},
-   getActual:function(i){
-     var m=MONTHS[i],row=DATA.kr31.find(function(r){return String(r.periodo||"").substring(0,7)===m;});
-     return row?row.net_rev_real:null;
-   },
-   getTarget:function(i){
-     var m=MONTHS[i],row=DATA.kr31.find(function(r){return String(r.periodo||"").substring(0,7)===m;});
-     return row?row.net_rev_target:null;
-   }},
-  {id:"kr32",squad:"ce",peso:7,label:"KR 3.2 - Aumentar agencias compradoras que utilizan cotizaciones",targets:[70,70,73,74,75,77],inverted:false,
-   fmtA:function(v){return v!==null?v.toFixed(1)+"%":null;},fmtT:function(v){return v+"%";},
-   getActual:function(i){
-     var m=MONTHS[i],row=DATA.kr32.find(function(r){return String(r.mes||"").substring(0,7)===m;});
-     return row?row.pct_activacion_comercial:null;
-   }},
-  {id:"kr33",squad:"ce",peso:7,label:"KR 3.3 - Frecuencia de compra",targets:[35,35,35,35,35,35],inverted:false,
-   fmtA:function(v){return v!==null?v.toFixed(1)+"%":null;},fmtT:function(v){return v+"%";},
-   getActual:function(i){
-     var m=MONTHS[i];
-     var ym=parseInt(m.slice(0,4)+m.slice(5,7),10);
-     var row=DATA.kr33.find(function(r){return r.mes_evaluacion===ym;});
-     return row?row.pct_aumento:null;
-   }}
-];
-
-function krNro(label){return label.split(/ - | — /)[0].trim();}
-function krDesc(label){var p=label.split(/ - | — /);return p.slice(1).join(' - ').trim();}
-var SQ_TOT={};KRS.forEach(function(kr){SQ_TOT[kr.squad]=(SQ_TOT[kr.squad]||0)+kr.peso;});
-function pesoGlobalPct(kr){return Math.round(kr.peso/50*100)+'%';}
-function pesoSquadPct(kr){return (kr.peso/(SQ_TOT[kr.squad]||1)*100).toFixed(1)+'%';}
-var activeTab='mensual', activeSq='all';
-
-function setTab(tab,btn){
-  activeTab=tab;
-  document.querySelectorAll('.tabpill').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  var showSq=tab==='progreso'||tab==='mensual'||tab==='semanal';
-  document.getElementById('sq-filter').style.display=showSq?'flex':'none';
-  document.getElementById('mes-filter').style.display=tab==='monitor'?'flex':'none';
-  if(tab==='monitor'){
-    document.querySelectorAll('.mespill').forEach(function(b){b.classList.toggle('active',(b.dataset.mes||'all')===activePulsoMes);});
-  }
-  if(window._pulsoChart){window._pulsoChart.destroy();window._pulsoChart=null;}
-  render();
-}
-function setSq(sq,btn){
-  activeSq=sq;
-  document.querySelectorAll('.sqpill').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  render();
-}
-function filteredKRS(){
-  return activeSq==='ce'?KRS.filter(function(k){return k.squad==='ce';}):
-         activeSq==='es'?KRS.filter(function(k){return k.squad==='es';}):KRS;
-}
-function compliance(a,t,inv){if(a===null||t===null||t===0)return null;return inv?t/a*100:a/t*100;}
-function effComp(pct){return pct===null?null:pct<70?0:pct>130?130:pct;}
-function chip(pct){
-  if(pct===null)return'<span class="chip na">N/D</span>';
-  var eff=effComp(pct);
-  var cls=eff>=100?'ok':eff>=80?'warn':'bad';
-  var note=pct<70?'≡ 0':pct>130?'↑130':'';
-  if(!note)return'<span class="chip '+cls+'">'+Math.round(pct)+'%</span>';
-  return'<span class="chip '+cls+'" style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.2;padding:3px 8px"><span>'+Math.round(pct)+'%</span><span style="font-size:9px;font-weight:400;opacity:.85">'+note+'</span></span>';
-}
-function avg(arr){var v=arr.filter(function(x){return x!==null;});return v.length?v.reduce(function(a,b){return a+b;},0)/v.length:null;}
-function nowYm(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()<9?"0":"")+(d.getMonth()+1);}
-
-function renderMensual(){
-  var idxs=[0,1,2,3,4,5];
-  var krs=filteredKRS();
-  var closed=nowYm();
-  var html='';
-
-  html+='<p class="sec-title">OKR Status FY27</p>';
-  html+='<div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap">';
-  html+='<span style="font-size:11px;color:var(--muted);font-weight:600">Umbrales:</span>';
-  html+='<span class="chip ok">&#8805; 100%&nbsp; en target</span>';
-  html+='<span class="chip warn">80 – 99%&nbsp; cerca</span>';
-  html+='<span class="chip bad">&lt; 80%&nbsp; lejos</span>';
-  html+='<span class="chip na">N/D&nbsp; sin dato</span>';
-  html+='</div>';
-  html+='<div class="card"><div class="card-hdr">Tablero Producto B2B - HTML · H1 FY27</div>';
-  html+='<table><thead><tr><th style="width:65px;text-align:center">Nro KR</th><th class="th-kr">KR</th><th style="width:45px;text-align:center">Peso</th>';
-  idxs.forEach(function(i){html+='<th>'+LABELS[i]+'</th>';});
-  html+='<th class="th-q">Q1</th><th class="th-q">Q2</th>';
-  html+='</tr></thead><tbody>';
-  var totalPesoM=krs.reduce(function(s,k){return s+k.peso;},0);
-  var cumPM=0,pesoPM=krs.map(function(k,i){if(i===krs.length-1)return(100-cumPM).toFixed(1)+'%';var p=parseFloat((k.peso/totalPesoM*100).toFixed(1));cumPM+=p;return p.toFixed(1)+'%';});
-  krs.forEach(function(kr,ki){
-    var comps=MONTHS.map(function(m,i){
-      var a=kr.getActual(i);
-      var t=kr.targets!==null?kr.targets[i]:(kr.getTarget?kr.getTarget(i):null);
-      return m<=closed?compliance(a,t,kr.inverted):null;
-    });
-    var q1=avg([comps[0],comps[1],comps[2]]),q2=avg([comps[3],comps[4],comps[5]]);
-    html+='<tr><td style="text-align:center;font-weight:700;color:#5B21B6;white-space:nowrap;padding:11px 8px">'+krNro(kr.label)+'</td><td class="td-kr">'+krDesc(kr.label)+'</td><td style="text-align:center;font-weight:600;color:var(--muted);white-space:nowrap;padding:11px 6px">'+pesoPM[ki]+'</td>';
-    idxs.forEach(function(i){html+='<td>'+(MONTHS[i]<=closed?chip(comps[i]):'-')+'</td>';});
-    html+='<td class="td-q">'+chip(q1)+'</td><td class="td-q">'+chip(q2)+'</td>';
-    html+='</tr>';
-  });
-  var wComps=idxs.map(function(i){
-    if(MONTHS[i]>closed)return null;
-    var num=0,den=0;
-    krs.forEach(function(kr){
-      var a=kr.getActual(i);
-      var t=kr.targets!==null?kr.targets[i]:(kr.getTarget?kr.getTarget(i):null);
-      var c=effComp(compliance(a,t,kr.inverted));
-      if(c!==null){num+=c*kr.peso;den+=kr.peso;}
-    });
-    return den>0?num/den:null;
-  });
-  var wQ1=avg([wComps[0],wComps[1],wComps[2]]),wQ2=avg([wComps[3],wComps[4],wComps[5]]);
-  var sepStyle='border-top:2px solid var(--border2);background:var(--surface2)';
-  html+='<tr style="'+sepStyle+'">';
-  html+='<td colspan="2" style="text-align:left;padding-left:16px;font-weight:700;font-size:12px;color:var(--purple)">Cumplimiento Total Ponderado</td>';
-  html+='<td style="text-align:center;font-weight:700;font-size:11px;color:var(--purple)">100%</td>';
-  idxs.forEach(function(i){html+='<td>'+(MONTHS[i]<=closed?chip(wComps[i]):'-')+'</td>';});
-  html+='<td class="td-q">'+chip(wQ1)+'</td><td class="td-q">'+chip(wQ2)+'</td>';
-  html+='</tr>';
-  html+='</tbody></table></div>';
-
-  html+='<p class="sec-title">Targets</p><div class="card"><table><thead><tr><th style="width:65px;text-align:center">Nro KR</th><th class="th-kr">KR</th>';
-  idxs.forEach(function(i){html+='<th>'+LABELS[i]+'</th>';});
-  html+='</tr></thead><tbody>';
-  krs.forEach(function(kr){
-    html+='<tr><td style="text-align:center;font-weight:700;color:#5B21B6;white-space:nowrap;padding:11px 8px">'+krNro(kr.label)+'</td><td class="td-kr">'+krDesc(kr.label)+'</td>';
-    idxs.forEach(function(i){
-      var t=kr.targets!==null?kr.targets[i]:(kr.getTarget?kr.getTarget(i):null);
-      html+='<td>'+(t!==null?kr.fmtT(t):'<span class="chip na">N/A</span>')+'</td>';
-    });
-    html+='</tr>';
-  });
-  html+='</tbody></table></div>';
-
-  html+='<p class="sec-title">Actuals</p><div class="card"><table><thead><tr><th style="width:65px;text-align:center">Nro KR</th><th class="th-kr">KR</th>';
-  idxs.forEach(function(i){html+='<th>'+LABELS[i]+'</th>';});
-  html+='</tr></thead><tbody>';
-  krs.forEach(function(kr){
-    html+='<tr><td style="text-align:center;font-weight:700;color:#5B21B6;white-space:nowrap;padding:11px 8px">'+krNro(kr.label)+'</td><td class="td-kr">'+krDesc(kr.label)+'</td>';
-    idxs.forEach(function(i){
-      var a=kr.getActual(i);
-      html+='<td>'+(MONTHS[i]<=closed?(a!==null?kr.fmtA(a):'<span class="chip na">N/D</span>'):'-')+'</td>';
-    });
-    html+='</tr>';
-  });
-  html+='</tbody></table></div>';
-
-  return html;
-}
-
-function renderSemanal(){
-  var today=nowYm();
-  var todayLbl=LABELS[MONTHS.indexOf(today)]||today;
-  var weeks=(DATA.kr22_sem||[]).map(function(r){return r.semana_inicio;})
-    .filter(function(w){return w&&semMes(w)>='2026-04';})
-    .sort()
-    .filter(function(w,i,a){return a.indexOf(w)===i;});
-
-  function mIdx(ym){return MONTHS.indexOf(ym);}
-  function upTo(data,w){return data.filter(function(r){return r.semana_inicio&&semMes(r.semana_inicio)===semMes(w)&&r.semana_inicio<=w;});}
-
-  function acum21(w){
-    var wm=semMes(w);
-    var r=(DATA.kr21_sem_cum||[]).find(function(x){
-      return x.semana_inicio===w&&String(x.mes_deadline||'').substring(0,7)===wm;
-    });
-    if(!r||!r.total_reservas_acum)return null;
-    var mi=mIdx(wm);
-    return{v:r.pct_timeout_acum.toFixed(1)+'%',comp:compliance(r.pct_timeout_acum,KRS[0].targets[mi<0?0:mi],true)};
-  }
-  function acum22(w){
-    var r=(DATA.kr22_sem_cum||[]).find(function(x){return x.semana_inicio===w;});
-    var mi=mIdx(semMes(w));
-    if(!r||r.cant_agencias_acum_mes===null||mi<0)return null;
-    var n=r.cant_agencias_acum_mes;
-    return{v:Math.round(n).toLocaleString('es-AR'),comp:compliance(n,KRS[1].targets[mi],false)};
-  }
-  function acum31(w){
-    var r=(DATA.kr31_sem_cum||[]).find(function(x){return x.semana_inicio===w;});
-    var mr=DATA.kr31.find(function(x){return String(x.periodo||'').substring(0,7)===semMes(w);});
-    if(!r||r.net_revenue_acum_mes===null||!mr||!mr.net_rev_target)return null;
-    var tot=r.net_revenue_acum_mes;
-    return{v:'$'+(tot>=1e6?(tot/1e6).toFixed(1)+'M':(tot/1e3).toFixed(0)+'K'),comp:compliance(tot,mr.net_rev_target,false)};
-  }
-  function acum32(w){
-    var r=(DATA.kr32_sem_cum||[]).find(function(x){return x.semana_inicio===w;});
-    var mi=mIdx(semMes(w));
-    if(!r||r.pct_activacion_acum===null||mi<0)return null;
-    return{v:r.pct_activacion_acum.toFixed(1)+'%',comp:compliance(r.pct_activacion_acum,KRS[3].targets[mi],false)};
-  }
-  function acum33(w){
-    var mi=mIdx(semMes(w));
-    if(mi<0)return null;
-    var ym=parseInt(semMes(w).replace('-',''),10);
-    var mr=DATA.kr33.find(function(x){return x.mes_evaluacion===ym;});
-    if(!mr||mr.pct_aumento===null)return null;
-    return{v:mr.pct_aumento.toFixed(1)+'%',comp:compliance(mr.pct_aumento,35,false)};
-  }
-
-  function sem21(w){
-    var wm=semMes(w);
-    var wi=weeks.indexOf(w);
-    var cur=(DATA.kr21_sem_cum||[]).find(function(x){return x.semana_inicio===w&&String(x.mes_deadline||'').substring(0,7)===wm;});
-    if(!cur||!cur.total_reservas_acum)return null;
-    var prv=wi>0&&semMes(weeks[wi-1])===wm?(DATA.kr21_sem_cum||[]).find(function(x){return x.semana_inicio===weeks[wi-1]&&String(x.mes_deadline||'').substring(0,7)===wm;}):null;
-    var tot=cur.total_reservas_acum-(prv?prv.total_reservas_acum:0);
-    var tou=cur.timeouts_acum-(prv?prv.timeouts_acum:0);
-    if(!tot)return null;
-    return{v:(tou/tot*100).toFixed(1)+'%'};
-  }
-  function sem22(w){
-    var r=(DATA.kr22_sem||[]).find(function(x){return x.semana_inicio===w;});
-    if(!r||r.cant_agencias_unicas===null)return null;
-    return{v:Math.round(r.cant_agencias_unicas).toLocaleString('es-AR')};
-  }
-  function sem31(w){
-    var r=(DATA.kr31_sem||[]).find(function(x){return x.semana_inicio===w;});
-    if(!r||r.net_revenue_real===null)return null;
-    var v=r.net_revenue_real;
-    return{v:'$'+(v>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K')};
-  }
-  function sem32(w){
-    var r=(DATA.kr32_sem||[]).find(function(x){return x.semana_inicio===w;});
-    if(!r||r.pct_activacion_comercial===null)return null;
-    return{v:r.pct_activacion_comercial.toFixed(1)+'%'};
-  }
-  function sem33(w){return acum33(w);}
-
-  var SEM_KRS=[
-    {label:KRS[0].label,squad:'es',peso:7,fn:acum21,semFn:sem21,
-     tgtFn:function(w){var mi=mIdx(semMes(w));return mi>=0?KRS[0].targets[mi]+'%':null;}},
-    {label:KRS[1].label,squad:'es',peso:13,fn:acum22,semFn:sem22,
-     tgtFn:function(w){var mi=mIdx(semMes(w));return mi>=0?KRS[1].targets[mi].toLocaleString('es-AR')+' ag.':null;}},
-    {label:KRS[2].label,squad:'ce',peso:16,fn:acum31,semFn:sem31,
-     tgtFn:function(w){var mr=DATA.kr31.find(function(x){return String(x.periodo||'').substring(0,7)===semMes(w);});return mr&&mr.net_rev_target?'$'+(mr.net_rev_target>=1e6?(mr.net_rev_target/1e6).toFixed(1)+'M':(mr.net_rev_target/1e3).toFixed(0)+'K'):null;}},
-    {label:KRS[3].label,squad:'ce',peso:7,fn:acum32,semFn:sem32,
-     tgtFn:function(w){var mi=mIdx(semMes(w));return mi>=0?KRS[3].targets[mi]+'%':null;}},
-    {label:KRS[4].label,squad:'ce',peso:7,fn:acum33,semFn:sem33,
-     tgtFn:function(){return'35%';}},
-  ];
-  var filtSemKRS=activeSq==='all'?SEM_KRS:SEM_KRS.filter(function(k){return k.squad===activeSq;});
-
-  var html='';
-  html+='<p class="sec-title">Seguimiento Semanal — '+todayLbl+' 2026</p>';
-  html+='<div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap">';
-  html+='<span style="font-size:11px;color:var(--muted);font-weight:600">Umbrales:</span>';
-  html+='<span class="chip ok">&#8805; 100%&nbsp; en target</span>';
-  html+='<span class="chip warn">80 – 99%&nbsp; cerca</span>';
-  html+='<span class="chip bad">&lt; 80%&nbsp; lejos</span>';
-  html+='<span class="chip na">N/D&nbsp; sin dato</span>';
-  html+='<span style="font-size:11px;color:var(--muted);margin-left:4px">· Acumulado del mes hasta cada semana vs target mensual</span>';
-  html+='</div>';
-
-  html+='<div class="card"><div class="card-hdr">Progreso semanal — '+todayLbl+' 2026</div>';
-  html+='<div style="overflow-x:auto"><table style="white-space:nowrap"><thead><tr><th style="width:65px;text-align:center">Nro KR</th><th class="th-kr">KR</th><th style="width:45px;text-align:center">Peso</th>';
-  weeks.forEach(function(w){html+='<th>'+semLabel(w)+'</th>';});
-  html+='</tr></thead><tbody>';
-  var totalPesoS=filtSemKRS.reduce(function(s,k){return s+k.peso;},0);
-  var cumPS=0,pesoPS=filtSemKRS.map(function(k,i){if(i===filtSemKRS.length-1)return(100-cumPS).toFixed(1)+'%';var p=parseFloat((k.peso/totalPesoS*100).toFixed(1));cumPS+=p;return p.toFixed(1)+'%';});
-  filtSemKRS.forEach(function(kr,ki){
-    html+='<tr><td style="text-align:center;font-weight:700;color:#5B21B6;white-space:nowrap;padding:11px 8px">'+krNro(kr.label)+'</td><td class="td-kr">'+krDesc(kr.label)+'</td><td style="text-align:center;font-weight:600;color:var(--muted);white-space:nowrap;padding:11px 6px">'+pesoPS[ki]+'</td>';
-    weeks.forEach(function(w){
-      var d=kr.fn(w);
-      var cls,txt;
-      if(!d||d.comp===null){cls='na';txt='N/D';}
-      else{cls=d.comp>=100?'ok':d.comp>=80?'warn':'bad';txt=Math.round(d.comp)+'%';}
-      html+='<td><span class="chip '+cls+'">'+txt+'</span></td>';
-    });
-    html+='</tr>';
-  });
-  html+='</tbody></table></div></div>';
-
-  html+='<p class="sec-title" style="margin-top:24px">Detalle por KR — '+todayLbl+' 2026</p>';
-  html+='<div class="card" style="overflow-x:auto"><table style="white-space:nowrap;border-collapse:collapse"><thead>';
-  html+='<tr><th style="width:65px;text-align:center">Nro KR</th><th class="th-kr" style="min-width:220px">KR</th>';
-  weeks.forEach(function(w){html+='<th style="min-width:90px">'+semLabel(w)+'</th>';});
-  html+='</tr></thead><tbody>';
-
-  filtSemKRS.forEach(function(kr,ki){
-    var isLast=ki===filtSemKRS.length-1;
-    var hdrBg='background:linear-gradient(90deg,#5B21B6,#7C3AED)';
-    html+='<tr><td style="'+hdrBg+';color:#fff;font-weight:700;font-size:11px;padding:9px 8px;text-align:center;white-space:nowrap">'+krNro(kr.label)+'</td><td colspan="'+(weeks.length+1)+'" style="'+hdrBg+';color:#fff;font-weight:700;font-size:12px;padding:9px 16px;letter-spacing:.02em">'+krDesc(kr.label)+'</td></tr>';
-    html+='<tr style="background:var(--surface)">';
-    html+='<td colspan="2" style="font-size:11px;padding:7px 8px 7px 20px;color:var(--muted);font-weight:600;border-right:3px solid var(--border2);white-space:nowrap">Semana</td>';
-    weeks.forEach(function(w){
-      var d=kr.semFn(w);
-      if(!d){html+='<td style="text-align:center;padding:7px 8px;font-size:13px"><span class="chip na">N/D</span></td>';return;}
-      html+='<td style="text-align:center;padding:7px 8px;font-size:13px;color:var(--text)">'+d.v+'</td>';
-    });
-    html+='</tr>';
-    html+='<tr style="background:var(--surface2)">';
-    html+='<td colspan="2" style="font-size:11px;padding:7px 8px 7px 20px;color:var(--purple);font-weight:700;border-right:3px solid #C4B5FD;white-space:nowrap">Acumulado</td>';
-    weeks.forEach(function(w){
-      var d=kr.fn(w);
-      if(!d){html+='<td style="text-align:center;padding:7px 8px;font-size:13px"><span class="chip na">N/D</span></td>';return;}
-      html+='<td style="text-align:center;padding:7px 8px;font-size:14px;font-weight:700;color:var(--text)">'+d.v+'</td>';
-    });
-    html+='</tr>';
-    var sepBot=isLast?'border-bottom:none':'border-bottom:2px solid var(--border2)';
-    html+='<tr style="background:var(--surface2)">';
-    html+='<td colspan="2" style="font-size:11px;padding:5px 8px 5px 20px;color:var(--muted);font-weight:500;'+sepBot+';white-space:nowrap">Target mensual</td>';
-    weeks.forEach(function(w){
-      html+='<td style="text-align:center;font-size:11px;padding:5px 8px;color:var(--muted);'+sepBot+'">'+(kr.tgtFn(w)||'—')+'</td>';
-    });
-    html+='</tr>';
-  });
-
-  html+='</tbody></table></div>';
-  return html;
-}
-
-function renderProgreso(){
-  var krs=filteredKRS();
-  var closed=nowYm();
-  var latestM=MONTHS.filter(function(m){return m<=closed;}).pop()||MONTHS[0];
-  var latestI=MONTHS.indexOf(latestM);
-  var html='';
-
-  html+='<p class="sec-title">Estado Actual — '+LABELS[latestI]+' 2026</p>';
-  html+='<div class="card" style="margin-bottom:24px">';
-  html+='<table><thead><tr><th style="width:65px;text-align:center">Nro KR</th><th class="th-kr" style="width:380px">KR</th><th style="width:45px;text-align:center">Peso</th><th>Actual</th><th>Target</th><th>Cumplimiento</th><th>Delta vs Target</th></tr></thead><tbody>';
-  var totalPesoP=krs.reduce(function(s,k){return s+k.peso;},0);
-  var cumPP=0,pesoPP=krs.map(function(k,i){if(i===krs.length-1)return(100-cumPP).toFixed(1)+'%';var p=parseFloat((k.peso/totalPesoP*100).toFixed(1));cumPP+=p;return p.toFixed(1)+'%';});
-  krs.forEach(function(kr,ki){
-    var a=kr.getActual(latestI);
-    var t=kr.targets!==null?kr.targets[latestI]:(kr.getTarget?kr.getTarget(latestI):null);
-    var comp=compliance(a,t,kr.inverted);
-    var delta='—',deltaColor='var(--muted)';
-    if(a!==null&&t!==null){
-      var diff=a-t;
-      var fmtSample=kr.fmtA(1)||'';
-      if(fmtSample.indexOf('%')>=0){
-        delta=(diff>=0?'+':'')+diff.toFixed(2)+'pp';
-      } else if(fmtSample.indexOf('$')>=0){
-        delta=(diff>=0?'+':'-')+'$'+Math.round(Math.abs(diff)).toLocaleString('es-AR');
-      } else {
-        delta=(diff>=0?'+':'')+Math.round(diff).toLocaleString('es-AR');
-      }
-      var isGood=kr.inverted?(a<=t):(a>=t);
-      deltaColor=isGood?'#16a34a':'#cf222e';
-    }
-    html+='<tr>';
-    html+='<td style="text-align:center;font-weight:700;color:#5B21B6;white-space:nowrap;padding:11px 8px">'+krNro(kr.label)+'</td><td class="td-kr">'+krDesc(kr.label)+'</td><td style="text-align:center;font-weight:600;color:var(--muted);white-space:nowrap;padding:11px 6px">'+pesoPP[ki]+'</td>';
-    html+='<td style="font-weight:700">'+(a!==null?kr.fmtA(a):'<span class="chip na">N/D</span>')+'</td>';
-    html+='<td>'+(t!==null?kr.fmtT(t):'<span class="chip na">N/A</span>')+'</td>';
-    html+='<td>'+chip(comp)+'</td>';
-    html+='<td style="font-weight:700;color:'+deltaColor+'">'+delta+'</td>';
-    html+='</tr>';
-  });
-  html+='</tbody></table></div>';
-
-  html+='<p class="sec-title">Progreso al Target</p>';
-  krs.forEach(function(kr){
-    var a=kr.getActual(latestI);
-    var t=kr.targets!==null?kr.targets[latestI]:(kr.getTarget?kr.getTarget(latestI):null);
-    var comp=compliance(a,t,kr.inverted);
-    var barPct=comp!==null?Math.min(comp,100):0;
-    var barColor=comp!==null?(comp>=100?'#22c55e':comp>=80?'#eab308':'#ef4444'):'#ddd';
-    html+='<div class="card" style="padding:16px 20px;margin-bottom:8px">';
-    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">';
-    html+='<span style="font-weight:700;color:#5B21B6;font-size:12px;margin-right:8px">'+krNro(kr.label)+'</span><span style="font-weight:600;font-size:13px">'+krDesc(kr.label)+'</span>';
-    html+='<span style="font-size:13px">'+(a!==null?kr.fmtA(a)+' / '+(t!==null?kr.fmtT(t):'?'):'N/D')+'&nbsp;&nbsp;'+chip(comp)+'</span>';
-    html+='</div>';
-    html+='<div style="background:#f0f0f0;border-radius:6px;height:10px">';
-    html+='<div style="background:'+barColor+';width:'+barPct+'%;height:10px;border-radius:6px;transition:width .4s"></div>';
-    html+='</div>';
-    html+='</div>';
-  });
-
-  return html;
-}
-
-function render(){
-  if(window._pulsoChart){window._pulsoChart.destroy();window._pulsoChart=null;}
-  if(activeTab==='progreso'){document.getElementById('root').innerHTML=renderProgreso();}
-  else if(activeTab==='monitor'){document.getElementById('root').innerHTML=renderPulso();setTimeout(buildPulsoChart,0);}
-  else if(activeTab==='semanal'){document.getElementById('root').innerHTML=renderSemanal();}
-  else{document.getElementById('root').innerHTML=renderMensual();}
-}
-
-function toggleTheme(){
-  var dark=document.body.classList.toggle('dark');
-  document.getElementById('theme-btn').textContent=dark?'☀':'🌙';
-  try{localStorage.setItem('okrs_theme',dark?'dark':'light');}catch(e){}
-}
-(function(){try{if(localStorage.getItem('okrs_theme')==='dark'){document.body.classList.add('dark');document.getElementById('theme-btn').textContent='☀';}}catch(e){}})();
-
-// ── Tab Monitor ────────────────────────────────────────────────────────────
-
-var activePulsoKR='kr21',activePulsoMes=nowYm();
-var MON_SHORT=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-
-var PULSO_KRS=[
-  {id:'kr21',label:'2.1 · Cancelaciones'},
-  {id:'kr22',label:'2.2 · Agencias'},
-  {id:'kr31',label:'3.1 · Net Revenue'},
-  {id:'kr32',label:'3.2 · Cotizaciones'},
-  {id:'kr33',label:'3.3 · Frecuencia'},
-];
-
-var PULSO_DESCS={
-  kr21:'<b>Semanal</b> — el % de cancelaciones varia semana a semana y tiene targets mensuales escalonados. El monitoreo semanal es esencial para detectar picos antes de que el mes cierre mal.',
-  kr22:'<b>Semanal + acumulado</b> — barras: agencias unicas esa semana; linea verde: acumulado de agencias unicas en el mes (sin repetir); linea roja: target mensual. La linea verde es la metrica oficial.',
-  kr31:'<b>Semanal + acumulado</b> — barras: revenue semanal; linea violeta: acumulado del mes; linea roja: forecast mensual. Util para detectar semanas debiles y proyectar el cierre del mes.',
-  kr32:'<b>Semanal</b> — % de agencias que cotizaron Y compraron sobre el total que cotizo esa semana. La brecha con el target (70-77%) es significativa; el monitoreo semanal permite intervenir a tiempo.',
-  kr33:'<b>Referencia mensual</b> — este KR compara el mes N vs el mes N+1 y no tiene granularidad semanal. Se muestra el resultado de cada mes cerrado. Verde = supero el target del 35%.',
-};
-
-function setPulsoKR(kr){
-  activePulsoKR=kr;
-  render();
-}
-function setPulsoMes(mes,btn){
-  activePulsoMes=mes;
-  document.querySelectorAll('.mespill').forEach(function(b){b.classList.toggle('active',(b.dataset.mes||'all')===mes);});
-  render();
-}
-
-function semLabel(s){if(!s)return'';var p=String(s).split('-');return p[2]+'-'+MON_SHORT[parseInt(p[1],10)-1];}
-function semMes(s){return String(s||'').substring(0,7);}
-function semTarget(s,tgts){var mi=MONTHS.indexOf(semMes(s));return(mi>=0&&tgts)?tgts[mi]:null;}
-function semRows(rows,field){
-  field=field||'semana_inicio';
-  if(activePulsoMes==='all')return rows;
-  return rows.filter(function(r){return semMes(r[field])===activePulsoMes;});
-}
-
-function _statCards(cards){
-  var sc='flex:1;min-width:140px;padding:16px 20px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)';
-  var sl='font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px';
-  var sv='font-size:26px;font-weight:800;line-height:1.1;margin-bottom:4px';
-  var ss='font-size:11px;color:var(--muted)';
-  var html='<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px">';
-  cards.forEach(function(c){
-    html+='<div style="'+sc+'"><div style="'+sl+'">'+c.lbl+'</div>'
-      +'<div style="'+sv+';color:'+(c.col||'#1F2328')+'">'+c.val+'</div>'
-      +'<div style="'+ss+'">'+c.sub+'</div></div>';
-  });
-  return html+'</div>';
-}
-
-function _curMesInfo(lastSem){
-  var cm=activePulsoMes!=='all'?activePulsoMes:semMes(lastSem);
-  var mi=MONTHS.indexOf(cm);
-  return{mes:cm,idx:mi,lab:mi>=0?LABELS[mi]:'mes'};
-}
-
-function renderKR21Stats(){
-  var rows=semRows(DATA.kr21_sem);
-  var tA=[22,20,18.25,16.85,15.75,15];
-  var valid=rows.filter(function(r){return r.pct_timeout_client!==null;});
-  if(!valid.length)return'';
-  var picoVal=valid.reduce(function(mx,r){return r.pct_timeout_client>mx?r.pct_timeout_client:mx;},-Infinity);
-  var picoRow=valid.find(function(r){return r.pct_timeout_client===picoVal;});
-  var lastRow=valid[valid.length-1];
-  var lastVal=lastRow.pct_timeout_client;
-  var cm=_curMesInfo(lastRow.semana_inicio);
-  var curTgt=cm.idx>=0?tA[cm.idx]:null;
-  var brecha=(lastVal!==null&&curTgt!==null)?lastVal-curTgt:null;
-  var bStr=brecha!==null?((brecha>=0?'+':'')+brecha.toFixed(1)+'pp'):'--';
-  var bCol=brecha!==null&&brecha>0?'#CF222E':'#16a34a';
-  return _statCards([
-    {lbl:'Pico de cancelaciones',val:picoVal.toFixed(1)+'%',sub:'semana '+semLabel(picoRow.semana_inicio),col:'#CF222E'},
-    {lbl:'Ultimo dato real',val:lastVal.toFixed(1)+'%',sub:'semana '+semLabel(lastRow.semana_inicio)},
-    {lbl:'Target '+cm.lab,val:curTgt!==null?curTgt+'%':'N/A',sub:'meta mensual',col:'#5B21B6'},
-    {lbl:'Brecha',val:bStr,sub:'sobre target '+cm.lab,col:bCol},
-  ]);
-}
-
-function renderKR22Stats(){
-  var rows=semRows(DATA.kr22_sem);
-  var tA=[4500,4500,5025,5445,5775,6000];
-  var valid=rows.filter(function(r){return r.cant_agencias_unicas!==null;});
-  if(!valid.length)return'';
-  var maxRow=valid.reduce(function(mx,r){return r.cant_agencias_unicas>mx.cant_agencias_unicas?r:mx;},valid[0]);
-  var lastRow=valid[valid.length-1];
-  var cm=_curMesInfo(lastRow.semana_inicio);
-  var curTgt=cm.idx>=0?tA[cm.idx]:null;
-  var semsEnMes=DATA.kr22_sem.filter(function(r){return semMes(r.semana_inicio)===cm.mes;}).length;
-  var fmt=function(v){return Math.round(v).toLocaleString('es-AR');};
-  return _statCards([
-    {lbl:'Max semana',val:fmt(maxRow.cant_agencias_unicas),sub:'semana '+semLabel(maxRow.semana_inicio),col:'#2563EB'},
-    {lbl:'Target '+cm.lab,val:curTgt!==null?curTgt.toLocaleString('es-AR'):'N/A',sub:'agencias unicas',col:'#5B21B6'},
-    {lbl:'Semanas en '+cm.lab,val:semsEnMes+' de 4',sub:'datos completos'},
-    {lbl:'Ultimo dato',val:fmt(lastRow.cant_agencias_unicas),sub:'sem '+semLabel(lastRow.semana_inicio)},
-  ]);
-}
-
-function renderKR31Stats(){
-  var rows=semRows(DATA.kr31_sem);
-  var valid=rows.filter(function(r){return r.net_revenue_real!==null;});
-  if(!valid.length)return'';
-  var lastRow=valid[valid.length-1];
-  var cm=_curMesInfo(lastRow.semana_inicio);
-  var cumRows=semRows(DATA.kr31_sem_cum||[]);
-  var lastCum=cumRows.length?cumRows[cumRows.length-1]:null;
-  var total=lastCum?lastCum.net_revenue_acum_mes:null;
-  var bestRow=valid.reduce(function(mx,r){return r.net_revenue_real>mx.net_revenue_real?r:mx;},valid[0]);
-  var worstRow=valid.reduce(function(mn,r){return r.net_revenue_real<mn.net_revenue_real?r:mn;},valid[0]);
-  var completos=valid.filter(function(r,i){return i<valid.length-1;});
-  var prom=completos.length?completos.reduce(function(s,r){return s+(r.net_revenue_real||0);},0)/completos.length:0;
-  var fmtM=function(v){return v===null?'N/D':'$'+(v>=1000000?(v/1000000).toFixed(1)+'M':(v/1000).toFixed(0)+'K');};
-  return _statCards([
-    {lbl:'Revenue acumulado',val:fmtM(total),sub:cm.lab+' hasta sem '+semLabel(lastRow.semana_inicio),col:'#2563EB'},
-    {lbl:'Mejor semana',val:fmtM(bestRow.net_revenue_real),sub:semLabel(bestRow.semana_inicio),col:'#16a34a'},
-    {lbl:'Semana mas baja',val:fmtM(worstRow.net_revenue_real),sub:semLabel(worstRow.semana_inicio),col:'#CF222E'},
-    {lbl:'Promedio semanal',val:fmtM(prom),sub:'semanas completas',col:'#5B21B6'},
-  ]);
-}
-
-function renderKR32Stats(){
-  var rows=semRows(DATA.kr32_sem);
-  var tA=[70,70,73,74,75,77];
-  var valid=rows.filter(function(r){return r.pct_activacion_comercial!==null;});
-  if(!valid.length)return'';
-  var vals=valid.map(function(r){return r.pct_activacion_comercial;});
-  var minV=Math.min.apply(null,vals),maxV=Math.max.apply(null,vals);
-  var bestRow=valid.find(function(r){return r.pct_activacion_comercial===maxV;});
-  var cm=_curMesInfo(valid[valid.length-1].semana_inicio);
-  var refTgt=70;
-  var prom=vals.reduce(function(s,v){return s+v;},0)/vals.length;
-  var brecha=prom-refTgt;
-  return _statCards([
-    {lbl:'Rango observado',val:Math.round(minV)+'–'+Math.round(maxV)+'%',sub:'sem completas'},
-    {lbl:'Target mensual',val:'70%+',sub:'abr–may: 70%',col:'#CF222E'},
-    {lbl:'Mejor semana',val:maxV.toFixed(1)+'%',sub:semLabel(bestRow.semana_inicio),col:'#16a34a'},
-    {lbl:'Brecha vs target',val:(brecha>=0?'+':'')+brecha.toFixed(0)+'pp',sub:'promedio vs 70%',col:brecha>=0?'#16a34a':'#CF222E'},
-  ]);
-}
-
-function renderKR33Stats(){
-  var rows=DATA.kr33;
-  if(!rows||!rows.length)return'';
-  var vals=rows.map(function(r){return r.pct_aumento;});
-  var bestIdx=vals.indexOf(Math.max.apply(null,vals));
-  var lastRow=rows[rows.length-1];
-  var lastVal=lastRow.pct_aumento;
-  function kr33Label(r){
-    var m=String(r.mes_evaluacion||'');
-    if(m.length===6){
-      var ym=m.substring(0,4)+'-'+m.substring(4,6);
-      var mi=MONTHS.indexOf(ym);
-      var prev=mi>0?LABELS[mi-1]:LABELS[mi];
-      return prev+(mi>=0?'→'+LABELS[mi]:'');
-    }
-    return m;
-  }
-  var curMI=MONTHS.indexOf(nowYm());
-  var hasCurrent=rows.some(function(r){
-    var m=String(r.mes_evaluacion||'');
-    if(m.length===6){var ym=m.substring(0,4)+'-'+m.substring(4,6);return ym===nowYm();}
-    return false;
-  });
-  return _statCards([
-    {lbl:'Target fijo',val:'35%',sub:'todos los meses',col:'#5B21B6'},
-    {lbl:'Mejor mes',val:Math.max.apply(null,vals).toFixed(1)+'%',sub:kr33Label(rows[bestIdx]),col:'#16a34a'},
-    {lbl:'Ultimo cerrado',val:lastVal.toFixed(1)+'%',sub:kr33Label(lastRow),col:lastVal>=35?'#16a34a':'#CF222E'},
-    {lbl:'Mes en curso',val:hasCurrent?vals[vals.length-1].toFixed(1)+'%':'0%',sub:hasCurrent?'datos parciales':'sin datos aun',col:'#6B7280'},
-  ]);
-}
-
-function buildPulsoChart(){
-  if(window._pulsoChart){window._pulsoChart.destroy();window._pulsoChart=null;}
-  var canvas=document.getElementById('pulso-canvas');
-  if(!canvas||typeof Chart==='undefined')return;
-  var G='rgba(22,163,74,.85)',R='rgba(207,34,46,.85)',BL='#2563EB',GR='#16a34a';
-  var base={responsive:true,plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false}}};
-
-  if(activePulsoKR==='kr21'){
-    var rows=semRows(DATA.kr21_sem);
-    var tA=[22,20,18.25,16.85,15.75,15];
-    var labs=rows.map(function(r){return semLabel(r.semana_inicio);});
-    var vals=rows.map(function(r){return r.pct_timeout_client;});
-    var tgt=rows.map(function(r){return semTarget(r.semana_inicio,tA);});
-    window._pulsoChart=new Chart(canvas,{type:'line',data:{labels:labs,datasets:[
-      {label:'% timeout real',data:vals,borderColor:BL,backgroundColor:'rgba(37,99,235,.12)',borderWidth:2,pointRadius:3,fill:true,tension:0.3,order:2},
-      {label:'target mensual',data:tgt,borderColor:'#CF222E',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false,tension:0,order:1}
-    ]},options:{responsive:true,plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false},title:{display:true,text:'% cancelaciones por falta de pago — semana a semana'}},scales:{y:{ticks:{callback:function(v){return v+'%';}}}}}}); return;
-  }
-
-  if(activePulsoKR==='kr22'){
-    var rows=semRows(DATA.kr22_sem);
-    var tA=[4500,4500,5025,5445,5775,6000];
-    var labs=rows.map(function(r){return semLabel(r.semana_inicio);});
-    var vals=rows.map(function(r){return r.cant_agencias_unicas;});
-    var tgt=rows.map(function(r){return semTarget(r.semana_inicio,tA);});
-    var cum=rows.map(function(r){var c=(DATA.kr22_sem_cum||[]).find(function(x){return x.semana_inicio===r.semana_inicio;});return c?c.cant_agencias_acum_mes:null;});
-    window._pulsoChart=new Chart(canvas,{type:'bar',data:{labels:labs,datasets:[
-      {label:'agencias unicas/semana',data:vals,backgroundColor:'rgba(37,99,235,.75)',borderRadius:4,order:3},
-      {label:'acumulado mensual',data:cum,type:'line',borderColor:GR,backgroundColor:'rgba(22,163,74,.08)',borderWidth:2.5,pointRadius:3,fill:false,tension:0.4,order:2},
-      {label:'target mensual',data:tgt,type:'line',borderColor:'#CF222E',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false,tension:0,order:1}
-    ]},options:Object.assign({},base,{plugins:Object.assign({},base.plugins,{title:{display:true,text:'Agencias unicas semanales + acumulado mensual + target'}}),scales:{y:{beginAtZero:true}}})}); return;
-  }
-
-  if(activePulsoKR==='kr31'){
-    var rows=activePulsoMes==='all'?DATA.kr31_sem:semRows(DATA.kr31_sem);
-    var labs=rows.map(function(r){return semLabel(r.semana_inicio);});
-    var wV=rows.map(function(r){return r.net_revenue_real;});
-    var cum=rows.map(function(r){var c=(DATA.kr31_sem_cum||[]).find(function(x){return x.semana_inicio===r.semana_inicio;});return c?c.net_revenue_acum_mes:null;});
-    var tgt=rows.map(function(r){var d=DATA.kr31.find(function(x){return semMes(x.periodo)===semMes(r.semana_inicio);});return d?d.net_rev_target:null;});
-    window._pulsoChart=new Chart(canvas,{type:'bar',data:{labels:labs,datasets:[
-      {label:'revenue semanal',data:wV,backgroundColor:'rgba(37,99,235,.75)',borderRadius:4,yAxisID:'y',order:3},
-      {label:'acumulado mensual',data:cum,type:'line',borderColor:GR,backgroundColor:'rgba(22,163,74,.08)',borderWidth:2.5,pointRadius:3,fill:true,tension:0.4,yAxisID:'y2',order:2},
-      {label:'forecast mensual',data:tgt,type:'line',borderColor:'#CF222E',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false,tension:0,yAxisID:'y2',order:1}
-    ]},options:Object.assign({},base,{plugins:Object.assign({},base.plugins,{title:{display:true,text:'Net revenue semanal y acumulado mensual'}}),scales:{y:{position:'left',ticks:{color:'#2563EB',callback:function(v){return'$'+Math.round(v/1000)+'K';}}},y2:{position:'right',grid:{drawOnChartArea:false},ticks:{color:GR,callback:function(v){return'$'+(v/1000000).toFixed(1)+'M';}}}}})}); return;
-  }
-
-  if(activePulsoKR==='kr32'){
-    var rows=semRows(DATA.kr32_sem);
-    var tA=[70,70,73,74,75,77];
-    var labs=rows.map(function(r){return semLabel(r.semana_inicio);});
-    var vals=rows.map(function(r){return r.pct_activacion_comercial;});
-    var tgt=rows.map(function(r){return semTarget(r.semana_inicio,tA)||70;});
-    window._pulsoChart=new Chart(canvas,{type:'line',data:{labels:labs,datasets:[
-      {label:'% activacion real',data:vals,borderColor:BL,backgroundColor:'rgba(37,99,235,.12)',borderWidth:2,pointRadius:3,fill:true,tension:0.3,order:2},
-      {label:'target 70%',data:tgt,borderColor:'#CF222E',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false,tension:0,order:1}
-    ]},options:{responsive:true,plugins:{legend:{position:'top'},tooltip:{mode:'index',intersect:false},title:{display:true,text:'% agencias que cotizaron y compraron — semanal'}},scales:{y:{min:30,ticks:{callback:function(v){return v+'%';}}}}}}); return;
-  }
-
-  if(activePulsoKR==='kr33'){
-    var rows=DATA.kr33;
-    function kr33L(r){var m=String(r.mes_evaluacion||'');if(m.length===6){var ym=m.substring(0,4)+'-'+m.substring(4,6);var mi=MONTHS.indexOf(ym);return mi>=0?LABELS[mi]:m;}return m;}
-    var labs=rows.map(kr33L);
-    var vals=rows.map(function(r){return r.pct_aumento;});
-    window._pulsoChart=new Chart(canvas,{type:'bar',data:{labels:labs,datasets:[
-      {label:'% agencias que aumentaron',data:vals,backgroundColor:vals.map(function(v){return v>=35?G:R;}),borderRadius:4},
-      {label:'target 35%',data:labs.map(function(){return 35;}),type:'line',borderColor:'#CF222E',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false}
-    ]},options:Object.assign({},base,{plugins:Object.assign({},base.plugins,{title:{display:true,text:'Frecuencia de compra — valores mensuales cerrados'}}),scales:{y:{min:30,max:40,ticks:{callback:function(v){return v+'%';}}}}})});
-  }
-}
-
-var _statsRenderers={kr21:renderKR21Stats,kr22:renderKR22Stats,kr31:renderKR31Stats,kr32:renderKR32Stats,kr33:renderKR33Stats};
-
-function getKRTrend(krId){
-  var cfg={
-    kr21:{rows:DATA.kr21_sem,f:'pct_timeout_client',inv:true},
-    kr22:{rows:DATA.kr22_sem,f:'cant_agencias_unicas',inv:false},
-    kr31:{rows:DATA.kr31_sem,f:'net_revenue_real',inv:false},
-    kr32:{rows:DATA.kr32_sem,f:'pct_activacion_comercial',inv:false},
-  }[krId];
-  if(!cfg)return null;
-  var vals=cfg.rows.map(function(r){return r[cfg.f];}).filter(function(v){return v!==null;});
-  if(vals.length<2)return null;
-  var n=vals.length,last=vals[n-1],prev=vals[n-2],prev2=n>2?vals[n-3]:null;
-  var worse=function(a,b){return cfg.inv?a>b:a<b;};
-  return{last:last,prev:prev,inv:cfg.inv,up:cfg.inv?last<prev:last>prev,declining:worse(last,prev)&&prev2!==null&&worse(prev,prev2)};
-}
-
-function renderTrendAlert(krId){
-  var t=getKRTrend(krId);
-  if(!t||!t.declining)return'';
-  return'<div style="padding:10px 16px;margin-bottom:12px;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius);font-size:12px;color:#b91c1c;display:flex;align-items:center;gap:8px"><span style="font-size:16px">&#9888;</span><span><b>Tendencia bajista</b> — 2 semanas consecutivas empeorando.</span></div>';
-}
-
-
-function renderPulso(){
-  var html='<p class="sec-title">Monitor Semanal — H1 FY27</p>';
-  html+='<div class="card" style="padding:14px 20px;margin-bottom:14px"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">';
-  html+='<span class="filter-label" style="margin-right:4px">KR</span>';
-  PULSO_KRS.forEach(function(kr){
-    var a=activePulsoKR===kr.id?' active':'';
-    var t=getKRTrend(kr.id);
-    var dot=t&&t.declining?'<span style="display:inline-block;width:6px;height:6px;background:#ef4444;border-radius:50%;margin-left:4px;vertical-align:middle"></span>':'';
-    html+='<button class="pill krpill'+a+'" data-kr="'+kr.id+'" onclick="setPulsoKR(this.dataset.kr)">'+kr.label+dot+'</button>';
-  });
-  html+='</div></div>';
-  html+='<div id="monitor-desc" style="padding:12px 16px;margin-bottom:14px;background:#EEF2FF;border:1px solid #C7D2FE;border-radius:var(--radius);font-size:12px;color:#3730A3">'+PULSO_DESCS[activePulsoKR]+'</div>';
-  html+=renderTrendAlert(activePulsoKR);
-  var fn=_statsRenderers[activePulsoKR];
-  if(fn)html+=fn();
-  html+='<div class="card" style="padding:20px 20px 16px"><canvas id="pulso-canvas" style="max-height:380px"></canvas></div>';
-  return html;
-}
-
-document.querySelectorAll('.mespill[data-mes]').forEach(function(b){
-  if(b.dataset.mes!=='all'&&b.dataset.mes>nowYm())b.style.display='none';
-});
-render();
-</script>
-</body>
-</html>

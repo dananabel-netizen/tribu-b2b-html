@@ -18,11 +18,15 @@ WITH base AS (
         r.id AS reservation_id,
         CASE WHEN bi.transaction_status = 'Cancelado' AND ca.type = 'TIMEOUT_CLIENT'
              THEN 'Time_out_client' ELSE r.status END AS status,
-        DATE_TRUNC('month', CAST(dc.deadline AS DATE)) AS mes_deadline
-    FROM data.lake.chewie_reservation r
-    LEFT JOIN data.lake.chewie_cancelation ca ON ca.reservation_id = r.oid
-    LEFT JOIN data.lake.chewie_deferred_condition dc ON r.oid = dc.reservation_id
-    LEFT JOIN data.analytics.bi_sales_fact_sales_recognition bi
+        DATE_TRUNC('month', CAST(dc.deadline AS DATE)) AS mes_deadline,
+        r.country_code,
+        SUM(bi.gb) AS gb_reserva,
+        ca.type as tipo_cancel,
+        bi.transaction_status as status_reserva
+    FROM lake.chewie_reservation r
+    LEFT JOIN lake.chewie_cancelation ca ON ca.reservation_id = r.oid
+    LEFT JOIN lake.chewie_deferred_condition dc ON r.oid = dc.reservation_id
+    LEFT JOIN analytics.bi_sales_fact_sales_recognition bi
         ON bi.transaction_code = CAST(r.id AS BIGINT)
         AND bi.partition_period >= '2024-01'
         AND bi.channel IN ('hoteldo-html-platinum','hoteldo-html-gold','hoteldo-html-silver','hoteldo-html-classic')
@@ -30,17 +34,15 @@ WITH base AS (
         AND r.channel LIKE 'hoteldo%'
         AND dc.reason = 'PROMISE-B2B'
         AND dc.deadline IS NOT NULL
-        AND CAST(dc.deadline AS DATE) >= DATE '2026-04-01'
     GROUP BY r.id, r.status, DATE_TRUNC('month', CAST(dc.deadline AS DATE)),
-             bi.transaction_status, ca.type
+             r.country_code, bi.transaction_status, ca.type
 )
 SELECT
     mes_deadline,
-    COUNT(DISTINCT reservation_id)                                                          AS total_reservas,
-    COUNT(DISTINCT CASE WHEN status = 'Time_out_client' THEN reservation_id END)            AS reservas_timeout_client,
-    ROUND(100.0 * COUNT(DISTINCT CASE WHEN status = 'Time_out_client' THEN reservation_id END)
-        / NULLIF(COUNT(DISTINCT reservation_id), 0), 2)                                    AS pct_timeout_client
-FROM base GROUP BY 1 ORDER BY 1
+    status,
+    COUNT(DISTINCT reservation_id) AS reservas,
+    SUM(gb_reserva) AS gb
+FROM base GROUP BY 1, 2 ORDER BY 1, 2
 """
 
 QUERY_KR22 = """
@@ -54,11 +56,11 @@ FROM (
     SELECT *,
         case when starts_with(created_user, 'ext.') then substr(created_user, 5)
              else created_user end as created_user_ajustado
-    FROM data.analytics.bi_requests_fact_header
-    WHERE creation_yearmonth >= '2026-04'
+    FROM analytics.bi_requests_fact_header
+    WHERE creation_yearmonth >= '2025-01'
 ) rfh
 INNER JOIN (
-    SELECT * FROM data.analytics.bi_transactional_fact_transactions
+    SELECT * FROM analytics.bi_transactional_fact_transactions
     WHERE reservation_year_month IS NOT NULL AND line_of_business = 'B2B'
 ) trx ON trx.transaction_code = rfh.transaction_code
 LEFT JOIN (
@@ -66,9 +68,9 @@ LEFT JOIN (
         case when starts_with(ad_username, 'ext.') then substr(ad_username, 5)
              else ad_username end as ad_username_ajustado,
         1 as flg_agente_staff
-    FROM data.lake.asrpt_payroll
+    FROM lake.asrpt_payroll
 ) n ON n.ad_username_ajustado = rfh.created_user_ajustado
-WHERE rfh.creation_yearmonth IN ('2026-04','2026-05','2026-06','2026-07','2026-08','2026-09')
+WHERE rfh.creation_yearmonth IN ('2026-03','2026-04','2026-05','2026-06','2026-07','2026-08','2026-09','2026-10','2026-11','2026-12','2027-01','2027-02','2027-03')
   AND trx.channel LIKE '%hoteldo-html%'
 GROUP BY rfh.creation_yearmonth ORDER BY rfh.creation_yearmonth
 """
@@ -84,7 +86,7 @@ WITH forecast_budget AS (
              when pais='Colombia' then 'CO' when pais='Ecuador' then 'EC' when pais='Mexico' then 'MX'
              when pais='Peru' then 'PE' when pais='Uruguay' then 'UY' else 'O' end as pais,
         'FCST' AS source, SUM(CAST(net_revenue AS DECIMAL(15,6))) as net_revenue
-    FROM data.raw.b2bfc1_gd WHERE lob_canal = 'B2B-MIN' GROUP BY 1,2,3,4,5)
+    FROM raw.b2bfc1_gd WHERE lob_canal = 'B2B-MIN' GROUP BY 1,2,3,4,5)
     UNION ALL
     (SELECT YEAR(DATE_PARSE(fecha, '%d-%m-%Y')) + 2000 as year, CAST(no_mes_proyectado AS INTEGER) as month,
         case when producto='Cars' then 'Autos' when producto='Cruises' then 'Cruceros'
@@ -95,7 +97,7 @@ WITH forecast_budget AS (
              when pais='Colombia' then 'CO' when pais='Ecuador' then 'EC' when pais='Mexico' then 'MX'
              when pais='Peru' then 'PE' when pais='Uruguay' then 'UY' else 'O' end as pais,
         'BDGT' AS source, SUM(CAST(net_revenue AS DECIMAL(15,6))) as net_revenue
-    FROM data.raw.b2b_budget_gd WHERE lob_canal = 'B2B-MIN' GROUP BY 1,2,3,4,5)
+    FROM raw.b2b_budget_gd WHERE lob_canal = 'B2B-MIN' GROUP BY 1,2,3,4,5)
 ), real_data AS (
     SELECT DISTINCT year(fh.gestion_date) as year, month(fh.gestion_date) as month,
         CASE WHEN fh.partner_id IN ('AP12142','AP12961','AP12767','AP12539','AP12792',
@@ -114,13 +116,13 @@ WITH forecast_budget AS (
             WHEN fh.country_code IN ('US','PA') THEN pnl.net_revenues_usd * 0.80
             WHEN fh.country_code='BR' AND fh.product IN ('Vuelos') THEN pnl.net_revenues_usd * 0.92
             ELSE pnl.net_revenues_usd * 0.97 END) as net_revenue
-    FROM data.analytics.bi_sales_fact_sales_recognition fh
+    FROM analytics.bi_sales_fact_sales_recognition fh
         LEFT JOIN data.analytics.bi_pnlop_fact_current_model pnl ON fh.product_id = pnl.product_id
         LEFT JOIN data.analytics.bi_transactional_fact_transactions t ON t.transaction_code = CAST(pnl.transaction_code AS VARCHAR)
         LEFT JOIN data.tmp.correccion_be be ON CAST(be.product_id AS VARCHAR) = CAST(pnl.product_id AS VARCHAR)
         LEFT JOIN data.tmp.mktg_funds d ON CAST(d.product_id AS VARCHAR) = CAST(pnl.product_id AS VARCHAR)
         LEFT JOIN data.tmp.mkt_funds_bd1 mkt ON mkt.product_id = fh.product_id
-    WHERE fh.gestion_date >= CAST('2026-04-01' AS DATE)
+    WHERE fh.gestion_date >= CAST('2025-01-01' AS DATE)
         AND fh.partition_period >= '2025-01-01'
         AND fh.lob_gestion IN ('stg__sales_b2bnohoteldo','stg_sales__b2bhoteldo')
         AND pnl.line_of_business = 'B2B'
@@ -129,37 +131,44 @@ WITH forecast_budget AS (
         AND fh.parent_channel = 'Agencias afiliadas'
     GROUP BY 1,2,3,4
 ), main AS (
-    SELECT CONCAT(CAST(COALESCE(f.year,rd.year) AS VARCHAR),'-',LPAD(CAST(COALESCE(f.month,rd.month) AS VARCHAR),2,'0')) as periodo,
+    SELECT COALESCE(f.year,rd.year) as year, COALESCE(f.month,rd.month) as month,
+        CONCAT(CAST(COALESCE(f.year,rd.year) AS VARCHAR),'-',LPAD(CAST(COALESCE(f.month,rd.month) AS VARCHAR),2,'0')) as periodo,
         ROUND(f.net_revenue,2) as net_revenue_target, ROUND(rd.net_revenue,2) as net_revenue_real
     FROM forecast_budget f
         FULL JOIN real_data rd ON f.year=rd.year AND f.month=rd.month AND f.pais=rd.pais AND f.producto=rd.producto
-    WHERE COALESCE(f.year,rd.year)=2026 AND COALESCE(f.month,rd.month) BETWEEN 4 AND 9
+    WHERE COALESCE(f.year,rd.year) IN (2025,2026)
+    ORDER BY year, month
 )
 SELECT periodo, SUM(net_revenue_real) as net_rev_real, SUM(net_revenue_target) as net_rev_target
 FROM main GROUP BY 1 ORDER BY 1
 """
 
 QUERY_KR32 = """
-WITH parametros AS (SELECT DATE '2026-04-01' AS fecha_inicio, DATE '2026-09-30' AS fecha_fin),
+WITH parametros AS (
+    SELECT DATE '2026-01-01' AS fecha_inicio, CURRENT_DATE AS fecha_fin
+),
 cotizaciones AS (
-    SELECT DATE_TRUNC('month', CAST(created_at AS DATE)) AS mes, UPPER(agency_code) AS agency_code, COUNT(*) AS cotizaciones
-    FROM data.raw.socrates_trip_quotations CROSS JOIN parametros p
+    SELECT DATE_TRUNC('month', CAST(created_at AS DATE)) AS mes,
+           UPPER(agency_code) AS agency_code,
+           COUNT(*) AS cotizaciones_realizadas
+    FROM raw.socrates_trip_quotations CROSS JOIN parametros p
     WHERE CAST(created_at AS DATE) BETWEEN p.fecha_inicio AND p.fecha_fin
       AND channel_code IN ('hoteldo-html-classic','hoteldo-html-gold','hoteldo-html-platinum','hoteldo-html-silver')
       AND agency_code IS NOT NULL AND agency_code != ''
-    GROUP BY 1,2
+    GROUP BY 1, 2
 ),
 ventas AS (
     SELECT DISTINCT DATE_TRUNC('month', bi.creation_date) AS mes, UPPER(bi.agency_code) AS agency_code
-    FROM data.analytics.bi_sales_fact_sales_recognition bi CROSS JOIN parametros p
+    FROM analytics.bi_sales_fact_sales_recognition bi CROSS JOIN parametros p
     WHERE bi.creation_date BETWEEN p.fecha_inicio AND p.fecha_fin
       AND bi.transaction_status = 'Confirmado'
       AND bi.channel IN ('hoteldo-html-classic','hoteldo-html-gold','hoteldo-html-platinum','hoteldo-html-silver')
-      AND bi.partition_period >= '2026-04' AND bi.agency_code IS NOT NULL
+      AND bi.partition_period >= '2026-01' AND bi.agency_code IS NOT NULL
 )
 SELECT c.mes,
     COUNT(DISTINCT c.agency_code) AS agencias_cotizadoras,
     COUNT(DISTINCT CASE WHEN v.agency_code IS NOT NULL THEN c.agency_code END) AS agencias_cotizaron_y_vendieron,
+    SUM(c.cotizaciones_realizadas) AS cotizaciones_realizadas,
     ROUND(100.0 * COUNT(DISTINCT CASE WHEN v.agency_code IS NOT NULL THEN c.agency_code END)
         / NULLIF(COUNT(DISTINCT c.agency_code),0), 2) AS pct_activacion_comercial
 FROM cotizaciones c LEFT JOIN ventas v ON c.agency_code=v.agency_code AND c.mes=v.mes
@@ -645,8 +654,8 @@ var KRS=[
    getActual:function(i){
      var m=MONTHS[i],rows=DATA.kr21.filter(function(r){return String(r.mes_deadline||"").substring(0,7)===m;});
      if(!rows.length)return null;
-     var total=rows.reduce(function(s,r){return s+(r.total_reservas||0);},0);
-     var timeout=rows.reduce(function(s,r){return s+(r.reservas_timeout_client||0);},0);
+     var total=rows.reduce(function(s,r){return s+(r.reservas||0);},0);
+     var timeout=rows.reduce(function(s,r){return r.status==='Time_out_client'?s+(r.reservas||0):s;},0);
      return total>0?timeout/total*100:null;
    }},
   {id:"kr22",squad:"es",peso:13,label:"KR 2.2 - Aumentar la cantidad de agencias que utilizan herramientas de gestión/postventa",targets:[4500,4500,5025,5445,5775,6000],inverted:false,

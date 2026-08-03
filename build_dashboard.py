@@ -179,59 +179,166 @@ QUERY_KR33 = """
 WITH base_reservas AS (
   SELECT
     YEAR(bi.creation_date) * 100 + CAST(MONTH(bi.creation_date) AS INT) AS mes,
-    bi.partner_id                                                          AS partner_id,
-    COUNT(DISTINCT bi.transaction_code)                                    AS reservas
-  FROM      analytics.bi_sales_fact_sales_recognition bi
+    bi.partner_id AS partner_id,
+    COUNT(DISTINCT bi.transaction_code) AS reservas
+  FROM analytics.bi_sales_fact_sales_recognition bi
   LEFT JOIN lake.chewie_reservation c
-            ON bi.transaction_code = CAST(c.id AS BIGINT) AND c.last_version = TRUE
+    ON bi.transaction_code = CAST(c.id AS BIGINT) AND c.last_version = TRUE
   LEFT JOIN lake.channels_bo_product product
-            ON bi.origin_product_id = product.transaction_id
-  WHERE  bi.channel IN (
-           'hoteldo-html-platinum', 'hoteldo-html-gold', 'hoteldo-html-silver',
-           'hoteldo-html-classic', 'travel-agency-bo', 'travel-agency-whitelabel'
-         )
-    AND  bi.creation_date > DATE '2023-01-01'
-    AND  bi.partition_period >= '2023-01'
-    AND  c.status NOT IN ('TO_CANCEL')
+    ON bi.origin_product_id = product.transaction_id
+  WHERE bi.channel IN (
+      'hoteldo-html-platinum', 'hoteldo-html-gold', 'hoteldo-html-silver',
+      'hoteldo-html-classic', 'travel-agency-bo', 'travel-agency-whitelabel'
+    )
+    AND bi.creation_date > DATE '2023-01-01'
+    AND bi.partition_period >= '2023-01'
+    AND c.status NOT IN ('TO_CANCEL')
   GROUP BY 1, 2
 ),
 agencias_1_3 AS (
   SELECT
-    mes                                                                AS mes_previo,
+    mes AS mes_previo,
     partner_id,
-    reservas                                                           AS reservas_previo,
-    CASE WHEN mes % 100 = 12
-         THEN (CAST(mes / 100 AS INT) + 1) * 100 + 1
-         ELSE mes + 1
-    END                                                                AS mes_evaluacion
+    reservas AS reservas_previo,
+    CASE WHEN mes % 100 = 12 THEN (CAST(mes / 100 AS INT) + 1) * 100 + 1 ELSE mes + 1 END AS mes_evaluacion
   FROM base_reservas
   WHERE reservas BETWEEN 1 AND 3
 ),
 totales_mes AS (
   SELECT mes, COUNT(DISTINCT partner_id) AS total_agencias
-  FROM  base_reservas
+  FROM base_reservas
   GROUP BY mes
 )
 SELECT
   prev.mes_previo,
   prev.mes_evaluacion,
-  ta_prev.total_agencias                                               AS agencias_total_previo,
-  ta_eval.total_agencias                                               AS agencias_total_evaluado,
-  COUNT(DISTINCT prev.partner_id)                                     AS agencias_1_3_previo,
-  COUNT(DISTINCT CASE WHEN COALESCE(eval.reservas, 0) > prev.reservas_previo
-                      THEN prev.partner_id END)                       AS agencias_aumentaron,
+  ta_prev.total_agencias AS agencias_total_previo,
+  ta_eval.total_agencias AS agencias_total_evaluado,
+  COUNT(DISTINCT prev.partner_id) AS agencias_1_3_previo,
+  COUNT(DISTINCT CASE WHEN COALESCE(eval.reservas, 0) >= prev.reservas_previo + 2 THEN prev.partner_id END) AS agencias_aumentaron,
   ROUND(
-    COUNT(DISTINCT CASE WHEN COALESCE(eval.reservas, 0) > prev.reservas_previo
-                        THEN prev.partner_id END) * 100.0
+    COUNT(DISTINCT CASE WHEN COALESCE(eval.reservas, 0) >= prev.reservas_previo + 2 THEN prev.partner_id END) * 100.0
     / NULLIF(COUNT(DISTINCT prev.partner_id), 0), 2
-  )                                                                    AS pct_aumento
-FROM      agencias_1_3 prev
-LEFT JOIN base_reservas eval  ON prev.partner_id = eval.partner_id AND eval.mes = prev.mes_evaluacion
+  ) AS pct_aumento,
+  25.0 AS target_pct,
+  ROUND(
+    COUNT(DISTINCT CASE WHEN COALESCE(eval.reservas, 0) >= prev.reservas_previo + 2 THEN prev.partner_id END) * 100.0
+    / NULLIF(COUNT(DISTINCT prev.partner_id), 0) / 25.0 * 100, 2
+  ) AS pct_cumplimiento_target
+FROM agencias_1_3 prev
+LEFT JOIN base_reservas eval ON prev.partner_id = eval.partner_id AND eval.mes = prev.mes_evaluacion
 LEFT JOIN totales_mes ta_prev ON ta_prev.mes = prev.mes_previo
 LEFT JOIN totales_mes ta_eval ON ta_eval.mes = prev.mes_evaluacion
 WHERE prev.mes_previo >= 202501
 GROUP BY 1, 2, 3, 4
 ORDER BY 1 ASC
+LIMIT 1048575
+"""
+
+QUERY_KR33_SEM = """
+WITH base_reservas AS (
+  SELECT
+    YEAR(bi.creation_date) * 100 + CAST(MONTH(bi.creation_date) AS INT) AS mes,
+    bi.partner_id,
+    COUNT(DISTINCT bi.transaction_code) AS reservas
+  FROM analytics.bi_sales_fact_sales_recognition bi
+  LEFT JOIN lake.chewie_reservation c ON bi.transaction_code = CAST(c.id AS BIGINT) AND c.last_version = TRUE
+  LEFT JOIN lake.channels_bo_product product ON bi.origin_product_id = product.transaction_id
+  WHERE bi.channel IN ('hoteldo-html-platinum','hoteldo-html-gold','hoteldo-html-silver','hoteldo-html-classic','travel-agency-bo','travel-agency-whitelabel')
+    AND bi.creation_date > DATE '2023-01-01'
+    AND bi.partition_period >= '2023-01'
+    AND c.status NOT IN ('TO_CANCEL')
+  GROUP BY 1, 2
+),
+agencias_1_3 AS (
+  SELECT
+    mes AS mes_previo,
+    partner_id,
+    reservas AS reservas_previo,
+    CASE WHEN mes % 100 = 12 THEN (CAST(mes / 100 AS INT) + 1) * 100 + 1 ELSE mes + 1 END AS mes_evaluacion
+  FROM base_reservas
+  WHERE reservas BETWEEN 1 AND 3
+),
+mensual AS (
+  SELECT
+    prev.mes_evaluacion,
+    ROUND(COUNT(DISTINCT CASE WHEN COALESCE(eval.reservas, 0) >= prev.reservas_previo + 2 THEN prev.partner_id END) * 100.0
+      / NULLIF(COUNT(DISTINCT prev.partner_id), 0), 2) AS pct_aumento
+  FROM agencias_1_3 prev
+  LEFT JOIN base_reservas eval ON prev.partner_id = eval.partner_id AND eval.mes = prev.mes_evaluacion
+  WHERE prev.mes_previo >= 202501
+  GROUP BY 1
+),
+semanas AS (
+  SELECT DISTINCT DATE_TRUNC('week', bi.creation_date) AS semana_inicio,
+    YEAR(bi.creation_date) * 100 + CAST(MONTH(bi.creation_date) AS INT) AS mes
+  FROM analytics.bi_sales_fact_sales_recognition bi
+  WHERE bi.creation_date >= DATE '2026-04-01' AND bi.partition_period >= '2026-04'
+)
+SELECT s.semana_inicio, m.pct_aumento
+FROM semanas s
+JOIN mensual m ON m.mes_evaluacion = s.mes
+ORDER BY 1
+LIMIT 1048575
+"""
+
+QUERY_KR33_SEM_CUM = """
+WITH base_reservas_mes AS (
+  SELECT
+    YEAR(bi.creation_date) * 100 + CAST(MONTH(bi.creation_date) AS INT) AS mes,
+    bi.partner_id,
+    COUNT(DISTINCT bi.transaction_code) AS reservas
+  FROM analytics.bi_sales_fact_sales_recognition bi
+  LEFT JOIN lake.chewie_reservation c ON bi.transaction_code = CAST(c.id AS BIGINT) AND c.last_version = TRUE
+  WHERE bi.channel IN ('hoteldo-html-platinum','hoteldo-html-gold','hoteldo-html-silver','hoteldo-html-classic','travel-agency-bo','travel-agency-whitelabel')
+    AND bi.creation_date > DATE '2023-01-01'
+    AND bi.partition_period >= '2023-01'
+    AND c.status NOT IN ('TO_CANCEL')
+  GROUP BY 1, 2
+),
+agencias_1_3 AS (
+  SELECT
+    mes AS mes_previo,
+    partner_id,
+    reservas AS reservas_previo,
+    CASE WHEN mes % 100 = 12 THEN (CAST(mes / 100 AS INT) + 1) * 100 + 1 ELSE mes + 1 END AS mes_evaluacion
+  FROM base_reservas_mes
+  WHERE reservas BETWEEN 1 AND 3 AND mes >= 202501
+),
+base_semanal AS (
+  SELECT
+    DATE_TRUNC('week', bi.creation_date) AS semana_inicio,
+    YEAR(bi.creation_date) * 100 + CAST(MONTH(bi.creation_date) AS INT) AS mes,
+    bi.partner_id,
+    COUNT(DISTINCT bi.transaction_code) AS reservas
+  FROM analytics.bi_sales_fact_sales_recognition bi
+  LEFT JOIN lake.chewie_reservation c ON bi.transaction_code = CAST(c.id AS BIGINT) AND c.last_version = TRUE
+  WHERE bi.channel IN ('hoteldo-html-platinum','hoteldo-html-gold','hoteldo-html-silver','hoteldo-html-classic','travel-agency-bo','travel-agency-whitelabel')
+    AND bi.creation_date >= DATE '2026-04-01'
+    AND bi.partition_period >= '2026-04'
+    AND c.status NOT IN ('TO_CANCEL')
+  GROUP BY 1, 2, 3
+),
+semanas AS (SELECT DISTINCT semana_inicio, mes FROM base_semanal),
+reservas_acum AS (
+  SELECT s.semana_inicio, s.mes, bs.partner_id, SUM(bs.reservas) AS reservas_acum
+  FROM semanas s
+  JOIN base_semanal bs ON bs.mes = s.mes AND bs.semana_inicio <= s.semana_inicio
+  GROUP BY 1, 2, 3
+)
+SELECT
+  s.semana_inicio,
+  COUNT(DISTINCT prev.partner_id) AS agencias_1_3_previo,
+  COUNT(DISTINCT CASE WHEN COALESCE(ra.reservas_acum, 0) >= prev.reservas_previo + 2 THEN prev.partner_id END) AS agencias_aumentaron,
+  ROUND(
+    COUNT(DISTINCT CASE WHEN COALESCE(ra.reservas_acum, 0) >= prev.reservas_previo + 2 THEN prev.partner_id END) * 100.0
+    / NULLIF(COUNT(DISTINCT prev.partner_id), 0), 2
+  ) AS pct_aumento_acum
+FROM semanas s
+JOIN agencias_1_3 prev ON prev.mes_evaluacion = s.mes
+LEFT JOIN reservas_acum ra ON ra.partner_id = prev.partner_id AND ra.semana_inicio = s.semana_inicio
+GROUP BY 1
+ORDER BY 1
 LIMIT 1048575
 """
 
@@ -516,6 +623,8 @@ QUERIES = [
     ('kr31_sem_cum', QUERY_KR31_SEM_CUM),
     ('kr32_sem', QUERY_KR32_SEM),
     ('kr32_sem_cum', QUERY_KR32_SEM_CUM),
+    ('kr33_sem', QUERY_KR33_SEM),
+    ('kr33_sem_cum', QUERY_KR33_SEM_CUM),
 ]
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
@@ -680,7 +789,7 @@ var KRS=[
      var m=MONTHS[i],row=DATA.kr32.find(function(r){return String(r.mes||"").substring(0,7)===m;});
      return row?row.pct_activacion_comercial:null;
    }},
-  {id:"kr33",squad:"ce",peso:7,label:"KR 3.3 - Frecuencia de compra",targets:[35,35,35,35,35,35],inverted:false,
+  {id:"kr33",squad:"ce",peso:7,label:"KR 3.3 - Frecuencia de compra",targets:[25,25,25,25,25,25],inverted:false,
    fmtA:function(v){return v!==null?v.toFixed(1)+"%":null;},fmtT:function(v){return v+"%";},
    getActual:function(i){
      var m=MONTHS[i];
@@ -857,12 +966,9 @@ function renderSemanal(){
     return{v:r.pct_activacion_acum.toFixed(1)+'%',comp:compliance(r.pct_activacion_acum,KRS[3].targets[mi],false)};
   }
   function acum33(w){
-    var mi=mIdx(semMes(w));
-    if(mi<0)return null;
-    var ym=parseInt(semMes(w).replace('-',''),10);
-    var mr=DATA.kr33.find(function(x){return x.mes_evaluacion===ym;});
-    if(!mr||mr.pct_aumento===null)return null;
-    return{v:mr.pct_aumento.toFixed(1)+'%',comp:compliance(mr.pct_aumento,35,false)};
+    var r=(DATA.kr33_sem_cum||[]).find(function(x){return x.semana_inicio===w;});
+    if(!r||r.pct_aumento_acum===null)return null;
+    return{v:r.pct_aumento_acum.toFixed(1)+'%',comp:compliance(r.pct_aumento_acum,25,false)};
   }
 
   function sem21(w){
@@ -892,7 +998,11 @@ function renderSemanal(){
     if(!r||r.pct_activacion_comercial===null)return null;
     return{v:r.pct_activacion_comercial.toFixed(1)+'%'};
   }
-  function sem33(w){return acum33(w);}
+  function sem33(w){
+    var r=(DATA.kr33_sem||[]).find(function(x){return x.semana_inicio===w;});
+    if(!r||r.pct_aumento===null)return null;
+    return{v:r.pct_aumento.toFixed(1)+'%'};
+  }
 
   var SEM_KRS=[
     {label:KRS[0].label,squad:'es',peso:7,fn:acum21,semFn:sem21,
@@ -904,7 +1014,7 @@ function renderSemanal(){
     {label:KRS[3].label,squad:'ce',peso:7,fn:acum32,semFn:sem32,
      tgtFn:function(w){var mi=mIdx(semMes(w));return mi>=0?KRS[3].targets[mi]+'%':null;}},
     {label:KRS[4].label,squad:'ce',peso:7,fn:acum33,semFn:sem33,
-     tgtFn:function(){return'35%';}},
+     tgtFn:function(){return'25%';}},
   ];
   var filtSemKRS=activeSq==='all'?SEM_KRS:SEM_KRS.filter(function(k){return k.squad===activeSq;});
 

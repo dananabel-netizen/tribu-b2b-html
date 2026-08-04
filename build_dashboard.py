@@ -1035,7 +1035,7 @@ function renderSemanal(){
   var shadow='box-shadow:3px 0 6px -2px rgba(0,0,0,.15)';
   html+='<div style="overflow-x:auto"><table style="white-space:nowrap"><thead><tr>';
   html+='<th style="width:65px;text-align:center;left:0;border-right:none;'+stHdr+'">Nro KR</th>';
-  html+='<th style="width:340px;min-width:340px;text-align:left;padding-left:16px;left:65px;border-right:none;'+stHdr+'">KR</th>';
+  html+='<th style="width:340px;min-width:340px;white-space:normal;text-align:left;padding-left:16px;left:65px;border-right:none;'+stHdr+'">KR</th>';
   html+='<th style="width:45px;text-align:center;left:405px;border-right:2px solid rgba(255,255,255,.25);'+stHdr+';'+shadow+'">Peso</th>';
   weeks.forEach(function(w){html+='<th>'+semLabel(w)+'</th>';});
   html+='</tr></thead><tbody>';
@@ -1044,7 +1044,7 @@ function renderSemanal(){
   filtSemKRS.forEach(function(kr,ki){
     html+='<tr>';
     html+='<td style="text-align:center;font-weight:700;color:#5B21B6;white-space:nowrap;padding:11px 8px;left:0;border-right:none;'+stCell+'">'+krNro(kr.label)+'</td>';
-    html+='<td style="width:340px;min-width:340px;text-align:left;padding-left:16px;font-weight:500;left:65px;border-right:none;'+stCell+'">'+krDesc(kr.label)+'</td>';
+    html+='<td style="width:340px;min-width:340px;white-space:normal;text-align:left;padding-left:16px;font-weight:500;left:65px;border-right:none;'+stCell+'">'+krDesc(kr.label)+'</td>';
     html+='<td style="text-align:center;font-weight:600;color:var(--muted);white-space:nowrap;padding:11px 6px;left:405px;border-right:2px solid var(--border);'+stCell+';'+shadow+'">'+pesoPS[ki]+'</td>';
     weeks.forEach(function(w){
       var d=kr.fn(w);
@@ -1063,7 +1063,7 @@ function renderSemanal(){
   html+='<div class="card" style="overflow-x:auto"><table style="white-space:nowrap;border-collapse:collapse"><thead>';
   html+='<tr>';
   html+='<th style="width:65px;text-align:center;left:0;border-right:none;'+st2Hdr+'">Nro KR</th>';
-  html+='<th style="width:340px;min-width:340px;text-align:left;padding-left:16px;left:65px;border-right:2px solid rgba(255,255,255,.25);'+st2Hdr+';'+shadow+'">KR</th>';
+  html+='<th style="width:340px;min-width:340px;white-space:normal;text-align:left;padding-left:16px;left:65px;border-right:2px solid rgba(255,255,255,.25);'+st2Hdr+';'+shadow+'">KR</th>';
   weeks.forEach(function(w){html+='<th style="min-width:90px">'+semLabel(w)+'</th>';});
   html+='</tr></thead><tbody>';
 

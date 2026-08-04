@@ -835,9 +835,9 @@ function chip(pct){
   if(pct===null)return'<span class="chip na">N/D</span>';
   var eff=effComp(pct);
   var cls=eff>=100?'ok':eff>=80?'warn':'bad';
-  var note=pct<70?'≡ 0':pct>130?'↑130':'';
+  var note=pct<70?'≡ 0':pct>130?'↑&thinsp;130':'';
   if(!note)return'<span class="chip '+cls+'">'+Math.round(pct)+'%</span>';
-  return'<span class="chip '+cls+'" style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.2;padding:3px 8px"><span>'+Math.round(pct)+'%</span><span style="font-size:9px;font-weight:400;opacity:.85">'+note+'</span></span>';
+  return'<span class="chip '+cls+'" style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.2;padding:3px 8px"><span>'+Math.round(pct)+'%</span><span style="font-size:10px;font-weight:600;opacity:.9">'+note+'</span></span>';
 }
 function avg(arr){var v=arr.filter(function(x){return x!==null;});return v.length?v.reduce(function(a,b){return a+b;},0)/v.length:null;}
 function nowYm(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()<9?"0":"")+(d.getMonth()+1);}
@@ -867,16 +867,16 @@ function renderMensual(){
     var comps=MONTHS.map(function(m,i){
       var a=kr.getActual(i);
       var t=kr.targets!==null?kr.targets[i]:(kr.getTarget?kr.getTarget(i):null);
-      return m<=closed?compliance(a,t,kr.inverted):null;
+      return m<closed?compliance(a,t,kr.inverted):null;
     });
     var q1=avg([comps[0],comps[1],comps[2]]),q2=avg([comps[3],comps[4],comps[5]]);
     html+='<tr><td style="text-align:center;font-weight:700;color:#5B21B6;white-space:nowrap;padding:11px 8px">'+krNro(kr.label)+'</td><td class="td-kr">'+krDesc(kr.label)+'</td><td style="text-align:center;font-weight:600;color:var(--muted);white-space:nowrap;padding:11px 6px">'+pesoPM[ki]+'</td>';
-    idxs.forEach(function(i){html+='<td>'+(MONTHS[i]<=closed?chip(comps[i]):'-')+'</td>';});
+    idxs.forEach(function(i){html+='<td>'+(MONTHS[i]<closed?chip(comps[i]):'-')+'</td>';});
     html+='<td class="td-q">'+chip(q1)+'</td><td class="td-q">'+chip(q2)+'</td>';
     html+='</tr>';
   });
   var wComps=idxs.map(function(i){
-    if(MONTHS[i]>closed)return null;
+    if(MONTHS[i]>=closed)return null;
     var num=0,den=0;
     krs.forEach(function(kr){
       var a=kr.getActual(i);
@@ -929,7 +929,7 @@ function renderSemanal(){
   var today=nowYm();
   var todayLbl=LABELS[MONTHS.indexOf(today)]||today;
   var weeks=(DATA.kr22_sem||[]).map(function(r){return r.semana_inicio;})
-    .filter(function(w){return w&&semMes(w)>='2026-04';})
+    .filter(function(w){return w&&semMes(w)>='2026-04'&&semMes(w)<nowYm();})
     .sort()
     .filter(function(w,i,a){return a.indexOf(w)===i;});
 
@@ -1030,13 +1030,22 @@ function renderSemanal(){
   html+='</div>';
 
   html+='<div class="card"><div class="card-hdr">Progreso semanal — '+todayLbl+' 2026</div>';
-  html+='<div style="overflow-x:auto"><table style="white-space:nowrap"><thead><tr><th style="width:65px;text-align:center">Nro KR</th><th class="th-kr">KR</th><th style="width:45px;text-align:center">Peso</th>';
+  var stHdr='position:sticky;z-index:3;background:#7C7FFF';
+  var stCell='position:sticky;z-index:1;background:var(--surface)';
+  var shadow='box-shadow:3px 0 6px -2px rgba(0,0,0,.15)';
+  html+='<div style="overflow-x:auto"><table style="white-space:nowrap"><thead><tr>';
+  html+='<th style="width:65px;text-align:center;left:0;'+stHdr+'">Nro KR</th>';
+  html+='<th style="width:220px;max-width:220px;overflow:hidden;text-overflow:ellipsis;text-align:left;padding-left:16px;left:65px;'+stHdr+'">KR</th>';
+  html+='<th style="width:45px;text-align:center;left:285px;'+stHdr+';'+shadow+'">Peso</th>';
   weeks.forEach(function(w){html+='<th>'+semLabel(w)+'</th>';});
   html+='</tr></thead><tbody>';
   var totalPesoS=filtSemKRS.reduce(function(s,k){return s+k.peso;},0);
   var cumPS=0,pesoPS=filtSemKRS.map(function(k,i){if(i===filtSemKRS.length-1)return(100-cumPS).toFixed(1)+'%';var p=parseFloat((k.peso/totalPesoS*100).toFixed(1));cumPS+=p;return p.toFixed(1)+'%';});
   filtSemKRS.forEach(function(kr,ki){
-    html+='<tr><td style="text-align:center;font-weight:700;color:#5B21B6;white-space:nowrap;padding:11px 8px">'+krNro(kr.label)+'</td><td class="td-kr">'+krDesc(kr.label)+'</td><td style="text-align:center;font-weight:600;color:var(--muted);white-space:nowrap;padding:11px 6px">'+pesoPS[ki]+'</td>';
+    html+='<tr>';
+    html+='<td style="text-align:center;font-weight:700;color:#5B21B6;white-space:nowrap;padding:11px 8px;left:0;'+stCell+'">'+krNro(kr.label)+'</td>';
+    html+='<td style="width:220px;max-width:220px;overflow:hidden;text-overflow:ellipsis;text-align:left;padding-left:16px;font-weight:500;left:65px;'+stCell+'">'+krDesc(kr.label)+'</td>';
+    html+='<td style="text-align:center;font-weight:600;color:var(--muted);white-space:nowrap;padding:11px 6px;left:285px;'+stCell+';'+shadow+'">'+pesoPS[ki]+'</td>';
     weeks.forEach(function(w){
       var d=kr.fn(w);
       var cls,txt;
@@ -1049,17 +1058,24 @@ function renderSemanal(){
   html+='</tbody></table></div></div>';
 
   html+='<p class="sec-title" style="margin-top:24px">Detalle por KR — '+todayLbl+' 2026</p>';
+  var st2Hdr='position:sticky;z-index:3;background:#7C7FFF';
+  var st2='position:sticky;left:0;z-index:1;min-width:285px;'+shadow;
   html+='<div class="card" style="overflow-x:auto"><table style="white-space:nowrap;border-collapse:collapse"><thead>';
-  html+='<tr><th style="width:65px;text-align:center">Nro KR</th><th class="th-kr" style="min-width:220px">KR</th>';
+  html+='<tr>';
+  html+='<th style="width:65px;text-align:center;left:0;'+st2Hdr+'">Nro KR</th>';
+  html+='<th style="width:220px;max-width:220px;overflow:hidden;text-overflow:ellipsis;text-align:left;padding-left:16px;left:65px;'+st2Hdr+';'+shadow+'">KR</th>';
   weeks.forEach(function(w){html+='<th style="min-width:90px">'+semLabel(w)+'</th>';});
   html+='</tr></thead><tbody>';
 
   filtSemKRS.forEach(function(kr,ki){
     var isLast=ki===filtSemKRS.length-1;
     var hdrBg='background:linear-gradient(90deg,#5B21B6,#7C3AED)';
-    html+='<tr><td style="'+hdrBg+';color:#fff;font-weight:700;font-size:11px;padding:9px 8px;text-align:center;white-space:nowrap">'+krNro(kr.label)+'</td><td colspan="'+(weeks.length+1)+'" style="'+hdrBg+';color:#fff;font-weight:700;font-size:12px;padding:9px 16px;letter-spacing:.02em">'+krDesc(kr.label)+'</td></tr>';
+    html+='<tr>';
+    html+='<td style="'+hdrBg+';color:#fff;font-weight:700;font-size:11px;padding:9px 8px;text-align:center;white-space:nowrap;position:sticky;left:0;z-index:1">'+krNro(kr.label)+'</td>';
+    html+='<td colspan="'+(weeks.length+1)+'" style="'+hdrBg+';color:#fff;font-weight:700;font-size:12px;padding:9px 16px;letter-spacing:.02em">'+krDesc(kr.label)+'</td>';
+    html+='</tr>';
     html+='<tr style="background:var(--surface)">';
-    html+='<td colspan="2" style="font-size:11px;padding:7px 8px 7px 20px;color:var(--muted);font-weight:600;border-right:3px solid var(--border2);white-space:nowrap">Semana</td>';
+    html+='<td colspan="2" style="font-size:11px;padding:7px 8px 7px 20px;color:var(--muted);font-weight:600;border-right:3px solid var(--border2);white-space:nowrap;background:var(--surface);'+st2+'">Semana</td>';
     weeks.forEach(function(w){
       var d=kr.semFn(w);
       if(!d){html+='<td style="text-align:center;padding:7px 8px;font-size:13px"><span class="chip na">N/D</span></td>';return;}
@@ -1067,7 +1083,7 @@ function renderSemanal(){
     });
     html+='</tr>';
     html+='<tr style="background:var(--surface2)">';
-    html+='<td colspan="2" style="font-size:11px;padding:7px 8px 7px 20px;color:var(--purple);font-weight:700;border-right:3px solid #C4B5FD;white-space:nowrap">Acumulado</td>';
+    html+='<td colspan="2" style="font-size:11px;padding:7px 8px 7px 20px;color:var(--purple);font-weight:700;border-right:3px solid #C4B5FD;white-space:nowrap;background:var(--surface2);'+st2+'">Acumulado</td>';
     weeks.forEach(function(w){
       var d=kr.fn(w);
       if(!d){html+='<td style="text-align:center;padding:7px 8px;font-size:13px"><span class="chip na">N/D</span></td>';return;}
@@ -1076,7 +1092,7 @@ function renderSemanal(){
     html+='</tr>';
     var sepBot=isLast?'border-bottom:none':'border-bottom:2px solid var(--border2)';
     html+='<tr style="background:var(--surface2)">';
-    html+='<td colspan="2" style="font-size:11px;padding:5px 8px 5px 20px;color:var(--muted);font-weight:500;'+sepBot+';white-space:nowrap">Target mensual</td>';
+    html+='<td colspan="2" style="font-size:11px;padding:5px 8px 5px 20px;color:var(--muted);font-weight:500;'+sepBot+';white-space:nowrap;background:var(--surface2);'+st2+'">Target mensual</td>';
     weeks.forEach(function(w){
       html+='<td style="text-align:center;font-size:11px;padding:5px 8px;color:var(--muted);'+sepBot+'">'+(kr.tgtFn(w)||'—')+'</td>';
     });

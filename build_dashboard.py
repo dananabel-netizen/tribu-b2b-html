@@ -1071,8 +1071,9 @@ function renderSemanal(){
     var isLast=ki===filtSemKRS.length-1;
     var hdrBg='background:linear-gradient(90deg,#5B21B6,#7C3AED)';
     html+='<tr>';
-    html+='<td style="'+hdrBg+';color:#fff;font-weight:700;font-size:11px;padding:9px 8px;text-align:center;white-space:nowrap;border-right:none;position:sticky;left:0;z-index:1">'+krNro(kr.label)+'</td>';
-    html+='<td colspan="'+(weeks.length+1)+'" style="'+hdrBg+';color:#fff;font-weight:700;font-size:12px;padding:9px 16px;letter-spacing:.02em">'+krDesc(kr.label)+'</td>';
+    html+='<td style="'+hdrBg+';color:#fff;font-weight:700;font-size:11px;padding:9px 8px;text-align:center;white-space:nowrap;border-right:none;position:sticky;left:0;z-index:2;width:65px">'+krNro(kr.label)+'</td>';
+    html+='<td style="'+hdrBg+';color:#fff;font-weight:700;font-size:12px;padding:9px 16px;letter-spacing:.02em;white-space:normal;border-right:none;position:sticky;left:65px;z-index:2;width:340px;min-width:340px;'+shadow+'">'+krDesc(kr.label)+'</td>';
+    html+='<td colspan="'+weeks.length+'" style="'+hdrBg+';padding:0;border:none"></td>';
     html+='</tr>';
     html+='<tr style="background:var(--surface)">';
     html+='<td colspan="2" style="font-size:11px;padding:7px 8px 7px 20px;color:var(--muted);font-weight:600;border-right:3px solid var(--border2);white-space:nowrap;background:var(--surface);'+st2+'">Semana</td>';

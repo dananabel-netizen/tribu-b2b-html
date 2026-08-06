@@ -859,7 +859,7 @@ function renderMensual(){
   html+='<div class="card"><div class="card-hdr">Tablero Producto B2B - HTML · H1 FY27</div>';
   html+='<table><thead><tr><th style="width:65px;text-align:center">Nro KR</th><th class="th-kr">KR</th><th style="width:45px;text-align:center">Peso</th>';
   idxs.forEach(function(i){html+='<th>'+LABELS[i]+'</th>';});
-  html+='<th class="th-q">Q1</th><th class="th-q">Q2</th>';
+  html+='<th class="th-q">Q1</th><th class="th-q">Q2</th><th class="th-q">H1</th>';
   html+='</tr></thead><tbody>';
   var totalPesoM=krs.reduce(function(s,k){return s+k.peso;},0);
   var cumPM=0,pesoPM=krs.map(function(k,i){if(i===krs.length-1)return(100-cumPM).toFixed(1)+'%';var p=parseFloat((k.peso/totalPesoM*100).toFixed(1));cumPM+=p;return p.toFixed(1)+'%';});
@@ -869,10 +869,10 @@ function renderMensual(){
       var t=kr.targets!==null?kr.targets[i]:(kr.getTarget?kr.getTarget(i):null);
       return m<closed?compliance(a,t,kr.inverted):null;
     });
-    var q1=avg([comps[0],comps[1],comps[2]]),q2=avg([comps[3],comps[4],comps[5]]);
+    var q1=avg([comps[0],comps[1],comps[2]]),q2=avg([comps[3],comps[4],comps[5]]),h1=avg(comps);
     html+='<tr><td style="text-align:center;font-weight:700;color:#5B21B6;white-space:nowrap;padding:11px 8px">'+krNro(kr.label)+'</td><td class="td-kr">'+krDesc(kr.label)+'</td><td style="text-align:center;font-weight:600;color:var(--muted);white-space:nowrap;padding:11px 6px">'+pesoPM[ki]+'</td>';
     idxs.forEach(function(i){html+='<td>'+(MONTHS[i]<closed?chip(comps[i]):'-')+'</td>';});
-    html+='<td class="td-q">'+chip(q1)+'</td><td class="td-q">'+chip(q2)+'</td>';
+    html+='<td class="td-q">'+chip(q1)+'</td><td class="td-q">'+chip(q2)+'</td><td class="td-q">'+chip(h1)+'</td>';
     html+='</tr>';
   });
   var wComps=idxs.map(function(i){
@@ -886,13 +886,13 @@ function renderMensual(){
     });
     return den>0?num/den:null;
   });
-  var wQ1=avg([wComps[0],wComps[1],wComps[2]]),wQ2=avg([wComps[3],wComps[4],wComps[5]]);
+  var wQ1=avg([wComps[0],wComps[1],wComps[2]]),wQ2=avg([wComps[3],wComps[4],wComps[5]]),wH1=avg(wComps);
   var sepStyle='border-top:2px solid var(--border2);background:var(--surface2)';
   html+='<tr style="'+sepStyle+'">';
   html+='<td colspan="2" style="text-align:left;padding-left:16px;font-weight:700;font-size:12px;color:var(--purple)">Cumplimiento Total Ponderado</td>';
   html+='<td style="text-align:center;font-weight:700;font-size:11px;color:var(--purple)">100%</td>';
-  idxs.forEach(function(i){html+='<td>'+(MONTHS[i]<=closed?chip(wComps[i]):'-')+'</td>';});
-  html+='<td class="td-q">'+chip(wQ1)+'</td><td class="td-q">'+chip(wQ2)+'</td>';
+  idxs.forEach(function(i){html+='<td>'+(MONTHS[i]<closed?chip(wComps[i]):'-')+'</td>';});
+  html+='<td class="td-q">'+chip(wQ1)+'</td><td class="td-q">'+chip(wQ2)+'</td><td class="td-q">'+chip(wH1)+'</td>';
   html+='</tr>';
   html+='</tbody></table></div>';
 

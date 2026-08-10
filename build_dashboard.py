@@ -841,6 +841,7 @@ function chip(pct){
 }
 function avg(arr){var v=arr.filter(function(x){return x!==null;});return v.length?v.reduce(function(a,b){return a+b;},0)/v.length:null;}
 function nowYm(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()<9?"0":"")+(d.getMonth()+1);}
+function thisMonday(){var d=new Date();var diff=d.getDay()===0?6:d.getDay()-1;var m=new Date(d.getFullYear(),d.getMonth(),d.getDate()-diff);return m.getFullYear()+"-"+(m.getMonth()<9?"0":"")+(m.getMonth()+1)+"-"+(m.getDate()<10?"0":"")+m.getDate();}
 
 function renderMensual(){
   var idxs=[0,1,2,3,4,5];
@@ -927,7 +928,7 @@ function renderMensual(){
 
 function renderSemanal(){
   var weeks=(DATA.kr22_sem||[]).map(function(r){return r.semana_inicio;})
-    .filter(function(w){return w&&semMes(w)>='2026-04'&&semMes(w)<nowYm();})
+    .filter(function(w){return w&&semMes(w)>='2026-04'&&w<thisMonday();})
     .sort()
     .filter(function(w,i,a){return a.indexOf(w)===i;});
   var lastWm=weeks.length?semMes(weeks[weeks.length-1]):null;

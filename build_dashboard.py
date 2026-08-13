@@ -88,7 +88,7 @@ WITH forecast_budget AS (
         'FCST' AS source, SUM(CAST(net_revenue AS DECIMAL(15,6))) as net_revenue
     FROM raw.b2bfc1_gd WHERE lob_canal = 'B2B-MIN' GROUP BY 1,2,3,4,5)
     UNION ALL
-    (SELECT CAST(SPLIT_PART(fecha, '-', 3) AS INTEGER) + 2000 as year, CAST(no_mes_proyectado AS INTEGER) as month,
+    (SELECT CASE WHEN LENGTH(SPLIT_PART(fecha, '-', 3)) = 2 THEN CAST(SPLIT_PART(fecha, '-', 3) AS INTEGER) + 2000 ELSE CAST(SPLIT_PART(fecha, '-', 3) AS INTEGER) END as year, CAST(no_mes_proyectado AS INTEGER) as month,
         case when producto='Cars' then 'Autos' when producto='Cruises' then 'Cruceros'
              when producto='Dest. Serv.' then 'Dest. Serv.' when producto='Flights' then 'Vuelos'
              when producto='Hotels' then 'Hoteles' when producto='Insurance' then 'Asistencia al viajero'
@@ -757,6 +757,7 @@ var DATA = __DATA__;
 var MONTHS=["2026-04","2026-05","2026-06","2026-07","2026-08","2026-09"];
 var LABELS=["Abr","May","Jun","Jul","Ago","Sep"];
 
+var KR31_TGT={"2026-04":3622885,"2026-05":4063503,"2026-06":3888578,"2026-07":3830895,"2026-08":3717243,"2026-09":3908286};
 var KRS=[
   {id:"kr21",squad:"es",peso:7,label:"KR 2.1 - Disminuir cancelación de bookings por falta pago",targets:[22,20,18.25,16.85,15.75,15],inverted:true,
    fmtA:function(v){return v!==null?v.toFixed(2)+"%":null;},fmtT:function(v){return v+"%";},
@@ -781,7 +782,7 @@ var KRS=[
    },
    getTarget:function(i){
      var m=MONTHS[i],row=DATA.kr31.find(function(r){return String(r.periodo||"").substring(0,7)===m;});
-     return row?row.net_rev_target:null;
+     return(row&&row.net_rev_target!=null)?row.net_rev_target:(KR31_TGT[m]||null);
    }},
   {id:"kr32",squad:"ce",peso:7,label:"KR 3.2 - Aumentar agencias compradoras que utilizan cotizaciones",targets:[70,70,73,74,75,77],inverted:false,
    fmtA:function(v){return v!==null?v.toFixed(1)+"%":null;},fmtT:function(v){return v+"%";},
@@ -956,9 +957,10 @@ function renderSemanal(){
   function acum31(w){
     var r=(DATA.kr31_sem_cum||[]).find(function(x){return x.semana_inicio===w;});
     var mr=DATA.kr31.find(function(x){return String(x.periodo||'').substring(0,7)===semMes(w);});
-    if(!r||r.net_revenue_acum_mes===null||!mr||!mr.net_rev_target)return null;
+    var tgt31=(mr&&mr.net_rev_target!=null)?mr.net_rev_target:(KR31_TGT[semMes(w)]||null);
+    if(!r||r.net_revenue_acum_mes===null||!tgt31)return null;
     var tot=r.net_revenue_acum_mes;
-    return{v:'$'+(tot>=1e6?(tot/1e6).toFixed(1)+'M':(tot/1e3).toFixed(0)+'K'),comp:compliance(tot,mr.net_rev_target,false)};
+    return{v:'$'+(tot>=1e6?(tot/1e6).toFixed(1)+'M':(tot/1e3).toFixed(0)+'K'),comp:compliance(tot,tgt31,false)};
   }
   function acum32(w){
     var r=(DATA.kr32_sem_cum||[]).find(function(x){return x.semana_inicio===w;});
@@ -1011,7 +1013,7 @@ function renderSemanal(){
     {label:KRS[1].label,squad:'es',peso:13,fn:acum22,semFn:sem22,
      tgtFn:function(w){var mi=mIdx(semMes(w));return mi>=0?KRS[1].targets[mi].toLocaleString('es-AR')+' ag.':null;}},
     {label:KRS[2].label,squad:'ce',peso:16,fn:acum31,semFn:sem31,
-     tgtFn:function(w){var mr=DATA.kr31.find(function(x){return String(x.periodo||'').substring(0,7)===semMes(w);});return mr&&mr.net_rev_target?'$'+(mr.net_rev_target>=1e6?(mr.net_rev_target/1e6).toFixed(1)+'M':(mr.net_rev_target/1e3).toFixed(0)+'K'):null;}},
+     tgtFn:function(w){var wm=semMes(w);var mr=DATA.kr31.find(function(x){return String(x.periodo||'').substring(0,7)===wm;});var t=(mr&&mr.net_rev_target!=null)?mr.net_rev_target:(KR31_TGT[wm]||null);return t?'$'+(t>=1e6?(t/1e6).toFixed(1)+'M':(t/1e3).toFixed(0)+'K'):null;}},
     {label:KRS[3].label,squad:'ce',peso:7,fn:acum32,semFn:sem32,
      tgtFn:function(w){var mi=mIdx(semMes(w));return mi>=0?KRS[3].targets[mi]+'%':null;}},
     {label:KRS[4].label,squad:'ce',peso:7,fn:acum33,semFn:sem33,

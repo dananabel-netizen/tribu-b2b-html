@@ -77,7 +77,7 @@ GROUP BY rfh.creation_yearmonth ORDER BY rfh.creation_yearmonth
 
 QUERY_KR31 = """
 WITH forecast_budget AS (
-    (SELECT YEAR(DATE_PARSE(fecha, '%d/%m/%Y')) as year, CAST(no_mes_proyectado AS INTEGER) as month,
+    (SELECT CAST(SPLIT_PART(fecha, '/', 3) AS INTEGER) as year, CAST(no_mes_proyectado AS INTEGER) as month,
         case when producto='Cars' then 'Autos' when producto='Cruises' then 'Cruceros'
              when producto='Dest. Serv.' then 'Dest. Serv.' when producto='Flights' then 'Vuelos'
              when producto='Hotels' then 'Hoteles' when producto='Insurance' then 'Asistencia al viajero'
@@ -88,7 +88,7 @@ WITH forecast_budget AS (
         'FCST' AS source, SUM(CAST(net_revenue AS DECIMAL(15,6))) as net_revenue
     FROM raw.b2bfc1_gd WHERE lob_canal = 'B2B-MIN' GROUP BY 1,2,3,4,5)
     UNION ALL
-    (SELECT YEAR(DATE_PARSE(fecha, '%d-%m-%Y')) + 2000 as year, CAST(no_mes_proyectado AS INTEGER) as month,
+    (SELECT CAST(SPLIT_PART(fecha, '-', 3) AS INTEGER) + 2000 as year, CAST(no_mes_proyectado AS INTEGER) as month,
         case when producto='Cars' then 'Autos' when producto='Cruises' then 'Cruceros'
              when producto='Dest. Serv.' then 'Dest. Serv.' when producto='Flights' then 'Vuelos'
              when producto='Hotels' then 'Hoteles' when producto='Insurance' then 'Asistencia al viajero'

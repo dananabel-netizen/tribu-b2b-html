@@ -1238,17 +1238,6 @@
       "pct_aumento": 0.75,
       "target_pct": 0.5,
       "pct_cumplimiento_target": 1.5
-    },
-    {
-      "mes_previo": "2027-07-01",
-      "mes_evaluacion": "2027-08-01",
-      "agencias_total_previo": 205,
-      "agencias_total_evaluado": 210,
-      "agencias_1_3_previo": 82,
-      "agencias_aumentaron": 62,
-      "pct_aumento": 0.756,
-      "target_pct": 0.5,
-      "pct_cumplimiento_target": 1.512
     }
   ],
   "kr21_sem": [
@@ -1386,6 +1375,33 @@
     {"semana_inicio": "2026-06-15", "net_revenue_real": 0.0},
     {"semana_inicio": "2026-06-22", "net_revenue_real": 0.0}
   ],
+  "kr31_sem_cum": [
+    {"semana_inicio": "2026-01-05", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-01-12", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-01-19", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-01-26", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-02-02", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-02-09", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-02-16", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-02-23", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-03-02", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-03-09", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-03-16", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-03-23", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-03-30", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-04-06", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-04-13", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-04-20", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-04-27", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-05-04", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-05-11", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-05-18", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-05-25", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-06-01", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-06-08", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-06-15", "net_revenue_acum_mes": 0.0},
+    {"semana_inicio": "2026-06-22", "net_revenue_acum_mes": 0.0}
+  ],
   "kr32_sem": [
     {"semana_inicio": "2026-01-05", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
     {"semana_inicio": "2026-01-12", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
@@ -1434,7 +1450,7 @@
     {"semana_inicio": "2026-05-04", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
     {"semana_inicio": "2026-05-11", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
     {"semana_inicio": "2026-05-18", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-05-25", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
+    {"semana_inicio": "2026-05-25", "agencias_cotizadoras_acum": 0, "agencias_compraron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
     {"semana_inicio": "2026-06-01", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
     {"semana_inicio": "2026-06-08", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
     {"semana_inicio": "2026-06-15", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
@@ -1464,7 +1480,8 @@
     {"semana_inicio": "2026-05-25", "pct_aumento": 0.0},
     {"semana_inicio": "2026-06-01", "pct_aumento": 0.0},
     {"semana_inicio": "2026-06-08", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-06-15", "pct_aumento": 0.0}
+    {"semana_inicio": "2026-06-15", "pct_aumento": 0.0},
+    {"semana_inicio": "2026-06-22", "pct_aumento": 0.0}
   ],
   "kr33_sem_cum": [
     {"semana_inicio": "2026-01-05", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},

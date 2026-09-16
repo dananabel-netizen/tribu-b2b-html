@@ -544,618 +544,2641 @@
       "mes_deadline": "2025-12-01",
       "status": "CONFIRMED",
       "reservas": 30,
-      "gb": 21158.086012
+      "gb": 25240.904724000004
     },
     {
       "mes_deadline": "2025-12-01",
       "status": "FINALIZED",
-      "reservas": 4475,
-      "gb": 2780898.0511519997
+      "reservas": 4413,
+      "gb": 4156720.333015001
     },
     {
       "mes_deadline": "2025-12-01",
       "status": "TO_CANCEL",
-      "reservas": 5021,
-      "gb": 4550852.785839999
+      "reservas": 5224,
+      "gb": 7308557.362216999
     },
     {
       "mes_deadline": "2025-12-01",
       "status": "Time_out_client",
-      "reservas": 3468,
-      "gb": 3278128.442760999
+      "reservas": 2993,
+      "gb": 4204288.714755
     },
     {
       "mes_deadline": "2026-01-01",
       "status": "CONFIRMED",
-      "reservas": 35,
-      "gb": 15114.481104
+      "reservas": 30,
+      "gb": 23221.636811999993
     },
     {
       "mes_deadline": "2026-01-01",
       "status": "FINALIZED",
-      "reservas": 4465,
-      "gb": 2994445.034654
+      "reservas": 3732,
+      "gb": 3218136.225908002
     },
     {
       "mes_deadline": "2026-01-01",
       "status": "TO_CANCEL",
-      "reservas": 4386,
-      "gb": 4104633.544943
+      "reservas": 3821,
+      "gb": 4595849.210699999
     },
     {
       "mes_deadline": "2026-01-01",
       "status": "Time_out_client",
-      "reservas": 2997,
-      "gb": 2949599.6003089997
+      "reservas": 2395,
+      "gb": 2920931.1611439995
     },
     {
       "mes_deadline": "2026-02-01",
       "status": "CONFIRMED",
-      "reservas": 31,
-      "gb": 20011.084254
+      "reservas": 26,
+      "gb": 22904.781047000004
     },
     {
       "mes_deadline": "2026-02-01",
       "status": "FINALIZED",
-      "reservas": 4919,
-      "gb": 3511589.7362549998
+      "reservas": 3408,
+      "gb": 2617834.814183001
     },
     {
       "mes_deadline": "2026-02-01",
       "status": "TO_CANCEL",
-      "reservas": 4712,
-      "gb": 4804845.160213001
+      "reservas": 3418,
+      "gb": 3694929.938706001
     },
     {
       "mes_deadline": "2026-02-01",
       "status": "Time_out_client",
-      "reservas": 3217,
-      "gb": 3348632.0738770005
+      "reservas": 2308,
+      "gb": 2380155.0796220005
     },
     {
       "mes_deadline": "2026-03-01",
       "status": "CONFIRMED",
-      "reservas": 33,
-      "gb": 23219.403576
+      "reservas": 18,
+      "gb": 12942.323464
     },
     {
       "mes_deadline": "2026-03-01",
       "status": "FINALIZED",
-      "reservas": 5380,
-      "gb": 3724805.6600929995
+      "reservas": 4549,
+      "gb": 3733716.8598710005
+    },
+    {
+      "mes_deadline": "2026-03-01",
+      "status": "PROCESSING",
+      "reservas": 1,
+      "gb": 516.113298
     },
     {
       "mes_deadline": "2026-03-01",
       "status": "TO_CANCEL",
-      "reservas": 5238,
-      "gb": 5559124.1488840005
+      "reservas": 4967,
+      "gb": 5557910.213506001
     },
     {
       "mes_deadline": "2026-03-01",
       "status": "Time_out_client",
-      "reservas": 3125,
-      "gb": 3400093.938837
+      "reservas": 2699,
+      "gb": 2960207.8915630006
     },
     {
       "mes_deadline": "2026-04-01",
       "status": "CONFIRMED",
-      "reservas": 35,
-      "gb": 27301.747741
+      "reservas": 36,
+      "gb": 21014.402738999997
     },
     {
       "mes_deadline": "2026-04-01",
       "status": "FINALIZED",
-      "reservas": 5388,
-      "gb": 3823730.9176960006
+      "reservas": 4682,
+      "gb": 3554401.5118639986
+    },
+    {
+      "mes_deadline": "2026-04-01",
+      "status": "PROCESSING",
+      "reservas": 8,
+      "gb": 5130.883327
     },
     {
       "mes_deadline": "2026-04-01",
       "status": "TO_CANCEL",
-      "reservas": 5226,
-      "gb": 5398896.609087
+      "reservas": 5081,
+      "gb": 5282511.002565999
     },
     {
       "mes_deadline": "2026-04-01",
       "status": "Time_out_client",
-      "reservas": 3096,
-      "gb": 3335903.812332
+      "reservas": 2934,
+      "gb": 2971161.3065989995
     },
     {
       "mes_deadline": "2026-05-01",
       "status": "CONFIRMED",
-      "reservas": 39,
-      "gb": 27232.027965999998
+      "reservas": 45,
+      "gb": 13398.095318
     },
     {
       "mes_deadline": "2026-05-01",
       "status": "FINALIZED",
-      "reservas": 5499,
-      "gb": 3944328.3945849997
+      "reservas": 5266,
+      "gb": 3937469.4853590014
+    },
+    {
+      "mes_deadline": "2026-05-01",
+      "status": "PROCESSING",
+      "reservas": 10,
+      "gb": 15319.606115
     },
     {
       "mes_deadline": "2026-05-01",
       "status": "TO_CANCEL",
-      "reservas": 5214,
-      "gb": 5311073.653246001
+      "reservas": 5573,
+      "gb": 5890078.397970002
     },
     {
       "mes_deadline": "2026-05-01",
       "status": "Time_out_client",
-      "reservas": 3254,
-      "gb": 3519094.9871959997
+      "reservas": 3664,
+      "gb": 3621400.5013299994
     },
     {
       "mes_deadline": "2026-06-01",
       "status": "CONFIRMED",
-      "reservas": 37,
-      "gb": 28237.371284
+      "reservas": 290,
+      "gb": 5621.159903
     },
     {
       "mes_deadline": "2026-06-01",
       "status": "FINALIZED",
-      "reservas": 5407,
-      "gb": 3937698.0494659997
+      "reservas": 4726,
+      "gb": 4217712.297638
     },
     {
       "mes_deadline": "2026-06-01",
       "status": "TO_CANCEL",
-      "reservas": 4925,
-      "gb": 5146693.163270999
+      "reservas": 5740,
+      "gb": 6872552.559386002
     },
     {
       "mes_deadline": "2026-06-01",
       "status": "Time_out_client",
-      "reservas": 3134,
-      "gb": 3424321.246575
+      "reservas": 3465,
+      "gb": 3932900.476432999
     },
     {
       "mes_deadline": "2026-07-01",
       "status": "CONFIRMED",
-      "reservas": 47,
-      "gb": 31005.889228
+      "reservas": 338,
+      "gb": 14742.34379
     },
     {
       "mes_deadline": "2026-07-01",
       "status": "FINALIZED",
-      "reservas": 5322,
-      "gb": 3719256.7343370003
+      "reservas": 4974,
+      "gb": 4761412.863724
     },
     {
       "mes_deadline": "2026-07-01",
       "status": "PROCESSING",
-      "reservas": 10,
-      "gb": 4114.443700000001
+      "reservas": 2,
+      "gb": 2354.831825
     },
     {
       "mes_deadline": "2026-07-01",
       "status": "TO_CANCEL",
-      "reservas": 4805,
-      "gb": 5008714.070452999
+      "reservas": 6052,
+      "gb": 7702787.587272999
     },
     {
       "mes_deadline": "2026-07-01",
       "status": "Time_out_client",
-      "reservas": 3039,
-      "gb": 3281429.792424001
+      "reservas": 3643,
+      "gb": 4331679.653967
+    },
+    {
+      "mes_deadline": "2026-08-01",
+      "status": "CONFIRMED",
+      "reservas": 144,
+      "gb": 2144.710087
+    },
+    {
+      "mes_deadline": "2026-08-01",
+      "status": "FINALIZED",
+      "reservas": 4751,
+      "gb": 3492360.386362
+    },
+    {
+      "mes_deadline": "2026-08-01",
+      "status": "TO_CANCEL",
+      "reservas": 6036,
+      "gb": 6038271.185839998
+    },
+    {
+      "mes_deadline": "2026-08-01",
+      "status": "Time_out_client",
+      "reservas": 3355,
+      "gb": 3325209.334943
+    },
+    {
+      "mes_deadline": "2026-09-01",
+      "status": "CONFIRMED",
+      "reservas": 29,
+      "gb": 14600.689631
+    },
+    {
+      "mes_deadline": "2026-09-01",
+      "status": "FINALIZED",
+      "reservas": 2851,
+      "gb": 2069987.0345949996
+    },
+    {
+      "mes_deadline": "2026-09-01",
+      "status": "PROCESSING",
+      "reservas": 30,
+      "gb": 28077.972198999996
+    },
+    {
+      "mes_deadline": "2026-09-01",
+      "status": "TO_CANCEL",
+      "reservas": 4001,
+      "gb": 4157166.154626999
+    },
+    {
+      "mes_deadline": "2026-09-01",
+      "status": "Time_out_client",
+      "reservas": 1982,
+      "gb": 2045748.5576540004
     }
   ],
   "kr22": [
-    {"cant_staff": 1, "cant_no_staff": 0, "cant_total": 1, "cant_agencias_unicas": 1, "creation_yearmonth": "2026-07"},
-    {"cant_staff": 1, "cant_no_staff": 0, "cant_total": 1, "cant_agencias_unicas": 1, "creation_yearmonth": "2026-06"},
-    {"cant_staff": 7, "cant_no_staff": 0, "cant_total": 7, "cant_agencias_unicas": 2, "creation_yearmonth": "2026-05"},
-    {"cant_staff": 12, "cant_no_staff": 0, "cant_total": 12, "cant_agencias_unicas": 3, "creation_yearmonth": "2026-04"},
-    {"cant_staff": 9, "cant_no_staff": 0, "cant_total": 9, "cant_agencias_unicas": 5, "creation_yearmonth": "2026-03"},
-    {"cant_staff": 18, "cant_no_staff": 0, "cant_total": 18, "cant_agencias_unicas": 6, "creation_yearmonth": "2026-02"},
-    {"cant_staff": 33, "cant_no_staff": 0, "cant_total": 33, "cant_agencias_unicas": 8, "creation_yearmonth": "2026-01"}
+    {
+      "cant_staff": 9211,
+      "cant_no_staff": 17048,
+      "cant_total": 26259,
+      "cant_agencias_unicas": 4372,
+      "creation_yearmonth": "2026-03"
+    },
+    {
+      "cant_staff": 8618,
+      "cant_no_staff": 15348,
+      "cant_total": 23966,
+      "cant_agencias_unicas": 4250,
+      "creation_yearmonth": "2026-04"
+    },
+    {
+      "cant_staff": 9386,
+      "cant_no_staff": 17806,
+      "cant_total": 27192,
+      "cant_agencias_unicas": 4667,
+      "creation_yearmonth": "2026-05"
+    },
+    {
+      "cant_staff": 10275,
+      "cant_no_staff": 19014,
+      "cant_total": 29289,
+      "cant_agencias_unicas": 4836,
+      "creation_yearmonth": "2026-06"
+    },
+    {
+      "cant_staff": 12322,
+      "cant_no_staff": 23418,
+      "cant_total": 35740,
+      "cant_agencias_unicas": 5473,
+      "creation_yearmonth": "2026-07"
+    },
+    {
+      "cant_staff": 11884,
+      "cant_no_staff": 21698,
+      "cant_total": 33582,
+      "cant_agencias_unicas": 5249,
+      "creation_yearmonth": "2026-08"
+    },
+    {
+      "cant_staff": 6162,
+      "cant_no_staff": 11037,
+      "cant_total": 17199,
+      "cant_agencias_unicas": 3796,
+      "creation_yearmonth": "2026-09"
+    }
   ],
   "kr31": [
-    {"periodo": "2026-01-01", "net_rev_real": 130000.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-02-01", "net_rev_real": 105000.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-03-01", "net_rev_real": 115000.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-04-01", "net_rev_real": 105000.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-05-01", "net_rev_real": 142000.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-06-01", "net_rev_real": 220000.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-07-01", "net_rev_real": 170000.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-08-01", "net_rev_real": 170000.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-09-01", "net_rev_real": 197423.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-10-01", "net_rev_real": 0.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-11-01", "net_rev_real": 0.0, "net_rev_target": 180000.0},
-    {"periodo": "2026-12-01", "net_rev_real": 0.0, "net_rev_target": 180000.0},
-    {"periodo": "2027-01-01", "net_rev_real": 0.0, "net_rev_target": 180000.0},
-    {"periodo": "2027-02-01", "net_rev_real": 0.0, "net_rev_target": 180000.0},
-    {"periodo": "2027-03-01", "net_rev_real": 0.0, "net_rev_target": 180000.0},
-    {"periodo": "2027-04-01", "net_rev_real": 0.0, "net_rev_target": 180000.0},
-    {"periodo": "2027-05-01", "net_rev_real": 0.0, "net_rev_target": 180000.0},
-    {"periodo": "2027-06-01", "net_rev_real": 0.0, "net_rev_target": 180000.0},
-    {"periodo": "2027-07-01", "net_rev_real": 0.0, "net_rev_target": 180000.0},
-    {"periodo": "2027-08-01", "net_rev_real": 0.0, "net_rev_target": 180000.0}
+    {
+      "periodo": "2025-02",
+      "net_rev_real": 2324898.4199999995,
+      "net_rev_target": null
+    },
+    {
+      "periodo": "2025-03",
+      "net_rev_real": 2539409.15,
+      "net_rev_target": null
+    },
+    {
+      "periodo": "2025-04",
+      "net_rev_real": 2367195.9,
+      "net_rev_target": null
+    },
+    {
+      "periodo": "2025-05",
+      "net_rev_real": 2659740.13,
+      "net_rev_target": null
+    },
+    {
+      "periodo": "2025-06",
+      "net_rev_real": 2695966.7800000003,
+      "net_rev_target": null
+    },
+    {
+      "periodo": "2025-07",
+      "net_rev_real": 2717054.06,
+      "net_rev_target": 2698175.92
+    },
+    {
+      "periodo": "2025-08",
+      "net_rev_real": 2324278.1299999994,
+      "net_rev_target": 2853362.9
+    },
+    {
+      "periodo": "2025-09",
+      "net_rev_real": 2594335.86,
+      "net_rev_target": 2944763.37
+    },
+    {
+      "periodo": "2025-10",
+      "net_rev_real": 2990932.2400000007,
+      "net_rev_target": 3290022.41
+    },
+    {
+      "periodo": "2025-11",
+      "net_rev_real": 3194965.14,
+      "net_rev_target": 3200534.64
+    },
+    {
+      "periodo": "2025-12",
+      "net_rev_real": 3461805.47,
+      "net_rev_target": 3639879.44
+    },
+    {
+      "periodo": "2026-01",
+      "net_rev_real": 3713823.4,
+      "net_rev_target": 3918210.0
+    },
+    {
+      "periodo": "2026-02",
+      "net_rev_real": 3757321.39,
+      "net_rev_target": 3954866.0
+    },
+    {
+      "periodo": "2026-03",
+      "net_rev_real": 3831240.68,
+      "net_rev_target": 4025188.0
+    },
+    {
+      "periodo": "2026-04",
+      "net_rev_real": 3905170.12,
+      "net_rev_target": 4095510.0
+    },
+    {
+      "periodo": "2026-05",
+      "net_rev_real": 3979100.0,
+      "net_rev_target": 4165832.0
+    },
+    {
+      "periodo": "2026-06",
+      "net_rev_real": 4053030.0,
+      "net_rev_target": 4236154.0
+    },
+    {
+      "periodo": "2026-07",
+      "net_rev_real": 4126960.0,
+      "net_rev_target": 4306476.0
+    },
+    {
+      "periodo": "2026-08",
+      "net_rev_real": 4200890.0,
+      "net_rev_target": 4376798.0
+    },
+    {
+      "periodo": "2026-09",
+      "net_rev_real": 4274820.0,
+      "net_rev_target": 4447120.0
+    }
   ],
   "kr32": [
-    {"mes": "2026-01-01", "agencias_cotizadoras": 125, "agencias_cotizaron_y_vendieron": 68, "cotizaciones_realizadas": 2258, "pct_activacion_comercial": 0.544},
-    {"mes": "2026-02-01", "agencias_cotizadoras": 112, "agencias_cotizaron_y_vendieron": 61, "cotizaciones_realizadas": 2000, "pct_activacion_comercial": 0.545},
-    {"mes": "2026-03-01", "agencias_cotizadoras": 128, "agencias_cotizaron_y_vendieron": 77, "cotizaciones_realizadas": 2400, "pct_activacion_comercial": 0.602},
-    {"mes": "2026-04-01", "agencias_cotizadoras": 116, "agencias_cotizaron_y_vendieron": 69, "cotizaciones_realizadas": 2150, "pct_activacion_comercial": 0.595},
-    {"mes": "2026-05-01", "agencias_cotizadoras": 130, "agencias_cotizaron_y_vendieron": 82, "cotizaciones_realizadas": 2500, "pct_activacion_comercial": 0.631},
-    {"mes": "2026-06-01", "agencias_cotizadoras": 138, "agencias_cotizaron_y_vendieron": 91, "cotizaciones_realizadas": 2800, "pct_activacion_comercial": 0.659},
-    {"mes": "2026-07-01", "agencias_cotizadoras": 145, "agencias_cotizaron_y_vendieron": 95, "cotizaciones_realizadas": 3100, "pct_activacion_comercial": 0.655}
+    {
+      "mes": "2026-01",
+      "agencias_cotizadoras": 125,
+      "agencias_cotizaron_y_vendieron": 68,
+      "cotizaciones_realizadas": 2258,
+      "pct_activacion_comercial": 0.544
+    },
+    {
+      "mes": "2026-02",
+      "agencias_cotizadoras": 112,
+      "agencias_cotizaron_y_vendieron": 61,
+      "cotizaciones_realizadas": 2000,
+      "pct_activacion_comercial": 0.545
+    },
+    {
+      "mes": "2026-03",
+      "agencias_cotizadoras": 128,
+      "agencias_cotizaron_y_vendieron": 77,
+      "cotizaciones_realizadas": 2400,
+      "pct_activacion_comercial": 0.602
+    },
+    {
+      "mes": "2026-04",
+      "agencias_cotizadoras": 116,
+      "agencias_cotizaron_y_vendieron": 69,
+      "cotizaciones_realizadas": 2150,
+      "pct_activacion_comercial": 0.595
+    },
+    {
+      "mes": "2026-05",
+      "agencias_cotizadoras": 130,
+      "agencias_cotizaron_y_vendieron": 82,
+      "cotizaciones_realizadas": 2500,
+      "pct_activacion_comercial": 0.631
+    },
+    {
+      "mes": "2026-06",
+      "agencias_cotizadoras": 138,
+      "agencias_cotizaron_y_vendieron": 91,
+      "cotizaciones_realizadas": 2800,
+      "pct_activacion_comercial": 0.659
+    },
+    {
+      "mes": "2026-07",
+      "agencias_cotizadoras": 145,
+      "agencias_cotizaron_y_vendieron": 95,
+      "cotizaciones_realizadas": 3100,
+      "pct_activacion_comercial": 0.655
+    },
+    {
+      "mes": "2026-08",
+      "agencias_cotizadoras": 152,
+      "agencias_cotizaron_y_vendieron": 101,
+      "cotizaciones_realizadas": 3300,
+      "pct_activacion_comercial": 0.664
+    },
+    {
+      "mes": "2026-09",
+      "agencias_cotizadoras": 88,
+      "agencias_cotizaron_y_vendieron": 58,
+      "cotizaciones_realizadas": 1880,
+      "pct_activacion_comercial": 0.659
+    }
   ],
   "kr33": [
-    {"mes_previo": "2025-12-01", "mes_evaluacion": "2026-01-01", "agencias_total_previo": 100, "agencias_total_evaluado": 115, "agencias_1_3_previo": 40, "agencias_aumentaron": 22, "pct_aumento": 0.55, "target_pct": 0.5, "pct_cumplimiento_target": 1.1},
-    {"mes_previo": "2026-01-01", "mes_evaluacion": "2026-02-01", "agencias_total_previo": 115, "agencias_total_evaluado": 120, "agencias_1_3_previo": 45, "agencias_aumentaron": 25, "pct_aumento": 0.556, "target_pct": 0.5, "pct_cumplimiento_target": 1.111},
-    {"mes_previo": "2026-02-01", "mes_evaluacion": "2026-03-01", "agencias_total_previo": 120, "agencias_total_evaluado": 125, "agencias_1_3_previo": 48, "agencias_aumentaron": 27, "pct_aumento": 0.563, "target_pct": 0.5, "pct_cumplimiento_target": 1.125},
-    {"mes_previo": "2026-03-01", "mes_evaluacion": "2026-04-01", "agencias_total_previo": 125, "agencias_total_evaluado": 130, "agencias_1_3_previo": 50, "agencias_aumentaron": 29, "pct_aumento": 0.58, "target_pct": 0.5, "pct_cumplimiento_target": 1.16},
-    {"mes_previo": "2026-04-01", "mes_evaluacion": "2026-05-01", "agencias_total_previo": 130, "agencias_total_evaluado": 135, "agencias_1_3_previo": 52, "agencias_aumentaron": 31, "pct_aumento": 0.596, "target_pct": 0.5, "pct_cumplimiento_target": 1.192},
-    {"mes_previo": "2026-05-01", "mes_evaluacion": "2026-06-01", "agencias_total_previo": 135, "agencias_total_evaluado": 140, "agencias_1_3_previo": 54, "agencias_aumentaron": 34, "pct_aumento": 0.63, "target_pct": 0.5, "pct_cumplimiento_target": 1.26},
-    {"mes_previo": "2026-06-01", "mes_evaluacion": "2026-07-01", "agencias_total_previo": 140, "agencias_total_evaluado": 145, "agencias_1_3_previo": 56, "agencias_aumentaron": 36, "pct_aumento": 0.643, "target_pct": 0.5, "pct_cumplimiento_target": 1.286},
-    {"mes_previo": "2026-07-01", "mes_evaluacion": "2026-08-01", "agencias_total_previo": 145, "agencias_total_evaluado": 150, "agencias_1_3_previo": 58, "agencias_aumentaron": 38, "pct_aumento": 0.655, "target_pct": 0.5, "pct_cumplimiento_target": 1.31},
-    {"mes_previo": "2026-08-01", "mes_evaluacion": "2026-09-01", "agencias_total_previo": 150, "agencias_total_evaluado": 155, "agencias_1_3_previo": 60, "agencias_aumentaron": 40, "pct_aumento": 0.667, "target_pct": 0.5, "pct_cumplimiento_target": 1.333},
-    {"mes_previo": "2026-09-01", "mes_evaluacion": "2026-10-01", "agencias_total_previo": 155, "agencias_total_evaluado": 160, "agencias_1_3_previo": 62, "agencias_aumentaron": 42, "pct_aumento": 0.677, "target_pct": 0.5, "pct_cumplimiento_target": 1.355},
-    {"mes_previo": "2026-10-01", "mes_evaluacion": "2026-11-01", "agencias_total_previo": 160, "agencias_total_evaluado": 165, "agencias_1_3_previo": 64, "agencias_aumentaron": 44, "pct_aumento": 0.688, "target_pct": 0.5, "pct_cumplimiento_target": 1.375},
-    {"mes_previo": "2026-11-01", "mes_evaluacion": "2026-12-01", "agencias_total_previo": 165, "agencias_total_evaluado": 170, "agencias_1_3_previo": 66, "agencias_aumentaron": 46, "pct_aumento": 0.697, "target_pct": 0.5, "pct_cumplimiento_target": 1.394},
-    {"mes_previo": "2026-12-01", "mes_evaluacion": "2027-01-01", "agencias_total_previo": 170, "agencias_total_evaluado": 175, "agencias_1_3_previo": 68, "agencias_aumentaron": 48, "pct_aumento": 0.706, "target_pct": 0.5, "pct_cumplimiento_target": 1.412},
-    {"mes_previo": "2027-01-01", "mes_evaluacion": "2027-02-01", "agencias_total_previo": 175, "agencias_total_evaluado": 180, "agencias_1_3_previo": 70, "agencias_aumentaron": 50, "pct_aumento": 0.714, "target_pct": 0.5, "pct_cumplimiento_target": 1.429},
-    {"mes_previo": "2027-02-01", "mes_evaluacion": "2027-03-01", "agencias_total_previo": 180, "agencias_total_evaluado": 185, "agencias_1_3_previo": 72, "agencias_aumentaron": 52, "pct_aumento": 0.722, "target_pct": 0.5, "pct_cumplimiento_target": 1.444},
-    {"mes_previo": "2027-03-01", "mes_evaluacion": "2027-04-01", "agencias_total_previo": 185, "agencias_total_evaluado": 190, "agencias_1_3_previo": 74, "agencias_aumentaron": 54, "pct_aumento": 0.73, "target_pct": 0.5, "pct_cumplimiento_target": 1.46},
-    {"mes_previo": "2027-04-01", "mes_evaluacion": "2027-05-01", "agencias_total_previo": 190, "agencias_total_evaluado": 195, "agencias_1_3_previo": 76, "agencias_aumentaron": 56, "pct_aumento": 0.737, "target_pct": 0.5, "pct_cumplimiento_target": 1.474},
-    {"mes_previo": "2027-05-01", "mes_evaluacion": "2027-06-01", "agencias_total_previo": 195, "agencias_total_evaluado": 200, "agencias_1_3_previo": 78, "agencias_aumentaron": 58, "pct_aumento": 0.744, "target_pct": 0.5, "pct_cumplimiento_target": 1.488},
-    {"mes_previo": "2027-06-01", "mes_evaluacion": "2027-07-01", "agencias_total_previo": 200, "agencias_total_evaluado": 205, "agencias_1_3_previo": 80, "agencias_aumentaron": 60, "pct_aumento": 0.75, "target_pct": 0.5, "pct_cumplimiento_target": 1.5},
-    {"mes_previo": "2027-07-01", "mes_evaluacion": "2027-08-01", "agencias_total_previo": 205, "agencias_total_evaluado": 210, "agencias_1_3_previo": 82, "agencias_aumentaron": 62, "pct_aumento": 0.756, "target_pct": 0.5, "pct_cumplimiento_target": 1.512}
+    {
+      "mes_previo": "2025-12-01",
+      "mes_evaluacion": "2026-01-01",
+      "agencias_total_previo": 100,
+      "agencias_total_evaluado": 115,
+      "agencias_1_3_previo": 40,
+      "agencias_aumentaron": 22,
+      "pct_aumento": 0.55,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.1
+    },
+    {
+      "mes_previo": "2026-01-01",
+      "mes_evaluacion": "2026-02-01",
+      "agencias_total_previo": 115,
+      "agencias_total_evaluado": 120,
+      "agencias_1_3_previo": 45,
+      "agencias_aumentaron": 25,
+      "pct_aumento": 0.556,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.111
+    },
+    {
+      "mes_previo": "2026-02-01",
+      "mes_evaluacion": "2026-03-01",
+      "agencias_total_previo": 120,
+      "agencias_total_evaluado": 125,
+      "agencias_1_3_previo": 48,
+      "agencias_aumentaron": 27,
+      "pct_aumento": 0.563,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.125
+    },
+    {
+      "mes_previo": "2026-03-01",
+      "mes_evaluacion": "2026-04-01",
+      "agencias_total_previo": 125,
+      "agencias_total_evaluado": 130,
+      "agencias_1_3_previo": 50,
+      "agencias_aumentaron": 29,
+      "pct_aumento": 0.58,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.16
+    },
+    {
+      "mes_previo": "2026-04-01",
+      "mes_evaluacion": "2026-05-01",
+      "agencias_total_previo": 130,
+      "agencias_total_evaluado": 135,
+      "agencias_1_3_previo": 52,
+      "agencias_aumentaron": 31,
+      "pct_aumento": 0.596,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.192
+    },
+    {
+      "mes_previo": "2026-05-01",
+      "mes_evaluacion": "2026-06-01",
+      "agencias_total_previo": 135,
+      "agencias_total_evaluado": 140,
+      "agencias_1_3_previo": 54,
+      "agencias_aumentaron": 34,
+      "pct_aumento": 0.63,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.26
+    },
+    {
+      "mes_previo": "2026-06-01",
+      "mes_evaluacion": "2026-07-01",
+      "agencias_total_previo": 140,
+      "agencias_total_evaluado": 145,
+      "agencias_1_3_previo": 56,
+      "agencias_aumentaron": 36,
+      "pct_aumento": 0.643,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.286
+    },
+    {
+      "mes_previo": "2026-07-01",
+      "mes_evaluacion": "2026-08-01",
+      "agencias_total_previo": 145,
+      "agencias_total_evaluado": 150,
+      "agencias_1_3_previo": 58,
+      "agencias_aumentaron": 38,
+      "pct_aumento": 0.655,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.31
+    },
+    {
+      "mes_previo": "2026-08-01",
+      "mes_evaluacion": "2026-09-01",
+      "agencias_total_previo": 150,
+      "agencias_total_evaluado": 155,
+      "agencias_1_3_previo": 60,
+      "agencias_aumentaron": 40,
+      "pct_aumento": 0.667,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.333
+    },
+    {
+      "mes_previo": "2026-09-01",
+      "mes_evaluacion": "2026-10-01",
+      "agencias_total_previo": 155,
+      "agencias_total_evaluado": 160,
+      "agencias_1_3_previo": 62,
+      "agencias_aumentaron": 42,
+      "pct_aumento": 0.677,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.355
+    },
+    {
+      "mes_previo": "2026-10-01",
+      "mes_evaluacion": "2026-11-01",
+      "agencias_total_previo": 160,
+      "agencias_total_evaluado": 165,
+      "agencias_1_3_previo": 64,
+      "agencias_aumentaron": 44,
+      "pct_aumento": 0.688,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.375
+    },
+    {
+      "mes_previo": "2026-11-01",
+      "mes_evaluacion": "2026-12-01",
+      "agencias_total_previo": 165,
+      "agencias_total_evaluado": 170,
+      "agencias_1_3_previo": 66,
+      "agencias_aumentaron": 46,
+      "pct_aumento": 0.697,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.394
+    },
+    {
+      "mes_previo": "2026-12-01",
+      "mes_evaluacion": "2027-01-01",
+      "agencias_total_previo": 170,
+      "agencias_total_evaluado": 175,
+      "agencias_1_3_previo": 68,
+      "agencias_aumentaron": 48,
+      "pct_aumento": 0.706,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.412
+    },
+    {
+      "mes_previo": "2027-01-01",
+      "mes_evaluacion": "2027-02-01",
+      "agencias_total_previo": 175,
+      "agencias_total_evaluado": 180,
+      "agencias_1_3_previo": 70,
+      "agencias_aumentaron": 50,
+      "pct_aumento": 0.714,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.429
+    },
+    {
+      "mes_previo": "2027-02-01",
+      "mes_evaluacion": "2027-03-01",
+      "agencias_total_previo": 180,
+      "agencias_total_evaluado": 185,
+      "agencias_1_3_previo": 72,
+      "agencias_aumentaron": 52,
+      "pct_aumento": 0.722,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.444
+    },
+    {
+      "mes_previo": "2027-03-01",
+      "mes_evaluacion": "2027-04-01",
+      "agencias_total_previo": 185,
+      "agencias_total_evaluado": 190,
+      "agencias_1_3_previo": 74,
+      "agencias_aumentaron": 54,
+      "pct_aumento": 0.73,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.46
+    },
+    {
+      "mes_previo": "2027-04-01",
+      "mes_evaluacion": "2027-05-01",
+      "agencias_total_previo": 190,
+      "agencias_total_evaluado": 195,
+      "agencias_1_3_previo": 76,
+      "agencias_aumentaron": 56,
+      "pct_aumento": 0.737,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.474
+    },
+    {
+      "mes_previo": "2027-05-01",
+      "mes_evaluacion": "2027-06-01",
+      "agencias_total_previo": 195,
+      "agencias_total_evaluado": 200,
+      "agencias_1_3_previo": 78,
+      "agencias_aumentaron": 58,
+      "pct_aumento": 0.744,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.488
+    },
+    {
+      "mes_previo": "2027-06-01",
+      "mes_evaluacion": "2027-07-01",
+      "agencias_total_previo": 200,
+      "agencias_total_evaluado": 205,
+      "agencias_1_3_previo": 80,
+      "agencias_aumentaron": 60,
+      "pct_aumento": 0.75,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.5
+    },
+    {
+      "mes_previo": "2027-07-01",
+      "mes_evaluacion": "2027-08-01",
+      "agencias_total_previo": 205,
+      "agencias_total_evaluado": 210,
+      "agencias_1_3_previo": 82,
+      "agencias_aumentaron": 62,
+      "pct_aumento": 0.756,
+      "target_pct": 0.5,
+      "pct_cumplimiento_target": 1.512
+    }
   ],
   "kr21_sem": [
-    {"semana_inicio": "2026-01-05", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-01-12", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-01-19", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-01-26", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-02-02", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-02-09", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-02-16", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-02-23", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-03-02", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-03-09", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-03-16", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-03-23", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-03-30", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-04-06", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-04-13", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-04-20", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-04-27", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-05-04", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-05-11", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-05-18", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-05-25", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-06-01", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-06-08", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-06-15", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-06-22", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-06-29", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-07-06", "total_reservas": 16165, "reservas_timeout_client": 3039, "pct_timeout_client": 0.18791},
-    {"semana_inicio": "2026-07-13", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-07-20", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-07-27", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-08-03", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-08-10", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-08-17", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-08-24", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-08-31", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-09-07", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-09-14", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-09-21", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-09-28", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-10-05", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-10-12", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-10-19", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-10-26", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-11-02", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-11-09", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-11-16", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-11-23", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-11-30", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-12-07", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-12-14", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-12-21", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2026-12-28", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-01-04", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-01-11", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-01-18", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-01-25", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-02-01", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-02-08", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-02-15", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-02-22", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-03-01", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-03-08", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-03-15", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-03-22", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-03-29", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-04-05", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-04-12", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-04-19", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-04-26", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-05-03", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-05-10", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-05-17", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-05-24", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-05-31", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-06-07", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-06-14", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-06-21", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-06-28", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-07-05", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-07-12", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-07-19", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0},
-    {"semana_inicio": "2027-07-26", "total_reservas": 0, "reservas_timeout_client": 0, "pct_timeout_client": 0.0}
+    {
+      "semana_inicio": "2026-01-05",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-12",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-19",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-26",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-02",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-09",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-16",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-23",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-02",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-09",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-16",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-23",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-30",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-06",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-13",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-20",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-27",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-04",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-11",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-18",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-25",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-01",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-08",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-15",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-22",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-29",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-07-06",
+      "total_reservas": 16165,
+      "reservas_timeout_client": 3039,
+      "pct_timeout_client": 0.18791
+    },
+    {
+      "semana_inicio": "2026-07-13",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-07-20",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-07-27",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-08-03",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-08-10",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-08-17",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-08-24",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-08-31",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-09-07",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-09-14",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-09-21",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-09-28",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-10-05",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-10-12",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-10-19",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-10-26",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-11-02",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-11-09",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-11-16",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-11-23",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-11-30",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-12-07",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-12-14",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-12-21",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2026-12-28",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-01-04",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-01-11",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-01-18",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-01-25",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-02-01",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-02-08",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-02-15",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-02-22",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-03-01",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-03-08",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-03-15",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-03-22",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-03-29",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-04-05",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-04-12",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-04-19",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-04-26",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-05-03",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-05-10",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-05-17",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-05-24",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-05-31",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-06-07",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-06-14",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-06-21",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-06-28",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-07-05",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-07-12",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-07-19",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    },
+    {
+      "semana_inicio": "2027-07-26",
+      "total_reservas": 0,
+      "reservas_timeout_client": 0,
+      "pct_timeout_client": 0.0
+    }
   ],
   "kr21_sem_cum": [
-    {"semana_inicio": "2026-01-05", "mes_deadline": "2026-01-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-01-12", "mes_deadline": "2026-01-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-01-19", "mes_deadline": "2026-01-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-01-26", "mes_deadline": "2026-01-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-02-02", "mes_deadline": "2026-02-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-02-09", "mes_deadline": "2026-02-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-02-16", "mes_deadline": "2026-02-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-02-23", "mes_deadline": "2026-02-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-03-02", "mes_deadline": "2026-03-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-03-09", "mes_deadline": "2026-03-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-03-16", "mes_deadline": "2026-03-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-03-23", "mes_deadline": "2026-03-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-03-30", "mes_deadline": "2026-03-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-04-06", "mes_deadline": "2026-04-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-04-13", "mes_deadline": "2026-04-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-04-20", "mes_deadline": "2026-04-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-04-27", "mes_deadline": "2026-04-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-05-04", "mes_deadline": "2026-05-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-05-11", "mes_deadline": "2026-05-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-05-18", "mes_deadline": "2026-05-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-05-25", "mes_deadline": "2026-05-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-06-01", "mes_deadline": "2026-06-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-06-08", "mes_deadline": "2026-06-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-06-15", "mes_deadline": "2026-06-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-06-22", "mes_deadline": "2026-06-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-06-29", "mes_deadline": "2026-06-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-07-06", "mes_deadline": "2026-07-01", "total_reservas_acum": 16165, "timeouts_acum": 3039, "pct_timeout_acum": 0.18791},
-    {"semana_inicio": "2026-07-13", "mes_deadline": "2026-07-01", "total_reservas_acum": 16165, "timeouts_acum": 3039, "pct_timeout_acum": 0.18791},
-    {"semana_inicio": "2026-07-20", "mes_deadline": "2026-07-01", "total_reservas_acum": 16165, "timeouts_acum": 3039, "pct_timeout_acum": 0.18791},
-    {"semana_inicio": "2026-07-27", "mes_deadline": "2026-07-01", "total_reservas_acum": 16165, "timeouts_acum": 3039, "pct_timeout_acum": 0.18791},
-    {"semana_inicio": "2026-08-03", "mes_deadline": "2026-08-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-08-10", "mes_deadline": "2026-08-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-08-17", "mes_deadline": "2026-08-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-08-24", "mes_deadline": "2026-08-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-08-31", "mes_deadline": "2026-08-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-09-07", "mes_deadline": "2026-09-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-09-14", "mes_deadline": "2026-09-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-09-21", "mes_deadline": "2026-09-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-09-28", "mes_deadline": "2026-09-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-10-05", "mes_deadline": "2026-10-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-10-12", "mes_deadline": "2026-10-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-10-19", "mes_deadline": "2026-10-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-10-26", "mes_deadline": "2026-10-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-11-02", "mes_deadline": "2026-11-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-11-09", "mes_deadline": "2026-11-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-11-16", "mes_deadline": "2026-11-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-11-23", "mes_deadline": "2026-11-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-11-30", "mes_deadline": "2026-11-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-12-07", "mes_deadline": "2026-12-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-12-14", "mes_deadline": "2026-12-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-12-21", "mes_deadline": "2026-12-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2026-12-28", "mes_deadline": "2026-12-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-01-04", "mes_deadline": "2027-01-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-01-11", "mes_deadline": "2027-01-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-01-18", "mes_deadline": "2027-01-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-01-25", "mes_deadline": "2027-01-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-02-01", "mes_deadline": "2027-02-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-02-08", "mes_deadline": "2027-02-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-02-15", "mes_deadline": "2027-02-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-02-22", "mes_deadline": "2027-02-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-03-01", "mes_deadline": "2027-03-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-03-08", "mes_deadline": "2027-03-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-03-15", "mes_deadline": "2027-03-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-03-22", "mes_deadline": "2027-03-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-03-29", "mes_deadline": "2027-03-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-04-05", "mes_deadline": "2027-04-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-04-12", "mes_deadline": "2027-04-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-04-19", "mes_deadline": "2027-04-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-04-26", "mes_deadline": "2027-04-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-05-03", "mes_deadline": "2027-05-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-05-10", "mes_deadline": "2027-05-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-05-17", "mes_deadline": "2027-05-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-05-24", "mes_deadline": "2027-05-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-05-31", "mes_deadline": "2027-05-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-06-07", "mes_deadline": "2027-06-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-06-14", "mes_deadline": "2027-06-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-06-21", "mes_deadline": "2027-06-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-06-28", "mes_deadline": "2027-06-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-07-05", "mes_deadline": "2027-07-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-07-12", "mes_deadline": "2027-07-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-07-19", "mes_deadline": "2027-07-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0},
-    {"semana_inicio": "2027-07-26", "mes_deadline": "2027-07-01", "total_reservas_acum": 0, "timeouts_acum": 0, "pct_timeout_acum": 0.0}
+    {
+      "semana_inicio": "2026-01-05",
+      "mes_deadline": "2026-01-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-12",
+      "mes_deadline": "2026-01-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-19",
+      "mes_deadline": "2026-01-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-26",
+      "mes_deadline": "2026-01-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-02",
+      "mes_deadline": "2026-02-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-09",
+      "mes_deadline": "2026-02-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-16",
+      "mes_deadline": "2026-02-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-23",
+      "mes_deadline": "2026-02-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-02",
+      "mes_deadline": "2026-03-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-09",
+      "mes_deadline": "2026-03-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-16",
+      "mes_deadline": "2026-03-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-23",
+      "mes_deadline": "2026-03-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-30",
+      "mes_deadline": "2026-03-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-06",
+      "mes_deadline": "2026-04-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-13",
+      "mes_deadline": "2026-04-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-20",
+      "mes_deadline": "2026-04-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-27",
+      "mes_deadline": "2026-04-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-04",
+      "mes_deadline": "2026-05-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-11",
+      "mes_deadline": "2026-05-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-18",
+      "mes_deadline": "2026-05-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-25",
+      "mes_deadline": "2026-05-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-01",
+      "mes_deadline": "2026-06-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-08",
+      "mes_deadline": "2026-06-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-15",
+      "mes_deadline": "2026-06-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-22",
+      "mes_deadline": "2026-06-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-29",
+      "mes_deadline": "2026-06-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-07-06",
+      "mes_deadline": "2026-07-01",
+      "total_reservas_acum": 16165,
+      "timeouts_acum": 3039,
+      "pct_timeout_acum": 0.18791
+    },
+    {
+      "semana_inicio": "2026-07-13",
+      "mes_deadline": "2026-07-01",
+      "total_reservas_acum": 16165,
+      "timeouts_acum": 3039,
+      "pct_timeout_acum": 0.18791
+    },
+    {
+      "semana_inicio": "2026-07-20",
+      "mes_deadline": "2026-07-01",
+      "total_reservas_acum": 16165,
+      "timeouts_acum": 3039,
+      "pct_timeout_acum": 0.18791
+    },
+    {
+      "semana_inicio": "2026-07-27",
+      "mes_deadline": "2026-07-01",
+      "total_reservas_acum": 16165,
+      "timeouts_acum": 3039,
+      "pct_timeout_acum": 0.18791
+    },
+    {
+      "semana_inicio": "2026-08-03",
+      "mes_deadline": "2026-08-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-08-10",
+      "mes_deadline": "2026-08-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-08-17",
+      "mes_deadline": "2026-08-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-08-24",
+      "mes_deadline": "2026-08-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-08-31",
+      "mes_deadline": "2026-08-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-09-07",
+      "mes_deadline": "2026-09-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-09-14",
+      "mes_deadline": "2026-09-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-09-21",
+      "mes_deadline": "2026-09-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-09-28",
+      "mes_deadline": "2026-09-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-10-05",
+      "mes_deadline": "2026-10-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-10-12",
+      "mes_deadline": "2026-10-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-10-19",
+      "mes_deadline": "2026-10-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-10-26",
+      "mes_deadline": "2026-10-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-11-02",
+      "mes_deadline": "2026-11-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-11-09",
+      "mes_deadline": "2026-11-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-11-16",
+      "mes_deadline": "2026-11-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-11-23",
+      "mes_deadline": "2026-11-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-11-30",
+      "mes_deadline": "2026-11-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-12-07",
+      "mes_deadline": "2026-12-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-12-14",
+      "mes_deadline": "2026-12-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-12-21",
+      "mes_deadline": "2026-12-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-12-28",
+      "mes_deadline": "2026-12-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-01-04",
+      "mes_deadline": "2027-01-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-01-11",
+      "mes_deadline": "2027-01-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-01-18",
+      "mes_deadline": "2027-01-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-01-25",
+      "mes_deadline": "2027-01-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-02-01",
+      "mes_deadline": "2027-02-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-02-08",
+      "mes_deadline": "2027-02-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-02-15",
+      "mes_deadline": "2027-02-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-02-22",
+      "mes_deadline": "2027-02-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-03-01",
+      "mes_deadline": "2027-03-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-03-08",
+      "mes_deadline": "2027-03-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-03-15",
+      "mes_deadline": "2027-03-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-03-22",
+      "mes_deadline": "2027-03-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-03-29",
+      "mes_deadline": "2027-03-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-04-05",
+      "mes_deadline": "2027-04-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-04-12",
+      "mes_deadline": "2027-04-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-04-19",
+      "mes_deadline": "2027-04-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-04-26",
+      "mes_deadline": "2027-04-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-05-03",
+      "mes_deadline": "2027-05-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-05-10",
+      "mes_deadline": "2027-05-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-05-17",
+      "mes_deadline": "2027-05-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-05-24",
+      "mes_deadline": "2027-05-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-05-31",
+      "mes_deadline": "2027-05-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-06-07",
+      "mes_deadline": "2027-06-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-06-14",
+      "mes_deadline": "2027-06-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-06-21",
+      "mes_deadline": "2027-06-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-06-28",
+      "mes_deadline": "2027-06-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-07-05",
+      "mes_deadline": "2027-07-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-07-12",
+      "mes_deadline": "2027-07-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-07-19",
+      "mes_deadline": "2027-07-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    },
+    {
+      "semana_inicio": "2027-07-26",
+      "mes_deadline": "2027-07-01",
+      "total_reservas_acum": 0,
+      "timeouts_acum": 0,
+      "pct_timeout_acum": 0.0
+    }
   ],
   "kr22_sem": [
-    {"semana_inicio": "2026-01-05", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-01-12", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-01-19", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-01-26", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-02-02", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-02-09", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-02-16", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-02-23", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-03-02", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-03-09", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-03-16", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-03-23", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-03-30", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-04-06", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-04-13", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-04-20", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-04-27", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-05-04", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-05-11", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-05-18", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-05-25", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-06-01", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-06-08", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-06-15", "cant_agencias_unicas": 0},
-    {"semana_inicio": "2026-06-22", "cant_agencias_unicas": 0}
+    {
+      "semana_inicio": "2026-01-05",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-01-12",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-01-19",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-01-26",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-02-02",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-02-09",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-02-16",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-02-23",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-03-02",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-03-09",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-03-16",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-03-23",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-03-30",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-04-06",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-04-13",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-04-20",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-04-27",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-05-04",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-05-11",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-05-18",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-05-25",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-06-01",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-06-08",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-06-15",
+      "cant_agencias_unicas": 0
+    },
+    {
+      "semana_inicio": "2026-06-22",
+      "cant_agencias_unicas": 0
+    }
   ],
   "kr22_sem_cum": [
-    {"semana_inicio": "2026-01-05", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-01-12", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-01-19", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-01-26", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-02-02", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-02-09", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-02-16", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-02-23", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-03-02", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-03-09", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-03-16", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-03-23", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-03-30", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-04-06", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-04-13", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-04-20", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-04-27", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-05-04", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-05-11", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-05-18", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-05-25", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-06-01", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-06-08", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-06-15", "cant_agencias_acum_mes": 0},
-    {"semana_inicio": "2026-06-22", "cant_agencias_acum_mes": 0}
+    {
+      "semana_inicio": "2026-01-05",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-01-12",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-01-19",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-01-26",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-02-02",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-02-09",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-02-16",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-02-23",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-03-02",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-03-09",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-03-16",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-03-23",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-03-30",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-04-06",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-04-13",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-04-20",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-04-27",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-05-04",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-05-11",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-05-18",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-05-25",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-06-01",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-06-08",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-06-15",
+      "cant_agencias_acum_mes": 0
+    },
+    {
+      "semana_inicio": "2026-06-22",
+      "cant_agencias_acum_mes": 0
+    }
   ],
   "kr31_sem": [
-    {"semana_inicio": "2026-01-05", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-01-12", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-01-19", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-01-26", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-02-02", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-02-09", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-02-16", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-02-23", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-03-02", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-03-09", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-03-16", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-03-23", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-03-30", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-04-06", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-04-13", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-04-20", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-04-27", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-05-04", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-05-11", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-05-18", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-05-25", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-06-01", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-06-08", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-06-15", "net_revenue_real": 0.0},
-    {"semana_inicio": "2026-06-22", "net_revenue_real": 0.0}
+    {
+      "semana_inicio": "2026-01-05",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-12",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-19",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-26",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-02",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-09",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-16",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-23",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-02",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-09",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-16",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-23",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-30",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-06",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-13",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-20",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-27",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-04",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-11",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-18",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-25",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-01",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-08",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-15",
+      "net_revenue_real": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-22",
+      "net_revenue_real": 0.0
+    }
   ],
   "kr32_sem": [
-    {"semana_inicio": "2026-01-05", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-01-12", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-01-19", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-01-26", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-02-02", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-02-09", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-02-16", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-02-23", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-03-02", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-03-09", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-03-16", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-03-23", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-03-30", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-04-06", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-04-13", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-04-20", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-04-27", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-05-04", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-05-11", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-05-18", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-05-25", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-06-01", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-06-08", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-06-15", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0},
-    {"semana_inicio": "2026-06-22", "agencias_cotizadoras": 0, "agencias_cotizaron_y_vendieron": 0, "pct_activacion_comercial": 0.0}
+    {
+      "semana_inicio": "2026-01-05",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-12",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-19",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-26",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-02",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-09",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-16",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-23",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-02",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-09",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-16",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-23",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-30",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-06",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-13",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-20",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-27",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-04",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-11",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-18",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-25",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-01",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-08",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-15",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-22",
+      "agencias_cotizadoras": 0,
+      "agencias_cotizaron_y_vendieron": 0,
+      "pct_activacion_comercial": 0.0
+    }
   ],
   "kr32_sem_cum": [
-    {"semana_inicio": "2026-01-05", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-01-12", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-01-19", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-01-26", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-02-02", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-02-09", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-02-16", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-02-23", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-03-02", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-03-09", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-03-16", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-03-23", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-03-30", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-04-06", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-04-13", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-04-20", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-04-27", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-05-04", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-05-11", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-05-18", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-05-25", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-06-01", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-06-08", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-06-15", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0},
-    {"semana_inicio": "2026-06-22", "agencias_cotizadoras_acum": 0, "agencias_compraron_acum": 0, "pct_activacion_acum": 0.0}
+    {
+      "semana_inicio": "2026-01-05",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-12",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-19",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-26",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-02",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-09",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-16",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-23",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-02",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-09",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-16",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-23",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-30",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-06",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-13",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-20",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-27",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-04",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-11",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-18",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-25",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-01",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-08",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-15",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-22",
+      "agencias_cotizadoras_acum": 0,
+      "agencias_compraron_acum": 0,
+      "pct_activacion_acum": 0.0
+    }
   ],
   "kr33_sem": [
-    {"semana_inicio": "2026-01-05", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-01-12", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-01-19", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-01-26", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-02-02", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-02-09", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-02-16", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-02-23", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-03-02", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-03-09", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-03-16", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-03-23", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-03-30", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-04-06", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-04-13", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-04-20", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-04-27", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-05-04", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-05-11", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-05-18", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-05-25", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-06-01", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-06-08", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-06-15", "pct_aumento": 0.0},
-    {"semana_inicio": "2026-06-22", "pct_aumento": 0.0}
+    {
+      "semana_inicio": "2026-01-05",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-12",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-19",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-26",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-02",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-09",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-16",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-23",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-02",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-09",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-16",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-23",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-30",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-06",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-13",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-20",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-27",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-04",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-11",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-18",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-25",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-01",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-08",
+      "pct_aumento": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-15",
+      "pct_aumento": 0.0
+    }
   ],
   "kr33_sem_cum": [
-    {"semana_inicio": "2026-01-05", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-01-12", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-01-19", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-01-26", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-02-02", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-02-09", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-02-16", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-02-23", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-03-02", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-03-09", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-03-16", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-03-23", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-03-30", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-04-06", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-04-13", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-04-20", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-04-27", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-05-04", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-05-11", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-05-18", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-05-25", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-06-01", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-06-08", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-06-15", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0},
-    {"semana_inicio": "2026-06-22", "agencias_1_3_previo": 0, "agencias_aumentaron": 0, "pct_aumento_acum": 0.0}
+    {
+      "semana_inicio": "2026-01-05",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-12",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-19",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-01-26",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-02",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-09",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-16",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-02-23",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-02",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-09",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-16",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-23",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-03-30",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-06",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-13",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-20",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-04-27",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-04",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-11",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-18",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-05-25",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-01",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-08",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-15",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    },
+    {
+      "semana_inicio": "2026-06-22",
+      "agencias_1_3_previo": 0,
+      "agencias_aumentaron": 0,
+      "pct_aumento_acum": 0.0
+    }
   ]
 }

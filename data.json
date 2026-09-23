@@ -1,1 +1,486 @@
-{"kr21":[{"mes_deadline":"2026-09-01","status":"CONFIRMED","reservas":153,"gb":42015.119059000004},{"mes_deadline":"2026-09-01","status":"FINALIZED","reservas":3875,"gb":2933403.632113},{"mes_deadline":"2026-09-01","status":"PROCESSING","reservas":22,"gb":12343.475389},{"mes_deadline":"2026-09-01","status":"TO_CANCEL","reservas":5441,"gb":5638064.078407},{"mes_deadline":"2026-09-01","status":"Time_out_client","reservas":2663,"gb":2673220.8808550006}],"kr22":[{"cant_staff":8366,"cant_no_staff":14943,"cant_total":23309,"cant_agencias_unicas":4419,"creation_yearmonth":"2026-09"}],"kr31":[{"periodo":"2026-09","net_rev_real":3462847.73,"net_rev_target":null}],"kr32":[{"mes":"2026-09-01","agencias_cotizadoras":6576,"agencias_cotizaron_y_vendieron":4316,"cotizaciones_realizadas":111535,"pct_activacion_comercial":65.6}],"kr33":[{"mes_previo":202609,"mes_evaluacion":202610,"agencias_total_previo":8345,"agencias_total_evaluado":null,"agencias_1_3_previo":5093,"agencias_aumentaron":0,"pct_aumento":0.0,"target_pct":25.0,"pct_cumplimiento_target":0.0}],"kr21_sem":[{"semana_inicio":"2026-09-21","total_reservas":3282,"reservas_timeout_client":77,"pct_timeout_client":2.3}],"kr21_sem_cum":[{"semana_inicio":"2026-09-21","mes_deadline":"2026-09-01","total_reservas_acum":14396,"timeouts_acum":2553,"pct_timeout_acum":17.7}],"kr22_sem":[{"semana_inicio":"2026-09-21","cant_agencias_unicas":24}],"kr22_sem_cum":[{"semana_inicio":"2026-09-21","cant_agencias_acum_mes":4311}],"kr31_sem":[{"semana_inicio":"2026-09-21","net_revenue_real":10048.59}],"kr31_sem_cum":[{"semana_inicio":"2026-09-21","net_revenue_acum_mes":3285754.58}],"kr32_sem":[{"semana_inicio":"2026-09-21","agencias_cotizadoras":107,"agencias_cotizaron_y_vendieron":10,"pct_activacion_comercial":9.3}],"kr32_sem_cum":[{"semana_inicio":"2026-09-21","agencias_cotizadoras_acum":6449,"agencias_compraron_acum":4170,"pct_activacion_acum":64.7}],"kr33_sem":[{"semana_inicio":"2026-09-21","pct_aumento":13.2}],"kr33_sem_cum":[{"semana_inicio":"2026-09-21","agencias_1_3_previo":5207,"agencias_aumentaron":688,"pct_aumento_acum":13.2}]} 
+{
+  "kr21": [
+    {
+      "mes_deadline": "2026-09-01",
+      "status": "CONFIRMED",
+      "reservas": 154,
+      "gb": 44538.161136999996
+    },
+    {
+      "mes_deadline": "2026-09-01",
+      "status": "FINALIZED",
+      "reservas": 4011,
+      "gb": 3033570.4050070005
+    },
+    {
+      "mes_deadline": "2026-09-01",
+      "status": "PROCESSING",
+      "reservas": 17,
+      "gb": 12288.11626
+    },
+    {
+      "mes_deadline": "2026-09-01",
+      "status": "TO_CANCEL",
+      "reservas": 5655,
+      "gb": 5863257.911389001
+    },
+    {
+      "mes_deadline": "2026-09-01",
+      "status": "Time_out_client",
+      "reservas": 2754,
+      "gb": 2755487.2864139997
+    }
+  ],
+  "kr22": [
+    {
+      "cant_staff": 9211,
+      "cant_no_staff": 17048,
+      "cant_total": 26259,
+      "cant_agencias_unicas": 4372,
+      "creation_yearmonth": "2026-03"
+    },
+    {
+      "cant_staff": 8618,
+      "cant_no_staff": 15348,
+      "cant_total": 23966,
+      "cant_agencias_unicas": 4250,
+      "creation_yearmonth": "2026-04"
+    },
+    {
+      "cant_staff": 9386,
+      "cant_no_staff": 17807,
+      "cant_total": 27193,
+      "cant_agencias_unicas": 4667,
+      "creation_yearmonth": "2026-05"
+    },
+    {
+      "cant_staff": 10275,
+      "cant_no_staff": 19014,
+      "cant_total": 29289,
+      "cant_agencias_unicas": 4836,
+      "creation_yearmonth": "2026-06"
+    },
+    {
+      "cant_staff": 12322,
+      "cant_no_staff": 23419,
+      "cant_total": 35741,
+      "cant_agencias_unicas": 5473,
+      "creation_yearmonth": "2026-07"
+    },
+    {
+      "cant_staff": 11884,
+      "cant_no_staff": 21719,
+      "cant_total": 33603,
+      "cant_agencias_unicas": 5249,
+      "creation_yearmonth": "2026-08"
+    },
+    {
+      "cant_staff": 8809,
+      "cant_no_staff": 15822,
+      "cant_total": 24631,
+      "cant_agencias_unicas": 4534,
+      "creation_yearmonth": "2026-09"
+    }
+  ],
+  "kr31": [
+    {
+      "periodo": "2026-04",
+      "net_rev_real": 4431328.230000001,
+      "net_rev_target": null
+    },
+    {
+      "periodo": "2026-05",
+      "net_rev_real": 4698573.7700000005,
+      "net_rev_target": null
+    },
+    {
+      "periodo": "2026-06",
+      "net_rev_real": 4626832.86,
+      "net_rev_target": null
+    },
+    {
+      "periodo": "2026-07",
+      "net_rev_real": 5342405.130000001,
+      "net_rev_target": null
+    },
+    {
+      "periodo": "2026-08",
+      "net_rev_real": 4968044.959999998,
+      "net_rev_target": null
+    },
+    {
+      "periodo": "2026-09",
+      "net_rev_real": 3668677.7100000004,
+      "net_rev_target": null
+    }
+  ],
+  "kr32": [
+    {
+      "mes": "2026-01-01",
+      "agencias_cotizadoras": 6079,
+      "agencias_cotizaron_y_vendieron": 4327,
+      "cotizaciones_realizadas": 134129,
+      "pct_activacion_comercial": 71.2
+    },
+    {
+      "mes": "2026-02-01",
+      "agencias_cotizadoras": 5974,
+      "agencias_cotizaron_y_vendieron": 4137,
+      "cotizaciones_realizadas": 116274,
+      "pct_activacion_comercial": 69.3
+    },
+    {
+      "mes": "2026-03-01",
+      "agencias_cotizadoras": 6506,
+      "agencias_cotizaron_y_vendieron": 4704,
+      "cotizaciones_realizadas": 142402,
+      "pct_activacion_comercial": 72.3
+    },
+    {
+      "mes": "2026-04-01",
+      "agencias_cotizadoras": 6588,
+      "agencias_cotizaron_y_vendieron": 4697,
+      "cotizaciones_realizadas": 138465,
+      "pct_activacion_comercial": 71.3
+    },
+    {
+      "mes": "2026-05-01",
+      "agencias_cotizadoras": 6788,
+      "agencias_cotizaron_y_vendieron": 4919,
+      "cotizaciones_realizadas": 145997,
+      "pct_activacion_comercial": 72.5
+    },
+    {
+      "mes": "2026-06-01",
+      "agencias_cotizadoras": 6865,
+      "agencias_cotizaron_y_vendieron": 4937,
+      "cotizaciones_realizadas": 146846,
+      "pct_activacion_comercial": 71.9
+    },
+    {
+      "mes": "2026-07-01",
+      "agencias_cotizadoras": 7366,
+      "agencias_cotizaron_y_vendieron": 5324,
+      "cotizaciones_realizadas": 174655,
+      "pct_activacion_comercial": 72.3
+    },
+    {
+      "mes": "2026-08-01",
+      "agencias_cotizadoras": 7246,
+      "agencias_cotizaron_y_vendieron": 5267,
+      "cotizaciones_realizadas": 161994,
+      "pct_activacion_comercial": 72.7
+    },
+    {
+      "mes": "2026-09-01",
+      "agencias_cotizadoras": 6733,
+      "agencias_cotizaron_y_vendieron": 4461,
+      "cotizaciones_realizadas": 118672,
+      "pct_activacion_comercial": 66.3
+    }
+  ],
+  "kr33": [
+    {
+      "mes_previo": 202501,
+      "mes_evaluacion": 202502,
+      "agencias_total_previo": 6101,
+      "agencias_total_evaluado": 6247,
+      "agencias_1_3_previo": 3508,
+      "agencias_aumentaron": 807,
+      "pct_aumento": 23.0,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 90.0
+    },
+    {
+      "mes_previo": 202502,
+      "mes_evaluacion": 202503,
+      "agencias_total_previo": 6247,
+      "agencias_total_evaluado": 6652,
+      "agencias_1_3_previo": 3531,
+      "agencias_aumentaron": 893,
+      "pct_aumento": 25.3,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 100.0
+    },
+    {
+      "mes_previo": 202503,
+      "mes_evaluacion": 202504,
+      "agencias_total_previo": 6652,
+      "agencias_total_evaluado": 6568,
+      "agencias_1_3_previo": 3660,
+      "agencias_aumentaron": 735,
+      "pct_aumento": 20.1,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 80.0
+    },
+    {
+      "mes_previo": 202504,
+      "mes_evaluacion": 202505,
+      "agencias_total_previo": 6568,
+      "agencias_total_evaluado": 6893,
+      "agencias_1_3_previo": 3739,
+      "agencias_aumentaron": 911,
+      "pct_aumento": 24.4,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 100.0
+    },
+    {
+      "mes_previo": 202505,
+      "mes_evaluacion": 202506,
+      "agencias_total_previo": 6893,
+      "agencias_total_evaluado": 6734,
+      "agencias_1_3_previo": 3876,
+      "agencias_aumentaron": 826,
+      "pct_aumento": 21.3,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 90.0
+    },
+    {
+      "mes_previo": 202506,
+      "mes_evaluacion": 202507,
+      "agencias_total_previo": 6734,
+      "agencias_total_evaluado": 7107,
+      "agencias_1_3_previo": 3781,
+      "agencias_aumentaron": 899,
+      "pct_aumento": 23.8,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 100.0
+    },
+    {
+      "mes_previo": 202507,
+      "mes_evaluacion": 202508,
+      "agencias_total_previo": 7107,
+      "agencias_total_evaluado": 6944,
+      "agencias_1_3_previo": 4002,
+      "agencias_aumentaron": 795,
+      "pct_aumento": 19.9,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 80.0
+    },
+    {
+      "mes_previo": 202508,
+      "mes_evaluacion": 202509,
+      "agencias_total_previo": 6944,
+      "agencias_total_evaluado": 7167,
+      "agencias_1_3_previo": 4056,
+      "agencias_aumentaron": 922,
+      "pct_aumento": 22.7,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 90.0
+    },
+    {
+      "mes_previo": 202509,
+      "mes_evaluacion": 202510,
+      "agencias_total_previo": 7167,
+      "agencias_total_evaluado": 7476,
+      "agencias_1_3_previo": 4097,
+      "agencias_aumentaron": 996,
+      "pct_aumento": 24.3,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 100.0
+    },
+    {
+      "mes_previo": 202510,
+      "mes_evaluacion": 202511,
+      "agencias_total_previo": 7476,
+      "agencias_total_evaluado": 7650,
+      "agencias_1_3_previo": 4216,
+      "agencias_aumentaron": 881,
+      "pct_aumento": 20.9,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 80.0
+    },
+    {
+      "mes_previo": 202511,
+      "mes_evaluacion": 202512,
+      "agencias_total_previo": 7650,
+      "agencias_total_evaluado": 7259,
+      "agencias_1_3_previo": 4424,
+      "agencias_aumentaron": 763,
+      "pct_aumento": 17.2,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 70.0
+    },
+    {
+      "mes_previo": 202512,
+      "mes_evaluacion": 202601,
+      "agencias_total_previo": 7259,
+      "agencias_total_evaluado": 8196,
+      "agencias_1_3_previo": 4413,
+      "agencias_aumentaron": 1279,
+      "pct_aumento": 29.0,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 120.0
+    },
+    {
+      "mes_previo": 202601,
+      "mes_evaluacion": 202602,
+      "agencias_total_previo": 8196,
+      "agencias_total_evaluado": 7977,
+      "agencias_1_3_previo": 4556,
+      "agencias_aumentaron": 907,
+      "pct_aumento": 19.9,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 80.0
+    },
+    {
+      "mes_previo": 202602,
+      "mes_evaluacion": 202603,
+      "agencias_total_previo": 7977,
+      "agencias_total_evaluado": 8630,
+      "agencias_1_3_previo": 4590,
+      "agencias_aumentaron": 1233,
+      "pct_aumento": 26.9,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 110.0
+    },
+    {
+      "mes_previo": 202603,
+      "mes_evaluacion": 202604,
+      "agencias_total_previo": 8630,
+      "agencias_total_evaluado": 8684,
+      "agencias_1_3_previo": 4693,
+      "agencias_aumentaron": 1047,
+      "pct_aumento": 22.3,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 90.0
+    },
+    {
+      "mes_previo": 202604,
+      "mes_evaluacion": 202605,
+      "agencias_total_previo": 8684,
+      "agencias_total_evaluado": 8960,
+      "agencias_1_3_previo": 4762,
+      "agencias_aumentaron": 1118,
+      "pct_aumento": 23.5,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 90.0
+    },
+    {
+      "mes_previo": 202605,
+      "mes_evaluacion": 202606,
+      "agencias_total_previo": 8960,
+      "agencias_total_evaluado": 9061,
+      "agencias_1_3_previo": 4834,
+      "agencias_aumentaron": 1073,
+      "pct_aumento": 22.2,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 90.0
+    },
+    {
+      "mes_previo": 202606,
+      "mes_evaluacion": 202607,
+      "agencias_total_previo": 9061,
+      "agencias_total_evaluado": 9584,
+      "agencias_1_3_previo": 5112,
+      "agencias_aumentaron": 1395,
+      "pct_aumento": 27.3,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 110.0
+    },
+    {
+      "mes_previo": 202607,
+      "mes_evaluacion": 202608,
+      "agencias_total_previo": 9584,
+      "agencias_total_evaluado": 9514,
+      "agencias_1_3_previo": 5126,
+      "agencias_aumentaron": 1069,
+      "pct_aumento": 20.9,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 80.0
+    },
+    {
+      "mes_previo": 202608,
+      "mes_evaluacion": 202609,
+      "agencias_total_previo": 9514,
+      "agencias_total_evaluado": 8507,
+      "agencias_1_3_previo": 5211,
+      "agencias_aumentaron": 799,
+      "pct_aumento": 15.3,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 60.0
+    },
+    {
+      "mes_previo": 202609,
+      "mes_evaluacion": 202610,
+      "agencias_total_previo": 8507,
+      "agencias_total_evaluado": null,
+      "agencias_1_3_previo": 5089,
+      "agencias_aumentaron": 0,
+      "pct_aumento": 0.0,
+      "target_pct": 25.0,
+      "pct_cumplimiento_target": 0.0
+    }
+  ],
+  "kr21_sem": [
+    {
+      "semana_inicio": "2026-09-21",
+      "total_reservas": 3282,
+      "reservas_timeout_client": 77,
+      "pct_timeout_client": 2.3
+    }
+  ],
+  "kr21_sem_cum": [
+    {
+      "semana_inicio": "2026-09-21",
+      "mes_deadline": "2026-09-01",
+      "total_reservas_acum": 14396,
+      "timeouts_acum": 2553,
+      "pct_timeout_acum": 17.7
+    }
+  ],
+  "kr22_sem": [
+    {
+      "semana_inicio": "2026-09-21",
+      "cant_agencias_unicas": 24
+    }
+  ],
+  "kr22_sem_cum": [
+    {
+      "semana_inicio": "2026-09-21",
+      "cant_agencias_acum_mes": 4311
+    }
+  ],
+  "kr31_sem": [
+    {
+      "semana_inicio": "2026-09-21",
+      "net_revenue_real": 10048.59
+    }
+  ],
+  "kr31_sem_cum": [
+    {
+      "semana_inicio": "2026-09-21",
+      "net_revenue_acum_mes": 3285754.58
+    }
+  ],
+  "kr32_sem": [
+    {
+      "semana_inicio": "2026-09-21",
+      "agencias_cotizadoras": 107,
+      "agencias_cotizaron_y_vendieron": 10,
+      "pct_activacion_comercial": 9.3
+    }
+  ],
+  "kr32_sem_cum": [
+    {
+      "semana_inicio": "2026-09-21",
+      "agencias_cotizadoras_acum": 6449,
+      "agencias_compraron_acum": 4170,
+      "pct_activacion_acum": 64.7
+    }
+  ],
+  "kr33_sem": [
+    {
+      "semana_inicio": "2026-09-21",
+      "pct_aumento": 13.2
+    }
+  ],
+  "kr33_sem_cum": [
+    {
+      "semana_inicio": "2026-09-21",
+      "agencias_1_3_previo": 5207,
+      "agencias_aumentaron": 688,
+      "pct_aumento_acum": 13.2
+    }
+  ]
+}

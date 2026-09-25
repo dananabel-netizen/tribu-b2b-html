@@ -1,10 +1,1 @@
-{
-  "kr21": [
-    {
-      "mes_deadline": "2024-02-01",
-      "status": "FINALIZED",
-      "reservas": 10,
-      "gb": 14936.105758
-    }
-  ]
-}
+{"kr21": [{"mes_deadline": "2024-02-01", "status": "FINALIZED", "reservas": 10, "gb": 14936.105758}]}

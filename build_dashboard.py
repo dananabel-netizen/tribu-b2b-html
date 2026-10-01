@@ -716,6 +716,7 @@ body,main,.card,.filter-bar{transition:background .25s,border-color .25s,color .
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
+<div id="__kr33sqlsrc__" style="display:none">__KR33_SQL__</div>
 <header>
   <div>
     <div class="logo-main">Tablero Producto B2B <span>HTML</span></div>
@@ -932,7 +933,7 @@ function renderMensual(){
   html+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap">KR 2.2</td><td style="padding:10px 12px;color:var(--text)">Agencias que utilizan herramientas de gestión / postventa</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/146710" target="_blank" style="color:var(--purple);font-weight:600;text-decoration:none;font-size:12px;border:1px solid var(--border2);padding:4px 10px;border-radius:4px">Ver en Metabase ↗</a></td></tr>';
   html+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap">KR 3.1</td><td style="padding:10px 12px;color:var(--text)">Net Revenue B2B Minorista</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/144499" target="_blank" style="color:var(--purple);font-weight:600;text-decoration:none;font-size:12px;border:1px solid var(--border2);padding:4px 10px;border-radius:4px">Ver en Metabase ↗</a></td></tr>';
   html+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap">KR 3.2</td><td style="padding:10px 12px;color:var(--text)">Agencias compradoras que utilizan cotizaciones</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/145654" target="_blank" style="color:var(--purple);font-weight:600;text-decoration:none;font-size:12px;border:1px solid var(--border2);padding:4px 10px;border-radius:4px">Ver en Metabase ↗</a></td></tr>';
-  html+='<tr><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap">KR 3.3</td><td style="padding:10px 12px;color:var(--text)">Frecuencia de compra</td><td style="padding:10px 16px"><button onclick="toggleSql(this)" style="background:none;border:1px solid var(--border2);border-radius:4px;padding:4px 10px;cursor:pointer;font-size:12px;font-weight:600;color:var(--purple)">▶ Ver SQL</button><div id="kr33-sql-box" style="display:none;margin-top:8px"><pre style="font-size:11px;line-height:1.6;white-space:pre;font-family:monospace;background:#1e1e1e;color:#d4d4d4;border-radius:6px;padding:14px;overflow-x:auto;margin:0">__KR33_SQL__</pre></div></td></tr>';
+  html+='<tr><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap">KR 3.3</td><td style="padding:10px 12px;color:var(--text)">Frecuencia de compra</td><td style="padding:10px 16px"><button onclick="toggleSql(this)" style="background:none;border:1px solid var(--border2);border-radius:4px;padding:4px 10px;cursor:pointer;font-size:12px;font-weight:600;color:var(--purple)">▶ Ver SQL</button><div id="kr33-sql-box" style="display:none;margin-top:8px"><pre id="kr33-sql-pre" style="font-size:11px;line-height:1.6;white-space:pre;font-family:monospace;background:#1e1e1e;color:#d4d4d4;border-radius:6px;padding:14px;overflow-x:auto;margin:0"></pre></div></td></tr>';
   html+='</tbody></table></div>';
 
   return html;
@@ -1485,7 +1486,9 @@ function renderPulso(){
 
 function toggleSql(btn){
   var box=document.getElementById('kr33-sql-box');
+  var pre=document.getElementById('kr33-sql-pre');
   if(!box)return;
+  if(pre&&!pre.innerHTML){var src=document.getElementById('__kr33sqlsrc__');if(src)pre.innerHTML=src.innerHTML;}
   var open=box.style.display==='block';
   box.style.display=open?'none':'block';
   btn.textContent=open?'▶ Ver SQL':'▼ Ocultar SQL';

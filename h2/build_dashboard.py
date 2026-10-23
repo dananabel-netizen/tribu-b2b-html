@@ -231,9 +231,13 @@ LEFT JOIN m ON m.periodo = s.periodo AND m.semana = s.semana
 ORDER BY s.periodo, s.semana
 """
 
+# kr21/kr22 alimentan la pestaña Mensual (se refrescan el dia 1); *_prog son las mismas queries
+# pero alimentan Progreso (se refrescan todos los dias); *_sem alimentan Semanal (lunes).
 QUERIES = [
     ('kr21', QUERY_KR21),
     ('kr22', QUERY_KR22),
+    ('kr21_prog', QUERY_KR21),
+    ('kr22_prog', QUERY_KR22),
     ('kr21_sem', QUERY_KR21_SEM),
     ('kr22_sem', QUERY_KR22_SEM),
 ]
@@ -357,6 +361,8 @@ var DATA = __DATA__;
 var MONTHS=["2026-10","2026-11","2026-12","2027-01","2027-02","2027-03"];
 var LABELS=["Oct","Nov","Dic","Ene","Feb","Mar"];
 
+var SRC='m';
+function dataKey(base){return (SRC==='p'&&DATA[base+'_prog'])?DATA[base+'_prog']:DATA[base];}
 function rowByMonth(rows,field,m){return (rows||[]).find(function(r){return String(r[field]||"").substring(0,7)===m;});}
 
 var KRS=[
@@ -368,12 +374,12 @@ var KRS=[
    getActual:function(i){return null;}},
   {id:"kr21",squad:"ce",peso:1,label:"KR 2.1 - Aumentar la cantidad de agencias que utilizan cotizaciones",targets:[7597,7968,7397,8122,7441,8075],inverted:false,
    fmtA:function(v){return v!==null?Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return v.toLocaleString("es-AR");},
-   getActual:function(i){var r=rowByMonth(DATA.kr21,"mes",MONTHS[i]);return r?r.agencias_cotizadoras:null;},
-   getTarget:function(i){var r=rowByMonth(DATA.kr21,"mes",MONTHS[i]);return(r&&r.target!=null)?r.target:null;}},
+   getActual:function(i){var r=rowByMonth(dataKey('kr21'),"mes",MONTHS[i]);return r?r.agencias_cotizadoras:null;},
+   getTarget:function(i){var r=rowByMonth(dataKey('kr21'),"mes",MONTHS[i]);return(r&&r.target!=null)?r.target:null;}},
   {id:"kr22",squad:"ce",peso:1,label:"KR 2.2 - Aumentar la cantidad de agencias que compran 3 o más semanas al mes",targets:[3396,3584,3483,3749,3670,3913],inverted:false,
    fmtA:function(v){return v!==null?Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return v.toLocaleString("es-AR");},
-   getActual:function(i){var r=rowByMonth(DATA.kr22,"mes_comercial",MONTHS[i]);return(r&&r.estado!=="PENDIENTE")?r.agencias_frecuentes:null;},
-   getTarget:function(i){var r=rowByMonth(DATA.kr22,"mes_comercial",MONTHS[i]);return(r&&r.target!=null)?r.target:null;}}
+   getActual:function(i){var r=rowByMonth(dataKey('kr22'),"mes_comercial",MONTHS[i]);return(r&&r.estado!=="PENDIENTE")?r.agencias_frecuentes:null;},
+   getTarget:function(i){var r=rowByMonth(dataKey('kr22'),"mes_comercial",MONTHS[i]);return(r&&r.target!=null)?r.target:null;}}
 ];
 function tgtOf(kr,i){
   if(kr.getTarget){var t=kr.getTarget(i);if(t!==null)return t;}
@@ -591,6 +597,7 @@ function renderSemanal(){
 }
 
 function render(){
+  SRC=activeTab==='progreso'?'p':'m';
   document.getElementById('root').innerHTML=activeTab==='progreso'?renderProgreso():activeTab==='semanal'?renderSemanal():renderMensual();
 }
 function toggleTheme(){

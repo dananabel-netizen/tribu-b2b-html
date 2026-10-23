@@ -1,0 +1,30 @@
+﻿name: Build Dashboard HTML H2
+
+on:
+  push:
+    paths:
+      - 'h2/data.json'
+    branches:
+      - tablero-live
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Generate HTML
+        run: python h2/build_html.py h2/data.json
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add h2/okrs_dashboard_h2.html
+          git diff --staged --quiet || git commit -m "Auto-refresh dashboard H2"
+          git pull --rebase origin tablero-live
+          git push

@@ -284,7 +284,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <style>
 :root{--bg:#f4f5f7;--surface:#fff;--surface2:#f8f9fa;--border:#e8e0f0;--border2:#d5c8e8;--purple:#6D28D9;--text:#1f2328;--muted:#57606a;--radius:8px;--shadow:0 1px 4px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI',sans-serif;font-size:14px;min-height:100vh}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI',sans-serif;font-size:16px;min-height:100vh}
 header{background:linear-gradient(90deg,#5B21B6,#7C3AED);padding:0 28px;height:72px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(91,33,182,.4)}
 .logo-main{color:#fff;font-size:15px;font-weight:700}.logo-main span{color:#C4B5FD}
 .logo-sub{color:rgba(196,181,253,.65);font-size:10px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
@@ -295,13 +295,13 @@ header{background:linear-gradient(90deg,#5B21B6,#7C3AED);padding:0 28px;height:7
 .pill{padding:5px 16px;border-radius:20px;border:1.5px solid var(--border2);background:#fff;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;line-height:1.4}
 .pill:hover{border-color:var(--purple);color:var(--purple)}
 .pill.active{background:var(--purple);border-color:var(--purple);color:#fff}
-main{padding:28px;max-width:1200px;margin:0 auto}
+main{padding:28px 40px;width:100%;max-width:none;margin:0}
 .sec-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--border);margin-top:28px}
 .sec-title:first-child{margin-top:0}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:auto;margin-bottom:8px}
 .card-hdr{background:#5457D9;color:#fff;padding:14px 20px;font-size:15px;font-weight:700}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{background:#7C7FFF;color:#fff;padding:10px 8px;text-align:center;font-weight:700;font-size:11px;white-space:nowrap;border-right:1px solid rgba(255,255,255,.15)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{background:#7C7FFF;color:#fff;padding:12px 10px;text-align:center;font-weight:700;font-size:13px;white-space:nowrap;border-right:1px solid rgba(255,255,255,.15)}
 th.th-kr{text-align:left;padding-left:16px;width:340px}
 th.th-q{background:#5457D9;border-left:2px solid rgba(255,255,255,.25)}
 td{padding:11px 8px;text-align:center;border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
@@ -309,7 +309,7 @@ td.td-kr{text-align:left;padding-left:16px;font-weight:500}
 td.td-q{border-left:2px solid var(--border2);font-weight:700}
 tbody tr:hover{background:var(--surface2)}
 tbody tr:last-child td{border-bottom:none}
-.chip{display:inline-block;padding:4px 10px;border-radius:5px;font-size:12px;font-weight:700;min-width:44px;text-align:center}
+.chip{display:inline-block;padding:5px 12px;border-radius:5px;font-size:14px;font-weight:700;min-width:52px;text-align:center}
 .ok{background:#d4f4dd;color:#16a34a}.warn{background:#fff7cd;color:#b45309}.bad{background:#ffd8d3;color:#cf222e}.na{background:#f0f0f0;color:#999;font-size:11px;font-weight:400}
 .tag{display:block;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
 .pend{font-size:10px;background:#FEF3C7;color:#92400E;border-radius:4px;padding:1px 6px;margin-left:6px;font-weight:700;white-space:nowrap}

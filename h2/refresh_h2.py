@@ -88,6 +88,10 @@ def main():
     keys = [k for m in modos for k in MODOS[m]]
     print(f"[{datetime.now():%Y-%m-%d %H:%M}] modos: {', '.join(modos)}")
 
+    try:
+        git('checkout', '--', str(DATA))   # descarta restos de una corrida anterior fallida
+    except RuntimeError:
+        pass
     git('pull', '--rebase', REMOTE, BRANCH)
 
     existing = json.loads(DATA.read_text(encoding='utf-8')) if DATA.exists() else {}

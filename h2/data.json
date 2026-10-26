@@ -3,9 +3,9 @@
     {
       "mes": "2026-10-01",
       "semanas": 4,
-      "agencias_cotizadoras": 6703,
+      "agencias_cotizadoras": 6881,
       "target": 7597,
-      "pct_cumplimiento": 88.2
+      "pct_cumplimiento": 90.6
     },
     {
       "mes": "2026-11-01",
@@ -48,9 +48,9 @@
       "mes_comercial": "2026-10",
       "semanas": 4,
       "estado": "EN_CURSO",
-      "agencias_frecuentes": 1508,
+      "agencias_frecuentes": 1789,
       "target": 3396,
-      "pct_cumplimiento": 44.4
+      "pct_cumplimiento": 52.7
     },
     {
       "mes_comercial": "2026-11",
@@ -115,8 +115,14 @@
     {
       "mes": "2026-10-01",
       "semana_inicio": "2026-10-19",
-      "agencias_semana": 3832,
-      "agencias_acum_mes": 6703
+      "agencias_semana": 4387,
+      "agencias_acum_mes": 6876
+    },
+    {
+      "mes": "2026-10-01",
+      "semana_inicio": "2026-10-26",
+      "agencias_semana": 75,
+      "agencias_acum_mes": 6881
     }
   ],
   "kr22_sem": [
@@ -140,18 +146,26 @@
       "mes_comercial": "2026-10",
       "semana": 3,
       "semana_inicio": "2026-10-19",
+      "estado": "CIERRE",
+      "compradoras_semana": 4527,
+      "frecuentes_acum": 1757
+    },
+    {
+      "mes_comercial": "2026-10",
+      "semana": 4,
+      "semana_inicio": "2026-10-26",
       "estado": "EN_CURSO",
-      "compradoras_semana": 3648,
-      "frecuentes_acum": 1508
+      "compradoras_semana": 88,
+      "frecuentes_acum": 1789
     }
   ],
   "kr21_prog": [
     {
       "mes": "2026-10-01",
       "semanas": 4,
-      "agencias_cotizadoras": 6703,
+      "agencias_cotizadoras": 6881,
       "target": 7597,
-      "pct_cumplimiento": 88.2
+      "pct_cumplimiento": 90.6
     },
     {
       "mes": "2026-11-01",
@@ -194,9 +208,9 @@
       "mes_comercial": "2026-10",
       "semanas": 4,
       "estado": "EN_CURSO",
-      "agencias_frecuentes": 1508,
+      "agencias_frecuentes": 1789,
       "target": 3396,
-      "pct_cumplimiento": 44.4
+      "pct_cumplimiento": 52.7
     },
     {
       "mes_comercial": "2026-11",

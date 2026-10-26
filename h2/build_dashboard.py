@@ -318,6 +318,8 @@ tbody tr:last-child td{border-bottom:none}
 .tag{display:block;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
 .pend{font-size:10px;background:#FEF3C7;color:#92400E;border-radius:4px;padding:1px 6px;margin-left:6px;font-weight:700;white-space:nowrap}
 footer{text-align:center;padding:20px;font-size:11px;color:var(--muted)}
+footer a{color:var(--purple);text-decoration:none;font-weight:600}
+footer a:hover{text-decoration:underline}
 body.dark{--bg:#0f172a;--surface:#1e293b;--surface2:#162032;--border:#334155;--border2:#475569;--text:#e2e8f0;--muted:#94a3b8;--purple:#A78BFA}
 body.dark .ok{background:#14532d;color:#86efac}body.dark .warn{background:#713f12;color:#fde68a}body.dark .bad{background:#7f1d1d;color:#fca5a5}body.dark .na{background:#1e293b;color:#64748b}
 body.dark .filter-bar{background:var(--surface)}
@@ -354,7 +356,7 @@ body,main,.card,.filter-bar{transition:background .25s,border-color .25s,color .
   </div>
 </div>
 <main id="root"></main>
-<footer>Datos del Datalake de Despegar (Trino)</footer>
+<footer>Datos del Datalake de Despegar (Trino) &nbsp;·&nbsp; <a href="https://script.google.com/a/macros/despegar.com/s/AKfycbw7nuX4vsH9zFXOtLwxTpXszKAFKMGKH9uJhPr5JQkX5BYeZWLy7PaSiyyn-X-LqXx5tw/exec" target="_blank" rel="noopener">Portal de dashboards ↗</a></footer>
 <script>
 var DATA = __DATA__;
 

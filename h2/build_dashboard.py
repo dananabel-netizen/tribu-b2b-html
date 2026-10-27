@@ -22,12 +22,12 @@ WITH parametros AS (
     SELECT DATE '2026-10-01' AS fecha_inicio, DATE '2027-03-31' AS fecha_fin
 ),
 targets AS (
-    SELECT DATE '2026-10-01' AS mes, 4 AS semanas, 7597 AS target_agencias
-    UNION ALL SELECT DATE '2026-11-01', 4, 7968
-    UNION ALL SELECT DATE '2026-12-01', 5, 7397
-    UNION ALL SELECT DATE '2027-01-01', 4, 8122
-    UNION ALL SELECT DATE '2027-02-01', 4, 7441
-    UNION ALL SELECT DATE '2027-03-01', 4, 8075
+    SELECT DATE '2026-10-01' AS mes, 4 AS semanas, 7500 AS target_agencias
+    UNION ALL SELECT DATE '2026-11-01', 4, 7718
+    UNION ALL SELECT DATE '2026-12-01', 5, 7601
+    UNION ALL SELECT DATE '2027-01-01', 4, 7910
+    UNION ALL SELECT DATE '2027-02-01', 4, 7818
+    UNION ALL SELECT DATE '2027-03-01', 4, 8100
 ),
 cotizaciones_socrates AS (
     SELECT DATE_TRUNC('month', CAST(created_at AS DATE)) AS mes,
@@ -374,7 +374,7 @@ var KRS=[
   {id:"kr12",squad:"es",peso:0,pending:true,label:"KR 1.2 - CPO Costo por Order",targets:null,inverted:true,
    fmtA:function(v){return v!==null?v.toFixed(2):null;},fmtT:function(v){return '≤ '+v;},
    getActual:function(i){return null;}},
-  {id:"kr21",squad:"ce",peso:1,label:"KR 2.1 - Aumentar la cantidad de agencias que utilizan cotizaciones",targets:[7597,7968,7397,8122,7441,8075],inverted:false,
+  {id:"kr21",squad:"ce",peso:1,label:"KR 2.1 - Aumentar la cantidad de agencias que utilizan cotizaciones",targets:[7500,7718,7601,7910,7818,8100],inverted:false,
    fmtA:function(v){return v!==null?Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return v.toLocaleString("es-AR");},
    getActual:function(i){var r=rowByMonth(dataKey('kr21'),"mes",MONTHS[i]);return r?r.agencias_cotizadoras:null;},
    getTarget:function(i){var r=rowByMonth(dataKey('kr21'),"mes",MONTHS[i]);return(r&&r.target!=null)?r.target:null;}},

@@ -163,9 +163,9 @@
     {
       "mes": "2026-10-01",
       "semanas": 4,
-      "agencias_cotizadoras": 6881,
+      "agencias_cotizadoras": 6986,
       "target": 7597,
-      "pct_cumplimiento": 90.6
+      "pct_cumplimiento": 92.0
     },
     {
       "mes": "2026-11-01",
@@ -208,9 +208,9 @@
       "mes_comercial": "2026-10",
       "semanas": 4,
       "estado": "EN_CURSO",
-      "agencias_frecuentes": 1789,
+      "agencias_frecuentes": 2091,
       "target": 3396,
-      "pct_cumplimiento": 52.7
+      "pct_cumplimiento": 61.6
     },
     {
       "mes_comercial": "2026-11",

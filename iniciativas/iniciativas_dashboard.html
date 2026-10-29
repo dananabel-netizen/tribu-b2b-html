@@ -626,6 +626,20 @@ Chart.register({id:"vlabels",afterDatasetsDraw(c,_,o){
   });
   ctx.restore();
 }});
+Chart.register({id:"stacklabels",afterDatasetsDraw(c,_,o){
+  if(!o||!o.on)return;
+  const ctx=c.ctx,n=c.data.datasets.length;
+  const fm=v=>v>=1e6?(v/1e6).toFixed(1).replace(".",",")+"M":v>=1000?Math.round(v/1000)+"k":String(v);
+  ctx.save();ctx.font=`600 ${o.size||10}px Rubik, sans-serif`;ctx.textAlign="center";
+  c.data.datasets.forEach((ds,di)=>{
+    c.getDatasetMeta(di).data.forEach((b,i)=>{
+      const v=ds.data[i];if(!v)return;
+      if(Math.abs(b.base-b.y)>=13){ctx.fillStyle=ds.lc||"#fff";ctx.textBaseline="middle";ctx.fillText(fm(v),b.x,(b.y+b.base)/2);}
+      else if(di===n-1){ctx.fillStyle="#334155";ctx.textBaseline="bottom";ctx.fillText(fm(v),b.x,b.y-2);}
+    });
+  });
+  ctx.restore();
+}});
 const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},vlabels:{on:true}}};
 
 
@@ -878,7 +892,7 @@ function renderLdp(d,cfg){
     <div style="display:grid;grid-template-columns:5fr 6fr;gap:14px;align-items:stretch">
       <div class="card"><div class="card-hdr"><div><div class="card-title">Share y venta por país</div><div class="card-sub">Link de pago sobre el GB de hoteles non ref de cada país, ${sinceTxt}</div></div></div>
         <table class="stbl"><thead><tr><th>País</th><th>Prendido</th><th class="num">GB (USD)</th><th class="num">Bookings</th><th class="num">Agencias</th><th class="num">Cancel.</th><th>Share</th></tr></thead><tbody>${rowsC}</tbody></table></div>
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del share del link de pago</div><div class="card-sub">% del GB de hoteles non ref de los países ya prendidos · el ${fdate(cfg.asof)} está incompleto (el día no terminó)</div></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del share del link de pago</div><div class="card-sub">% del GB de hoteles non ref de los países ya prendidos</div></div>
         <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
         <div class="ch" style="height:228px"><canvas id="cLdpS"></canvas></div></div>
     </div>
@@ -907,18 +921,18 @@ function renderLdp(d,cfg){
         pointRadius:impGran==="d"?3:6,pointHoverRadius:7,pointBackgroundColor:"#fff",pointBorderColor:"#ED8B08",pointBorderWidth:2}]},
       options:{...baseOpts,plugins:{legend:{display:false},
         tooltip:{...tt,displayColors:false,callbacks:{label:c=>"Share: "+pf(c.parsed.y),afterLabel:c=>"USD "+fmtN(m.get(ks[c.dataIndex])[2])+" de USD "+fmtN(m.get(ks[c.dataIndex])[3])}},
-        vlabels:{on:impGran!=="d",size:11,zero:true,fmt:pf}},
+        vlabels:{on:true,size:impGran==="d"?9:11,zero:true,fmt:pf}},
         scales:{y:{beginAtZero:true,grace:"30%",grid,ticks:{callback:v=>v+"%"},title:{display:true,text:"% del GB",color:"#64748B",font:{size:11,weight:"600"}}},
                 x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
     const link=ldpMode==="link";
-    const ds=link?[["Otros medios no reembolsables",k=>m.get(k)[1],"#94A3B8"],["Link de pago",k=>m.get(k)[2],"#ED8B08"]]
+    const ds=link?[["Otros medios no reembolsables",k=>m.get(k)[1],"#94A3B8","#1E293B"],["Link de pago",k=>m.get(k)[2],"#ED8B08"]]
                  :[["Reembolsable",k=>m.get(k)[0],"#3B82F6"],["No reembolsable",k=>m.get(k)[1]+m.get(k)[2],"#ED8B08"]];
-    $("ldpVs").textContent=link?"GB confirmado en USD · solo hoteles no reembolsables: link de pago vs otros medios de pago · MX, AR, CL, BR, CO y PE"
-                               :"GB confirmado en USD · incluye todos los medios de pago · MX, AR, CL, BR, CO y PE";
+    $("ldpVs").textContent=link?"GB confirmado en USD (etiquetas en miles) · solo hoteles no reembolsables: link de pago vs otros medios de pago · MX, AR, CL, BR, CO y PE"
+                               :"GB confirmado en USD (etiquetas en miles) · incluye todos los medios de pago · MX, AR, CL, BR, CO y PE";
     document.querySelectorAll("#ldpMode button").forEach(b=>b.classList.toggle("active",b.dataset.m===ldpMode));
-    chart("cLdpV",{type:"bar",data:{labels:lb,datasets:ds.map(([n,f,col],i)=>({label:n,data:ks.map(k=>Math.round(f(k))),backgroundColor:col,borderRadius:i===1?{topLeft:6,topRight:6}:0,maxBarThickness:64}))},
+    chart("cLdpV",{type:"bar",data:{labels:lb,datasets:ds.map(([n,f,col,lc],i)=>({label:n,lc,data:ks.map(k=>Math.round(f(k))),backgroundColor:col,borderRadius:i===1?{topLeft:6,topRight:6}:0,maxBarThickness:64}))},
       options:{...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11}}},
-        tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y),footer:it=>"Total: USD "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}},vlabels:{on:false}},
+        tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y),footer:it=>"Total: USD "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}},vlabels:{on:false},stacklabels:{on:true,size:impGran==="d"?9:11}},
         scales:{y:{stacked:true,beginAtZero:true,grid,title:{display:true,text:"GB (USD)",color:"#64748B",font:{size:11,weight:"600"}}},
                 x:{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
   }

@@ -292,7 +292,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI'
 header{background:linear-gradient(90deg,#5B21B6,#7C3AED);padding:0 28px;height:72px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(91,33,182,.4)}
 .logo-main{color:#fff;font-size:15px;font-weight:700}.logo-main span{color:#C4B5FD}
 .logo-sub{color:rgba(196,181,253,.65);font-size:10px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
-.upd{color:rgba(255,255,255,.5);font-size:11px}
+.upd{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;line-height:1.2;white-space:nowrap}
 .filter-bar{display:flex;gap:24px;padding:14px 28px;background:#fff;border-bottom:1px solid var(--border);align-items:center;flex-wrap:wrap;position:sticky;top:72px;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .filter-group{display:flex;align-items:center;gap:8px}
 .filter-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}

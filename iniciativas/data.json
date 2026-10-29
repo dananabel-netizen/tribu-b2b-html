@@ -3,8 +3,15 @@
  "initiatives": [
   [
    "Combinaciones de MDP con HDO pay",
+   "2026-10-29",
+   "BR,CO",
+   "",
+   "RO en BR y CO. Se puede combinar aunque HDO Pay no tenga saldo suficiente para pagar la totalidad de la reserva."
+  ],
+  [
+   "Combinaciones de MDP con HDO pay",
    "2026-10-26",
-   "AR,BR,CL,CO,MX",
+   "AR,CL,MX",
    "",
    "Primero RO en MX, AR y CL. Ahora se puede combinar aunque HDO Pay no tenga saldo suficiente para pagar la totalidad de la reserva."
   ],

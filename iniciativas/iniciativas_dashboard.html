@@ -488,7 +488,7 @@ details.q summary{font-size:14px;display:flex;align-items:center;gap:8px}
     <span class="chip live">● Actualizado 2026-10-29</span>
   </div>
   <div class="tools">
-    <button class="tbtn" id="bLink" title="Copiar link con los filtros y la vista actuales">🔗 Link</button>
+    <button class="tbtn" id="bLink" title="Copiar el link del tablero">🔗 Link</button>
     <button class="tbtn" id="bPdf" title="Imprimir o guardar como PDF">🖨 PDF</button>
     <button class="tbtn" id="bPres" title="Modo presentación (Esc para salir)">🖥 Presentar</button>
     <button class="tbtn" id="bTheme" title="Modo claro / oscuro">🌙</button>
@@ -1032,8 +1032,9 @@ $("bPres").onclick=togglePres;
 $("bTheme").onclick=()=>{setTheme(root.dataset.theme==="dark"?"light":"dark");saveHash();};
 $("bZm").onclick=()=>setZoom((parseFloat(root.style.zoom)||.85)-.05);
 $("bZp").onclick=()=>setZoom((parseFloat(root.style.zoom)||.85)+.05);
+const SHARE_URL="https://script.google.com/a/macros/despegar.com/s/AKfycbzM_hsgCInRJwjVRDAPsKhfhlQjXEKWpbvgEB5HtEd7yv3VKjERUCUY4ZKasUEd9ARUzw/exec";
 $("bLink").onclick=()=>{
-  saveHash();const u=location.href;
+  const u=SHARE_URL;   // link fijo de la web app (dentro de Apps Script location.href no sirve)
   const fb=()=>{const t=document.createElement("textarea");t.value=u;document.body.appendChild(t);t.select();try{document.execCommand("copy");toast("🔗 Link copiado");}catch(e){toast("No se pudo copiar el link");}t.remove();};
   (navigator.clipboard?navigator.clipboard.writeText(u).then(()=>toast("🔗 Link copiado")):Promise.reject()).catch(fb);
 };

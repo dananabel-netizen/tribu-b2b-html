@@ -505,9 +505,6 @@ details.q summary{font-size:14px;display:flex;align-items:center;gap:8px}
   <div class="fl"><label>Buscar</label><input type="text" id="q" placeholder="Iniciativa o detalle…"></div>
   <div class="fl"><label>País</label><div class="ms-wrap" id="ms-wrap-country"></div></div>
   <div class="fl"><label>Año</label><div class="ms-wrap" id="ms-wrap-year"></div></div>
-  <div class="fl"><label>Categoría</label><div class="ms-wrap" id="ms-wrap-cat"></div></div>
-  <div class="fl"><label>Desde</label><input type="date" id="dFrom"></div>
-  <div class="fl"><label>Hasta</label><input type="date" id="dTo"></div>
   <button class="btn-clear" id="clearAll">🧹 Limpiar filtros</button>
   <span class="fcount" id="fcount"></span>
 </div>
@@ -597,16 +594,12 @@ document.addEventListener("click",()=>document.querySelectorAll(".ms-wrap.open")
 
 msInit("country",uniq(DATA.flatMap(d=>d.countries).filter(c=>c!=="Todos")).sort());
 msInit("year",uniq(DATA.map(d=>d.y)).sort().reverse());
-msInit("cat",uniq(DATA.map(d=>d.cat)).sort());
 
 /* ---------- filtros ---------- */
 function match(d,skip){
   if(F.q&&!(d.name+" "+d.note).toLowerCase().includes(F.q.toLowerCase()))return false;
   if(F.country.length&&!(d.countries.includes("Todos")||d.countries.some(c=>F.country.includes(c))))return false;
   if(F.year.length&&!F.year.includes(String(d.y)))return false;
-  if(skip!=="cat"&&F.cat.length&&!F.cat.includes(d.cat))return false;
-  if(F.from&&d.date<F.from)return false;
-  if(F.to&&d.date>F.to)return false;
   return true;
 }
 
@@ -954,8 +947,6 @@ function render(){
 
 /* ---------- eventos ---------- */
 $("q").oninput=e=>{F.q=e.target.value;render();};
-$("dFrom").onchange=e=>{F.from=e.target.value;render();};
-$("dTo").onchange=e=>{F.to=e.target.value;render();};
 $("tabs").onclick=e=>{const p=e.target.dataset.p;if(!p)return;setPage(p);};
 /* ---------- navegación, herramientas, link compartible ---------- */
 const root=document.documentElement;
@@ -972,8 +963,7 @@ function saveHash(){
     if(view==="week")p.set("w",iso(weekStart));
     if(F.country.length)p.set("c",F.country.join(","));
     if(F.year.length)p.set("a",F.year.join(","));
-    if(F.cat.length)p.set("k",F.cat.join("|"));
-    if(F.q)p.set("q",F.q);if(F.from)p.set("f",F.from);if(F.to)p.set("t",F.to);
+    if(F.q)p.set("q",F.q);
     if(view==="list"){p.set("s",sortBy);p.set("g",groupBy);}
     if(root.dataset.theme==="dark")p.set("th","d");
     history.replaceState(null,"","#"+p.toString());
@@ -987,10 +977,7 @@ function loadHash(){
   if(/^\d{4}-\d\d-\d\d$/.test(p.get("w")||""))weekStart=mondayOf(new Date(p.get("w")+"T00:00:00Z"));
   if(p.get("c"))MS.country(p.get("c").split(","));
   if(p.get("a"))MS.year(p.get("a").split(","));
-  if(p.get("k"))MS.cat(p.get("k").split("|"));
   if(p.get("q")){F.q=p.get("q");$("q").value=F.q;}
-  if(p.get("f")){F.from=p.get("f");$("dFrom").value=F.from;}
-  if(p.get("t")){F.to=p.get("t");$("dTo").value=F.to;}
   if(cmpMap[p.get("s")]){sortBy=p.get("s");}
   if(["month","year","cat","none"].includes(p.get("g")))groupBy=p.get("g");
   $("sortSel").value=sortBy;$("grpSel").value=groupBy;
@@ -1044,10 +1031,10 @@ document.addEventListener("keydown",e=>{
   const n=e.key==="ArrowLeft"?-1:e.key==="ArrowRight"?1:0;if(n)step(n);
 });
 $("clearAll").onclick=()=>{
-  Object.assign(F,{q:"",from:"",to:""});
-  $("q").value="";$("dFrom").value="";$("dTo").value="";
+  Object.assign(F,{q:""});
+  $("q").value="";
   document.querySelectorAll(".ms-search input").forEach(i=>{i.value="";i.dispatchEvent(new Event("input"));});
-  ["country","year","cat"].forEach(f=>MS[f]([]));
+  ["country","year"].forEach(f=>MS[f]([]));
   render();
 };
 setZoom(+(store.get("zoom")||.85));

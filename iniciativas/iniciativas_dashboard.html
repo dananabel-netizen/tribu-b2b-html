@@ -1020,7 +1020,7 @@ $("bPres").onclick=togglePres;
 $("bTheme").onclick=()=>{setTheme(root.dataset.theme==="dark"?"light":"dark");saveHash();};
 $("bZm").onclick=()=>setZoom((parseFloat(root.style.zoom)||.85)-.05);
 $("bZp").onclick=()=>setZoom((parseFloat(root.style.zoom)||.85)+.05);
-const SHARE_URL="https://script.google.com/a/macros/despegar.com/s/AKfycbzM_hsgCInRJwjVRDAPsKhfhlQjXEKWpbvgEB5HtEd7yv3VKjERUCUY4ZKasUEd9ARUzw/exec";
+const SHARE_URL=["https:","","script.google.com","a","macros","despegar.com","s","AKfycbzM_hsgCInRJwjVRDAPsKhfhlQjXEKWpbvgEB5HtEd7yv3VKjERUCUY4ZKasUEd9ARUzw","exec"].join("/");   // armada por partes: Apps Script rompe la página si la URL va completa
 $("bLink").onclick=()=>{
   const u=SHARE_URL;   // link fijo de la web app (dentro de Apps Script location.href no sirve)
   const fb=()=>{const t=document.createElement("textarea");t.value=u;document.body.appendChild(t);t.select();try{document.execCommand("copy");toast("🔗 Link copiado");}catch(e){toast("No se pudo copiar el link");}t.remove();};

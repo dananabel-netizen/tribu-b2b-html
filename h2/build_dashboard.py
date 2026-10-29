@@ -317,9 +317,8 @@ tbody tr:last-child td{border-bottom:none}
 .ok{background:#d4f4dd;color:#16a34a}.warn{background:#fff7cd;color:#b45309}.bad{background:#ffd8d3;color:#cf222e}.na{background:#f0f0f0;color:#999;font-size:11px;font-weight:400}
 .tag{display:block;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
 .pend{font-size:10px;background:#FEF3C7;color:#92400E;border-radius:4px;padding:1px 6px;margin-left:6px;font-weight:700;white-space:nowrap}
-footer{margin-top:40px;padding:26px 20px;text-align:center;background:linear-gradient(90deg,#5B21B6,#7C3AED);box-shadow:0 -2px 12px rgba(91,33,182,.35)}
-footer a{display:inline-block;background:#fff;color:#5B21B6;text-decoration:none;font-weight:700;font-size:15px;padding:11px 28px;border-radius:24px;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:transform .15s,box-shadow .15s}
-footer a:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.3)}
+#portal-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;text-decoration:none;line-height:1.2;white-space:nowrap;transition:background .2s}
+#portal-btn:hover{background:rgba(255,255,255,.25)}
 body.dark{--bg:#0f172a;--surface:#1e293b;--surface2:#162032;--border:#334155;--border2:#475569;--text:#e2e8f0;--muted:#94a3b8;--purple:#A78BFA}
 body.dark .ok{background:#14532d;color:#86efac}body.dark .warn{background:#713f12;color:#fde68a}body.dark .bad{background:#7f1d1d;color:#fca5a5}body.dark .na{background:#1e293b;color:#64748b}
 body.dark .filter-bar{background:var(--surface)}
@@ -339,6 +338,7 @@ body,main,.card,.filter-bar{transition:background .25s,border-color .25s,color .
   </div>
   <div style="display:flex;align-items:center;gap:14px">
     <span class="upd">Actualizado: __UPDATED__</span>
+    <a id="portal-btn" href="https://script.google.com/a/macros/despegar.com/s/AKfycbw7nuX4vsH9zFXOtLwxTpXszKAFKMGKH9uJhPr5JQkX5BYeZWLy7PaSiyyn-X-LqXx5tw/exec" target="_blank" rel="noopener" title="Portal de dashboards">🗂️ Portal de dashboards</a>
     <button id="theme-btn" onclick="toggleTheme()" title="Modo noche/día">🌙</button>
   </div>
 </header>
@@ -356,7 +356,6 @@ body,main,.card,.filter-bar{transition:background .25s,border-color .25s,color .
   </div>
 </div>
 <main id="root"></main>
-<footer><a href="https://script.google.com/a/macros/despegar.com/s/AKfycbw7nuX4vsH9zFXOtLwxTpXszKAFKMGKH9uJhPr5JQkX5BYeZWLy7PaSiyyn-X-LqXx5tw/exec" target="_blank" rel="noopener">Portal de dashboards ↗</a></footer>
 <script>
 var DATA = __DATA__;
 

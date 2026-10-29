@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iniciativas HotelDO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#F9F3E6;--panel:#FFFFFF;--panel2:#F5F7FA;--line:#E8ECF0;
+  --txt:#0F1834;--txt2:#334155;--mut:#64748B;
+  --navy:#223260;--navyd:#0F1834;
+  --orange:#ED8B08;--oranged:#D07D06;--orangesoft:rgba(237,139,8,.12);
+  --green:#10B981;--greensoft:rgba(16,185,129,.12);
+  --red:#EF4444;--redsoft:rgba(239,68,68,.10);
+  --blue:#3B82F6;--purple:#8B5CF6;--cyan:#06B6D4;--amber:#F59E0B;
+  --sh:0 1px 2px rgba(15,24,52,.04),0 4px 20px rgba(15,24,52,.06);
+  --shmd:0 2px 8px rgba(15,24,52,.07),0 8px 32px rgba(15,24,52,.09);
+  --shpop:0 8px 40px rgba(15,24,52,.18);
+  --r:14px;--r2:10px;--ink:#223260;--we:#FBFAF7;--hov:#FFFBF2;--hov2:#FFF8EC;
+}
+*{box-sizing:border-box}
+html{zoom:.85}
+body{margin:0;background:var(--bg);color:var(--txt);font:13px/1.45 'Rubik',system-ui,sans-serif}
+
+/* header */
+.hdr{position:sticky;top:0;z-index:100;height:56px;background:linear-gradient(100deg,#0F1834 0%,#223260 60%,#2d4080 100%);border-bottom:3px solid var(--orange);display:flex;align-items:center;justify-content:space-between;padding:0 28px;box-shadow:var(--shmd)}
+.hdr-l{display:flex;align-items:center;gap:18px}
+.hdr-title{color:#fff;font-weight:700;font-size:16px;line-height:1.15;border-left:1px solid rgba(255,255,255,.25);padding-left:18px;letter-spacing:.01em}
+.hdr-title small{display:block;font-weight:500;font-size:11px;color:#F7B955;letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+.chips{display:flex;gap:8px}
+.chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.14);color:#fff;border-radius:99px;padding:5px 14px;font-size:12px;font-weight:500;white-space:nowrap}
+.chip.live::first-letter{color:var(--green)}
+
+/* tabs */
+.tabs{position:sticky;top:59px;z-index:90;background:var(--panel);border-bottom:1px solid var(--line);display:flex;gap:4px;padding:0 28px}
+.tab{background:none;border:none;border-bottom:3px solid transparent;padding:12px 18px;font:600 13px 'Rubik',sans-serif;color:var(--mut);cursor:pointer}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--ink);border-bottom-color:var(--orange)}
+
+/* filter bar */
+.fbar{position:sticky;top:101px;z-index:80;background:var(--panel);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;padding:7px 28px}
+.fl{display:flex;flex-direction:column;gap:3px}
+.fl>label{font-size:10px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.07em}
+.fl input[type=text],.fl input[type=date]{border:1px solid var(--line);border-radius:10px;background:var(--panel2);padding:6px 10px;font:500 13px 'Rubik',sans-serif;color:var(--txt);background:var(--panel);height:30px}
+.fl input[type=text]{width:180px}
+.ms-wrap{position:relative}
+.ms-trigger{min-width:130px;height:30px;text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:0 28px 0 10px;font:500 13px 'Rubik',sans-serif;color:var(--txt);cursor:pointer;position:relative}
+.ms-trigger::after{content:"▾";position:absolute;right:10px;color:var(--mut)}
+.ms-wrap.open .ms-trigger,.ms-trigger:hover{border-color:var(--orange)}
+.ms-panel{display:none;position:absolute;top:38px;left:0;z-index:200;width:240px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);box-shadow:var(--shpop);padding:8px}
+.ms-wrap.open .ms-panel{display:block}
+.ms-search input{width:100%;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font:13px 'Rubik',sans-serif}
+.ms-actions{display:flex;justify-content:space-between;margin:6px 2px}
+.ms-actions button{background:none;border:none;color:var(--orange);font:600 12px 'Rubik',sans-serif;cursor:pointer}
+.ms-list{max-height:220px;overflow:auto}
+.ms-item{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;cursor:pointer;font-size:13px}
+.ms-item:hover{background:var(--panel2)}
+.ms-item input{accent-color:var(--orange)}
+.btn-clear{background:linear-gradient(135deg,#F5A02A,var(--orange));box-shadow:0 2px 6px rgba(237,139,8,.35);color:#fff;border:none;border-radius:10px;padding:0 12px;height:30px;font:700 12px 'Rubik',sans-serif;white-space:nowrap;cursor:pointer}
+.btn-clear:hover{background:var(--oranged)}
+.fcount{margin-left:auto;color:var(--mut);font-size:12px;align-self:center}
+
+/* content */
+.wrap{padding:14px 28px 40px;max-width:none;margin:0}
+.page{display:none}.page.active{display:block}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:12px}
+.kpi{background:var(--panel);border-radius:var(--r);box-shadow:var(--sh);padding:10px 14px;border-top:3px solid var(--navy);transition:.15s}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--shmd)}
+.kpi-g{border-top-color:var(--green)}.kpi-r{border-top-color:var(--red)}.kpi-b{border-top-color:var(--blue)}
+.kpi-p{border-top-color:var(--purple)}.kpi-c{border-top-color:var(--cyan)}.kpi-a{border-top-color:var(--amber)}
+.kpi-0{border-top:3px solid transparent;border-image:linear-gradient(90deg,var(--navy),var(--orange)) 1}
+.kpi-icon{font-size:14px;display:inline-block;margin-right:4px}
+.kpi-lbl{display:inline;font-size:10px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
+.kpi-val{font-size:19px;font-weight:800;color:var(--ink)}
+.kpi-sub{font-size:12px;color:var(--mut);display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.delta{border-radius:99px;padding:1px 8px;font-size:11px;font-weight:700}
+.delta.up{background:var(--greensoft);color:#0b8f66}.delta.dn{background:var(--redsoft);color:var(--red)}.delta.nd{background:var(--panel2);color:var(--mut)}
+
+.ins-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin-bottom:12px}
+.ins-card{display:flex;gap:8px;background:var(--panel);border-radius:var(--r);box-shadow:var(--sh);padding:8px 12px;border-left:4px solid var(--mut);font-size:12px;color:var(--txt2)}
+.ins-card.pos{border-left-color:var(--green);background:linear-gradient(90deg,var(--greensoft),var(--panel) 40%)}
+.ins-card.neg{border-left-color:var(--red);background:linear-gradient(90deg,var(--redsoft),var(--panel) 40%)}
+.ins-card.warn{border-left-color:var(--orange);background:linear-gradient(90deg,var(--orangesoft),var(--panel) 40%)}
+.ins-emoji{font-size:16px}
+.ins-text b{color:var(--ink)}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.card{background:var(--panel);border-radius:var(--r);box-shadow:var(--sh);padding:12px 14px;margin-bottom:10px}
+.row2 .card{margin-bottom:0}
+.card-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:10px}
+.card-title{font-size:14px;font-weight:700;color:var(--ink)}
+.card-sub{font-size:12px;color:var(--mut)}
+.gran{display:flex;background:var(--panel2);border-radius:8px;padding:2px}
+.gran button{border:none;background:none;border-radius:6px;padding:4px 10px;font:600 12px 'Rubik',sans-serif;color:var(--mut);cursor:pointer}
+.gran button.active{background:var(--orange);color:#fff}
+.ch{height:180px;position:relative}
+
+.month{margin:22px 0 8px;font-size:12px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.item{background:var(--panel);border-radius:var(--r);box-shadow:var(--sh);padding:12px 14px;display:flex;flex-direction:column;gap:4px;border-left:4px solid var(--navy);transition:.15s}
+.item:hover{box-shadow:var(--shmd);transform:translateY(-2px)}
+.item.fl-warn{border-left-color:var(--orange)}
+.item h3{margin:0;font-size:13px;font-weight:700;color:var(--ink);line-height:1.3}
+.item .date{color:var(--mut);font-size:12px}
+.item p{margin:0;color:var(--txt2);font-size:12px}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(34,50,96,.08);color:var(--ink);font-weight:600}
+.tag.cat{background:var(--orangesoft);color:var(--oranged)}
+.tag.new{background:var(--greensoft);color:#0b8f66}
+.tag.warn{background:var(--redsoft);color:var(--red)}
+.empty{padding:40px;text-align:center;color:var(--mut);background:var(--panel);border-radius:var(--r)}
+
+.stbl{width:100%;border-collapse:collapse;font-size:13px}
+.stbl th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);padding:6px 8px;border-bottom:1px solid var(--line)}
+.stbl td{padding:8px;border-bottom:1px solid var(--line)}
+.name-txt{font-weight:600;color:var(--ink)}
+.pct-pill{background:var(--orangesoft);color:var(--oranged);border-radius:99px;padding:1px 10px;font-weight:700;font-size:12px}
+.sbar{height:6px;border-radius:99px;background:var(--panel2);min-width:80px}.sbar i{display:block;height:100%;border-radius:99px;background:var(--orange)}
+
+.item{cursor:pointer}
+.tag.imp{background:var(--navy);color:#fff}
+.tab.imp{color:var(--oranged)}
+.imp-hdr{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.imp-hdr h2{margin:0;font-size:18px;color:var(--ink)}
+.imp-hdr p{margin:2px 0 0;color:var(--mut);font-size:13px;max-width:780px}
+.btn-back{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font:600 12px 'Rubik',sans-serif;color:var(--ink);cursor:pointer;height:32px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--mut);margin-bottom:6px}
+.leg-dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+.pill-st{border-radius:99px;padding:1px 10px;font-size:11px;font-weight:700}
+.pill-st.ok{background:var(--greensoft);color:#0b8f66}.pill-st.ko{background:var(--redsoft);color:var(--red)}
+tr.post td{background:var(--orangesoft)}
+details.q{background:var(--panel);border-radius:var(--r);box-shadow:var(--sh);padding:12px 16px}
+details.q summary{cursor:pointer;font-weight:700;color:var(--ink);font-size:13px}
+details.q pre{overflow:auto;background:var(--panel2);border-radius:8px;padding:12px;font-size:12px;margin:10px 0 0}
+.view-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.seg{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:2px}
+.seg button,.nav-b{border:none;background:none;border-radius:6px;padding:4px 10px;font:600 12px 'Rubik',sans-serif;color:var(--mut);cursor:pointer}
+.seg button.on{background:var(--navy);color:#fff}
+.nav-b{background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--ink)}
+.nav-b:hover{border-color:var(--orange)}
+.cal-t{text-align:center;font-size:16px;font-weight:700;color:var(--ink);min-width:170px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shmd)}
+.cal-h{background:var(--navy);color:#fff!important;padding:7px 5px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);text-align:center}
+.cal-c{background:var(--panel);min-height:96px;padding:5px;display:flex;flex-direction:column;gap:3px}
+.cal-c.we{background:var(--we)}.cal-c.out{background:var(--panel2)}
+.cal-d{font-size:11px;font-weight:600;color:var(--mut)}
+.cal-c.today .cal-d{background:var(--orange);color:#fff;border-radius:99px;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center}
+.chip-i{background:rgba(34,50,96,.09);color:var(--ink);border-left:3px solid var(--navy);border-radius:6px;padding:2px 6px;font-size:11px;transition:.12s;font-weight:600;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip-i:hover{background:var(--navy);color:#fff}
+.chip-i.rb{background:var(--orangesoft);border-left-color:var(--orange);color:var(--oranged)}
+.chip-i.im{border-left-color:var(--green)}
+.leg2{display:flex;gap:14px;font-size:11px;color:var(--mut);margin-top:8px}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.row2{grid-template-columns:1fr}.chips{display:none}}
+
+/* ===== pulido estético v2 ===== */
+body{background:radial-gradient(1200px 500px at 85% -10%,rgba(237,139,8,.10),transparent 60%),radial-gradient(900px 500px at -10% 10%,rgba(34,50,96,.07),transparent 60%),var(--bg);background-attachment:fixed}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:#c9d1de;border-radius:99px;border:2px solid transparent;background-clip:padding-box}::-webkit-scrollbar-thumb:hover{background:var(--orange);background-clip:padding-box;border:2px solid transparent}
+.page.active{animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tabs{box-shadow:0 2px 10px rgba(15,24,52,.05)}
+.tab{transition:.15s;border-radius:8px 8px 0 0}
+.tab:hover{background:rgba(237,139,8,.07)}
+.tab.active{background:linear-gradient(180deg,transparent,rgba(237,139,8,.10))}
+.fbar{box-shadow:0 4px 14px rgba(15,24,52,.05)}
+.fl input:focus,.ms-trigger:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(237,139,8,.18)}
+.fcount{background:var(--panel2);padding:4px 12px;border-radius:99px;font-weight:600;color:var(--ink)}
+/* calendario */
+.view-bar{display:grid;grid-template-columns:1fr auto 1fr;background:var(--panel);border-radius:var(--r);box-shadow:var(--sh);padding:10px 14px;margin-bottom:12px}
+.view-bar #calNav{grid-column:2;justify-self:center}
+.view-bar .seg{grid-column:1;justify-self:start}
+.cal-grid{border:none;gap:0;background:var(--panel)}
+.cal-h{border-right:1px solid rgba(255,255,255,.08)}
+.cal-c{border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .12s}
+.cal-c:nth-child(7n){border-right:none}
+.cal-c:hover:not(.out){background:var(--hov)}
+.cal-c.today{background:rgba(237,139,8,.07);box-shadow:inset 0 0 0 2px var(--orange)}
+.cal-d{font-size:12px}
+.chip-i{--cc:var(--navy);border-left-color:var(--cc);background:color-mix(in srgb,var(--cc) 12%,var(--panel));color:var(--ink);box-shadow:0 1px 2px rgba(15,24,52,.06)}
+.chip-i:hover{background:var(--cc);color:#fff;transform:translateX(2px)}
+.chip-i.rb{background:color-mix(in srgb,var(--cc) 12%,var(--panel));color:var(--ink);outline:1.5px dashed var(--orange);outline-offset:-1.5px}
+.chip-i.im::after{content:" 📈"}
+.leg2{background:var(--panel);border-radius:var(--r);box-shadow:var(--sh);padding:8px 14px;margin-top:10px}
+.catleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11px;color:var(--txt2);margin-top:8px;padding:0 4px}
+.catleg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+/* lista */
+.month{display:flex;align-items:center;gap:10px;color:var(--ink);font-size:13px}
+.month::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.item{--cc:var(--navy);border-left-color:var(--cc);background:linear-gradient(135deg,var(--panel) 60%,color-mix(in srgb,var(--cc) 6%,var(--panel)))}
+.item:hover{transform:translateY(-3px);box-shadow:var(--shpop)}
+.item.fl-warn{box-shadow:inset 0 0 0 1.5px rgba(237,139,8,.35),var(--sh)}
+.item h3{font-size:14px}
+.tag{font-weight:600;border:1px solid rgba(34,50,96,.08)}
+.tag.cat{border-color:transparent}
+.tag.new{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 4px rgba(16,185,129,.15)}}
+/* impacto */
+.imp-hdr{background:linear-gradient(100deg,var(--panel),var(--hov2));border-radius:var(--r);box-shadow:var(--sh);padding:16px 20px;border-left:5px solid var(--orange)}
+.btn-back{border-radius:10px;transition:.15s}.btn-back:hover{border-color:var(--orange);color:var(--oranged)}
+.kpi{padding:14px 16px;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;right:-24px;top:-24px;width:80px;height:80px;border-radius:50%;background:rgba(34,50,96,.04)}
+.kpi-icon{font-size:18px;display:block;margin:0 0 4px}
+.kpi-lbl{display:block;margin-bottom:4px}
+.kpi-val{font-size:26px;letter-spacing:-.02em}
+.card{border:1px solid rgba(232,236,240,.8)}
+.card-title{display:flex;align-items:center;gap:8px}
+.card-title::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--orange)}
+details.q summary{color:var(--ink)}
+.empty{border:2px dashed var(--line);background:transparent}
+.nav-b.arr{width:32px;height:32px;padding:0;border-radius:50%;font-size:20px;line-height:1;display:inline-flex;align-items:center;justify-content:center;background:var(--panel2);border:none;color:var(--ink);transition:.15s}
+.nav-b.arr:hover{background:var(--orange);color:#fff;transform:scale(1.08)}
+.nav-b.hoy{border:1.5px solid var(--orange);color:var(--oranged);border-radius:99px;padding:5px 16px;margin-left:6px;background:var(--panel)}
+.nav-b.hoy:hover{background:var(--orange);color:#fff}
+#calNav{gap:10px!important}
+.cal-t{display:flex;align-items:baseline;justify-content:center;gap:8px;width:290px;min-width:290px;font-size:20px;font-weight:500;color:var(--ink)}
+.cal-t b{font-weight:800;letter-spacing:-.01em}
+.cal-t .cy{color:var(--mut);font-weight:400}
+.cal-t .cn{font-size:11px;font-weight:700;color:var(--oranged);background:var(--orangesoft);border-radius:99px;padding:3px 10px;align-self:center;margin-left:4px}
+.cal-grid{position:relative}
+.empty-m{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:var(--panel);border:1.5px dashed var(--line);border-radius:99px;padding:6px 18px;font-size:12px;font-weight:600;color:var(--mut);pointer-events:none;grid-column:1/-1}
+.chip-i em{font-style:normal;font-size:9px;font-weight:700;opacity:.55;margin-left:6px;letter-spacing:.05em}
+.chip-i:hover em{opacity:.85}
+.cal-c{min-height:104px}
+.cal-d{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;border-radius:99px;color:var(--ink)}
+.cal-c.we .cal-d{color:var(--mut)}
+.cal-c.today .cal-d{box-shadow:0 2px 8px rgba(237,139,8,.5)}
+.seg{box-shadow:inset 0 0 0 1px var(--line);border:none;background:var(--panel2);border-radius:10px;padding:3px}
+.seg button{border-radius:8px;padding:6px 14px;transition:.15s}
+.seg button.on{box-shadow:0 2px 6px rgba(34,50,96,.3)}
+.hdr .logo-svg{filter:drop-shadow(0 1px 4px rgba(0,0,0,.25))}
+.wrap::after{content:"HotelDO · HTML";display:block;text-align:center;margin-top:22px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);opacity:.7}
+
+/* ===== v3: modo oscuro, vistas, panel, herramientas ===== */
+html[data-theme=dark]{--bg:#0B1020;--panel:#151C33;--panel2:#1C2540;--line:#27325A;--txt:#E8ECF8;--txt2:#B8C2DC;--mut:#8A96B8;--ink:#E6EBF7;--we:#121A31;--hov:#1A2342;--hov2:#1A2342;--orangesoft:rgba(237,139,8,.18);--greensoft:rgba(16,185,129,.18);--redsoft:rgba(239,68,68,.18);--sh:0 1px 2px rgba(0,0,0,.35),0 4px 20px rgba(0,0,0,.3);--shmd:0 2px 8px rgba(0,0,0,.4),0 8px 32px rgba(0,0,0,.35)}
+html[data-theme=dark] body{background:radial-gradient(1200px 500px at 85% -10%,rgba(237,139,8,.08),transparent 60%),var(--bg)}
+html[data-theme=dark] .tag{background:rgba(255,255,255,.08)}
+html[data-theme=dark] .kpi::after{background:rgba(255,255,255,.04)}
+html[data-theme=dark] input[type=date]{color-scheme:dark}
+html[data-theme=dark] .delta.up{color:#34d399}
+html[data-theme=dark] .fcount,html[data-theme=dark] .cal-d{color:var(--txt)}
+html.pres{zoom:1.1!important}
+html.pres .fbar,html.pres .tabs{display:none}
+html.pres .cal-c{min-height:124px}
+html.pres .chip-i{font-size:12px}
+html.pres .wrap::after{display:none}
+
+/* header tools */
+.hdr-r{display:flex;align-items:center;gap:14px}
+.tools{display:flex;gap:6px}
+.tbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#fff;border-radius:10px;padding:5px 11px;font:600 12px 'Rubik',sans-serif;cursor:pointer;transition:.15s;white-space:nowrap}
+.tbtn:hover{background:var(--orange);border-color:var(--orange)}
+.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);background:var(--navyd);color:#fff;padding:10px 20px;border-radius:99px;font-weight:600;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:400;box-shadow:var(--shpop)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.tgl{height:30px;border:1px solid var(--line);background:var(--panel2);color:var(--txt2);border-radius:10px;padding:0 12px;font:600 12px 'Rubik',sans-serif;cursor:pointer;transition:.15s;white-space:nowrap}
+.tgl:hover{border-color:var(--orange)}
+.tgl.on{background:var(--orange);color:#fff;border-color:var(--orange)}
+
+/* stats */
+.kpis.mini{margin-bottom:12px}
+.mini .kpi{display:flex;align-items:center;gap:12px;padding:10px 14px}
+.mini .kpi-icon{width:40px;height:40px;border-radius:12px;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-size:19px;margin:0;flex:none}
+.mini .kpi-val{font-size:22px;line-height:1.1}
+.mini .kpi-lbl{margin:0}
+.mini .kpi-sub{margin-top:1px}
+
+/* leyenda interactiva */
+.catleg{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px;padding:0}
+.lg-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin-right:4px}
+.lg{--cc:#94A3B8;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);color:var(--txt2);border-radius:99px;padding:4px 11px;font:600 11px 'Rubik',sans-serif;cursor:pointer;transition:.12s}
+.lg i{display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--cc);margin:0}
+.lg small{color:var(--mut);font-weight:600}
+.lg:hover{border-color:var(--cc);transform:translateY(-1px)}
+.lg.on{background:var(--cc);color:#fff;border-color:var(--cc)}
+.lg.on i{background:#fff}.lg.on small{color:rgba(255,255,255,.85)}
+.lg.dim{opacity:.45}
+.lg.clr{--cc:var(--orange);color:var(--oranged)}
+
+/* calendario: chips con banderas */
+.chip-i{display:flex;align-items:center;gap:4px}
+.cn-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.fgs{display:inline-flex;gap:3px;flex:none;align-items:center}
+.chip-i.im::after{flex:none}
+.fg{height:11px;width:auto;border-radius:2px;vertical-align:-1px;box-shadow:0 0 0 1px rgba(0,0,0,.14)}
+.more{background:none;border:none;color:var(--oranged);font:700 10px 'Rubik',sans-serif;text-align:left;cursor:pointer;padding:0 4px}
+.more:hover{text-decoration:underline}
+.cal-d.has{cursor:pointer}
+.cal-d.has:hover{background:var(--orangesoft)}
+.cal-t{width:340px;min-width:340px;white-space:nowrap}
+
+/* vista semana */
+.wk-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+.wk-col{background:var(--panel);border-radius:var(--r);box-shadow:var(--sh);min-height:340px;display:flex;flex-direction:column;overflow:hidden}
+.wk-col.we{background:var(--we)}
+.wk-col.today{box-shadow:inset 0 0 0 2px var(--orange),var(--sh)}
+.wk-h{background:var(--navy);color:#fff;padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;display:flex;justify-content:space-between;align-items:center}
+.wk-h b{font-size:17px}
+.wk-col.today .wk-h{background:var(--orange)}
+.wk-b{padding:8px;display:flex;flex-direction:column;gap:6px}
+.wk-card{--cc:var(--navy);border-left:4px solid var(--cc);background:color-mix(in srgb,var(--cc) 10%,var(--panel));border-radius:8px;padding:7px 9px;cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);transition:.12s}
+.wk-card:hover{transform:translateY(-2px);box-shadow:var(--shmd)}
+.wk-card.rb{outline:1.5px dashed var(--orange);outline-offset:-1.5px}
+.wk-card small{display:flex;gap:4px;align-items:center;flex-wrap:wrap;color:var(--mut);font-weight:500;margin-top:4px;font-size:10px}
+.wk-empty{color:var(--mut);opacity:.45;font-size:12px;text-align:center;margin-top:24px}
+
+/* vista año */
+.yr{background:var(--panel);border-radius:var(--r);box-shadow:var(--shmd);overflow:hidden}
+.yr-grid{display:grid;grid-template-columns:200px repeat(12,minmax(0,1fr))}
+.yr-h{background:var(--navy);color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:9px 4px;text-align:center}
+.yr-l{padding:11px 12px;font-weight:600;font-size:12px;color:var(--ink);display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+.yr-l i{width:10px;height:10px;border-radius:3px;flex:none}
+.yr-c{border-bottom:1px solid var(--line);border-left:1px solid var(--line);display:flex;align-items:center;justify-content:center;min-height:44px;font-weight:800;font-size:14px;transition:.12s}
+.yr-c.has{cursor:pointer}
+.yr-c.has:hover{transform:scale(1.08);box-shadow:var(--shmd);position:relative;z-index:2;border-radius:6px}
+.yr-tot.yr-l,.yr-tot.yr-c{background:var(--panel2);font-weight:800;border-bottom:none}
+
+/* lista */
+#listCtl{grid-column:2;justify-self:center;display:none;gap:14px;align-items:center}
+#listCtl label{font-size:10px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.07em;display:flex;align-items:center;gap:6px}
+#listCtl select{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:6px 10px;font:500 12px 'Rubik',sans-serif;color:var(--txt);cursor:pointer}
+.gc{background:var(--orangesoft);color:var(--oranged);border-radius:99px;padding:1px 10px;font-size:11px;font-weight:700}
+.item p.clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tag .fg{margin-right:3px}
+.fg-all{font-size:11px}
+
+/* panel lateral */
+.d-bg{position:fixed;inset:0;background:rgba(15,24,52,.4);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:.2s;z-index:300}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,100%);background:var(--panel);box-shadow:var(--shpop);transform:translateX(105%);transition:transform .25s ease;z-index:310;display:flex;flex-direction:column}
+body.dopen .d-bg{opacity:1;pointer-events:auto}
+body.dopen .drawer{transform:none}
+.d-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 20px;background:linear-gradient(100deg,#0F1834,#223260);color:#fff;border-bottom:3px solid var(--orange)}
+.d-hd b{font-size:14px}
+.d-hd button{background:rgba(255,255,255,.14);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;flex:none}
+.d-hd button:hover{background:var(--orange)}
+#dBody{padding:18px 20px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:16px}
+.d-card{--cc:var(--navy);border-left:5px solid var(--cc);background:color-mix(in srgb,var(--cc) 8%,var(--panel));border-radius:12px;padding:14px 16px}
+.d-card h3{margin:0 0 6px;font-size:17px;color:var(--ink);line-height:1.3}
+.d-date{color:var(--mut);font-size:12px;margin-bottom:8px}
+.d-sec label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);display:block;margin-bottom:6px}
+.d-sec p{margin:0;color:var(--txt2);font-size:13px;line-height:1.55}
+.d-ctys{display:flex;flex-wrap:wrap;gap:6px}
+.d-cty{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--ink)}
+.d-btn{background:linear-gradient(135deg,#F5A02A,var(--orange));color:#fff;border:none;border-radius:12px;padding:12px;font:700 13px 'Rubik',sans-serif;cursor:pointer;box-shadow:0 4px 12px rgba(237,139,8,.35)}
+.d-btn:hover{filter:brightness(1.05)}
+.d-noimp{background:var(--panel2);border:1.5px dashed var(--line);border-radius:12px;padding:12px;text-align:center;color:var(--mut);font-size:12px}
+.d-back2{align-self:flex-start;background:none;border:none;color:var(--oranged);font:600 12px 'Rubik',sans-serif;cursor:pointer;padding:0}
+.d-item{--cc:var(--navy);border-left:4px solid var(--cc);background:color-mix(in srgb,var(--cc) 8%,var(--panel));border-radius:10px;padding:10px 12px;cursor:pointer;transition:.12s}
+.d-item:hover{transform:translateX(3px);box-shadow:var(--shmd)}
+.d-item b{display:block;color:var(--ink);font-size:13px}
+.d-item small{color:var(--mut);display:flex;gap:6px;align-items:center;margin-top:4px;font-size:11px}
+
+/* responsive */
+@media(max-width:900px){
+  html{zoom:1!important}
+  .hdr{height:auto;min-height:56px;flex-wrap:wrap;padding:8px 14px;gap:8px}
+  .hdr-r{flex-wrap:wrap}.tools{flex-wrap:wrap}
+  .tabs,.fbar,.wrap{padding-left:14px;padding-right:14px}
+  .tabs,.fbar{position:static}
+  .kpis.mini{grid-template-columns:repeat(2,1fr)}
+  .view-bar{grid-template-columns:1fr;gap:10px}
+  .view-bar #calNav,.view-bar .seg,#listCtl{grid-column:1;justify-self:center}
+  .seg{flex-wrap:wrap}
+  .cal-t{width:auto;min-width:0;font-size:16px}
+  .cal-c{min-height:64px;padding:3px}.chip-i{font-size:9px}.fgs{display:none}
+  .wk-grid{grid-template-columns:1fr}.wk-col{min-height:0}
+  .yr{overflow:auto}.yr-grid{grid-template-columns:130px repeat(12,minmax(30px,1fr));min-width:560px}
+  .row2{grid-template-columns:1fr}
+}
+/* impresión / PDF */
+@media print{
+  @page{size:landscape;margin:8mm}
+  html{zoom:.62!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .tools,.fbar,.tabs,.chips,.view-bar #vSeg,.view-bar #calNav button,.drawer,.d-bg,.toast,#listCtl{display:none!important}
+  .hdr{position:static}
+  body{background:#fff}
+  .page{animation:none}
+}
+.kpis.k3{grid-template-columns:repeat(4,1fr)}
+#impact .card,#impact details.q{margin-bottom:12px}
+#impact .ch{height:220px}
+.aid{color:var(--mut);font-size:11px;font-weight:500;margin-left:4px}
+.cty-row{display:grid;grid-template-columns:190px 1fr 40px 56px;gap:14px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.cty-row:last-child{border-bottom:none}
+.cty-n{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--ink)}
+.cty-row .sbar{height:10px}
+.cty-row b{text-align:right;color:var(--ink)}
+@media(max-width:900px){.kpis.k3{grid-template-columns:1fr 1fr}.cty-row{grid-template-columns:1fr 1fr 30px 50px}}
+/* ===== impacto: pulido ===== */
+#impact .card,#impact details.q{border-radius:18px;padding:16px 20px}
+.imp-hdr{border-radius:18px;padding:18px 24px}
+.imp-hdr h2{font-size:22px;letter-spacing:-.01em}
+.imp-hdr p{margin:4px 0 0}
+#impact .kpi{border-radius:18px;padding:16px 18px;border-top-width:4px}
+#impact .kpi-icon{width:42px;height:42px;border-radius:13px;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 0 10px}
+#impact .kpi-val{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin:2px 0 6px}
+.u{font-size:13px;font-weight:700;color:var(--mut);letter-spacing:.08em;margin-right:8px;vertical-align:middle}
+.kpi-hero{background:linear-gradient(135deg,#0F1834 0%,#223260 100%)!important;border-top-color:var(--orange)!important}
+.kpi-hero .kpi-lbl{color:#F7B955}
+.kpi-hero .kpi-val{color:#fff!important;font-size:34px!important}
+.kpi-hero .u{color:#F7B955}
+.kpi-hero .kpi-icon{background:rgba(255,255,255,.12)!important}
+.kpi-hero .delta{background:rgba(255,255,255,.14);color:#fff}
+.kpi-hero::after{background:rgba(237,139,8,.18)!important}
+.donut{--p:100;width:128px;height:128px;border-radius:50%;background:conic-gradient(var(--orange) calc(var(--p)*1%),var(--panel2) 0);display:grid;place-items:center;position:relative;flex:none}
+.donut::before{content:"";position:absolute;inset:15px;background:var(--panel);border-radius:50%}
+.donut span{position:relative;text-align:center;line-height:1.1}
+.donut b{display:block;font-size:30px;color:var(--ink);font-weight:800}
+.donut small{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.cty-wrap{display:flex;align-items:center;gap:32px;padding:6px 0 4px}
+.cty-list{flex:1}
+.cty-row{grid-template-columns:170px 1fr 36px 58px}
+.stbl th.num,.stbl td.num{text-align:right}
+.stbl td{padding:10px 8px}
+.stbl td.dt{font-weight:700;color:var(--ink)}
+.stbl td.rsv{font-variant-numeric:tabular-nums;color:var(--mut);font-size:12px}
+tr.post td{background:rgba(237,139,8,.07)}
+tr.pre td{opacity:.6}
+.ag{display:flex;align-items:center;gap:10px}
+.ag small{display:block;color:var(--mut);font-size:11px;margin-top:1px;margin-left:0}
+.av{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex:none;box-shadow:0 2px 6px rgba(15,24,52,.18)}
+.pill-st{display:inline-flex;align-items:center;gap:6px}
+.pill-st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.mom{font-size:11px;font-weight:600;border-radius:99px;padding:3px 10px}
+.mom.mp{background:var(--orangesoft);color:var(--oranged)}
+.mom.mo{background:var(--panel2);color:var(--mut)}
+details.q summary{font-size:14px;display:flex;align-items:center;gap:8px}
+@media(max-width:900px){.cty-wrap{flex-direction:column;align-items:flex-start}.cty-row{grid-template-columns:1fr 1fr 30px 50px}}
+.imp-eye{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--oranged);margin-bottom:6px}
+.imp-eye::before{content:"";width:22px;height:3px;border-radius:2px;background:var(--orange)}
+.imp-hdr h2{font-size:32px!important;font-weight:800;letter-spacing:-.025em;line-height:1.1;margin:0;background:linear-gradient(90deg,var(--ink) 0%,var(--ink) 45%,#ED8B08 100%);-webkit-background-clip:text;background-clip:text;color:transparent;display:block;width:fit-content}
+.imp-hdr p{margin-top:8px!important}
+.imp-hdr.one{padding:14px 24px;align-items:center;flex-wrap:nowrap}
+.imp-line{display:flex;align-items:center;gap:18px;min-width:0;flex-wrap:nowrap}
+.imp-line .imp-eye{margin:0;white-space:nowrap}
+.imp-line h2{font-size:30px!important;white-space:nowrap}
+.imp-meta{color:var(--mut);font-size:13px;white-space:nowrap;border-left:1px solid var(--line);padding-left:18px}
+.imp-meta b{color:var(--ink)}
+.imp-line .tags{flex-wrap:nowrap}
+@media(max-width:1100px){.imp-hdr.one{flex-wrap:wrap}.imp-line{flex-wrap:wrap;gap:8px 14px}.imp-meta{border-left:none;padding-left:0}}
+/* impacto compacto: entra todo en una pantalla */
+#impact .kpis.k3{gap:10px;margin-bottom:10px}
+#impact .mini .kpi{padding:10px 14px;border-radius:14px;border-top-width:3px;gap:12px}
+#impact .mini .kpi-icon{width:38px;height:38px;border-radius:11px;font-size:18px;margin:0}
+#impact .mini .kpi-val{font-size:24px;margin:0 0 2px}
+#impact .kpi-hero .kpi-val{font-size:26px!important}
+#impact .mini .kpi-lbl{margin:0}
+#impact .u{font-size:11px;margin-right:6px}
+#impact .card,#impact details.q{padding:10px 16px;margin-bottom:10px;border-radius:14px}
+#impact .card-hdr{margin-bottom:4px}
+#impact .ch{height:168px}
+#impact .card-title{font-size:13px}
+.imp-hdr.one{padding:10px 20px;margin-bottom:10px;border-radius:14px}
+.imp-line h2{font-size:24px!important}
+#impact .donut{width:78px;height:78px}
+#impact .donut::before{inset:10px}
+#impact .donut b{font-size:20px}
+#impact .donut small{font-size:8px}
+#impact .cty-wrap{padding:0;gap:22px}
+#impact .cty-row{padding:4px 0}
+#impact details.q summary{font-size:13px}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-l">
+    <svg class="logo-svg" width="116" height="20" viewBox="0 0 196.8 34" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <g id="wordmark-hotel">
+        <path d="M105.206 0.247H101.17V33.962H105.206V0.247Z" fill="white"/>
+        <path d="M88.689 9.179H84.313C79.116 9.179 74.887 13.807 74.887 19.495V23.647C74.887 29.335 79.116 33.962 84.313 33.962H88.689C88.744 33.962 88.797 33.953 88.852 33.951H96.217V29.825H88.566V29.836H84.313C81.266 29.836 78.78 27.182 78.668 23.876H98.104C98.105 23.799 98.115 23.723 98.115 23.645V19.493C98.115 13.806 93.886 9.179 88.689 9.179ZM94.345 19.921H78.657V19.495C78.657 16.081 81.195 13.305 84.313 13.305H88.689C91.808 13.305 94.345 16.081 94.345 19.495V19.921Z" fill="white"/>
+        <path d="M61.989 4.72H58.218V23.899H58.231C58.355 29.47 62.525 33.962 67.646 33.962H72.021C72.175 33.962 72.326 33.945 72.477 33.937V29.81C72.326 29.824 72.175 29.836 72.021 29.836H67.646C64.528 29.836 61.99 27.06 61.99 23.647V23.375H61.988V13.417H72.491V9.448H61.989V4.72Z" fill="white"/>
+        <path d="M46.322 9.179H41.947C36.75 9.179 32.521 13.806 32.521 19.495V23.647C32.521 29.334 36.75 33.962 41.947 33.962H46.322C51.52 33.962 55.748 29.335 55.748 23.647V19.495C55.748 13.806 51.52 9.179 46.322 9.179ZM51.978 23.647C51.978 27.06 49.441 29.836 46.322 29.836H41.947C38.829 29.836 36.291 27.06 36.291 23.647V19.495C36.291 16.081 38.829 13.305 41.947 13.305H46.322C49.441 13.305 51.978 16.082 51.978 19.495V23.647Z" fill="white"/>
+        <path d="M25.366 14.259H4.284V0H0V33.962H4.284V18.553H25.366V33.962H29.65V0H25.366V14.259Z" fill="white"/>
+      </g>
+      <g id="wordmark-do-icon" transform="translate(105.206, 0.074)">
+        <path d="M51.452 0.001H46.791C39.546 0.001 33.673 6.428 33.673 14.357V19.457C33.673 27.384 39.546 33.812 46.791 33.812H51.452C58.697 33.812 64.569 27.385 64.57 19.458V14.358C64.57 6.428 58.698 0.001 51.452 0.001ZM58.914 18.997C58.914 23.761 55.386 27.623 51.033 27.623H46.791C42.67 27.623 39.328 23.967 39.328 19.457V14.357C39.328 9.847 42.67 6.189 46.791 6.189H51.452C55.573 6.189 58.914 9.845 58.914 14.356V18.997Z" fill="#ED8B08"/>
+        <path d="M18.564 0H0L0.053 33.799H7.049C7.17 33.803 7.286 33.814 7.411 33.814H18.567C25.406 33.814 30.951 27.746 30.951 20.26V13.555C30.949 6.07 25.404 0.001 18.564 0.001V0ZM25.295 20.259H25.294C25.294 24.706 22 27.623 17.936 27.623H8.039C6.262 27.623 5.716 27.028 5.54 26.831C5.237 26.492 5.289 25.428 5.288 24.418V9.396C5.307 8.385 5.159 7.418 5.54 6.983C5.715 6.782 6.262 6.189 8.039 6.189H18.566C22.283 6.189 25.295 9.487 25.295 13.554V20.259Z" fill="#ED8B08"/>
+        <path d="M91.579 17.129H91.57C91.551 16.719 91.382 16.32 91.04 16.093L67.674 0.74C66.815 0.168 65.818 1.18 66.16 2.283C67.148 5.458 70.179 10.641 70.005 17.137H70.003C70.004 17.156 70.003 17.174 70.004 17.194C70.003 17.213 70.004 17.233 70.003 17.252H70.005C70.181 23.749 67.153 28.933 66.167 32.108C65.824 33.212 66.821 34.221 67.681 33.649L91.039 18.282C91.381 18.055 91.55 17.657 91.569 17.246H91.578C91.578 17.227 91.574 17.208 91.574 17.19C91.574 17.169 91.58 17.15 91.579 17.129Z" fill="#ED8B08"/>
+      </g>
+    </svg>
+    <div class="hdr-title">Iniciativas HotelDO<small>HTML</small></div>
+  </div>
+  <div class="hdr-r"><div class="chips">
+    <span class="chip" id="chipRange">📅 —</span>
+    <span class="chip" id="chipTotal">📋 —</span>
+    <span class="chip live">● Actualizado 2026-10-29</span>
+  </div>
+  <div class="tools">
+    <button class="tbtn" id="bLink" title="Copiar link con los filtros y la vista actuales">🔗 Link</button>
+    <button class="tbtn" id="bPdf" title="Imprimir o guardar como PDF">🖨 PDF</button>
+    <button class="tbtn" id="bPres" title="Modo presentación (Esc para salir)">🖥 Presentar</button>
+    <button class="tbtn" id="bTheme" title="Modo claro / oscuro">🌙</button>
+    <button class="tbtn" id="bZm" title="Achicar">A−</button><button class="tbtn" id="bZp" title="Agrandar">A+</button>
+  </div></div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-p="lista">🗂️ Iniciativas</button>
+  <button class="tab imp" data-p="impacto" id="tabImpacto" style="display:none"></button>
+</nav>
+
+<div class="fbar">
+  <div class="fl"><label>Buscar</label><input type="text" id="q" placeholder="Iniciativa o detalle…"></div>
+  <div class="fl"><label>País</label><div class="ms-wrap" id="ms-wrap-country"></div></div>
+  <div class="fl"><label>Año</label><div class="ms-wrap" id="ms-wrap-year"></div></div>
+  <div class="fl"><label>Categoría</label><div class="ms-wrap" id="ms-wrap-cat"></div></div>
+  <div class="fl"><label>Desde</label><input type="date" id="dFrom"></div>
+  <div class="fl"><label>Hasta</label><input type="date" id="dTo"></div>
+  <button class="btn-clear" id="clearAll">🧹 Limpiar filtros</button>
+  <span class="fcount" id="fcount"></span>
+</div>
+
+<main class="wrap">
+  <section class="page active" id="p-lista">
+    <div class="view-bar">
+      <div class="seg" id="vSeg"><button data-v="cal" class="on">📅 Mes</button><button data-v="week">🗓️ Semana</button><button data-v="year">📊 Año</button><button data-v="list">☰ Lista</button></div>
+      <span id="calNav" style="display:flex;align-items:center;gap:6px"><button class="nav-b arr" data-n="-1" aria-label="Anterior">‹</button><span class="cal-t" id="calT"></span><button class="nav-b arr" data-n="1" aria-label="Siguiente">›</button><button class="nav-b hoy" data-n="0">Hoy</button></span>
+      <span id="listCtl"><label>Ordenar <select id="sortSel"><option value="date-desc">Fecha ↓ (recientes)</option><option value="date-asc">Fecha ↑ (antiguas)</option><option value="name">Nombre A–Z</option><option value="cat">Categoría</option></select></label><label>Agrupar <select id="grpSel"><option value="month">Por mes</option><option value="year">Por año</option><option value="cat">Por categoría</option><option value="none">Sin agrupar</option></select></label></span>
+    </div>
+    <div id="cal"></div>
+    <div id="list"></div>
+  </section>
+
+  <section class="page" id="p-impacto"><div id="impact"></div></section>
+
+</main>
+
+<div class="d-bg" id="dBg"></div>
+<aside class="drawer" id="drawer"><div class="d-hd"><b id="dTitle"></b><button id="dClose" aria-label="Cerrar">✕</button></div><div id="dBody"></div></aside>
+<div class="toast" id="toast"></div>
+
+<script>
+const RAW = [["Combinaciones de MDP con HDO pay","2026-10-26","AR,CL,MX","","Primero RO en MX, AR y CL. Ahora se puede combinar aunque HDO Pay no tenga saldo suficiente para pagar la totalidad de la reserva."],["Link de pago en hoteles non ref","2026-10-19","BR,CO,PE","","RO de link de pago en hoteles non ref"],["Pago diferido | AR","2026-10-19","AR","","Pago diferido en USD (no se habilita en ARS)"],["Link de pago en hoteles non ref","2026-10-13","AR,CL","","Parte II de RO"],["Link de pago en Hoteles NON REF","2026-09-29","MX","","Solo MX classic para pruebas. Ante error de booking, cancelación y RO automático. Rollout MX terminado el 13/10."],["Cambios en CHK | Part I","2026-09-30","Todos","","Hito 3 de Payment Hub - Preguntas en el CHK"],["Vuelos en USA","2026-09-16","US,PA","","Solo USA. En todos los channels salvo silver (concentra agencias API)."],["FRAMI - nuevos mercados","2026-09-11","AR,CL,CO,MX,PE","",""],["Visualización Tarifas netas en Shopping","2026-09-10","MX","","Piloto de tarifas netas en shopping para MX channel Gold"],["PI de Asistencias en hoteles","2026-09-10","Todos","",""],["Rollout (Prefondeo) Anticipo HDO Pay","2026-09-07","CO,MX","","Las agencias anticipan su cuenta por transferencia; HotelDO valida el comprobante y el saldo queda disponible en el checkout."],["Frami - agente IA - 2da prueba 950 agencias","2026-08-26","BR","",""],["Exoneraciones para Disney","2026-08-21","Todos","","Exoneración (EXO) en pre check-in desde Mi Reserva, con creación automática de tarea de PI y mail al comercial."],["Comparación de cotizaciones","2026-08-19","Todos","","Aplica a todos los productos; comparación con detalle en hoteles, vuelos, paquetes y actividades."],["Frami - agente IA - 1ra prueba","2026-08-12","BR","",""],["Ver y Descargar liquidación (cuenta corriente)","2026-07-31","","",""],["Reservas a entrar en penalidad futura - Correo de vencimientos","2026-07-30","Todos","","Mail con próximos vencimientos de reservas 'Confirma ahora, paga después'."],["HDO Academy","2026-07-28","BR,AR,MX,CO,CL,PE","","MVP habilitado."],["Previsualización de facturas sin descarga","2026-07-16","Todos","","Ver el detalle de un comprobante en BO Mambo sin descargarlo."],["Combinar medios de pago (doc. no fiscal)","2026-07-01","AR","","Documento no fiscal en Mambo para reservas con cuenta corriente: 'Ver Liquidación'."],["Asistencia en PI - Paquetes","2026-06-17","Todos","","Asistencias en PI de paquetes en todos los channels y mercados con PI configurada."],["Anticipo (AR-ARS)","2026-06-16","AR","","Anticipo de cuenta por transferencia bancaria."],["Autogestión cta cte - Calendario de vencimientos INV","2026-06-16","AR","","Apartado en Pagos-Facturación con deuda agrupada por estado."],["Reporte Cuenta Corriente","2026-06-04","Todos","","Nuevos campos: AG, AP, SSN, MYOB_CUSTOMER, razón social."],["3DS CO","2026-05-22","CO","","Prendido de prueba el 14/5 y apagado por falla en cobros. Prendido y apagado de nuevo el 20/5."],["Combinar medios de pago","2026-05-20","AR,BR,MX","","Scheduler en HotelDO. Apagado el 22/5 por bug y vuelto a prender el mismo día."],["Carrito | bimoneda","2026-05-21","AR","","Carrito en moneda local y USD."],["Pago diferido CO CL y PE","2026-05-14","CL,CO,PE","","Solo channel classic para pruebas."],["Switch de USD en Paquetes","2026-05-14","AR","",""],["Actualización Tipificación Consultas (Ayúdame con mi reserva)","2026-04-30","Todos","","Todas las tipificaciones de Consultas actualizadas."],["Comisiones x producto Paquetes","2026-04-23","Todos","","Discriminación de comisiones en paquetes: si se cancela el hotel, el vuelo queda con la comisión correcta."],["Nequi","2026-04-20","CO","",""],["Calendario - Reservas a entrar en penalidad futura","2026-03-26","Todos","",""],["Cambio Nexo por Toqan IA","2026-03-23","AR,CL,CO,EC,MX,PE,US,PA","","2do paso de Pago comisiones: extracción de datos de facturas con Toqan IA."],["Buscador de reservas en INV/EC","2026-03-18","Todos","","Nuevo filtro en mambo y client."],["Unificación de cuenta corriente","2026-03-17","AR","",""],["Descargar docs fiscales en reservas canceladas","2026-03-16","Todos","","Client permite descargar documentos fiscales de reservas canceladas."],["Pago Comisiones","2026-03-03","PA","","1er paso: se cambia Nexo por Toqan IA para extraer datos de facturas."],["TC en USD - En AR","2026-02-25","AR","","Hoteles y vuelos INT; paquetes internacionales en marzo 2026."],["Visualizar facturas de Brasil","2026-02-13","BR","","NC y facturas visibles en BO Client y BO Mambo."],["Cambio manual Hoteles (Proveedor: Desp)","2026-02-10","BR,CO,MX,US,PA","","Opción de cambio manual para OP en lugar de crear una consulta."],["Alta cruceros","2026-02-05","BR","","4/2 primeras 50 agencias con credenciales Krooze. 13/4 redirect al 100%."],["Devolución HDO Pay para cancelación (vuelos)","2026-02-04","Todos","","Habilitado para agencias HTML. Pendiente rollout ONA."],["Nubank en BR","2026-01-28","BR","",""],["Migración de HDO PAY","2026-01-26","Todos","","Ya no lo envía Vader: es una regla de Business Rules."],["Migración Cta Cte a B rules","2026-01-20","Todos","","Cuenta corriente pasa de Vader a una regla de Business Rules."],["Vertical Disney - PA","2026-01-19","US,PA","",""],["Autogestión cta cte AR - visual de INV","2026-01-19","AR","",""],["Nuevas verticales en USA y PA","2025-12-10","US,PA","","Actividades y Tickets (este último solo PA). Actividades prendida el 3/12/25."],["Rediseño Cotizaciones","2025-12-10","Todos","","Prendido en todas las agencias HTML el 10/12/2025."],["Pago Diferido","2025-11-10","MX","","Prendido en todos los channels."],["Doble factor de Autenticación (2FA)","2025-09-24","Todos","Seguridad","3er intento de prendida el 4/12, con rollback el mismo día."],["Gestor de pagos en USA","2025-09-23","US,PA","","23/09 USA, 30/09 PA."],["Promesa de pago AR (ARS & USD)","2025-09-23","AR","","Solución en AR$ para doméstico y USD para internacional."],["Solicitar datos de facturación al regularizar promesa","2025-09-17","Todos","",""],["Comisiones en el BO de agencia","2025-09-11","Todos","","8/9 CO,PE,EC,CL · 11/9 MX,US,PA · 17/9 AR y BR."],["Envío de mail de pasajero a la aerolínea (VIVA)","2025-09-09","MX","",""],["Migración de Cuenta Corriente y HDO Pay a BRules","2025-09-03","Todos","","Permite ofrecer descuento en estos medios de pago y mayor granularidad para prender/apagar."],["Carrito (Hoteles, Vuelos y Traslados)","2025-08-18","CL,CO,EC,MX,PE","","Platinum 25/08; BR todo menos classic 09/09."],["Switch bimonetario en hoteles","2025-08-07","AR","",""],["Reservas Non Ref a Emisión","2025-08-04","Todos","","30/07 primeras 2 agencias, 04/08 resto."],["Cuenta Corriente Vuelos, Tickets y Traslados","2025-08-04","CL,EC,PE,US,PA","","04/08 EC · 19/09 PE,US,PA · 09/10 CL."],["Pestaña 'Mis Cotizaciones' para las agencias","2025-08-25","Todos","","10/07 todo menos classic. 25/08 classic."],["Cuenta Corriente Actividades, Autos & Asistencias","2025-07-31","AR,BR,CL,CO,EC,PE,US,PA","","31/07 BR,CO · 12/08 AR · 29/08 EC,CL · 19/09 PE,US,PA."],["Modificación de comisiones desde el BO","2025-07-21","Todos","Herramientas de Agencia","21/07 agencias amigas · 8/9 CO · 11/9 MX,US,PA · 17/9 AR,BR."],["ABM de usuarios","2025-07-21","Todos","","21/07 agencias amigas · PE,EC,CL · 8/9 CO · 11/9 MX,US,PA · 17/9 AR,BR."],["MercadoPago Chile","2025-07-07","CL","",""],["Retener Fee & Comisión en Cancel (Autos)","2025-07-03","BR","","Fix de flujo de exoneración el 02/09."],["Curva de Cobranza","2025-07-02","Todos","Otros","Reporte de cobros de cuenta corriente con la fecha correcta de cada pago para calcular el % abonado por mes."],["White Label HDO","2025-06-27","Todos","Herramientas de Agencia",""],["Cuenta Corriente Vuelos, Tickets y Traslados","2025-06-25","CO","Medios de Pago",""],["Determinar comisión al regularizar promesa de pago","2025-06-24","Todos","Medios de Pago",""],["TD en USD","2025-06-23","AR","Medios de Pago","Todas las agencias con descriptor propio. Igual funcionamiento que TD en pesos."],["IVA Colombia","2025-06-09","CO","Tarifa & Comisiones","Prendido el 06/05 y apagado."],["Mostrar comisión en PI","2025-05-05","Todos","Tarifa & Comisiones","Comisión de cada producto en la página intermedia (paquetes y hoteles)."],["One Step Checkout","2025-05-05","Todos","Medios de Pago",""],["Expiración de contraseña","2025-05-07","Todos","Seguridad","5/5 EC · 6/5 PE,CL,US,PA · 7/5 CO,BR,AR · 19/5 MX y AR."],["Robustecimiento de Contraseña (caracteres)","2025-04-08","Todos","Seguridad",""],["Modificar Pago Cash en Promesa","2025-04-28","Todos","Medios de Pago",""],["Paquetes Netos","2025-04-29","BR","Paquetes",""],["Paquetes Netos","2025-04-28","CO","Paquetes",""],["Paquetes Netos","2025-05-08","CL,PE","Paquetes",""],["Paquetes Netos AR (USD y ARS)","2025-05-28","AR","Paquetes",""],["Paquetes Netos","2025-03-05","MX","Paquetes",""],["Flujo arma tu vuelo","2025-05-28","Todos","Vuelos","Comprar por separado vuelos 2OW dentro del flujo de vuelos."],["Cuenta Corriente Vuelos","2025-05-28","AR","Medios de Pago",""],["Combinar 2 TC","2025-05-15","Todos","Medios de Pago","Combinar 2 tarjetas directo desde el checkout, sin pasar por el gestor."],["Comisiones en dólares","2025-05-16","AR","Tarifa & Comisiones","Las agencias cobran sus comisiones en USD."],["Bimonetario en todos los channels y productos (excepto Packs)","2025-05-16","AR","Tarifa & Comisiones","Tarifa en dólares en todos los channels."],["Convivencia HDO Pay y Cuenta corriente","2025-05-21","Todos","Medios de Pago","Pueden convivir sin restricciones."],["Prellenado Datos Facturación","2025-05-20","AR","Medios de Pago",""],["Cuenta Corriente Tickets y Traslados","2025-05-19","AR","Medios de Pago",""],["Cuenta Corriente Vuelos, Tickets y Traslados","2025-05-19","BR","Medios de Pago",""],["Fix Neteo de Traslados","2025-05-26","Todos","ONA","Mejora de competitividad de tarifas."],["Cambio voucher autos","2025-03-21","Todos","ONA","Se oculta el precio del auto en el voucher."],["3DS BR","2025-03-10","BR","Medios de Pago",""],["Cuenta corriente USD (Hoteles)","2025-02-27","AR","Medios de Pago",""],["Mostrar tiempo pre-booking Gestor de Pagos, Pago diferido y Pago remoto","2025-02-20","Todos","Medios de Pago","Muestra el tiempo correcto al elegir hotel non ref con solo 1 hora."],["Fix Revenue reglas 1R Prob PP a 1 (100%)","2025-02-14","Todos","Tarifa & Comisiones","Regla de 1R que cambiaba proveedores al azar; ahora gana siempre el más barato."],["Comisiones por aerolíneas","2025-01-28","Todos","Tarifa & Comisiones","Comisión diferencial por aerolínea."],["3DS MX","2025-01-27","MX","Medios de Pago","Prendido el 24/01 en platinum."],["MercadoPago","2025-01-27","AR","Medios de Pago",""],["Modificar Flujo Cash","2025-01-15","Todos","Medios de Pago",""],["Pago Remoto (Link de Pago)","2025-01-13","Todos","Medios de Pago","Prendido 13/01 en platinum, apagado 31/01, vuelto a prender 04/02 en todo menos paquetes."],["Cuenta Corriente Internacional MEP AR$","2025-01-08","AR","Medios de Pago","Tarifas internacionales con TC MEP."],["App HotelDO","2024-12-10","Todos","Herramientas de Agencia",""],["Carrito de actividades Checkout Multicanal","2024-11-07","Todos","ONA","Carrito de actividades migrado al nuevo checkout."],["HDO Pay MX, AR, EC, PE, CL","2024-11-05","Todos","Medios de Pago","Reembolsos a una wallet en lugar de cupón. Piloto con 10 agencias por país desde 21/10/24."],["CHK por pasos","2024-11-05","Todos","Medios de Pago",""],["Vuelos Netos, Autos y Asistencias México","2024-11-04","MX","Vuelos","Platinum 04/11/24, completo 11/11/24."],["Partners que Operan fuera del Portal","2024-10-04","Todos","Otros",""],["Mostrar Proveedor de Actividades","2024-09-19","Todos","ONA","Se muestra el proveedor en el shopping de actividades."],["Facturación Internacional con RFC Genérico en Preventa HTML","2024-09-19","MX","Otros",""],["Fix Autos Netos","2024-09-18","Todos","Tarifa & Comisiones","Mejora de tarifas de autos."],["Alta de agencias (Raso): asociación de código de sucursal a razón social","2024-09-16","Todos","Otros",""],["Alta de agencias (Raso): perfil comercial para carga de documentos","2024-09-16","Todos","Otros",""],["Bimonetario MEP Vuelos en Paquetes","2024-08-13","AR","Tarifa & Comisiones",""],["Bimonetario MEP Vuelos Standalone","2024-08-07","AR","Tarifa & Comisiones",""],["Bloquear Gestor de Pagos en contexto USD Argentina","2024-07-29","AR","Medios de Pago",""],["Prendida Vertical VR","2024-07-04","Todos","Hoteles",""],["Autos Brasil","2024-07-02","BR","ONA",""],["Vuelos Netos Colombia","2024-07-02","CO","Vuelos",""],["Monedero + Gestor de Pagos","2024-07-02","BR,CO","Medios de Pago",""],["Bimonetario MEP (todo excepto Autos y vuelos, idem B2C)","2024-06-14","AR","Tarifa & Comisiones","02/07 se prendió autos en bimonetario desde B2C."],["DEBIN USD VUELOS NETOS","2024-05-16","AR","Medios de Pago",""],["Desactivar 'Mejora tu Auto' en HotelDO","2024-05-14","Todos","ONA","Rompía el checkout al tomar tarifas prepagas."],["Recupero cash en riesgo reject","2024-05-08","Todos","Medios de Pago",""],["DEBIN Argentina 24hs","2024-04-23","AR","Medios de Pago","Duración de DEBIN extendida de 3 a 24 hs."],["Monedero Brasil","2024-04-16","BR","Medios de Pago",""],["Asistencias Netas Brasil","2024-04-05","BR","ONA",""],["HotelDO Cuenta Corriente (API + HTML) Chile","2024-03-25","CL","Otros",""],["HotelDO Cuenta Corriente (API + HTML) Arg Doméstico","2024-03-25","AR","Otros",""],["HotelDO Cuenta Corriente (API + HTML) Perú","2024-03-25","PE","Otros",""],["Desactivación de Check Out Pasos Mobile","2024-02-29","Todos","Otros",""],["HotelDO Cuenta Corriente (API + HTML) Ecuador","2024-02-22","EC","Medios de Pago",""],["Promesa de Pago Nativa","2024-02-21","Todos","Medios de Pago",""],["Vuelos Netos Argentina","2024-02-14","AR","Vuelos",""],["Vuelos Netos Ecuador","2024-02-01","EC","Vuelos",""],["Vuelos Netos Chile","2024-02-01","CL","Vuelos",""],["Vuelos Netos Perú","2024-02-01","PE","Vuelos",""],["Traslados MX","2024-01-18","MX","ONA",""],["Checkout Multicanal API","2024-01-16","Todos","Otros",""],["Migración Argentina","2024-01-26","AR","Otros",""],["Checkout Multicanal (Autos y Asistencias)","2023-12-19","Todos","Otros",""],["Asistencias Netas Colombia","2023-12-14","CO","ONA",""],["Vuelos Netos Brasil","2023-12-04","BR","Vuelos",""],["Migración Chile a HotelDO","2023-11-28","CL","Otros",""],["Migración Perú a HotelDO","2023-11-28","PE","Otros",""],["Migración Ecuador a HotelDO","2023-11-15","EC","Otros",""],["Autos Colombia","2023-11-13","CO","ONA",""],["Múltiple uso de Cupones","2023-10-25","Todos","Medios de Pago",""],["Promesa de Pago + monedero","2023-10-17","Todos","Medios de Pago",""],["Monedero CO (vía cancelaciones)","2023-09-25","CO","Herramientas de Agencia",""],["Operador de Traslados","2023-09-08","Todos","ONA",""],["Checkout Multicanal (Hoteles, Actividades y Traslados)","2023-08-22","Todos","Otros",""],["DEBIN AR","2023-08-08","AR","Medios de Pago",""],["Múltiples Medios de Pago","2023-08-07","Todos","Medios de Pago",""],["Vuelos + 2 Alojamientos","2023-07-06","Todos","Paquetes",""],["Migración AFF MX a HotelDO (Híbrido)","2022-10-20","MX","Otros",""],["Migración AFF Col a HotelDO","2022-09-28","CO","Otros",""],["Migración AFF Brasil a HotelDO","2022-09-05","BR","Otros",""]];
+
+const MONTHS=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const MONTHS_L=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const _n=new Date(),NOW=new Date(Date.UTC(_n.getFullYear(),_n.getMonth(),_n.getDate()));
+const iso=dt=>dt.toISOString().slice(0,10),TODAY_ISO=iso(NOW);
+const mondayOf=dt=>{const x=new Date(dt);x.setUTCDate(x.getUTCDate()-((x.getUTCDay()+6)%7));return x;};
+const NAVY="#223260",ORANGE="#ED8B08";
+const DATA=RAW.map(([n,d,c,k,t])=>({
+  name:n,date:d,countries:c?c.split(","):[],cat:k||"Sin categoría",note:t,
+  y:+d.slice(0,4),m:+d.slice(5,7)-1
+})).sort((a,b)=>b.date.localeCompare(a.date));
+const isRb=d=>/rollback|apag/i.test(d.note);
+
+/* ---------- impacto por iniciativa ---------- */
+// datos de impacto: los genera refresh_iniciativas.py (data.json)
+const IMPACT_CFG={"pd_ar":{"title":"Pago diferido AR","launch":"2026-10-19","partial":"2026-10-30","method":"DEFERRED_PAYMENT","asof":"2026-10-29","daily":[["2026-10-19",164,77018.85],["2026-10-20",138,76247.85],["2026-10-21",162,109842.89],["2026-10-22",152,86913.05],["2026-10-23",162,119815.08],["2026-10-24",55,50833.43],["2026-10-25",22,6349.98],["2026-10-26",152,105471.63],["2026-10-27",163,139730.11],["2026-10-28",160,114268.76],["2026-10-29",10,3021.43]],"bookings":[["2026-10-21","Cancelado","AG00118320","Travexa","156894362000",2294.54],["2026-10-22","Cancelado","AG00083776","SK GROUP","32646362100",3331.88],["2026-10-22","Confirmado","AG00125015","Aurus Travel","761262362100",1873.23],["2026-10-23","Confirmado","AG00091199","Javier Fioriio","888542362200",5760.66],["2026-10-26","Confirmado","AG00109372","Feliz Viaje Bahia Blanca","701881362500",2142.32],["2026-10-27","Cancelado","AG00121720","Jesica Travel","560395362600",4326.15],["2026-10-27","Confirmado","AG00083776","SK GROUP","38520362600",3087.6099999999997],["2026-10-28","Confirmado","AG00121720","Jesica Travel","392713362700",4335.130000000001]],"country":"AR","query":"select cast(bi.creation_date as varchar) as date, bi.transaction_status as estado, bi.partner_id, bi.agency_name, bi.transaction_code as reserva, sum(bi.gb) as gb\nfrom analytics.bi_sales_fact_sales_recognition bi\nleft join lake.channels_bo_product product on bi.origin_product_id = product.transaction_id\nwhere bi.channel in ('hoteldo-html-platinum','hoteldo-html-gold','hoteldo-html-silver','hoteldo-html-classic')\n  and bi.creation_date >= date '2026-10-01'\n  and bi.partition_period >= '2026-10'\n  and bi.country_code = 'AR'\n  and product.payment_methods = 'DEFERRED_PAYMENT'\n  and lower(bi.agency_name) not like '%test%'\ngroup by 1,2,3,4,5 order by 1,2"},"ldp":{"kind":"ldp","title":"Link de pago en hoteles non ref","asof":"2026-10-29","partial":"2026-10-30","daily":[["2026-09-29",403740,241481,18552,0,174507,7],["2026-09-30",383577,238409,4912,0,105600,7],["2026-10-01",454372,199950,6711,0,126027,7],["2026-10-02",431993,239497,6510,619,153313,9],["2026-10-03",227865,148008,2931,0,127141,3],["2026-10-04",145156,101771,1628,0,50247,3],["2026-10-05",430488,240626,1642,0,109662,4],["2026-10-06",550146,301047,4704,0,139300,4],["2026-10-07",600709,286984,2902,0,167471,3],["2026-10-08",464784,293693,6762,105,137076,11],["2026-10-09",496306,284633,7127,0,155922,10],["2026-10-10",236981,153403,8192,0,80566,8],["2026-10-11",111009,77050,7018,0,33156,5],["2026-10-12",214368,97553,5050,0,110496,7],["2026-10-13",419099,232265,4437,0,244106,8],["2026-10-14",438976,225039,14784,2782,236713,9],["2026-10-15",382019,272220,6855,0,157201,8],["2026-10-16",442156,266009,8585,2646,260374,16],["2026-10-17",238725,154602,2320,0,134018,1],["2026-10-18",82318,67967,2647,0,37241,2],["2026-10-19",353463,172722,15544,749,542478,36],["2026-10-20",399135,191129,37049,754,628066,57],["2026-10-21",390307,233052,54556,0,677915,61],["2026-10-22",378035,176929,53191,0,608155,59],["2026-10-23",487032,195349,34463,238,717082,57],["2026-10-24",218023,116182,39969,0,374173,45],["2026-10-25",78324,52157,5217,0,135697,14],["2026-10-26",350613,144812,32339,1313,529078,47],["2026-10-27",322388,170127,53134,0,545649,75],["2026-10-28",342617,203245,41051,0,586913,63],["2026-10-29",38796,16044,2052,0,56891,6]],"countries":[["MX","2026-09-29",170,157934,125,3280327,5221,237,28],["AR","2026-10-13",16,13701,11,720100,781,26,2],["CL","2026-10-13",25,17738,20,475032,310,45,5],["BR","2026-10-19",387,267165,287,2918806,3869,332,72],["CO","2026-10-19",47,32342,41,681608,1253,95,5],["PE","2026-10-19",7,3953,5,66363,82,11,2]],"tot":{"nl":652,"gl":492834,"ag":489,"gt":8142236,"nt":11516,"agt":4127,"nc":746,"gc":629532,"rep":114,"hnc":6092},"remote":[["2026-09-29",102421,38545],["2026-09-30",65767,16441],["2026-10-01",57350,18771],["2026-10-02",72341,19376],["2026-10-03",47083,7126],["2026-10-04",26062,6133],["2026-10-05",68337,19392],["2026-10-06",77273,26960],["2026-10-07",146052,13906],["2026-10-08",130330,32587],["2026-10-09",81354,34755],["2026-10-10",52115,21273],["2026-10-11",12179,9774],["2026-10-12",31048,7493],["2026-10-13",77912,14597],["2026-10-14",68007,24605],["2026-10-15",48706,20184],["2026-10-16",83908,22207],["2026-10-17",35133,16924],["2026-10-18",17162,7148],["2026-10-19",103314,15544],["2026-10-20",63419,37049],["2026-10-21",72257,54556],["2026-10-22",64143,53191],["2026-10-23",103838,34463],["2026-10-24",44428,39969],["2026-10-25",16842,5217],["2026-10-26",79365,32339],["2026-10-27",66992,53134],["2026-10-28",66435,41051],["2026-10-29",2811,2052]],"top":[["AG00058434","Amigos De Viaje","MX",7,16031],["AG00075874","Check In Viagens (Betim - MG)","BR",2,12063],["AG00042756","Destino360","MX",1,8601],["AG00117559","Diez mil pies Viajes AR","AR",1,7879],["AG00082623","Simplifique Turismo (Juiz de Fora - MG) - ASM","BR",2,6772],["AG00058132","Bilhete On (Mogi das Cruzes  SP)","BR",2,6000],["AG00114414","Elite (Capivari do Sul - RS)","BR",2,5497],["AG00073562","SBtur Viagem (Sao Caetano do Sul - SP)","BR",2,5327],["AG00031836","VIAJE POR EL MUNDO SAS","CO",3,5076],["AG00090474","EB Travel Brasil","BR",1,4950]]}}, IMPACT_MAP={"Pago diferido | AR|2026-10-19":"pd_ar","Link de pago en hoteles non ref|2026-10-19":"ldp","Link de pago en hoteles non ref|2026-10-13":"ldp","Link de pago en Hoteles NON REF|2026-09-29":"ldp"};
+const IMPACT={};Object.keys(IMPACT_MAP).forEach(k=>IMPACT[k]=IMPACT_CFG[IMPACT_MAP[k]]);
+
+const $=id=>document.getElementById(id);
+const uniq=a=>[...new Set(a)];
+const PAL=["#3B82F6","#10B981","#8B5CF6","#06B6D4","#F59E0B","#EC4899","#14B8A6","#6366F1","#84CC16","#F97316","#0EA5E9","#A855F7"];
+const CATS=uniq(DATA.map(d=>d.cat)).sort();
+const CATCOL={"Medios de Pago":"#8B5CF6","Otros":"#F59E0B","ONA":"#06B6D4","Tarifa & Comisiones":"#EC4899","Vuelos":"#F97316","Paquetes":"#3B82F6","Seguridad":"#14B8A6","Herramientas de Agencia":"#6366F1","Hoteles":"#10B981","Sin categoría":"#94A3B8"};
+const catCol=c=>CATCOL[c]||PAL[[...c].reduce((a,ch)=>a+ch.charCodeAt(0),0)%PAL.length];
+const CN={AR:"Argentina",BR:"Brasil",CO:"Colombia",MX:"México",CL:"Chile",PE:"Perú",PA:"Panamá",US:"Estados Unidos",EC:"Ecuador",Todos:"Todos los mercados"};
+const flag=c=>c==="Todos"?'<span class="fg-all" title="Todos los mercados">🌎</span>':`<img class="fg" src="https://flagcdn.com/w20/${c.toLowerCase()}.png" alt="${c}" title="${CN[c]||c}" onerror="this.replaceWith(document.createTextNode(this.alt))">`;
+const F={country:[],year:[],cat:[],q:"",from:"",to:"",rb:false};
+const fmtPct=(a,b)=>b===0?(a>0?"nuevo":"="):((a-b)/b*100>=0?"+":"")+Math.round((a-b)/b*100)+"%";
+
+/* ---------- multi-select ---------- */
+const MS_LABEL={country:"Todos",year:"Todos",cat:"Todas"};
+const MS={};
+function msInit(field,values){
+  const wrap=$("ms-wrap-"+field);
+  wrap.innerHTML=`<button class="ms-trigger" type="button">${MS_LABEL[field]}</button>
+    <div class="ms-panel"><div class="ms-search"><input type="text" placeholder="Buscar..."></div>
+    <div class="ms-actions"><button type="button" data-a="all">Seleccionar todo</button><button type="button" data-a="clear">Limpiar</button></div>
+    <div class="ms-list">${values.map(v=>`<label class="ms-item"><input type="checkbox" value="${v}">${field==="country"?flag(v):""}<span>${v}</span></label>`).join("")}</div></div>`;
+  const items=()=>[...wrap.querySelectorAll(".ms-item")];
+  const label=()=>{const sel=F[field];wrap.querySelector(".ms-trigger").textContent=sel.length===0?MS_LABEL[field]:sel.length===1?sel[0]:sel.length+" seleccionados";};
+  MS[field]=vals=>{vals=vals.map(String);items().forEach(i=>{const inp=i.querySelector("input");inp.checked=vals.includes(inp.value);});F[field]=vals;label();};
+  const sync=()=>{
+    F[field]=items().filter(i=>i.querySelector("input").checked).map(i=>i.querySelector("input").value);
+    label();
+    render();
+  };
+  wrap.querySelector(".ms-trigger").onclick=e=>{
+    e.stopPropagation();
+    document.querySelectorAll(".ms-wrap.open").forEach(w=>{if(w!==wrap)w.classList.remove("open")});
+    wrap.classList.toggle("open");
+  };
+  wrap.querySelector(".ms-panel").onclick=e=>e.stopPropagation();
+  wrap.querySelector(".ms-list").onchange=sync;
+  wrap.querySelector(".ms-search input").oninput=e=>{
+    const q=e.target.value.toLowerCase();
+    items().forEach(i=>i.style.display=i.textContent.toLowerCase().includes(q)?"":"none");
+  };
+  wrap.querySelector('[data-a="all"]').onclick=()=>{items().filter(i=>i.style.display!=="none").forEach(i=>i.querySelector("input").checked=true);sync();};
+  wrap.querySelector('[data-a="clear"]').onclick=()=>{items().forEach(i=>i.querySelector("input").checked=false);sync();};
+}
+document.addEventListener("click",()=>document.querySelectorAll(".ms-wrap.open").forEach(w=>w.classList.remove("open")));
+
+msInit("country",uniq(DATA.flatMap(d=>d.countries).filter(c=>c!=="Todos")).sort());
+msInit("year",uniq(DATA.map(d=>d.y)).sort().reverse());
+msInit("cat",uniq(DATA.map(d=>d.cat)).sort());
+
+/* ---------- filtros ---------- */
+function match(d,skip){
+  if(F.q&&!(d.name+" "+d.note).toLowerCase().includes(F.q.toLowerCase()))return false;
+  if(F.country.length&&!(d.countries.includes("Todos")||d.countries.some(c=>F.country.includes(c))))return false;
+  if(F.year.length&&!F.year.includes(String(d.y)))return false;
+  if(skip!=="cat"&&F.cat.length&&!F.cat.includes(d.cat))return false;
+  if(F.from&&d.date<F.from)return false;
+  if(F.to&&d.date>F.to)return false;
+  return true;
+}
+
+/* ---------- render ---------- */
+let charts={};
+function chart(id,cfg){ if(charts[id])charts[id].destroy(); charts[id]=new Chart($(id),cfg); }
+// plugin propio de labels sobre las barras (sin dependencias extra)
+Chart.register({id:"vlabels",afterDatasetsDraw(c,_,o){
+  if(!o||!o.on)return;
+  const ctx=c.ctx,horiz=c.options.indexAxis==="y";
+  ctx.save();ctx.font=`600 ${o.size||10}px Rubik, sans-serif`;ctx.fillStyle="#334155";
+  c.getDatasetMeta(0).data.forEach((b,i)=>{
+    const v=c.data.datasets[0].data[i];if(!v&&!o.zero)return;
+    const t=o.fmt?o.fmt(v):v;
+    if(horiz){ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillText(t,b.x+4,b.y);}
+    else{ctx.textAlign="center";ctx.textBaseline="bottom";ctx.fillText(t,b.x,b.y-(c.config.type==="line"?12:2));}
+  });
+  ctx.restore();
+}});
+const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},vlabels:{on:true}}};
+
+
+/* ---------- estado de vista ---------- */
+const NOWY=NOW.getUTCFullYear(),NOWM=NOW.getUTCMonth();
+let view="cal",calY=NOWY,calM=NOWM,weekStart=mondayOf(NOW),sortBy="date-desc",groupBy="month";
+const DOW=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+const MAXC=2;
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const hasImp=d=>!!IMPACT[d.name+"|"+d.date];
+const longDate=s=>{const [y,m,d]=s.split("-");return `${+d} de ${MONTHS_L[+m-1].toLowerCase()} de ${y}`;};
+const LEG2='<div class="leg2"><span style="color:var(--oranged)">▌con apagado/rollback</span><span style="color:var(--green)">▌con impacto disponible</span><span>Click en una iniciativa para ver el detalle</span></div>';
+function setTitle(inner,n){$("calT").innerHTML=inner+`<span class="cn">${n} ${n===1?"iniciativa":"iniciativas"}</span>`;}
+
+/* ---------- stats ---------- */
+function inWin(d,a,b){const x=(NOW-new Date(d.date))/864e5;return x>=a&&x<b;}
+
+/* ---------- vista mes ---------- */
+const chipHtml=d=>`<div class="chip-i ${isRb(d)?"rb":""} ${hasImp(d)?"im":""}" style="--cc:${catCol(d.cat)}" data-i="${DATA.indexOf(d)}" title="${esc(d.name)} · ${d.countries.join(", ")||"—"}"><span class="cn-t">${d.name}</span><span class="fgs">${d.countries.filter(c=>c!=="Todos").slice(0,3).map(flag).join("")}</span></div>`;
+function renderCal(rows){
+  const start=(new Date(Date.UTC(calY,calM,1)).getUTCDay()+6)%7;
+  const dim=new Date(Date.UTC(calY,calM+1,0)).getUTCDate();
+  const by={};let n=0;
+  rows.forEach(d=>{if(d.y===calY&&d.m===calM){const k=+d.date.slice(8);(by[k]=by[k]||[]).push(d);n++;}});
+  setTitle(`<b>${MONTHS_L[calM]}</b> <span class="cy">${calY}</span>`,n);
+  let h='<div class="cal-grid">'+DOW.map(x=>`<div class="cal-h">${x}</div>`).join("");
+  const cells=Math.ceil((start+dim)/7)*7;
+  for(let i=0;i<cells;i++){
+    const day=i-start+1;
+    if(day<1||day>dim){h+='<div class="cal-c out"></div>';continue;}
+    const key=`${calY}-${String(calM+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+    const list=by[day]||[];
+    h+=`<div class="cal-c ${i%7>=5?"we":""} ${key===TODAY_ISO?"today":""}"><div class="cal-d ${list.length?"has":""}" data-day="${key}">${day}</div>`+
+      list.slice(0,MAXC).map(chipHtml).join("")+
+      (list.length>MAXC?`<button class="more" data-day="${key}">+${list.length-MAXC} más</button>`:"")+"</div>";
+  }
+  $("cal").innerHTML=h+(n?"":'<div class="empty-m">Sin iniciativas prendidas este mes</div>')+"</div>"+LEG2;
+}
+
+/* ---------- vista semana ---------- */
+const weekCard=d=>`<div class="wk-card ${isRb(d)?"rb":""}" style="--cc:${catCol(d.cat)}" data-i="${DATA.indexOf(d)}">${d.name}${hasImp(d)?" 📈":""}<small>${d.countries.map(flag).join("")}<span>${d.cat==="Sin categoría"?"":d.cat}</span></small></div>`;
+function renderWeek(rows){
+  const days=[...Array(7)].map((_,i)=>new Date(weekStart.getTime()+i*864e5));
+  const keys=days.map(iso),by={};let n=0;
+  rows.forEach(d=>{const i=keys.indexOf(d.date);if(i>=0){(by[i]=by[i]||[]).push(d);n++;}});
+  const a=days[0],b=days[6];
+  const lbl=a.getUTCMonth()===b.getUTCMonth()?`${a.getUTCDate()}–${b.getUTCDate()} ${MONTHS[b.getUTCMonth()]}`:`${a.getUTCDate()} ${MONTHS[a.getUTCMonth()]} – ${b.getUTCDate()} ${MONTHS[b.getUTCMonth()]}`;
+  setTitle(`<b>${lbl}</b> <span class="cy">${b.getUTCFullYear()}</span>`,n);
+  $("cal").innerHTML='<div class="wk-grid">'+days.map((dt,i)=>`<div class="wk-col ${i>=5?"we":""} ${keys[i]===TODAY_ISO?"today":""}"><div class="wk-h"><span>${DOW[i]}</span><b>${dt.getUTCDate()}</b></div><div class="wk-b">${(by[i]||[]).map(weekCard).join("")||'<div class="wk-empty">—</div>'}</div></div>`).join("")+"</div>"+LEG2;
+}
+
+/* ---------- vista año (línea de tiempo por categoría) ---------- */
+function renderYear(rows){
+  const yr=rows.filter(d=>d.y===calY);
+  setTitle(`<b>${calY}</b>`,yr.length);
+  const cats=CATS.filter(c=>yr.some(d=>d.cat===c));
+  const cnt={},tot=Array(12).fill(0);
+  yr.forEach(d=>{const k=d.cat+"|"+d.m;cnt[k]=(cnt[k]||0)+1;tot[d.m]++;});
+  const max=Math.max(1,...Object.values(cnt));
+  let h='<div class="yr"><div class="yr-grid"><div class="yr-h" style="text-align:left;padding-left:12px">Categoría</div>'+MONTHS.map(m=>`<div class="yr-h">${m}</div>`).join("");
+  cats.forEach(c=>{
+    h+=`<div class="yr-l"><i style="background:${catCol(c)}"></i>${c}</div>`;
+    for(let m=0;m<12;m++){
+      const v=cnt[c+"|"+m]||0,r=v/max;
+      h+=v?`<div class="yr-c has" data-k="${esc(c)}" data-mm="${m}" style="background:color-mix(in srgb,${catCol(c)} ${Math.round(18+r*72)}%,var(--panel));color:${r>.6?"#fff":"var(--ink)"}">${v}</div>`:'<div class="yr-c"></div>';
+    }
+  });
+  h+='<div class="yr-tot yr-l">Total</div>'+tot.map(v=>`<div class="yr-tot yr-c">${v||""}</div>`).join("");
+  $("cal").innerHTML=h+'</div></div>'+(yr.length?"":'<div class="empty" style="margin-top:12px">Sin iniciativas en este año con los filtros actuales.</div>')+'<div class="leg2"><span>Click en un número para ver las iniciativas de esa categoría y mes</span></div>';
+}
+
+/* ---------- vista lista ---------- */
+const cmpMap={"date-desc":(a,b)=>b.date.localeCompare(a.date),"date-asc":(a,b)=>a.date.localeCompare(b.date),name:(a,b)=>a.name.localeCompare(b.name,"es"),cat:(a,b)=>a.cat.localeCompare(b.cat,"es")||b.date.localeCompare(a.date)};
+const card=d=>{
+  const age=(NOW-new Date(d.date))/864e5,[y,mo,da]=d.date.split("-");
+  return `<article class="item ${isRb(d)?"fl-warn":""}" style="--cc:${catCol(d.cat)}" data-i="${DATA.indexOf(d)}" title="Click para ver el detalle">
+    <div class="tags">${hasImp(d)?'<span class="tag imp">📈 Impacto disponible</span>':""}${age<=14&&age>=0?'<span class="tag new">Nuevo</span>':""}${isRb(d)?'<span class="tag warn">Apagado/rollback</span>':""}</div>
+    <h3>${d.name}</h3><div class="date">${da}/${mo}/${y}</div>
+    ${d.note?`<p class="clamp">${d.note}</p>`:""}
+    <div class="tags">${d.countries.map(c=>`<span class="tag">${flag(c)} ${c}</span>`).join("")}${d.cat!=="Sin categoría"?`<span class="tag cat" style="background:${catCol(d.cat)}22;color:${catCol(d.cat)}">${d.cat}</span>`:""}</div>
+  </article>`;
+};
+function renderListView(rows){
+  if(!rows.length){$("list").innerHTML='<div class="empty">Sin resultados para estos filtros.</div>';return;}
+  const inner=groupBy==="cat"?(a,b)=>a.cat.localeCompare(b.cat,"es")||cmpMap[sortBy](a,b):cmpMap[sortBy];
+  const sorted=[...rows].sort(inner);
+  const gk={month:d=>`${MONTHS_L[d.m]} ${d.y}`,year:d=>String(d.y),cat:d=>d.cat,none:()=>""}[groupBy];
+  const groups=new Map();
+  sorted.forEach(d=>{const k=gk(d);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(d);});
+  let entries=[...groups];
+  if(groupBy==="month"||groupBy==="year"){
+    const mn=arr=>arr.reduce((m,d)=>d.date<m?d.date:m,"9999");
+    const dir=sortBy==="date-asc"?1:-1;
+    entries.sort((a,b)=>dir*mn(a[1]).localeCompare(mn(b[1])));
+  }
+  $("list").innerHTML=entries.map(([k,arr])=>(k?`<div class="month">${k}<span class="gc">${arr.length}</span></div>`:"")+'<div class="items">'+arr.map(card).join("")+"</div>").join("");
+}
+function renderList(rows){
+  const isList=view==="list";
+  $("cal").style.display=isList?"none":"";
+  $("list").style.display=isList?"":"none";
+  $("calNav").style.display=isList?"none":"flex";
+  $("listCtl").style.display=isList?"flex":"none";
+  [...$("vSeg").children].forEach(b=>b.classList.toggle("on",b.dataset.v===view));
+  if(view==="cal")renderCal(rows);else if(view==="week")renderWeek(rows);else if(view==="year")renderYear(rows);else renderListView(rows);
+}
+
+/* ---------- panel lateral de detalle ---------- */
+let lastList=null,curDrawerItem=null;
+function openDrawer(items,title){
+  document.body.classList.add("dopen");
+  if(items.length===1)showDetail(items[0],false);else showList(items,title);
+}
+function closeDrawer(){document.body.classList.remove("dopen");}
+function showList(items,title){
+  lastList={items,title};curDrawerItem=null;
+  $("dTitle").textContent=`${title} · ${items.length}`;
+  $("dBody").innerHTML=items.map(d=>`<div class="d-item" style="--cc:${catCol(d.cat)}" data-i="${DATA.indexOf(d)}"><b>${d.name}</b><small>${d.countries.map(flag).join("")}<span>${d.cat==="Sin categoría"?"":d.cat}</span></small></div>`).join("")||'<div class="empty">Sin iniciativas</div>';
+}
+function showDetail(d,back){
+  curDrawerItem=d;
+  const age=(NOW-new Date(d.date))/864e5;
+  $("dTitle").textContent="Detalle de la iniciativa";
+  $("dBody").innerHTML=`${back?'<button class="d-back2" id="dBackL">← Volver a la lista</button>':""}
+    <div class="d-card" style="--cc:${catCol(d.cat)}"><h3>${d.name}</h3><div class="d-date">📅 Prendida el ${longDate(d.date)}</div>
+      <div class="tags">${d.cat!=="Sin categoría"?`<span class="tag cat" style="background:${catCol(d.cat)}22;color:${catCol(d.cat)}">${d.cat}</span>`:""}${age<=14&&age>=0?'<span class="tag new">Nuevo</span>':""}${isRb(d)?'<span class="tag warn">Apagado/rollback</span>':""}</div></div>
+    <div class="d-sec"><label>Mercados</label><div class="d-ctys">${d.countries.map(c=>`<span class="d-cty">${flag(c)} ${CN[c]||c}</span>`).join("")||"—"}</div></div>
+    <div class="d-sec"><label>Detalle</label><p>${d.note||"<i>Sin detalle cargado en la bitácora.</i>"}</p></div>
+    ${hasImp(d)?'<button class="d-btn" id="dImp">📈 Ver impacto</button>':'<div class="d-noimp">📭 Todavía no hay impacto cargado para esta iniciativa.</div>'}`;
+}
+
+/* ---------- tab de impacto ---------- */
+let curImpact=null;
+const wd=s=>{const g=new Date(s+"T00:00:00Z").getUTCDay();return g>=1&&g<=5;};
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+const fmtN=n=>Math.round(n).toLocaleString("es-AR");
+const fdate=s=>s.slice(8)+"/"+s.slice(5,7);
+
+function openImpact(d){
+  curImpact=d;
+  const t=$("tabImpacto"); t.style.display=""; t.textContent="📈 Impacto · "+d.name;
+  setPage("impacto");
+}
+function setPage(p){
+  closeDrawer();
+  [...$("tabs").children].forEach(b=>b.classList.toggle("active",b.dataset.p===p));
+  document.querySelectorAll(".page").forEach(s=>s.classList.toggle("active",s.id==="p-"+p));
+  document.querySelector(".fbar").style.display=p==="impacto"?"none":"";
+  window.scrollTo(0,0);
+  render();
+}
+
+let impGran="d";
+function renderImpact(){
+  const d=curImpact; if(!d)return;
+  const [y,mo,da]=d.date.split("-");
+  const cfg=IMPACT[d.name+"|"+d.date];
+  if(cfg&&cfg.kind==="ldp"){renderLdp(d,cfg);return;}
+  const head=`<div class="imp-hdr one"><div class="imp-line"><span class="imp-eye">Impacto de iniciativa</span><h2>${d.name}</h2>
+    <span class="imp-meta">Prendida el <b>${da}/${mo}/${y}</b>${cfg?` · datos al ${fdate(cfg.asof)} (hoy parcial)`:""}</span>
+    <span class="tags">${d.countries.map(c=>`<span class="tag">${flag(c)} ${CN[c]||c}</span>`).join("")}${d.cat!=="Sin categoría"?`<span class="tag cat" style="background:${catCol(d.cat)}22;color:${catCol(d.cat)}">${d.cat}</span>`:""}</span></div>
+    <button class="btn-back" id="impBack">← Volver a iniciativas</button></div>`;
+  if(!cfg){
+    $("impact").innerHTML=head+`<div class="empty">📭 Todavía no hay query cargada para esta iniciativa.<br>Pasame la query y armo su tab de impacto.</div>`;
+    $("impBack").onclick=()=>setPage("lista"); return;
+  }
+  // reservas: [fecha, estado, partner_id, agencia, reserva, gb]
+  cfg.bookings=cfg.bookings.filter(r=>!/test/i.test(r[3]));   // se excluyen agencias de prueba
+  const inPost=r=>r[0]>=cfg.launch&&r[0]<cfg.partial;
+  const okB=cfg.bookings.filter(r=>r[1]==="Confirmado"&&inPost(r)), koB=cfg.bookings.filter(r=>r[1]==="Cancelado"&&inPost(r));
+  const gbM=okB.reduce((s,r)=>s+r[5],0), okN=okB.length, koN=koB.length;
+  const gbT=cfg.daily.filter(r=>r[0]>=cfg.launch&&r[0]<cfg.partial).reduce((s,r)=>s+r[2],0);   // GB confirmado total, todos los medios de pago
+  const share=gbT?gbM/gbT*100:0;
+  const agN=uniq(okB.map(r=>r[2])).length;
+  const since=`desde el ${fdate(cfg.launch)}`;
+  const kpis=[
+    ["kpi-g kpi-hero","💰","GB confirmado",`<span class="u">USD</span>${fmtN(gbM)}`,`<span class="delta nd">${since}</span>`],
+    ["kpi-b","📊","Share del medio de pago",share.toFixed(1).replace(".",",")+"%",`<span class="delta nd">del GB confirmado total · USD ${fmtN(gbT)}</span>`],
+    ["kpi-c","🧾","Bookings confirmados",okN,`<span class="delta ${koN?"dn":"nd"}">${koN} canceladas</span>`],
+    ["kpi-p","🏢","Agencias que lo usaron",agN,`<span class="delta nd">con al menos 1 reserva confirmada</span>`]
+  ];
+  const rowsT=[...cfg.bookings].sort((a,b)=>b[0].localeCompare(a[0])||a[1].localeCompare(b[1])).map(r=>`<tr class="${inPost(r)?"post":"pre"}"><td class="dt">${fdate(r[0])}</td><td><span class="pill-st ${r[1]==="Confirmado"?"ok":"ko"}">${r[1]==="Confirmado"?"Confirmada":"Cancelada"}</span></td><td><div class="ag"><span class="av" style="background:${PAL[[...r[3]].reduce((a,c)=>a+c.charCodeAt(0),0)%PAL.length]}">${r[3].trim()[0].toUpperCase()}</span><div><b class="name-txt">${r[3]}</b><small class="aid">${r[2]}</small></div></div></td><td class="rsv">${r[4]}</td><td class="num"><b>USD ${fmtN(r[5])}</b></td><td><span class="mom ${inPost(r)?"mp":"mo"}">${inPost(r)?"Post-lanzamiento":"Pre-lanzamiento"}</span></td></tr>`).join("");
+  $("impact").innerHTML=head+
+   `<div class="kpis k3 mini">${kpis.map(([c,i,l,v,s])=>`<div class="kpi ${c}"><div class="kpi-icon">${i}</div><div class="kpi-body"><div class="kpi-lbl">${l}</div><div class="kpi-val">${v}</div><div class="kpi-sub">${s}</div></div></div>`).join("")}</div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del GB confirmado</div><div class="card-sub">USD con este medio de pago, ${since}</div></div>
+      <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
+      <div class="ch"><canvas id="cImpG"></canvas></div></div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del share del medio de pago</div><div class="card-sub">% del GB confirmado total de AR que se pagó con este medio, ${since} · el último día es parcial</div></div>
+      <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
+      <div class="ch"><canvas id="cImpS"></canvas></div></div>
+
+    <details class="q"><summary>Ver detalle de reservas · ${okN} confirmadas · ${koN} canceladas desde el lanzamiento</summary>
+      <table class="stbl" style="margin-top:10px"><thead><tr><th>Fecha</th><th>Estado</th><th>Agencia</th><th>Reserva</th><th class="num">GB</th><th>Momento</th></tr></thead><tbody>${rowsT}</tbody></table>
+      <div class="card-sub" style="margin-top:8px">Las filas de pre-lanzamiento son anteriores al ${fdate(cfg.launch)} y no cuentan en las métricas.</div></details>`;
+  $("impBack").onclick=()=>setPage("lista");
+
+  // gráfico de evolución con granularidad día / semana / mes
+  const days=[];for(let t=new Date(cfg.launch+"T00:00:00Z");iso(t)<=cfg.asof;t=new Date(t.getTime()+864e5))days.push(iso(t));
+  const keyOf=(dd,g)=>g==="d"?dd:g==="w"?iso(mondayOf(new Date(dd+"T00:00:00Z"))):dd.slice(0,7);
+  const lblOf=(k,g)=>g==="d"?fdate(k):g==="w"?"Sem "+fdate(k):MONTHS_L[+k.slice(5)-1]+" "+k.slice(2,4);
+  const XT={d:"Día",w:"Semana (inicia el lunes)",m:"Mes"};
+  function draw(){
+    const m=new Map();
+    days.forEach(dd=>{const k=keyOf(dd,impGran);if(!m.has(k))m.set(k,0);});
+    okB.forEach(r=>{const k=keyOf(r[0],impGran);m.set(k,(m.get(k)||0)+r[5]);});
+    const ks=[...m.keys()].sort();
+    document.querySelectorAll(".impGran").forEach(g=>[...g.children].forEach(b=>b.classList.toggle("active",b.dataset.g===impGran)));
+    chart("cImpG",{type:"bar",data:{labels:ks.map(k=>lblOf(k,impGran)),datasets:[{data:ks.map(k=>Math.round(m.get(k))),backgroundColor:c=>{const a=c.chart.chartArea;if(!a)return ORANGE;const g=c.chart.ctx.createLinearGradient(0,a.top,0,a.bottom);g.addColorStop(0,"#F7B955");g.addColorStop(1,"#ED8B08");return g;},borderRadius:{topLeft:8,topRight:8},maxBarThickness:72}]},
+      options:{...baseOpts,plugins:{legend:{display:false},tooltip:{backgroundColor:"#0F1834",padding:10,cornerRadius:8,displayColors:false,callbacks:{label:c=>"GB confirmado: USD "+fmtN(c.parsed.y)}},vlabels:{on:true,size:11,fmt:v=>"USD "+fmtN(v)}},
+        scales:{y:{beginAtZero:true,grace:"18%",grid:{color:"rgba(100,116,139,.15)",borderDash:[4,4]},title:{display:true,text:"GB (USD)",color:"#64748B",font:{size:11,weight:"600"}}},
+                x:{grid:{display:false},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
+    // share del medio de pago sobre el GB confirmado total, por período
+    const totB=new Map();
+    cfg.daily.filter(r=>r[0]>=cfg.launch&&r[0]<=cfg.asof).forEach(r=>{const k=keyOf(r[0],impGran);totB.set(k,(totB.get(k)||0)+r[2]);});
+    const sh=ks.map(k=>totB.get(k)?Math.round(m.get(k)/totB.get(k)*10000)/100:0);
+    const fmtP=v=>v.toFixed(1).replace(".",",")+"%";
+    chart("cImpS",{type:"line",data:{labels:ks.map(k=>lblOf(k,impGran)),datasets:[{data:sh,borderColor:"#3B82F6",borderWidth:3,tension:.35,fill:true,
+        backgroundColor:c=>{const a=c.chart.chartArea;if(!a)return "rgba(59,130,246,.15)";const g=c.chart.ctx.createLinearGradient(0,a.top,0,a.bottom);g.addColorStop(0,"rgba(59,130,246,.30)");g.addColorStop(1,"rgba(59,130,246,0)");return g;},
+        pointRadius:6,pointHoverRadius:8,pointBackgroundColor:"#fff",pointBorderColor:"#3B82F6",pointBorderWidth:3}]},
+      options:{...baseOpts,plugins:{legend:{display:false},
+        tooltip:{backgroundColor:"#0F1834",padding:10,cornerRadius:8,displayColors:false,callbacks:{label:c=>"Share: "+fmtP(c.parsed.y),afterLabel:c=>"USD "+fmtN(m.get(ks[c.dataIndex]))+" de USD "+fmtN(totB.get(ks[c.dataIndex])||0)}},
+        vlabels:{on:true,size:11,zero:true,fmt:fmtP}},
+        scales:{y:{beginAtZero:true,grace:"35%",grid:{color:"rgba(100,116,139,.15)",borderDash:[4,4]},ticks:{callback:v=>v+"%"},title:{display:true,text:"% del GB",color:"#64748B",font:{size:11,weight:"600"}}},
+                x:{grid:{display:false},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
+  }
+  document.querySelectorAll(".impGran").forEach(el=>el.onclick=e=>{const g=e.target.dataset.g;if(!g)return;impGran=g;draw();});
+  draw();
+}
+
+/* ---------- impacto: link de pago en hoteles non ref (multi-país, escalonado) ---------- */
+function renderLdp(d,cfg){
+  const T=cfg.tot, C=cfg.countries;
+  const pf=v=>v.toFixed(1).replace(".",",")+"%";
+  const sinceTxt="desde el lanzamiento de cada país";
+  const head=`<div class="imp-hdr one"><div class="imp-line"><span class="imp-eye">Impacto de iniciativa</span><h2>${cfg.title}</h2>
+    <span class="imp-meta">Prendido escalonado · datos al ${fdate(cfg.asof)} (hoy parcial)</span>
+    <span class="tags">${C.map(r=>`<span class="tag" title="${CN[r[0]]||r[0]}">${flag(r[0])}</span>`).join("")}</span></div>
+    <button class="btn-back" id="impBack">← Volver a iniciativas</button></div>`;
+  const kpis=[
+    ["kpi-g kpi-hero","💰","GB confirmado",`<span class="u">USD</span>${fmtN(T.gl)}`,`<span class="delta nd">ticket prom. USD ${fmtN(T.gl/T.nl)} · hoteles USD ${fmtN(T.gt/T.nt)}</span>`],
+    ["kpi-b","📊","Share total",pf(T.gl/T.gt*100),`<span class="delta nd">del GB de hoteles · USD ${fmtN(T.gt)}</span>`],
+    ["kpi-c","🧾","Bookings confirmados",fmtN(T.nl),`<span class="delta nd">${pf(T.nl/T.nt*100)} de ${fmtN(T.nt)} reservas de hoteles</span>`],
+    ["kpi-p","🏢","Agencias que lo usan",fmtN(T.ag),`<span class="delta nd">${pf(T.rep/T.ag*100)} repitió · ${pf(T.ag/T.agt*100)} del total</span>`]
+  ];
+  const mx=Math.max(...C.map(r=>r[3]/r[5]));
+  const rowsC=[...C].sort((a,b)=>b[3]/b[5]-a[3]/a[5]).map(r=>{const sh=r[3]/r[5]*100;
+    return `<tr><td><span class="cty-n">${flag(r[0])} ${CN[r[0]]||r[0]}</span></td><td class="dt">${fdate(r[1])}</td><td class="num">${fmtN(r[3])}</td><td class="num">${fmtN(r[2])}</td><td class="num">${fmtN(r[4])}</td><td class="num">${pf(r[7]/(r[2]+r[7])*100)}</td><td><div style="display:flex;align-items:center;gap:8px"><div class="sbar" style="flex:1;min-width:50px"><i style="width:${sh/ (mx*100)*100}%"></i></div><b>${pf(sh)}</b></div></td></tr>`;}).join("");
+  $("impact").innerHTML=head+
+   `<div class="kpis k3 mini">${kpis.map(([c,i,l,v,s])=>`<div class="kpi ${c}"><div class="kpi-icon">${i}</div><div class="kpi-body"><div class="kpi-lbl">${l}</div><div class="kpi-val">${v}</div><div class="kpi-sub">${s}</div></div></div>`).join("")}</div>
+    <div style="display:grid;grid-template-columns:5fr 6fr;gap:14px;align-items:stretch">
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Share y venta por país</div><div class="card-sub">Link de pago sobre el GB de hoteles de cada país, ${sinceTxt}</div></div></div>
+        <table class="stbl"><thead><tr><th>País</th><th>Prendido</th><th class="num">GB (USD)</th><th class="num">Bookings</th><th class="num">Agencias</th><th class="num">Cancel.</th><th>Share</th></tr></thead><tbody>${rowsC}</tbody></table></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del share del link de pago</div><div class="card-sub">% del GB de hoteles de los países ya prendidos · el ${fdate(cfg.asof)} está incompleto (el día no terminó)</div></div>
+        <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
+        <div class="ch" style="height:228px"><canvas id="cLdpS"></canvas></div></div>
+    </div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución de venta de hoteles: reembolsable vs no reembolsable</div><div class="card-sub" id="ldpVs"></div></div>
+      <div style="display:flex;gap:8px;align-items:center"><div class="gran" id="ldpMode"><button data-m="all">Todos los MDP</button><button data-m="link">Solo link de pago</button></div>
+      <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div></div>
+      <div class="ch"><canvas id="cLdpV"></canvas></div></div>
+    <details class="q"><summary>Ver top 10 agencias por GB con link de pago · ${pf(cfg.top.reduce((a,r)=>a+r[4],0)/T.gl*100)} del GB del link</summary>
+      <table class="stbl" style="margin-top:10px"><thead><tr><th>#</th><th>Agencia</th><th>País</th><th class="num">Bookings</th><th class="num">GB</th></tr></thead><tbody>${cfg.top.map((r,i)=>`<tr><td class="dt">${i+1}</td><td><div class="ag"><span class="av" style="background:${PAL[[...r[1]].reduce((a,c)=>a+c.charCodeAt(0),0)%PAL.length]}">${r[1].trim()[0].toUpperCase()}</span><div><b class="name-txt">${r[1]}</b><small class="aid">${r[0]}</small></div></div></td><td>${flag(r[2])} ${CN[r[2]]||r[2]}</td><td class="num">${r[3]}</td><td class="num"><b>USD ${fmtN(r[4])}</b></td></tr>`).join("")}</tbody></table>
+      <div class="card-sub" style="margin-top:8px">Reservas confirmadas desde el lanzamiento de cada país. Se excluyen agencias con "test" en el nombre.</div></details>`;
+  $("impBack").onclick=()=>setPage("lista");
+  const keyOf=(dd,g)=>g==="d"?dd:g==="w"?iso(mondayOf(new Date(dd+"T00:00:00Z"))):dd.slice(0,7);
+  const lblOf=(k,g)=>g==="d"?fdate(k):g==="w"?"Sem "+fdate(k):MONTHS_L[+k.slice(5)-1]+" "+k.slice(2,4);
+  const XT={d:"Día",w:"Semana (inicia el lunes)",m:"Mes"};
+  let ldpMode="all";
+  const grid={color:"rgba(100,116,139,.15)",borderDash:[4,4]};
+  const tt={backgroundColor:"#0F1834",padding:10,cornerRadius:8};
+  function draw(){
+    const m=new Map();
+    cfg.daily.forEach(r=>{const k=keyOf(r[0],impGran);const a=m.get(k)||[0,0,0,0];a[0]+=r[1];a[1]+=r[2];a[2]+=r[3];a[3]+=r[5];m.set(k,a);});
+    const ks=[...m.keys()].sort(), lb=ks.map(k=>lblOf(k,impGran));
+    document.querySelectorAll(".impGran").forEach(g=>[...g.children].forEach(b=>b.classList.toggle("active",b.dataset.g===impGran)));
+    const sh=ks.map(k=>m.get(k)[3]?Math.round(m.get(k)[2]/m.get(k)[3]*10000)/100:0);
+    chart("cLdpS",{type:"line",data:{labels:lb,datasets:[{data:sh,borderColor:"#ED8B08",borderWidth:3,tension:.35,fill:true,
+        backgroundColor:c=>{const a=c.chart.chartArea;if(!a)return "rgba(237,139,8,.15)";const g=c.chart.ctx.createLinearGradient(0,a.top,0,a.bottom);g.addColorStop(0,"rgba(237,139,8,.30)");g.addColorStop(1,"rgba(237,139,8,0)");return g;},
+        pointRadius:impGran==="d"?3:6,pointHoverRadius:7,pointBackgroundColor:"#fff",pointBorderColor:"#ED8B08",pointBorderWidth:2}]},
+      options:{...baseOpts,plugins:{legend:{display:false},
+        tooltip:{...tt,displayColors:false,callbacks:{label:c=>"Share: "+pf(c.parsed.y),afterLabel:c=>"USD "+fmtN(m.get(ks[c.dataIndex])[2])+" de USD "+fmtN(m.get(ks[c.dataIndex])[3])}},
+        vlabels:{on:impGran!=="d",size:11,zero:true,fmt:pf}},
+        scales:{y:{beginAtZero:true,grace:"30%",grid,ticks:{callback:v=>v+"%"},title:{display:true,text:"% del GB",color:"#64748B",font:{size:11,weight:"600"}}},
+                x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
+    const rm=new Map();cfg.remote.forEach(r=>{const k=keyOf(r[0],impGran);const a=rm.get(k)||[0,0];a[0]+=r[1];a[1]+=r[2];rm.set(k,a);});
+    const link=ldpMode==="link";
+    const ds=link?[["Reembolsable",k=>(rm.get(k)||[0,0])[0],"#3B82F6"],["No reembolsable",k=>(rm.get(k)||[0,0])[1],"#ED8B08"]]
+                 :[["Reembolsable",k=>m.get(k)[0],"#3B82F6"],["No reembolsable",k=>m.get(k)[1]+m.get(k)[2],"#ED8B08"]];
+    $("ldpVs").textContent=link?"GB confirmado en USD · solo reservas con link de pago (medio de pago REMOTE, solo o combinado con otro) · MX, AR, CL, BR, CO y PE"
+                               :"GB confirmado en USD · incluye todos los medios de pago · MX, AR, CL, BR, CO y PE";
+    document.querySelectorAll("#ldpMode button").forEach(b=>b.classList.toggle("active",b.dataset.m===ldpMode));
+    chart("cLdpV",{type:"bar",data:{labels:lb,datasets:ds.map(([n,f,col],i)=>({label:n,data:ks.map(k=>Math.round(f(k))),backgroundColor:col,borderRadius:i===1?{topLeft:6,topRight:6}:0,maxBarThickness:64}))},
+      options:{...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11}}},
+        tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y),footer:it=>"Total: USD "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}},vlabels:{on:false}},
+        scales:{y:{stacked:true,beginAtZero:true,grid,title:{display:true,text:"GB (USD)",color:"#64748B",font:{size:11,weight:"600"}}},
+                x:{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
+  }
+  document.querySelectorAll(".impGran").forEach(el=>el.onclick=e=>{const g=e.target.dataset.g;if(!g)return;impGran=g;draw();});
+  $("ldpMode").onclick=e=>{const g=e.target.dataset.m;if(!g)return;ldpMode=g;draw();};
+  draw();
+}
+
+function render(){
+  if($("p-impacto").classList.contains("active")){renderImpact();return;}
+  const rows=DATA.filter(match);
+  $("fcount").textContent=`${rows.length} de ${DATA.length} iniciativas`;
+  $("chipTotal").textContent=`📋 ${DATA.length} iniciativas`;
+  const dates=DATA.map(d=>d.date).sort();
+  const f=s=>`${MONTHS[+s.slice(5,7)-1]} ${s.slice(0,4)}`;
+  $("chipRange").textContent=`📅 ${f(dates[0])} - ${f(dates[dates.length-1])}`;
+  renderList(rows);saveHash();
+}
+
+/* ---------- eventos ---------- */
+$("q").oninput=e=>{F.q=e.target.value;render();};
+$("dFrom").onchange=e=>{F.from=e.target.value;render();};
+$("dTo").onchange=e=>{F.to=e.target.value;render();};
+$("tabs").onclick=e=>{const p=e.target.dataset.p;if(!p)return;setPage(p);};
+/* ---------- navegación, herramientas, link compartible ---------- */
+const root=document.documentElement;
+const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+function setZoom(z){const v=Math.min(1.3,Math.max(.6,Math.round(z*100)/100));root.style.zoom=v;store.set("zoom",v);}
+function setTheme(t){root.dataset.theme=t;$("bTheme").textContent=t==="dark"?"☀️":"🌙";store.set("theme",t);}
+function togglePres(){root.classList.toggle("pres");$("bPres").textContent=root.classList.contains("pres")?"✕ Salir":"🖥 Presentar";}
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("show"),2200);}
+
+function saveHash(){
+  try{
+    const p=new URLSearchParams();
+    p.set("v",view);p.set("y",calY);p.set("m",calM+1);
+    if(view==="week")p.set("w",iso(weekStart));
+    if(F.country.length)p.set("c",F.country.join(","));
+    if(F.year.length)p.set("a",F.year.join(","));
+    if(F.cat.length)p.set("k",F.cat.join("|"));
+    if(F.q)p.set("q",F.q);if(F.from)p.set("f",F.from);if(F.to)p.set("t",F.to);
+    if(view==="list"){p.set("s",sortBy);p.set("g",groupBy);}
+    if(root.dataset.theme==="dark")p.set("th","d");
+    history.replaceState(null,"","#"+p.toString());
+  }catch(e){}
+}
+function loadHash(){
+  const p=new URLSearchParams(location.hash.slice(1));
+  if(["cal","week","year","list"].includes(p.get("v")))view=p.get("v");
+  if(+p.get("y")>2000)calY=+p.get("y");
+  if(+p.get("m")>=1&&+p.get("m")<=12)calM=+p.get("m")-1;
+  if(/^\d{4}-\d\d-\d\d$/.test(p.get("w")||""))weekStart=mondayOf(new Date(p.get("w")+"T00:00:00Z"));
+  if(p.get("c"))MS.country(p.get("c").split(","));
+  if(p.get("a"))MS.year(p.get("a").split(","));
+  if(p.get("k"))MS.cat(p.get("k").split("|"));
+  if(p.get("q")){F.q=p.get("q");$("q").value=F.q;}
+  if(p.get("f")){F.from=p.get("f");$("dFrom").value=F.from;}
+  if(p.get("t")){F.to=p.get("t");$("dTo").value=F.to;}
+  if(cmpMap[p.get("s")]){sortBy=p.get("s");}
+  if(["month","year","cat","none"].includes(p.get("g")))groupBy=p.get("g");
+  $("sortSel").value=sortBy;$("grpSel").value=groupBy;
+  setTheme(p.get("th")==="d"?"dark":(store.get("theme")||"light"));
+}
+function step(n){
+  if(n===0){calY=NOWY;calM=NOWM;weekStart=mondayOf(NOW);}
+  else if(view==="week"){weekStart=new Date(weekStart.getTime()+n*7*864e5);calY=weekStart.getUTCFullYear();calM=weekStart.getUTCMonth();}
+  else if(view==="year")calY+=n;
+  else{calM+=n;if(calM<0){calM=11;calY--;}if(calM>11){calM=0;calY++;}}
+  render();
+}
+
+$("cal").onclick=e=>{
+  const c=e.target.closest(".chip-i,.wk-card");
+  if(c){openDrawer([DATA[+c.dataset.i]]);return;}
+  const m=e.target.closest(".more,.cal-d.has");
+  if(m){openDrawer(DATA.filter(d=>d.date===m.dataset.day&&match(d)),longDate(m.dataset.day));return;}
+  const y=e.target.closest(".yr-c.has");
+  if(y){const k=y.dataset.k,mm=+y.dataset.mm;openDrawer(DATA.filter(d=>match(d)&&d.y===calY&&d.m===mm&&d.cat===k),`${k} · ${MONTHS_L[mm]} ${calY}`);}
+};
+$("list").onclick=e=>{const a=e.target.closest(".item");if(a)openDrawer([DATA[+a.dataset.i]]);};
+$("calNav").onclick=e=>{const b=e.target.closest("[data-n]");if(b)step(+b.dataset.n);};
+$("vSeg").onclick=e=>{
+  const b=e.target.closest("[data-v]");if(!b)return;const v=b.dataset.v;
+  if(v==="week"&&view!=="week")weekStart=mondayOf((calY===NOWY&&calM===NOWM)?NOW:new Date(Date.UTC(calY,calM,1)));
+  view=v;render();
+};
+$("sortSel").onchange=e=>{sortBy=e.target.value;render();};
+$("grpSel").onchange=e=>{groupBy=e.target.value;render();};
+$("dBody").onclick=e=>{
+  const it=e.target.closest(".d-item");if(it){showDetail(DATA[+it.dataset.i],true);return;}
+  if(e.target.closest("#dBackL")&&lastList){showList(lastList.items,lastList.title);return;}
+  if(e.target.closest("#dImp")){const d=curDrawerItem;closeDrawer();openImpact(d);}
+};
+$("dClose").onclick=closeDrawer;$("dBg").onclick=closeDrawer;
+$("bPdf").onclick=()=>window.print();
+$("bPres").onclick=togglePres;
+$("bTheme").onclick=()=>{setTheme(root.dataset.theme==="dark"?"light":"dark");saveHash();};
+$("bZm").onclick=()=>setZoom((parseFloat(root.style.zoom)||.85)-.05);
+$("bZp").onclick=()=>setZoom((parseFloat(root.style.zoom)||.85)+.05);
+$("bLink").onclick=()=>{
+  saveHash();const u=location.href;
+  const fb=()=>{const t=document.createElement("textarea");t.value=u;document.body.appendChild(t);t.select();try{document.execCommand("copy");toast("🔗 Link copiado");}catch(e){toast("No se pudo copiar el link");}t.remove();};
+  (navigator.clipboard?navigator.clipboard.writeText(u).then(()=>toast("🔗 Link copiado")):Promise.reject()).catch(fb);
+};
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){if(document.body.classList.contains("dopen"))closeDrawer();else if(root.classList.contains("pres"))togglePres();return;}
+  if(view==="list"||!$("p-lista").classList.contains("active")||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+  const n=e.key==="ArrowLeft"?-1:e.key==="ArrowRight"?1:0;if(n)step(n);
+});
+$("clearAll").onclick=()=>{
+  Object.assign(F,{q:"",from:"",to:""});
+  $("q").value="";$("dFrom").value="";$("dTo").value="";
+  document.querySelectorAll(".ms-search input").forEach(i=>{i.value="";i.dispatchEvent(new Event("input"));});
+  ["country","year","cat"].forEach(f=>MS[f]([]));
+  render();
+};
+setZoom(+(store.get("zoom")||.85));
+loadHash();
+render();
+</script>
+</body>
+</html>

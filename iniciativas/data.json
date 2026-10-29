@@ -1,0 +1,1870 @@
+{
+ "updated": "2026-10-29",
+ "initiatives": [
+  [
+   "Combinaciones de MDP con HDO pay",
+   "2026-10-26",
+   "AR,CL,MX",
+   "",
+   "Primero RO en MX, AR y CL. Ahora se puede combinar aunque HDO Pay no tenga saldo suficiente para pagar la totalidad de la reserva."
+  ],
+  [
+   "Link de pago en hoteles non ref",
+   "2026-10-19",
+   "BR,CO,PE",
+   "",
+   "RO de link de pago en hoteles non ref"
+  ],
+  [
+   "Pago diferido | AR",
+   "2026-10-19",
+   "AR",
+   "",
+   "Pago diferido en USD (no se habilita en ARS)"
+  ],
+  [
+   "Link de pago en hoteles non ref",
+   "2026-10-13",
+   "AR,CL",
+   "",
+   "Parte II de RO"
+  ],
+  [
+   "Link de pago en Hoteles NON REF",
+   "2026-09-29",
+   "MX",
+   "",
+   "Solo MX classic para pruebas. Ante error de booking, cancelación y RO automático. Rollout MX terminado el 13/10."
+  ],
+  [
+   "Cambios en CHK | Part I",
+   "2026-09-30",
+   "Todos",
+   "",
+   "Hito 3 de Payment Hub - Preguntas en el CHK"
+  ],
+  [
+   "Vuelos en USA",
+   "2026-09-16",
+   "US,PA",
+   "",
+   "Solo USA. En todos los channels salvo silver (concentra agencias API)."
+  ],
+  [
+   "FRAMI - nuevos mercados",
+   "2026-09-11",
+   "AR,CL,CO,MX,PE",
+   "",
+   ""
+  ],
+  [
+   "Visualización Tarifas netas en Shopping",
+   "2026-09-10",
+   "MX",
+   "",
+   "Piloto de tarifas netas en shopping para MX channel Gold"
+  ],
+  [
+   "PI de Asistencias en hoteles",
+   "2026-09-10",
+   "Todos",
+   "",
+   ""
+  ],
+  [
+   "Rollout (Prefondeo) Anticipo HDO Pay",
+   "2026-09-07",
+   "CO,MX",
+   "",
+   "Las agencias anticipan su cuenta por transferencia; HotelDO valida el comprobante y el saldo queda disponible en el checkout."
+  ],
+  [
+   "Frami - agente IA - 2da prueba 950 agencias",
+   "2026-08-26",
+   "BR",
+   "",
+   ""
+  ],
+  [
+   "Exoneraciones para Disney",
+   "2026-08-21",
+   "Todos",
+   "",
+   "Exoneración (EXO) en pre check-in desde Mi Reserva, con creación automática de tarea de PI y mail al comercial."
+  ],
+  [
+   "Comparación de cotizaciones",
+   "2026-08-19",
+   "Todos",
+   "",
+   "Aplica a todos los productos; comparación con detalle en hoteles, vuelos, paquetes y actividades."
+  ],
+  [
+   "Frami - agente IA - 1ra prueba",
+   "2026-08-12",
+   "BR",
+   "",
+   ""
+  ],
+  [
+   "Ver y Descargar liquidación (cuenta corriente)",
+   "2026-07-31",
+   "",
+   "",
+   ""
+  ],
+  [
+   "Reservas a entrar en penalidad futura - Correo de vencimientos",
+   "2026-07-30",
+   "Todos",
+   "",
+   "Mail con próximos vencimientos de reservas 'Confirma ahora, paga después'."
+  ],
+  [
+   "HDO Academy",
+   "2026-07-28",
+   "BR,AR,MX,CO,CL,PE",
+   "",
+   "MVP habilitado."
+  ],
+  [
+   "Previsualización de facturas sin descarga",
+   "2026-07-16",
+   "Todos",
+   "",
+   "Ver el detalle de un comprobante en BO Mambo sin descargarlo."
+  ],
+  [
+   "Combinar medios de pago (doc. no fiscal)",
+   "2026-07-01",
+   "AR",
+   "",
+   "Documento no fiscal en Mambo para reservas con cuenta corriente: 'Ver Liquidación'."
+  ],
+  [
+   "Asistencia en PI - Paquetes",
+   "2026-06-17",
+   "Todos",
+   "",
+   "Asistencias en PI de paquetes en todos los channels y mercados con PI configurada."
+  ],
+  [
+   "Anticipo (AR-ARS)",
+   "2026-06-16",
+   "AR",
+   "",
+   "Anticipo de cuenta por transferencia bancaria."
+  ],
+  [
+   "Autogestión cta cte - Calendario de vencimientos INV",
+   "2026-06-16",
+   "AR",
+   "",
+   "Apartado en Pagos-Facturación con deuda agrupada por estado."
+  ],
+  [
+   "Reporte Cuenta Corriente",
+   "2026-06-04",
+   "Todos",
+   "",
+   "Nuevos campos: AG, AP, SSN, MYOB_CUSTOMER, razón social."
+  ],
+  [
+   "3DS CO",
+   "2026-05-22",
+   "CO",
+   "",
+   "Prendido de prueba el 14/5 y apagado por falla en cobros. Prendido y apagado de nuevo el 20/5."
+  ],
+  [
+   "Combinar medios de pago",
+   "2026-05-20",
+   "AR,BR,MX",
+   "",
+   "Scheduler en HotelDO. Apagado el 22/5 por bug y vuelto a prender el mismo día."
+  ],
+  [
+   "Carrito | bimoneda",
+   "2026-05-21",
+   "AR",
+   "",
+   "Carrito en moneda local y USD."
+  ],
+  [
+   "Pago diferido CO CL y PE",
+   "2026-05-14",
+   "CL,CO,PE",
+   "",
+   "Solo channel classic para pruebas."
+  ],
+  [
+   "Switch de USD en Paquetes",
+   "2026-05-14",
+   "AR",
+   "",
+   ""
+  ],
+  [
+   "Actualización Tipificación Consultas (Ayúdame con mi reserva)",
+   "2026-04-30",
+   "Todos",
+   "",
+   "Todas las tipificaciones de Consultas actualizadas."
+  ],
+  [
+   "Comisiones x producto Paquetes",
+   "2026-04-23",
+   "Todos",
+   "",
+   "Discriminación de comisiones en paquetes: si se cancela el hotel, el vuelo queda con la comisión correcta."
+  ],
+  [
+   "Nequi",
+   "2026-04-20",
+   "CO",
+   "",
+   ""
+  ],
+  [
+   "Calendario - Reservas a entrar en penalidad futura",
+   "2026-03-26",
+   "Todos",
+   "",
+   ""
+  ],
+  [
+   "Cambio Nexo por Toqan IA",
+   "2026-03-23",
+   "AR,CL,CO,EC,MX,PE,US,PA",
+   "",
+   "2do paso de Pago comisiones: extracción de datos de facturas con Toqan IA."
+  ],
+  [
+   "Buscador de reservas en INV/EC",
+   "2026-03-18",
+   "Todos",
+   "",
+   "Nuevo filtro en mambo y client."
+  ],
+  [
+   "Unificación de cuenta corriente",
+   "2026-03-17",
+   "AR",
+   "",
+   ""
+  ],
+  [
+   "Descargar docs fiscales en reservas canceladas",
+   "2026-03-16",
+   "Todos",
+   "",
+   "Client permite descargar documentos fiscales de reservas canceladas."
+  ],
+  [
+   "Pago Comisiones",
+   "2026-03-03",
+   "PA",
+   "",
+   "1er paso: se cambia Nexo por Toqan IA para extraer datos de facturas."
+  ],
+  [
+   "TC en USD - En AR",
+   "2026-02-25",
+   "AR",
+   "",
+   "Hoteles y vuelos INT; paquetes internacionales en marzo 2026."
+  ],
+  [
+   "Visualizar facturas de Brasil",
+   "2026-02-13",
+   "BR",
+   "",
+   "NC y facturas visibles en BO Client y BO Mambo."
+  ],
+  [
+   "Cambio manual Hoteles (Proveedor: Desp)",
+   "2026-02-10",
+   "BR,CO,MX,US,PA",
+   "",
+   "Opción de cambio manual para OP en lugar de crear una consulta."
+  ],
+  [
+   "Alta cruceros",
+   "2026-02-05",
+   "BR",
+   "",
+   "4/2 primeras 50 agencias con credenciales Krooze. 13/4 redirect al 100%."
+  ],
+  [
+   "Devolución HDO Pay para cancelación (vuelos)",
+   "2026-02-04",
+   "Todos",
+   "",
+   "Habilitado para agencias HTML. Pendiente rollout ONA."
+  ],
+  [
+   "Nubank en BR",
+   "2026-01-28",
+   "BR",
+   "",
+   ""
+  ],
+  [
+   "Migración de HDO PAY",
+   "2026-01-26",
+   "Todos",
+   "",
+   "Ya no lo envía Vader: es una regla de Business Rules."
+  ],
+  [
+   "Migración Cta Cte a B rules",
+   "2026-01-20",
+   "Todos",
+   "",
+   "Cuenta corriente pasa de Vader a una regla de Business Rules."
+  ],
+  [
+   "Vertical Disney - PA",
+   "2026-01-19",
+   "US,PA",
+   "",
+   ""
+  ],
+  [
+   "Autogestión cta cte AR - visual de INV",
+   "2026-01-19",
+   "AR",
+   "",
+   ""
+  ],
+  [
+   "Nuevas verticales en USA y PA",
+   "2025-12-10",
+   "US,PA",
+   "",
+   "Actividades y Tickets (este último solo PA). Actividades prendida el 3/12/25."
+  ],
+  [
+   "Rediseño Cotizaciones",
+   "2025-12-10",
+   "Todos",
+   "",
+   "Prendido en todas las agencias HTML el 10/12/2025."
+  ],
+  [
+   "Pago Diferido",
+   "2025-11-10",
+   "MX",
+   "",
+   "Prendido en todos los channels."
+  ],
+  [
+   "Doble factor de Autenticación (2FA)",
+   "2025-09-24",
+   "Todos",
+   "Seguridad",
+   "3er intento de prendida el 4/12, con rollback el mismo día."
+  ],
+  [
+   "Gestor de pagos en USA",
+   "2025-09-23",
+   "US,PA",
+   "",
+   "23/09 USA, 30/09 PA."
+  ],
+  [
+   "Promesa de pago AR (ARS & USD)",
+   "2025-09-23",
+   "AR",
+   "",
+   "Solución en AR$ para doméstico y USD para internacional."
+  ],
+  [
+   "Solicitar datos de facturación al regularizar promesa",
+   "2025-09-17",
+   "Todos",
+   "",
+   ""
+  ],
+  [
+   "Comisiones en el BO de agencia",
+   "2025-09-11",
+   "Todos",
+   "",
+   "8/9 CO,PE,EC,CL · 11/9 MX,US,PA · 17/9 AR y BR."
+  ],
+  [
+   "Envío de mail de pasajero a la aerolínea (VIVA)",
+   "2025-09-09",
+   "MX",
+   "",
+   ""
+  ],
+  [
+   "Migración de Cuenta Corriente y HDO Pay a BRules",
+   "2025-09-03",
+   "Todos",
+   "",
+   "Permite ofrecer descuento en estos medios de pago y mayor granularidad para prender/apagar."
+  ],
+  [
+   "Carrito (Hoteles, Vuelos y Traslados)",
+   "2025-08-18",
+   "CL,CO,EC,MX,PE",
+   "",
+   "Platinum 25/08; BR todo menos classic 09/09."
+  ],
+  [
+   "Switch bimonetario en hoteles",
+   "2025-08-07",
+   "AR",
+   "",
+   ""
+  ],
+  [
+   "Reservas Non Ref a Emisión",
+   "2025-08-04",
+   "Todos",
+   "",
+   "30/07 primeras 2 agencias, 04/08 resto."
+  ],
+  [
+   "Cuenta Corriente Vuelos, Tickets y Traslados",
+   "2025-08-04",
+   "CL,EC,PE,US,PA",
+   "",
+   "04/08 EC · 19/09 PE,US,PA · 09/10 CL."
+  ],
+  [
+   "Pestaña 'Mis Cotizaciones' para las agencias",
+   "2025-08-25",
+   "Todos",
+   "",
+   "10/07 todo menos classic. 25/08 classic."
+  ],
+  [
+   "Cuenta Corriente Actividades, Autos & Asistencias",
+   "2025-07-31",
+   "AR,BR,CL,CO,EC,PE,US,PA",
+   "",
+   "31/07 BR,CO · 12/08 AR · 29/08 EC,CL · 19/09 PE,US,PA."
+  ],
+  [
+   "Modificación de comisiones desde el BO",
+   "2025-07-21",
+   "Todos",
+   "Herramientas de Agencia",
+   "21/07 agencias amigas · 8/9 CO · 11/9 MX,US,PA · 17/9 AR,BR."
+  ],
+  [
+   "ABM de usuarios",
+   "2025-07-21",
+   "Todos",
+   "",
+   "21/07 agencias amigas · PE,EC,CL · 8/9 CO · 11/9 MX,US,PA · 17/9 AR,BR."
+  ],
+  [
+   "MercadoPago Chile",
+   "2025-07-07",
+   "CL",
+   "",
+   ""
+  ],
+  [
+   "Retener Fee & Comisión en Cancel (Autos)",
+   "2025-07-03",
+   "BR",
+   "",
+   "Fix de flujo de exoneración el 02/09."
+  ],
+  [
+   "Curva de Cobranza",
+   "2025-07-02",
+   "Todos",
+   "Otros",
+   "Reporte de cobros de cuenta corriente con la fecha correcta de cada pago para calcular el % abonado por mes."
+  ],
+  [
+   "White Label HDO",
+   "2025-06-27",
+   "Todos",
+   "Herramientas de Agencia",
+   ""
+  ],
+  [
+   "Cuenta Corriente Vuelos, Tickets y Traslados",
+   "2025-06-25",
+   "CO",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Determinar comisión al regularizar promesa de pago",
+   "2025-06-24",
+   "Todos",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "TD en USD",
+   "2025-06-23",
+   "AR",
+   "Medios de Pago",
+   "Todas las agencias con descriptor propio. Igual funcionamiento que TD en pesos."
+  ],
+  [
+   "IVA Colombia",
+   "2025-06-09",
+   "CO",
+   "Tarifa & Comisiones",
+   "Prendido el 06/05 y apagado."
+  ],
+  [
+   "Mostrar comisión en PI",
+   "2025-05-05",
+   "Todos",
+   "Tarifa & Comisiones",
+   "Comisión de cada producto en la página intermedia (paquetes y hoteles)."
+  ],
+  [
+   "One Step Checkout",
+   "2025-05-05",
+   "Todos",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Expiración de contraseña",
+   "2025-05-07",
+   "Todos",
+   "Seguridad",
+   "5/5 EC · 6/5 PE,CL,US,PA · 7/5 CO,BR,AR · 19/5 MX y AR."
+  ],
+  [
+   "Robustecimiento de Contraseña (caracteres)",
+   "2025-04-08",
+   "Todos",
+   "Seguridad",
+   ""
+  ],
+  [
+   "Modificar Pago Cash en Promesa",
+   "2025-04-28",
+   "Todos",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Paquetes Netos",
+   "2025-04-29",
+   "BR",
+   "Paquetes",
+   ""
+  ],
+  [
+   "Paquetes Netos",
+   "2025-04-28",
+   "CO",
+   "Paquetes",
+   ""
+  ],
+  [
+   "Paquetes Netos",
+   "2025-05-08",
+   "CL,PE",
+   "Paquetes",
+   ""
+  ],
+  [
+   "Paquetes Netos AR (USD y ARS)",
+   "2025-05-28",
+   "AR",
+   "Paquetes",
+   ""
+  ],
+  [
+   "Paquetes Netos",
+   "2025-03-05",
+   "MX",
+   "Paquetes",
+   ""
+  ],
+  [
+   "Flujo arma tu vuelo",
+   "2025-05-28",
+   "Todos",
+   "Vuelos",
+   "Comprar por separado vuelos 2OW dentro del flujo de vuelos."
+  ],
+  [
+   "Cuenta Corriente Vuelos",
+   "2025-05-28",
+   "AR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Combinar 2 TC",
+   "2025-05-15",
+   "Todos",
+   "Medios de Pago",
+   "Combinar 2 tarjetas directo desde el checkout, sin pasar por el gestor."
+  ],
+  [
+   "Comisiones en dólares",
+   "2025-05-16",
+   "AR",
+   "Tarifa & Comisiones",
+   "Las agencias cobran sus comisiones en USD."
+  ],
+  [
+   "Bimonetario en todos los channels y productos (excepto Packs)",
+   "2025-05-16",
+   "AR",
+   "Tarifa & Comisiones",
+   "Tarifa en dólares en todos los channels."
+  ],
+  [
+   "Convivencia HDO Pay y Cuenta corriente",
+   "2025-05-21",
+   "Todos",
+   "Medios de Pago",
+   "Pueden convivir sin restricciones."
+  ],
+  [
+   "Prellenado Datos Facturación",
+   "2025-05-20",
+   "AR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Cuenta Corriente Tickets y Traslados",
+   "2025-05-19",
+   "AR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Cuenta Corriente Vuelos, Tickets y Traslados",
+   "2025-05-19",
+   "BR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Fix Neteo de Traslados",
+   "2025-05-26",
+   "Todos",
+   "ONA",
+   "Mejora de competitividad de tarifas."
+  ],
+  [
+   "Cambio voucher autos",
+   "2025-03-21",
+   "Todos",
+   "ONA",
+   "Se oculta el precio del auto en el voucher."
+  ],
+  [
+   "3DS BR",
+   "2025-03-10",
+   "BR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Cuenta corriente USD (Hoteles)",
+   "2025-02-27",
+   "AR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Mostrar tiempo pre-booking Gestor de Pagos, Pago diferido y Pago remoto",
+   "2025-02-20",
+   "Todos",
+   "Medios de Pago",
+   "Muestra el tiempo correcto al elegir hotel non ref con solo 1 hora."
+  ],
+  [
+   "Fix Revenue reglas 1R Prob PP a 1 (100%)",
+   "2025-02-14",
+   "Todos",
+   "Tarifa & Comisiones",
+   "Regla de 1R que cambiaba proveedores al azar; ahora gana siempre el más barato."
+  ],
+  [
+   "Comisiones por aerolíneas",
+   "2025-01-28",
+   "Todos",
+   "Tarifa & Comisiones",
+   "Comisión diferencial por aerolínea."
+  ],
+  [
+   "3DS MX",
+   "2025-01-27",
+   "MX",
+   "Medios de Pago",
+   "Prendido el 24/01 en platinum."
+  ],
+  [
+   "MercadoPago",
+   "2025-01-27",
+   "AR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Modificar Flujo Cash",
+   "2025-01-15",
+   "Todos",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Pago Remoto (Link de Pago)",
+   "2025-01-13",
+   "Todos",
+   "Medios de Pago",
+   "Prendido 13/01 en platinum, apagado 31/01, vuelto a prender 04/02 en todo menos paquetes."
+  ],
+  [
+   "Cuenta Corriente Internacional MEP AR$",
+   "2025-01-08",
+   "AR",
+   "Medios de Pago",
+   "Tarifas internacionales con TC MEP."
+  ],
+  [
+   "App HotelDO",
+   "2024-12-10",
+   "Todos",
+   "Herramientas de Agencia",
+   ""
+  ],
+  [
+   "Carrito de actividades Checkout Multicanal",
+   "2024-11-07",
+   "Todos",
+   "ONA",
+   "Carrito de actividades migrado al nuevo checkout."
+  ],
+  [
+   "HDO Pay MX, AR, EC, PE, CL",
+   "2024-11-05",
+   "Todos",
+   "Medios de Pago",
+   "Reembolsos a una wallet en lugar de cupón. Piloto con 10 agencias por país desde 21/10/24."
+  ],
+  [
+   "CHK por pasos",
+   "2024-11-05",
+   "Todos",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Vuelos Netos, Autos y Asistencias México",
+   "2024-11-04",
+   "MX",
+   "Vuelos",
+   "Platinum 04/11/24, completo 11/11/24."
+  ],
+  [
+   "Partners que Operan fuera del Portal",
+   "2024-10-04",
+   "Todos",
+   "Otros",
+   ""
+  ],
+  [
+   "Mostrar Proveedor de Actividades",
+   "2024-09-19",
+   "Todos",
+   "ONA",
+   "Se muestra el proveedor en el shopping de actividades."
+  ],
+  [
+   "Facturación Internacional con RFC Genérico en Preventa HTML",
+   "2024-09-19",
+   "MX",
+   "Otros",
+   ""
+  ],
+  [
+   "Fix Autos Netos",
+   "2024-09-18",
+   "Todos",
+   "Tarifa & Comisiones",
+   "Mejora de tarifas de autos."
+  ],
+  [
+   "Alta de agencias (Raso): asociación de código de sucursal a razón social",
+   "2024-09-16",
+   "Todos",
+   "Otros",
+   ""
+  ],
+  [
+   "Alta de agencias (Raso): perfil comercial para carga de documentos",
+   "2024-09-16",
+   "Todos",
+   "Otros",
+   ""
+  ],
+  [
+   "Bimonetario MEP Vuelos en Paquetes",
+   "2024-08-13",
+   "AR",
+   "Tarifa & Comisiones",
+   ""
+  ],
+  [
+   "Bimonetario MEP Vuelos Standalone",
+   "2024-08-07",
+   "AR",
+   "Tarifa & Comisiones",
+   ""
+  ],
+  [
+   "Bloquear Gestor de Pagos en contexto USD Argentina",
+   "2024-07-29",
+   "AR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Prendida Vertical VR",
+   "2024-07-04",
+   "Todos",
+   "Hoteles",
+   ""
+  ],
+  [
+   "Autos Brasil",
+   "2024-07-02",
+   "BR",
+   "ONA",
+   ""
+  ],
+  [
+   "Vuelos Netos Colombia",
+   "2024-07-02",
+   "CO",
+   "Vuelos",
+   ""
+  ],
+  [
+   "Monedero + Gestor de Pagos",
+   "2024-07-02",
+   "BR,CO",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Bimonetario MEP (todo excepto Autos y vuelos, idem B2C)",
+   "2024-06-14",
+   "AR",
+   "Tarifa & Comisiones",
+   "02/07 se prendió autos en bimonetario desde B2C."
+  ],
+  [
+   "DEBIN USD VUELOS NETOS",
+   "2024-05-16",
+   "AR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Desactivar 'Mejora tu Auto' en HotelDO",
+   "2024-05-14",
+   "Todos",
+   "ONA",
+   "Rompía el checkout al tomar tarifas prepagas."
+  ],
+  [
+   "Recupero cash en riesgo reject",
+   "2024-05-08",
+   "Todos",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "DEBIN Argentina 24hs",
+   "2024-04-23",
+   "AR",
+   "Medios de Pago",
+   "Duración de DEBIN extendida de 3 a 24 hs."
+  ],
+  [
+   "Monedero Brasil",
+   "2024-04-16",
+   "BR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Asistencias Netas Brasil",
+   "2024-04-05",
+   "BR",
+   "ONA",
+   ""
+  ],
+  [
+   "HotelDO Cuenta Corriente (API + HTML) Chile",
+   "2024-03-25",
+   "CL",
+   "Otros",
+   ""
+  ],
+  [
+   "HotelDO Cuenta Corriente (API + HTML) Arg Doméstico",
+   "2024-03-25",
+   "AR",
+   "Otros",
+   ""
+  ],
+  [
+   "HotelDO Cuenta Corriente (API + HTML) Perú",
+   "2024-03-25",
+   "PE",
+   "Otros",
+   ""
+  ],
+  [
+   "Desactivación de Check Out Pasos Mobile",
+   "2024-02-29",
+   "Todos",
+   "Otros",
+   ""
+  ],
+  [
+   "HotelDO Cuenta Corriente (API + HTML) Ecuador",
+   "2024-02-22",
+   "EC",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Promesa de Pago Nativa",
+   "2024-02-21",
+   "Todos",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Vuelos Netos Argentina",
+   "2024-02-14",
+   "AR",
+   "Vuelos",
+   ""
+  ],
+  [
+   "Vuelos Netos Ecuador",
+   "2024-02-01",
+   "EC",
+   "Vuelos",
+   ""
+  ],
+  [
+   "Vuelos Netos Chile",
+   "2024-02-01",
+   "CL",
+   "Vuelos",
+   ""
+  ],
+  [
+   "Vuelos Netos Perú",
+   "2024-02-01",
+   "PE",
+   "Vuelos",
+   ""
+  ],
+  [
+   "Traslados MX",
+   "2024-01-18",
+   "MX",
+   "ONA",
+   ""
+  ],
+  [
+   "Checkout Multicanal API",
+   "2024-01-16",
+   "Todos",
+   "Otros",
+   ""
+  ],
+  [
+   "Migración Argentina",
+   "2024-01-26",
+   "AR",
+   "Otros",
+   ""
+  ],
+  [
+   "Checkout Multicanal (Autos y Asistencias)",
+   "2023-12-19",
+   "Todos",
+   "Otros",
+   ""
+  ],
+  [
+   "Asistencias Netas Colombia",
+   "2023-12-14",
+   "CO",
+   "ONA",
+   ""
+  ],
+  [
+   "Vuelos Netos Brasil",
+   "2023-12-04",
+   "BR",
+   "Vuelos",
+   ""
+  ],
+  [
+   "Migración Chile a HotelDO",
+   "2023-11-28",
+   "CL",
+   "Otros",
+   ""
+  ],
+  [
+   "Migración Perú a HotelDO",
+   "2023-11-28",
+   "PE",
+   "Otros",
+   ""
+  ],
+  [
+   "Migración Ecuador a HotelDO",
+   "2023-11-15",
+   "EC",
+   "Otros",
+   ""
+  ],
+  [
+   "Autos Colombia",
+   "2023-11-13",
+   "CO",
+   "ONA",
+   ""
+  ],
+  [
+   "Múltiple uso de Cupones",
+   "2023-10-25",
+   "Todos",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Promesa de Pago + monedero",
+   "2023-10-17",
+   "Todos",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Monedero CO (vía cancelaciones)",
+   "2023-09-25",
+   "CO",
+   "Herramientas de Agencia",
+   ""
+  ],
+  [
+   "Operador de Traslados",
+   "2023-09-08",
+   "Todos",
+   "ONA",
+   ""
+  ],
+  [
+   "Checkout Multicanal (Hoteles, Actividades y Traslados)",
+   "2023-08-22",
+   "Todos",
+   "Otros",
+   ""
+  ],
+  [
+   "DEBIN AR",
+   "2023-08-08",
+   "AR",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Múltiples Medios de Pago",
+   "2023-08-07",
+   "Todos",
+   "Medios de Pago",
+   ""
+  ],
+  [
+   "Vuelos + 2 Alojamientos",
+   "2023-07-06",
+   "Todos",
+   "Paquetes",
+   ""
+  ],
+  [
+   "Migración AFF MX a HotelDO (Híbrido)",
+   "2022-10-20",
+   "MX",
+   "Otros",
+   ""
+  ],
+  [
+   "Migración AFF Col a HotelDO",
+   "2022-09-28",
+   "CO",
+   "Otros",
+   ""
+  ],
+  [
+   "Migración AFF Brasil a HotelDO",
+   "2022-09-05",
+   "BR",
+   "Otros",
+   ""
+  ]
+ ],
+ "impact": {
+  "configs": {
+   "pd_ar": {
+    "title": "Pago diferido AR",
+    "launch": "2026-10-19",
+    "partial": "2026-10-30",
+    "method": "DEFERRED_PAYMENT",
+    "asof": "2026-10-29",
+    "daily": [
+     [
+      "2026-10-19",
+      164,
+      77018.85
+     ],
+     [
+      "2026-10-20",
+      138,
+      76247.85
+     ],
+     [
+      "2026-10-21",
+      162,
+      109842.89
+     ],
+     [
+      "2026-10-22",
+      152,
+      86913.05
+     ],
+     [
+      "2026-10-23",
+      162,
+      119815.08
+     ],
+     [
+      "2026-10-24",
+      55,
+      50833.43
+     ],
+     [
+      "2026-10-25",
+      22,
+      6349.98
+     ],
+     [
+      "2026-10-26",
+      152,
+      105471.63
+     ],
+     [
+      "2026-10-27",
+      163,
+      139730.11
+     ],
+     [
+      "2026-10-28",
+      160,
+      114268.76
+     ],
+     [
+      "2026-10-29",
+      10,
+      3021.43
+     ]
+    ],
+    "bookings": [
+     [
+      "2026-10-21",
+      "Cancelado",
+      "AG00118320",
+      "Travexa",
+      "156894362000",
+      2294.54
+     ],
+     [
+      "2026-10-22",
+      "Cancelado",
+      "AG00083776",
+      "SK GROUP",
+      "32646362100",
+      3331.88
+     ],
+     [
+      "2026-10-22",
+      "Confirmado",
+      "AG00125015",
+      "Aurus Travel",
+      "761262362100",
+      1873.23
+     ],
+     [
+      "2026-10-23",
+      "Confirmado",
+      "AG00091199",
+      "Javier Fioriio",
+      "888542362200",
+      5760.66
+     ],
+     [
+      "2026-10-26",
+      "Confirmado",
+      "AG00109372",
+      "Feliz Viaje Bahia Blanca",
+      "701881362500",
+      2142.32
+     ],
+     [
+      "2026-10-27",
+      "Cancelado",
+      "AG00121720",
+      "Jesica Travel",
+      "560395362600",
+      4326.15
+     ],
+     [
+      "2026-10-27",
+      "Confirmado",
+      "AG00083776",
+      "SK GROUP",
+      "38520362600",
+      3087.6099999999997
+     ],
+     [
+      "2026-10-28",
+      "Confirmado",
+      "AG00121720",
+      "Jesica Travel",
+      "392713362700",
+      4335.130000000001
+     ]
+    ],
+    "country": "AR",
+    "query": "select cast(bi.creation_date as varchar) as date, bi.transaction_status as estado, bi.partner_id, bi.agency_name, bi.transaction_code as reserva, sum(bi.gb) as gb\nfrom analytics.bi_sales_fact_sales_recognition bi\nleft join lake.channels_bo_product product on bi.origin_product_id = product.transaction_id\nwhere bi.channel in ('hoteldo-html-platinum','hoteldo-html-gold','hoteldo-html-silver','hoteldo-html-classic')\n  and bi.creation_date >= date '2026-10-01'\n  and bi.partition_period >= '2026-10'\n  and bi.country_code = 'AR'\n  and product.payment_methods = 'DEFERRED_PAYMENT'\n  and lower(bi.agency_name) not like '%test%'\ngroup by 1,2,3,4,5 order by 1,2"
+   },
+   "ldp": {
+    "kind": "ldp",
+    "title": "Link de pago en hoteles non ref",
+    "asof": "2026-10-29",
+    "partial": "2026-10-30",
+    "daily": [
+     [
+      "2026-09-29",
+      403740,
+      241481,
+      18552,
+      0,
+      174507,
+      7
+     ],
+     [
+      "2026-09-30",
+      383577,
+      238409,
+      4912,
+      0,
+      105600,
+      7
+     ],
+     [
+      "2026-10-01",
+      454372,
+      199950,
+      6711,
+      0,
+      126027,
+      7
+     ],
+     [
+      "2026-10-02",
+      431993,
+      239497,
+      6510,
+      619,
+      153313,
+      9
+     ],
+     [
+      "2026-10-03",
+      227865,
+      148008,
+      2931,
+      0,
+      127141,
+      3
+     ],
+     [
+      "2026-10-04",
+      145156,
+      101771,
+      1628,
+      0,
+      50247,
+      3
+     ],
+     [
+      "2026-10-05",
+      430488,
+      240626,
+      1642,
+      0,
+      109662,
+      4
+     ],
+     [
+      "2026-10-06",
+      550146,
+      301047,
+      4704,
+      0,
+      139300,
+      4
+     ],
+     [
+      "2026-10-07",
+      600709,
+      286984,
+      2902,
+      0,
+      167471,
+      3
+     ],
+     [
+      "2026-10-08",
+      464784,
+      293693,
+      6762,
+      105,
+      137076,
+      11
+     ],
+     [
+      "2026-10-09",
+      496306,
+      284633,
+      7127,
+      0,
+      155922,
+      10
+     ],
+     [
+      "2026-10-10",
+      236981,
+      153403,
+      8192,
+      0,
+      80566,
+      8
+     ],
+     [
+      "2026-10-11",
+      111009,
+      77050,
+      7018,
+      0,
+      33156,
+      5
+     ],
+     [
+      "2026-10-12",
+      214368,
+      97553,
+      5050,
+      0,
+      110496,
+      7
+     ],
+     [
+      "2026-10-13",
+      419099,
+      232265,
+      4437,
+      0,
+      244106,
+      8
+     ],
+     [
+      "2026-10-14",
+      438976,
+      225039,
+      14784,
+      2782,
+      236713,
+      9
+     ],
+     [
+      "2026-10-15",
+      382019,
+      272220,
+      6855,
+      0,
+      157201,
+      8
+     ],
+     [
+      "2026-10-16",
+      442156,
+      266009,
+      8585,
+      2646,
+      260374,
+      16
+     ],
+     [
+      "2026-10-17",
+      238725,
+      154602,
+      2320,
+      0,
+      134018,
+      1
+     ],
+     [
+      "2026-10-18",
+      82318,
+      67967,
+      2647,
+      0,
+      37241,
+      2
+     ],
+     [
+      "2026-10-19",
+      353463,
+      172722,
+      15544,
+      749,
+      542478,
+      36
+     ],
+     [
+      "2026-10-20",
+      399135,
+      191129,
+      37049,
+      754,
+      628066,
+      57
+     ],
+     [
+      "2026-10-21",
+      390307,
+      233052,
+      54556,
+      0,
+      677915,
+      61
+     ],
+     [
+      "2026-10-22",
+      378035,
+      176929,
+      53191,
+      0,
+      608155,
+      59
+     ],
+     [
+      "2026-10-23",
+      487032,
+      195349,
+      34463,
+      238,
+      717082,
+      57
+     ],
+     [
+      "2026-10-24",
+      218023,
+      116182,
+      39969,
+      0,
+      374173,
+      45
+     ],
+     [
+      "2026-10-25",
+      78324,
+      52157,
+      5217,
+      0,
+      135697,
+      14
+     ],
+     [
+      "2026-10-26",
+      350613,
+      144812,
+      32339,
+      1313,
+      529078,
+      47
+     ],
+     [
+      "2026-10-27",
+      322388,
+      170127,
+      53134,
+      0,
+      545649,
+      75
+     ],
+     [
+      "2026-10-28",
+      342617,
+      203245,
+      41051,
+      0,
+      586913,
+      63
+     ],
+     [
+      "2026-10-29",
+      38796,
+      16044,
+      2052,
+      0,
+      56891,
+      6
+     ]
+    ],
+    "countries": [
+     [
+      "MX",
+      "2026-09-29",
+      170,
+      157934,
+      125,
+      3280327,
+      5221,
+      237,
+      28
+     ],
+     [
+      "AR",
+      "2026-10-13",
+      16,
+      13701,
+      11,
+      720100,
+      781,
+      26,
+      2
+     ],
+     [
+      "CL",
+      "2026-10-13",
+      25,
+      17738,
+      20,
+      475032,
+      310,
+      45,
+      5
+     ],
+     [
+      "BR",
+      "2026-10-19",
+      387,
+      267165,
+      287,
+      2918806,
+      3869,
+      332,
+      72
+     ],
+     [
+      "CO",
+      "2026-10-19",
+      47,
+      32342,
+      41,
+      681608,
+      1253,
+      95,
+      5
+     ],
+     [
+      "PE",
+      "2026-10-19",
+      7,
+      3953,
+      5,
+      66363,
+      82,
+      11,
+      2
+     ]
+    ],
+    "tot": {
+     "nl": 652,
+     "gl": 492834,
+     "ag": 489,
+     "gt": 8142236,
+     "nt": 11516,
+     "agt": 4127,
+     "nc": 746,
+     "gc": 629532,
+     "rep": 114,
+     "hnc": 6092
+    },
+    "remote": [
+     [
+      "2026-09-29",
+      102421,
+      38545
+     ],
+     [
+      "2026-09-30",
+      65767,
+      16441
+     ],
+     [
+      "2026-10-01",
+      57350,
+      18771
+     ],
+     [
+      "2026-10-02",
+      72341,
+      19376
+     ],
+     [
+      "2026-10-03",
+      47083,
+      7126
+     ],
+     [
+      "2026-10-04",
+      26062,
+      6133
+     ],
+     [
+      "2026-10-05",
+      68337,
+      19392
+     ],
+     [
+      "2026-10-06",
+      77273,
+      26960
+     ],
+     [
+      "2026-10-07",
+      146052,
+      13906
+     ],
+     [
+      "2026-10-08",
+      130330,
+      32587
+     ],
+     [
+      "2026-10-09",
+      81354,
+      34755
+     ],
+     [
+      "2026-10-10",
+      52115,
+      21273
+     ],
+     [
+      "2026-10-11",
+      12179,
+      9774
+     ],
+     [
+      "2026-10-12",
+      31048,
+      7493
+     ],
+     [
+      "2026-10-13",
+      77912,
+      14597
+     ],
+     [
+      "2026-10-14",
+      68007,
+      24605
+     ],
+     [
+      "2026-10-15",
+      48706,
+      20184
+     ],
+     [
+      "2026-10-16",
+      83908,
+      22207
+     ],
+     [
+      "2026-10-17",
+      35133,
+      16924
+     ],
+     [
+      "2026-10-18",
+      17162,
+      7148
+     ],
+     [
+      "2026-10-19",
+      103314,
+      15544
+     ],
+     [
+      "2026-10-20",
+      63419,
+      37049
+     ],
+     [
+      "2026-10-21",
+      72257,
+      54556
+     ],
+     [
+      "2026-10-22",
+      64143,
+      53191
+     ],
+     [
+      "2026-10-23",
+      103838,
+      34463
+     ],
+     [
+      "2026-10-24",
+      44428,
+      39969
+     ],
+     [
+      "2026-10-25",
+      16842,
+      5217
+     ],
+     [
+      "2026-10-26",
+      79365,
+      32339
+     ],
+     [
+      "2026-10-27",
+      66992,
+      53134
+     ],
+     [
+      "2026-10-28",
+      66435,
+      41051
+     ],
+     [
+      "2026-10-29",
+      2811,
+      2052
+     ]
+    ],
+    "top": [
+     [
+      "AG00058434",
+      "Amigos De Viaje",
+      "MX",
+      7,
+      16031
+     ],
+     [
+      "AG00075874",
+      "Check In Viagens (Betim - MG)",
+      "BR",
+      2,
+      12063
+     ],
+     [
+      "AG00042756",
+      "Destino360",
+      "MX",
+      1,
+      8601
+     ],
+     [
+      "AG00117559",
+      "Diez mil pies Viajes AR",
+      "AR",
+      1,
+      7879
+     ],
+     [
+      "AG00082623",
+      "Simplifique Turismo (Juiz de Fora - MG) - ASM",
+      "BR",
+      2,
+      6772
+     ],
+     [
+      "AG00058132",
+      "Bilhete On (Mogi das Cruzes  SP)",
+      "BR",
+      2,
+      6000
+     ],
+     [
+      "AG00114414",
+      "Elite (Capivari do Sul - RS)",
+      "BR",
+      2,
+      5497
+     ],
+     [
+      "AG00073562",
+      "SBtur Viagem (Sao Caetano do Sul - SP)",
+      "BR",
+      2,
+      5327
+     ],
+     [
+      "AG00031836",
+      "VIAJE POR EL MUNDO SAS",
+      "CO",
+      3,
+      5076
+     ],
+     [
+      "AG00090474",
+      "EB Travel Brasil",
+      "BR",
+      1,
+      4950
+     ]
+    ]
+   }
+  },
+  "map": {
+   "Pago diferido | AR|2026-10-19": "pd_ar",
+   "Link de pago en hoteles non ref|2026-10-19": "ldp",
+   "Link de pago en hoteles non ref|2026-10-13": "ldp",
+   "Link de pago en Hoteles NON REF|2026-09-29": "ldp"
+  }
+ }
+}

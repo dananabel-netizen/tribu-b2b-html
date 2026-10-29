@@ -865,10 +865,10 @@ function renderLdp(d,cfg){
     <span class="tags">${C.map(r=>`<span class="tag" title="${CN[r[0]]||r[0]}">${flag(r[0])}</span>`).join("")}</span></div>
     <button class="btn-back" id="impBack">← Volver a iniciativas</button></div>`;
   const kpis=[
-    ["kpi-g kpi-hero","💰","GB confirmado",`<span class="u">USD</span>${fmtN(T.gl)}`,`<span class="delta nd">ticket prom. USD ${fmtN(T.gl/T.nl)} · hoteles USD ${fmtN(T.gt/T.nt)}</span>`],
-    ["kpi-b","📊","Share total",pf(T.gl/T.gt*100),`<span class="delta nd">del GB de hoteles · USD ${fmtN(T.gt)}</span>`],
-    ["kpi-c","🧾","Bookings confirmados",fmtN(T.nl),`<span class="delta nd">${pf(T.nl/T.nt*100)} de ${fmtN(T.nt)} reservas de hoteles</span>`],
-    ["kpi-p","🏢","Agencias que lo usan",fmtN(T.ag),`<span class="delta nd">${pf(T.rep/T.ag*100)} repitió · ${pf(T.ag/T.agt*100)} del total</span>`]
+    ["kpi-g kpi-hero","💰","GB confirmado",`<span class="u">USD</span>${fmtN(T.gl)}`,`<span class="delta nd">ticket prom. USD ${fmtN(T.gl/T.nl)} · hoteles non ref USD ${fmtN(T.gt/T.nt)}</span>`],
+    ["kpi-b","📊","Share total",pf(T.gl/T.gt*100),`<span class="delta nd">del GB de hoteles non ref · USD ${fmtN(T.gt)}</span>`],
+    ["kpi-c","🧾","Bookings confirmados",fmtN(T.nl),`<span class="delta nd">${pf(T.nl/T.nt*100)} de ${fmtN(T.nt)} reservas de hoteles non ref</span>`],
+    ["kpi-p","🏢","Agencias que lo usan",fmtN(T.ag),`<span class="delta nd">${pf(T.rep/T.ag*100)} repitió · ${pf(T.ag/T.agt*100)} de ${fmtN(T.agt)} agencias con venta non ref</span>`]
   ];
   const mx=Math.max(...C.map(r=>r[3]/r[5]));
   const rowsC=[...C].sort((a,b)=>b[3]/b[5]-a[3]/a[5]).map(r=>{const sh=r[3]/r[5]*100;
@@ -876,14 +876,14 @@ function renderLdp(d,cfg){
   $("impact").innerHTML=head+
    `<div class="kpis k3 mini">${kpis.map(([c,i,l,v,s])=>`<div class="kpi ${c}"><div class="kpi-icon">${i}</div><div class="kpi-body"><div class="kpi-lbl">${l}</div><div class="kpi-val">${v}</div><div class="kpi-sub">${s}</div></div></div>`).join("")}</div>
     <div style="display:grid;grid-template-columns:5fr 6fr;gap:14px;align-items:stretch">
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Share y venta por país</div><div class="card-sub">Link de pago sobre el GB de hoteles de cada país, ${sinceTxt}</div></div></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Share y venta por país</div><div class="card-sub">Link de pago sobre el GB de hoteles non ref de cada país, ${sinceTxt}</div></div></div>
         <table class="stbl"><thead><tr><th>País</th><th>Prendido</th><th class="num">GB (USD)</th><th class="num">Bookings</th><th class="num">Agencias</th><th class="num">Cancel.</th><th>Share</th></tr></thead><tbody>${rowsC}</tbody></table></div>
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del share del link de pago</div><div class="card-sub">% del GB de hoteles de los países ya prendidos · el ${fdate(cfg.asof)} está incompleto (el día no terminó)</div></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del share del link de pago</div><div class="card-sub">% del GB de hoteles non ref de los países ya prendidos · el ${fdate(cfg.asof)} está incompleto (el día no terminó)</div></div>
         <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
         <div class="ch" style="height:228px"><canvas id="cLdpS"></canvas></div></div>
     </div>
     <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución de venta de hoteles: reembolsable vs no reembolsable</div><div class="card-sub" id="ldpVs"></div></div>
-      <div style="display:flex;gap:8px;align-items:center"><div class="gran" id="ldpMode"><button data-m="all">Todos los MDP</button><button data-m="link">Solo link de pago</button></div>
+      <div style="display:flex;gap:8px;align-items:center"><div class="gran" id="ldpMode"><button data-m="all">Todos los MDP</button><button data-m="link">Solo non ref</button></div>
       <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div></div>
       <div class="ch"><canvas id="cLdpV"></canvas></div></div>
     <details class="q"><summary>Ver top 10 agencias por GB con link de pago · ${pf(cfg.top.reduce((a,r)=>a+r[4],0)/T.gl*100)} del GB del link</summary>
@@ -898,7 +898,7 @@ function renderLdp(d,cfg){
   const tt={backgroundColor:"#0F1834",padding:10,cornerRadius:8};
   function draw(){
     const m=new Map();
-    cfg.daily.forEach(r=>{const k=keyOf(r[0],impGran);const a=m.get(k)||[0,0,0,0];a[0]+=r[1];a[1]+=r[2];a[2]+=r[3];a[3]+=r[5];m.set(k,a);});
+    cfg.daily.forEach(r=>{const k=keyOf(r[0],impGran);const a=m.get(k)||[0,0,0,0];a[0]+=r[1];a[1]+=r[2];a[2]+=r[3];a[3]+=r[7];m.set(k,a);});
     const ks=[...m.keys()].sort(), lb=ks.map(k=>lblOf(k,impGran));
     document.querySelectorAll(".impGran").forEach(g=>[...g.children].forEach(b=>b.classList.toggle("active",b.dataset.g===impGran)));
     const sh=ks.map(k=>m.get(k)[3]?Math.round(m.get(k)[2]/m.get(k)[3]*10000)/100:0);
@@ -910,11 +910,10 @@ function renderLdp(d,cfg){
         vlabels:{on:impGran!=="d",size:11,zero:true,fmt:pf}},
         scales:{y:{beginAtZero:true,grace:"30%",grid,ticks:{callback:v=>v+"%"},title:{display:true,text:"% del GB",color:"#64748B",font:{size:11,weight:"600"}}},
                 x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
-    const rm=new Map();cfg.remote.forEach(r=>{const k=keyOf(r[0],impGran);const a=rm.get(k)||[0,0];a[0]+=r[1];a[1]+=r[2];rm.set(k,a);});
     const link=ldpMode==="link";
-    const ds=link?[["Reembolsable",k=>(rm.get(k)||[0,0])[0],"#3B82F6"],["No reembolsable",k=>(rm.get(k)||[0,0])[1],"#ED8B08"]]
+    const ds=link?[["Otros medios no reembolsables",k=>m.get(k)[1],"#94A3B8"],["Link de pago",k=>m.get(k)[2],"#ED8B08"]]
                  :[["Reembolsable",k=>m.get(k)[0],"#3B82F6"],["No reembolsable",k=>m.get(k)[1]+m.get(k)[2],"#ED8B08"]];
-    $("ldpVs").textContent=link?"GB confirmado en USD · solo reservas con link de pago (medio de pago REMOTE, solo o combinado con otro) · MX, AR, CL, BR, CO y PE"
+    $("ldpVs").textContent=link?"GB confirmado en USD · solo hoteles no reembolsables: link de pago vs otros medios de pago · MX, AR, CL, BR, CO y PE"
                                :"GB confirmado en USD · incluye todos los medios de pago · MX, AR, CL, BR, CO y PE";
     document.querySelectorAll("#ldpMode button").forEach(b=>b.classList.toggle("active",b.dataset.m===ldpMode));
     chart("cLdpV",{type:"bar",data:{labels:lb,datasets:ds.map(([n,f,col],i)=>({label:n,data:ks.map(k=>Math.round(f(k))),backgroundColor:col,borderRadius:i===1?{topLeft:6,topRight:6}:0,maxBarThickness:64}))},

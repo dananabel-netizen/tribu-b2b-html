@@ -60,7 +60,8 @@ z as (select *, case when rf=false and pm like '%REMOTE%' and d>=ld then 'L' whe
 select cast(d as varchar) d,
  round(sum(case when cls='R' then gb end)) ref, round(sum(case when cls='N' then gb end)) non, round(sum(case when cls='L' then gb end)) link,
  round(sum(case when cls='X' then gb end)) sd, round(sum(case when d>=ld then gb end)) scope,
- count(distinct case when cls='L' then r end) nl
+ count(distinct case when cls='L' then r end) nl,
+ round(sum(case when d>=ld and rf=false then gb end)) scope_nr
 from z group by d order by d
 """
 
@@ -83,7 +84,8 @@ union all select 'TOT','',count(distinct case when st='Confirmado' then r end), 
 
 Q_LDP_TOTALS = f"""
 with {_BASE}
-select c, round(sum(gb)) gt, count(distinct r) nt, count(distinct p) agt from k where d>=ld and st='Confirmado' group by c
+select c, round(sum(gb)) gt, count(distinct r) nt, count(distinct p) agt from k where d>=ld and st='Confirmado' and rf=false group by c
+union all select 'ALL', round(sum(gb)), count(distinct r), count(distinct p) from k where d>=ld and st='Confirmado' and rf=false
 """
 
 Q_LDP_TOP = f"""
@@ -91,13 +93,6 @@ with {_BASE},
 t as (select p, max(an) an, max(c) c, count(distinct r) n, round(sum(gb)) g from k
       where d>=ld and st='Confirmado' and rf=false and pm like '%REMOTE%' group by p)
 select p, an, c, n, g from t order by g desc limit 10
-"""
-
-Q_LDP_REMOTE = f"""
-with {_BASE}
-select cast(d as varchar) d,
- round(sum(case when rf=true then gb end)) rref, round(sum(case when rf=false then gb end)) rnon
-from k where st='Confirmado' and pm like '%REMOTE%' group by d order by d
 """
 
 # ── Pago diferido AR ───────────────────────────────────────────────────────────────────────────────
@@ -145,7 +140,6 @@ def fetch_all():
         out['ldp_country'] = q('ldp_country', Q_LDP_COUNTRY)
         out['ldp_totals'] = q('ldp_totals', Q_LDP_TOTALS)
         out['ldp_top'] = q('ldp_top', Q_LDP_TOP)
-        out['ldp_remote'] = q('ldp_remote', Q_LDP_REMOTE)
         out['pd_daily'] = q('pd_daily', Q_PD_DAILY)
         return out, q   # q se reusa para las reservas de pago diferido
     except Exception:
@@ -157,6 +151,7 @@ def build_ldp(cfg_old, r, today):
     daily = [[row[0]] + [num(x) for x in row[1:]] for row in r['ldp_daily']]
     cty = {row[0]: row for row in r['ldp_country']}
     tt = {row[0]: row for row in r['ldp_totals']}
+    nr = tt.pop('ALL')
     countries = []
     for c in LDP_COUNTRIES:
         if c not in cty:
@@ -165,13 +160,13 @@ def build_ldp(cfg_old, r, today):
         # [país, prendido, bookings link, GB link, agencias link, GB hoteles total, bookings hoteles total, canceladas link, repitieron]
         countries.append([c, LDP_LAUNCH[c], num(x[2]), num(x[3]), num(x[4]), num(t[1]), num(t[2]), num(x[5]), num(x[7])])
     A, T = cty['ALL'], cty['TOT']
-    tot = {'nl': num(A[2]), 'gl': num(A[3]), 'ag': num(A[4]), 'gt': sum(x[5] for x in countries), 'nt': sum(x[6] for x in countries),
-           'agt': num(T[4]), 'nc': num(A[5]), 'gc': num(A[6]), 'rep': num(A[7]), 'hnc': num(T[5])}
+    tot = {'nl': num(A[2]), 'gl': num(A[3]), 'ag': num(A[4]), 'gt': num(nr[1]), 'nt': num(nr[2]),
+           'agt': num(nr[3]), 'nc': num(A[5]), 'gc': num(A[6]), 'rep': num(A[7]), 'hnc': num(T[5])}
     top = [[row[0], row[1], row[2], num(row[3]), num(row[4])] for row in r['ldp_top']]
-    remote = [[row[0], num(row[1]), num(row[2])] for row in r['ldp_remote']]
     cfg = dict(cfg_old)
+    cfg.pop('remote', None)   # ya no se usa
     cfg.update(kind='ldp', title=cfg_old.get('title', 'Link de pago en hoteles non ref'), asof=today.isoformat(),
-               partial=(today + timedelta(days=1)).isoformat(), daily=daily, countries=countries, tot=tot, top=top, remote=remote)
+               partial=(today + timedelta(days=1)).isoformat(), daily=daily, countries=countries, tot=tot, top=top)
     return cfg
 
 

@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Usabilidad HotelDO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page:#f2f2f2; --surface:#fff; --ink:#1a1a1a; --ink2:#555b66; --muted:#8b909a;
+    --line:#e4e4e4; --axis:#c9ccd3; --nav:#1b2a4a; --black:#0a0a0a;
+    --orange:#f08a00; --teal:#0e8a6e; --mint:#aeeadb; --mint-ink:#0b4a3c; --blue:#2a78d6;
+    --font:"Rubik","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.45 var(--font);background:var(--page);color:var(--ink);-webkit-font-smoothing:antialiased}
+  header,main{zoom:.7}   /* escala general: todo igual, un poco más chico */
+  .wrap{max-width:none;margin:0 auto;padding:0 32px}
+
+  /* Cabecera blanca, como la plataforma */
+  header{background:#fff;border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:14px;padding-bottom:2px}
+  .brand{display:flex;align-items:center;gap:22px}
+  .logo{height:46px;display:flex;align-items:center}
+  .logo img{height:100%;display:block;object-fit:contain}
+  .logo .wm{font-weight:700;font-size:30px;letter-spacing:-1px;color:var(--nav)}
+  .logo .wm b{color:var(--orange)}
+  .ttl{border-left:1px solid var(--line);padding-left:22px}
+  .ttl h1{margin:0;font-size:19px;font-weight:600;letter-spacing:-.2px}
+  .ttl .sub{color:var(--muted);font-size:12.5px}
+  .asof{background:var(--page);border-radius:0 0 18px 18px;padding:14px 26px;font-size:14px;color:var(--ink2);margin-top:-14px;white-space:nowrap}
+  .asof b{color:var(--ink);font-weight:600}
+
+  /* Pestañas estilo barra de HotelDO */
+  .tabs{display:flex;gap:6px;overflow-x:auto}
+  .tab{border:0;background:none;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;
+    min-width:118px;height:98px;padding:12px 14px 0;color:var(--ink2);border-bottom:3px solid transparent;transition:color .15s}
+  .tab .ic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#6b7385;transition:background .15s,color .15s}
+  .tab .ic svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .tab .lb{font-size:15px;font-weight:400;padding-bottom:11px}
+  .tab:hover{color:var(--ink)}
+  .tab:hover .ic{background:#eef0f4;color:var(--ink)}
+  .tab[aria-pressed=true]{color:var(--ink);border-bottom-color:var(--nav)}
+  .tab[aria-pressed=true] .ic{background:var(--black);color:#fff}
+  .tab[aria-pressed=true] .lb{font-weight:600}
+  .tab:focus-visible{outline:2px solid var(--nav);outline-offset:-2px;border-radius:10px}
+
+  main{max-width:none;margin:22px 0 48px;padding:0 32px}
+
+  /* Panel negro de filtros, como el buscador de HotelDO */
+  .panel{background:var(--black);color:#fff;border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+  .panel h3{margin:0 8px 0 0;font-size:19px;font-weight:600}
+  .field{background:#fff;color:var(--ink);border-radius:10px;padding:7px 14px 8px;min-width:168px;border:1px solid #d9d9d9}
+  .field label{display:block;font-size:10.5px;letter-spacing:.14em;color:var(--muted);font-weight:500;text-transform:uppercase}
+  .field select{border:0;background:transparent;font:600 14.5px var(--font);color:var(--ink);width:100%;outline:none;cursor:pointer;padding:2px 0 0;margin-left:-3px}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-left:6px}
+  .pill{border:2px solid #fff;background:transparent;color:#fff;border-radius:999px;padding:7px 16px;font:600 13.5px var(--font);cursor:pointer;transition:background .15s,color .15s}
+  .pill:hover{background:rgba(255,255,255,.14)}
+  .pill[aria-pressed=true]{background:#fff;color:var(--black)}
+  .btn{margin-left:auto;background:var(--orange);color:#fff;border:0;border-radius:999px;padding:12px 28px;font:600 15px var(--font);cursor:pointer;box-shadow:0 4px 14px rgba(240,138,0,.35);transition:transform .1s,filter .15s}
+  .btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+
+
+  /* KPIs */
+  .kpis{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin-bottom:14px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  .kpi{margin:0;display:flex;flex-direction:column;justify-content:space-between;min-height:112px}
+  .kpi .l{color:var(--muted);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+  .kpi .v{font-size:28px;font-weight:600;letter-spacing:-.6px;line-height:1.1;margin-top:8px}
+  .kpi .s{color:var(--muted);font-size:12.5px;margin-top:6px}
+  .kpi.hero{background:var(--black);border-color:var(--black);color:#fff}
+  .kpi.hero .l{color:rgba(255,255,255,.6)}
+  .kpi.hero .v{font-size:48px;letter-spacing:-1.6px}
+  .kpi.hero .s{color:rgba(255,255,255,.62)}
+  .kpi.hero .s::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--orange);margin-right:8px}
+
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .card h2{margin:0;font-size:17px;font-weight:600;letter-spacing:-.2px}
+  .card .hint{color:var(--muted);font-size:12.5px;margin:2px 0 14px}
+
+
+  /* Columnas semanales */
+  .cols{display:flex;align-items:flex-end;gap:10px;height:170px;border-bottom:1px solid var(--axis);padding-top:22px}
+  .col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative;border-radius:8px 8px 0 0}
+  .col:hover{background:#f6f6f6}
+  .col .bar{width:100%;max-width:24px;border-radius:4px 4px 0 0;transition:height .35s ease}
+  .col .end{position:absolute;font-size:12px;font-weight:600;white-space:nowrap}
+  .xlab{display:flex;gap:10px;margin-top:6px}
+  .xlab span{flex:1;text-align:center;font-size:11px;color:var(--muted)}
+
+  /* Tablas */
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;font-weight:500;border-bottom:1px solid var(--line);padding:8px 12px;white-space:nowrap;cursor:pointer;user-select:none}
+  th:hover{color:var(--ink)}
+  th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+  td{padding:8px 12px;border-bottom:1px solid #efefef}
+  td:first-child{font-weight:500}
+  tbody tr:hover td{background:#fafafa}
+  tbody tr:last-child td{border-bottom:0}
+  tfoot td{font-weight:600;background:#f6f6f6;border-bottom:0}
+  .muted{color:var(--muted)}
+  .up{color:var(--teal);font-weight:600}.dn{color:#c2410c;font-weight:600}
+  .lvl::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:7px}
+  .few{font-size:10.5px;font-weight:600;color:#9a5b00;background:#fff3dc;border-radius:999px;padding:2px 8px;margin-left:6px;white-space:nowrap}
+  .csvbtn{border:1.5px solid var(--black);background:#fff;border-radius:999px;padding:6px 14px;font:600 12.5px var(--font);cursor:pointer;margin-bottom:10px}
+  .csvbtn:hover{background:var(--black);color:#fff}
+  .low::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--orange);margin-right:7px}
+  .smartgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin-top:12px}
+  .ins{border:1px solid #e6e8ee;border-left:4px solid var(--c);border-radius:10px;padding:12px 14px;font-size:13.5px;line-height:1.5}
+  .ins .tag{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin-bottom:4px}
+  .ins p{margin:0}.ins b{font-weight:600}.ins .do{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
+  @media(max-width:980px){.smartgrid{grid-template-columns:1fr}}
+  /* Navegación de secciones: se ve una por vez */
+  .seg{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 14px}
+  .seg button{border:1.5px solid var(--axis);background:#fff;color:var(--ink2);border-radius:999px;padding:9px 22px;font:500 14px var(--font);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+  .seg button:hover{border-color:var(--ink);color:var(--ink)}
+  .seg button[aria-pressed=true]{background:var(--black);border-color:var(--black);color:#fff;font-weight:600}
+  .pane[hidden]{display:none}
+  .hint:empty,.foot:empty{display:none}
+  .smartgrid{margin-top:14px}
+  .tblhead,.smarthead{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+  .tblhead .csvbtn{margin:2px 0 0;flex:none}
+  .selbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff4e2;border-radius:8px;padding:9px 14px;margin:0 0 12px;font-size:13.5px}
+  .selbar span{margin-right:auto}
+  .selbar .go{border:0;background:var(--black);color:#fff;border-radius:999px;padding:6px 16px;font:600 12.5px var(--font);cursor:pointer}
+  .selbar .go:hover{filter:brightness(1.25)}
+  .evbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .evbar label{font-size:10.5px;letter-spacing:.14em;color:var(--muted);font-weight:500;text-transform:uppercase}
+  .evbar select{border:1px solid var(--axis);background:#fff;border-radius:10px;padding:8px 14px;font:600 14px var(--font);color:var(--ink);cursor:pointer;min-width:240px}
+  .linkbtn{border:0;background:none;color:var(--ink);font:600 13px var(--font);text-decoration:underline;cursor:pointer;padding:4px 0;flex:none}
+  .ctywrap{overflow-x:auto;margin-top:6px}
+  #ctyTbl td.hm{text-align:right;font-variant-numeric:tabular-nums}
+  #ctyTbl td.hm.na{color:#b4bac5}
+  #ctyTbl th small{display:block;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted);font-size:10.5px;margin-top:2px}
+  #ctyTbl tr.sub td{color:var(--muted);font-size:12.5px;border-top:2px solid var(--line,#e6e8ee)}
+  .ctyins{list-style:none;margin:14px 0 4px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px 28px;font-size:13px;line-height:1.45}
+  .ctyins li b{font-weight:600}.ctyins .up{font-weight:600}.ctyins .dn{font-weight:600}
+  @media(max-width:980px){.ctyins{grid-template-columns:1fr}}
+  .cell-bar{display:inline-block;vertical-align:middle;height:6px;border-radius:3px;background:var(--teal);margin-left:10px}
+  .foot{color:var(--muted);font-size:12px;margin-top:12px;line-height:1.55}
+  /* Cómo se ve cada filtro en la plataforma */
+  tr[data-f]{cursor:pointer}
+  tbody tr.sel td{background:#fff4e2}
+  .shotgrid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:22px;align-items:start}
+  .shotwrap{position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--line);background:#f2f2f2;line-height:0}
+  .shotwrap img{width:100%;height:auto;display:block}
+  .spot{position:absolute;border:3px solid var(--orange);border-radius:8px;box-shadow:0 0 0 9999px rgba(10,10,10,.52);transition:all .25s ease;pointer-events:none}
+  .noshot{padding:48px 24px;text-align:center;color:var(--muted);line-height:1.5;font-size:14px}
+  .fname{font-size:20px;font-weight:600;letter-spacing:-.3px;margin:0 0 4px}
+  .fwhere{color:var(--ink2);font-size:13.5px;margin:0 0 14px}
+  .fwhere.warn{color:#9a5b00}
+  .fstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+  .fstats div{background:#f6f6f6;border-radius:8px;padding:10px 12px}
+  .fstats b{display:block;font-size:20px;font-weight:600;letter-spacing:-.4px}
+  .fstats span{font-size:10.5px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+  .fchips{display:flex;flex-wrap:wrap;gap:6px}
+  .fchip{border:1px solid var(--axis);background:#fff;color:var(--ink2);border-radius:999px;padding:5px 12px;font:500 12px var(--font);cursor:pointer}
+  .fchip:hover{border-color:var(--ink);color:var(--ink)}
+  .fchip[aria-pressed=true]{background:var(--black);border-color:var(--black);color:#fff}
+  .fchip.has::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--orange);margin-left:7px}
+  @media(max-width:980px){.shotgrid{grid-template-columns:1fr}}
+  #tip{position:fixed;pointer-events:none;background:var(--black);color:#fff;padding:9px 12px;border-radius:8px;font-size:12.5px;line-height:1.45;opacity:0;transition:opacity .1s;z-index:9;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+  @media(max-width:980px){.kpis{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}.btn{margin-left:0}}
+  @media print{body{background:#fff}.panel{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <div class="brand">
+      <div class="logo"><img src="logo-horizontal.png" alt="HotelDO" onerror="this.parentNode.innerHTML='<span class=wm>Hotel<b>DO</b></span>'"></div>
+      <div class="ttl"><h1>Usabilidad · CTR de filtros</h1><div class="sub">CTR de filtros por producto</div></div>
+    </div>
+    <div class="asof" id="win"></div>
+  </div>
+  <div class="wrap"><nav class="tabs" id="tabs" role="group" aria-label="Producto"></nav></div>
+</header>
+<main>
+<section class="panel" aria-label="Período">
+  <h3>Período</h3>
+  <div class="field"><label for="selFrom">Desde</label><select id="selFrom"></select></div>
+  <div class="field"><label for="selTo">Hasta</label><select id="selTo"></select></div>
+  <div class="field"><label for="selCty">País</label><select id="selCty"></select></div>
+  <div class="pills" id="pills"></div>
+  <button class="btn" id="reset">Ver todo</button>
+</section>
+<div class="kpis" id="kpis"></div>
+<div class="card" id="smart"><div class="smarthead"><div><h2>Lo que conviene mirar</h2><div class="hint" id="smartHint"></div></div><button class="linkbtn" id="smartMore" type="button" hidden></button></div>
+  <div class="smartgrid" id="smartGrid"></div><div class="foot" id="smartFoot"></div></div>
+<nav class="seg" id="seg" aria-label="Sección">
+  <button type="button" data-pane="filtros" aria-pressed="true">Filtros</button>
+  <button type="button" data-pane="evol" aria-pressed="false">Evolución</button>
+  <button type="button" data-pane="pais" aria-pressed="false">Por país</button>
+  <button type="button" data-pane="shot" aria-pressed="false">Cómo se ve</button>
+  <button type="button" data-pane="prod" aria-pressed="false">Comparar productos</button>
+</nav>
+<section class="pane" id="pane-filtros">
+  <div class="card">
+    <div class="tblhead"><div><h2 id="tblTitle">Filtros</h2><div class="hint">Click en un filtro para elegirlo</div></div><button class="csvbtn" id="csv" type="button">Descargar CSV</button></div>
+    <div class="selbar" id="selBar"></div>
+    <table id="tbl"></table><div class="foot" id="foot"></div>
+  </div>
+</section>
+<section class="pane" id="pane-evol" hidden>
+  <div class="evbar"><label for="evF">Filtro</label><select id="evF"></select></div>
+  <div class="charts">
+    <div class="card"><h2>Visitas a la búsqueda por semana</h2><div class="hint">Visitas únicas por semana</div><div id="wkVisits"></div></div>
+    <div class="card"><h2 id="wkTitle">CTR por semana</h2><div id="wkCtr"></div></div>
+  </div>
+</section>
+<section class="pane" id="pane-pais" hidden>
+  <div class="card" id="ctyCard"><h2 id="ctyTitle">Comparativo por país</h2><div class="hint">Verde: se usa más que el promedio · naranja: menos</div>
+    <div class="ctywrap"><table id="ctyTbl"></table></div><div class="foot" id="ctyFoot"></div></div>
+</section>
+<section class="pane" id="pane-shot" hidden>
+  <div class="card" id="shotCard"><h2>Cómo se ve cada filtro</h2><div class="hint">Elegí un filtro abajo</div>
+    <div class="shotgrid"><div class="shotwrap" id="shot"></div><div id="shotSide"></div></div></div>
+</section>
+<section class="pane" id="pane-prod" hidden>
+  <div class="card"><h2>Comparar productos</h2><table id="cmp"></table></div>
+</section>
+</main>
+<div id="tip"></div>
+
+<script>
+// Fuente: cards de Metabase de la colección Usabilidad (CTR Filtros General), canales hoteldo-html-*.
+// visits = visitas únicas a la búsqueda · clicks = visitas que aplicaron el filtro
+// thanks = de esas visitas, las que llegaron a THANKS · ctr = clicks/visits · share = clicks/total clicks de filtros
+// @@DATA_BEGIN
+const WINDOW = "9 semanas: 28/08 – 29/10/2026";
+// Una corrida por semana y producto (la de 30 días vence el tiempo). Cada semana: [visitas, "filtro clicks thanks;..."]
+const WEEKS = ["2026-08-28","2026-09-04","2026-09-11","2026-09-18","2026-09-25","2026-10-02","2026-10-09","2026-10-16","2026-10-23"];
+const RAW = {
+ "Hoteles":{card:171325, w:[
+  [66829,"meal_plans 17248 391;hotel_name 10836 501;zones 3654 114;accommodation_type 2603 52;roompack_tags 1676 26;rate_score 1273 20;hotel_type 1243 34;stars 1185 31;total_price_range 928 22;amenities_groups 393 10;hotel_chains 355 18;amenities 206 7;payment_type 101 0;offers 92 1;promo_campaign 18 0"],
+  [65421,"meal_plans 16361 376;hotel_name 9878 477;zones 3507 121;accommodation_type 2151 60;roompack_tags 1563 24;hotel_type 1129 23;stars 1127 32;rate_score 1109 21;total_price_range 845 31;amenities_groups 369 10;hotel_chains 342 13;amenities 260 9;payment_type 98 1;offers 72 0;promo_campaign 11 1"],
+  [67022,"meal_plans 16701 388;hotel_name 10379 439;zones 3698 100;accommodation_type 2411 60;roompack_tags 1529 26;hotel_type 1245 26;stars 1232 32;rate_score 1181 25;total_price_range 944 24;amenities_groups 406 12;hotel_chains 290 16;amenities 232 6;payment_type 88 3;offers 80 3;promo_campaign 25 0"],
+  [67598,"meal_plans 16856 361;hotel_name 10711 483;zones 3478 96;accommodation_type 2395 78;roompack_tags 1615 20;stars 1243 39;rate_score 1209 22;hotel_type 1198 29;total_price_range 899 34;amenities_groups 413 13;hotel_chains 305 10;amenities 270 9;payment_type 115 2;offers 80 2;promo_campaign 22 1"],
+  [66537,"meal_plans 16728 354;hotel_name 10418 476;zones 3630 122;accommodation_type 2221 53;roompack_tags 1659 33;hotel_type 1266 28;stars 1219 27;rate_score 1175 20;total_price_range 848 31;amenities_groups 383 14;hotel_chains 311 11;amenities 219 4;payment_type 127 3;offers 78 1;promo_campaign 22 1"],
+  [68688,"meal_plans 17288 423;hotel_name 10650 514;zones 3791 120;accommodation_type 2350 48;roompack_tags 1672 26;stars 1328 45;hotel_type 1227 27;rate_score 1140 34;total_price_range 905 43;amenities_groups 438 13;hotel_chains 352 11;amenities 243 6;payment_type 121 2;offers 86 4;promo_campaign 18 0"],
+  [61980,"meal_plans 15517 391;hotel_name 9550 429;zones 3399 106;accommodation_type 2235 63;roompack_tags 1575 26;hotel_type 1235 38;stars 1172 44;rate_score 1058 17;total_price_range 816 37;amenities_groups 366 12;hotel_chains 282 11;amenities 193 4;payment_type 91 2;offers 63 2;promo_campaign 27 0"],
+  [66630,"meal_plans 16983 383;hotel_name 10350 417;zones 3678 121;accommodation_type 2302 47;roompack_tags 1824 29;stars 1313 40;hotel_type 1253 40;rate_score 1250 25;total_price_range 891 35;amenities_groups 407 12;hotel_chains 318 22;amenities 220 12;payment_type 92 1;offers 72 1;promo_campaign 22 0"],
+  [64665,"meal_plans 16623 338;hotel_name 10204 407;zones 3553 85;accommodation_type 2348 65;roompack_tags 1628 26;hotel_type 1249 24;stars 1240 30;rate_score 1128 22;total_price_range 802 27;amenities_groups 393 12;hotel_chains 362 14;amenities 221 8;payment_type 128 2;offers 67 1;promo_campaign 19 0"]]},
+ "Vuelos":{card:171355, w:[
+  [60232,"aerolinea_matrix 10041 420;escalas_side 8083 324;escalas_matrix 7879 328;Baggages_side 6136 227;precio_matrix_suggestion 5562 228;precio_matrix_default 4144 181;aerolinea_side 2192 118;horariosal_side 2188 95;horarioregreso_side 1332 52;durvuelosalida_side 518 10;aeropuertoorigen_side 427 27;durvuelollegada_side 302 5;aeropuertodest_side 125 5;precios_side 124 1;escalas_cluster-non-stop 16 1;Alianza_side 8 0"],
+  [57010,"aerolinea_matrix 9318 428;escalas_side 7689 292;escalas_matrix 7236 312;Baggages_side 5778 190;precio_matrix_suggestion 5050 220;precio_matrix_default 3910 171;horariosal_side 2118 111;aerolinea_side 2094 91;horarioregreso_side 1254 54;durvuelosalida_side 490 13;aeropuertoorigen_side 416 25;durvuelollegada_side 290 3;aeropuertodest_side 147 4;precios_side 141 6;escalas_cluster-non-stop 12 0;Alianza_side 9 1"],
+  [61534,"aerolinea_matrix 10174 438;escalas_matrix 8032 331;escalas_side 7773 301;Baggages_side 6170 231;precio_matrix_suggestion 5649 220;precio_matrix_default 4222 183;aerolinea_side 2251 109;horariosal_side 2024 98;horarioregreso_side 1258 46;durvuelosalida_side 583 15;aeropuertoorigen_side 331 16;durvuelollegada_side 330 9;aeropuertodest_side 170 5;precios_side 121 5;escalas_cluster-non-stop 12 1;Alianza_side 10 1"],
+  [61395,"aerolinea_matrix 9658 417;escalas_side 8118 361;escalas_matrix 7453 297;Baggages_side 5853 210;precio_matrix_suggestion 5266 201;precio_matrix_default 3910 161;aerolinea_side 2274 151;horariosal_side 2083 133;horarioregreso_side 1260 90;durvuelosalida_side 482 13;aeropuertoorigen_side 463 38;durvuelollegada_side 294 6;aeropuertodest_side 180 12;precios_side 124 5;escalas_cluster-non-stop 8 0;Alianza_side 6 0"],
+  [59539,"aerolinea_matrix 9376 404;escalas_side 7575 261;escalas_matrix 7325 296;Baggages_side 5964 221;precio_matrix_suggestion 5069 199;precio_matrix_default 3955 159;aerolinea_side 2112 107;horariosal_side 2070 87;horarioregreso_side 1245 39;durvuelosalida_side 491 9;aeropuertoorigen_side 431 26;durvuelollegada_side 302 6;aeropuertodest_side 156 10;precios_side 153 11;escalas_cluster-non-stop 11 0;Alianza_side 5 0"],
+  [61913,"aerolinea_matrix 9630 417;escalas_side 7992 313;escalas_matrix 7464 304;Baggages_side 6175 231;precio_matrix_suggestion 5132 198;precio_matrix_default 4035 181;aerolinea_side 2343 116;horariosal_side 2133 96;horarioregreso_side 1222 59;durvuelosalida_side 519 9;aeropuertoorigen_side 411 30;durvuelollegada_side 272 3;aeropuertodest_side 150 11;precios_side 110 1;escalas_cluster-non-stop 9 0;Alianza_side 5 0"],
+  [56841,"aerolinea_matrix 8786 411;escalas_side 7259 297;escalas_matrix 6805 302;Baggages_side 5505 211;precio_matrix_suggestion 4720 211;precio_matrix_default 3644 173;aerolinea_side 1978 103;horariosal_side 1834 76;horarioregreso_side 1017 37;aeropuertoorigen_side 442 34;durvuelosalida_side 441 12;durvuelollegada_side 251 6;aeropuertodest_side 202 13;precios_side 107 1;Alianza_side 9 0;escalas_cluster-non-stop 9 1"],
+  [61446,"aerolinea_matrix 9522 413;escalas_side 7937 304;escalas_matrix 7372 323;Baggages_side 6062 213;precio_matrix_suggestion 5085 223;precio_matrix_default 4026 163;aerolinea_side 2285 106;horariosal_side 2128 101;horarioregreso_side 1171 45;durvuelosalida_side 657 21;aeropuertoorigen_side 516 36;durvuelollegada_side 390 10;aeropuertodest_side 169 10;precios_side 156 4;escalas_cluster-non-stop 16 0;Alianza_side 9 1"],
+  [60217,"aerolinea_matrix 9120 425;escalas_side 7660 334;escalas_matrix 7133 325;Baggages_side 5976 228;precio_matrix_suggestion 4929 209;precio_matrix_default 3787 194;aerolinea_side 2119 108;horariosal_side 2088 101;horarioregreso_side 1147 52;durvuelosalida_side 664 11;aeropuertoorigen_side 446 33;durvuelollegada_side 346 5;aeropuertodest_side 169 13;precios_side 149 5;escalas_cluster-non-stop 17 0;Alianza_side 6 0"]]},
+ "Autos":{card:171406, w:[
+  [3877,"filter_payment_method 1630 94;filter_category 646 25;filter_provider 575 40;filter_number_of_passengers 401 15;filter_transmission 352 29;filter_deliver_method 212 17;filter_zones 93 9;filter_engine_type 21 0;filter_promotion 10 1"],
+  [3533,"filter_payment_method 1469 97;filter_category 642 36;filter_provider 467 46;filter_number_of_passengers 374 13;filter_transmission 307 26;filter_deliver_method 158 10;filter_zones 45 3;filter_engine_type 17 1;filter_promotion 10 0"],
+  [3738,"filter_payment_method 1534 86;filter_category 621 30;filter_provider 493 36;filter_number_of_passengers 404 17;filter_transmission 328 26;filter_deliver_method 183 11;filter_zones 74 7;filter_engine_type 14 1;filter_promotion 13 0"],
+  [3841,"filter_payment_method 1585 93;filter_category 641 25;filter_provider 525 39;filter_number_of_passengers 404 20;filter_transmission 345 20;filter_deliver_method 189 6;filter_zones 61 5;filter_engine_type 14 0;filter_promotion 14 0"],
+  [3652,"filter_payment_method 1522 96;filter_category 603 28;filter_provider 505 43;filter_number_of_passengers 402 14;filter_transmission 329 28;filter_deliver_method 193 11;filter_zones 78 5;filter_engine_type 18 0;filter_promotion 12 1"],
+  [4005,"filter_payment_method 1609 96;filter_category 673 32;filter_provider 542 41;filter_transmission 357 23;filter_number_of_passengers 354 15;filter_deliver_method 216 15;filter_zones 88 4;filter_engine_type 19 1;filter_promotion 12 2"],
+  [3655,"filter_payment_method 1498 89;filter_category 633 24;filter_provider 480 43;filter_number_of_passengers 374 11;filter_transmission 289 21;filter_deliver_method 210 14;filter_zones 83 4;filter_promotion 14 0;filter_engine_type 3 0"],
+  [3766,"filter_payment_method 1607 91;filter_category 697 27;filter_provider 544 45;filter_number_of_passengers 368 11;filter_transmission 287 19;filter_deliver_method 189 11;filter_zones 63 3;filter_engine_type 13 0;filter_promotion 7 0"],
+  [3730,"filter_payment_method 1591 105;filter_category 737 46;filter_provider 550 43;filter_number_of_passengers 390 14;filter_transmission 280 27;filter_deliver_method 191 12;filter_zones 71 2;filter_promotion 11 0;filter_engine_type 11 0"]]},
+ "Actividades":{card:171405, w:[
+  [7261,"ai-keyword-filter 1651 52;experience-type-filter 46 1;inclusions-filter 43 0;score-filter 20 0;duration-filter 13 0;price 12 0"],
+  [6812,"ai-keyword-filter 1588 45;experience-type-filter 45 0;inclusions-filter 30 1;score-filter 12 0;price 7 0;duration-filter 4 0"],
+  [7190,"ai-keyword-filter 1768 65;experience-type-filter 49 1;inclusions-filter 39 1;duration-filter 19 0;score-filter 17 0;price 11 0"],
+  [7148,"ai-keyword-filter 1722 75;experience-type-filter 40 0;inclusions-filter 28 0;score-filter 22 2;duration-filter 16 0;price 15 0;category-filter 2 0"],
+  [7026,"ai-keyword-filter 1709 65;experience-type-filter 46 0;inclusions-filter 34 2;score-filter 17 1;price 11 0;duration-filter 8 0;category-filter 1 0"],
+  [7431,"ai-keyword-filter 1734 62;experience-type-filter 34 0;inclusions-filter 31 1;score-filter 11 0;price 10 1;duration-filter 8 0"],
+  [6309,"ai-keyword-filter 1518 57;experience-type-filter 36 0;inclusions-filter 34 0;score-filter 15 0;duration-filter 8 1;price 8 0"],
+  [6842,"ai-keyword-filter 1615 62;experience-type-filter 48 0;inclusions-filter 35 0;score-filter 15 0;duration-filter 11 0;price 7 0"],
+  [6581,"ai-keyword-filter 1427 54;inclusions-filter 43 2;experience-type-filter 38 0;score-filter 11 0;duration-filter 6 1;price 4 0;category-filter 1 0"]]},
+ "Paquetes":{card:171404, w:[
+  [32291,"meal_plans 9712 137;hotel_name 5823 167;zones 2352 42;accommodation_type 1002 6;rate_score 921 9;hotel_type 827 7;stars 565 10;roompack_tags 543 5;hotel_chains 172 8;amenities_groups 149 3;payment_type 134 0;amenities 76 1;promo_campaign 23 0"],
+  [28770,"meal_plans 8615 128;hotel_name 5184 139;zones 2001 30;accommodation_type 855 12;rate_score 794 10;hotel_type 681 6;stars 516 12;roompack_tags 419 5;hotel_chains 194 11;payment_type 115 1;amenities_groups 112 3;amenities 91 2;promo_campaign 17 0"],
+  [32614,"meal_plans 9510 118;hotel_name 5695 164;zones 2350 37;accommodation_type 982 23;rate_score 879 6;hotel_type 757 9;stars 596 6;roompack_tags 470 3;hotel_chains 140 1;amenities_groups 127 1;payment_type 122 1;amenities 83 0;promo_campaign 39 0"],
+  [32684,"meal_plans 9672 118;hotel_name 5952 175;zones 2157 31;accommodation_type 956 10;rate_score 866 11;hotel_type 722 6;stars 607 9;roompack_tags 477 1;amenities_groups 167 3;hotel_chains 153 1;payment_type 124 0;amenities 78 2;promo_campaign 25 0"],
+  [31818,"meal_plans 9834 122;hotel_name 5880 163;zones 2240 28;accommodation_type 900 15;rate_score 843 9;hotel_type 785 7;stars 642 11;roompack_tags 526 3;amenities_groups 167 1;hotel_chains 140 0;payment_type 125 0;amenities 89 2;promo_campaign 29 0"],
+  [33647,"meal_plans 10359 144;hotel_name 5789 139;zones 2319 36;accommodation_type 998 13;rate_score 834 5;hotel_type 783 9;stars 669 14;roompack_tags 610 3;hotel_chains 196 2;payment_type 161 1;amenities_groups 149 4;amenities 105 1;promo_campaign 40 0"],
+  [28957,"meal_plans 8962 94;hotel_name 5120 126;zones 2036 26;accommodation_type 799 13;rate_score 796 8;hotel_type 796 3;stars 566 6;roompack_tags 507 3;hotel_chains 134 3;amenities_groups 128 2;payment_type 121 0;amenities 72 3;promo_campaign 26 1"],
+  [31565,"meal_plans 9497 90;hotel_name 5420 108;zones 2082 18;accommodation_type 935 9;rate_score 894 7;hotel_type 810 6;stars 686 7;roompack_tags 474 5;amenities_groups 142 3;hotel_chains 138 4;payment_type 118 1;amenities 97 1;promo_campaign 28 0"],
+  [30393,"meal_plans 9381 77;hotel_name 5151 85;zones 1902 19;accommodation_type 914 6;rate_score 855 9;hotel_type 738 3;stars 648 10;roompack_tags 534 3;amenities_groups 193 1;hotel_chains 167 1;payment_type 128 1;amenities 88 1;promo_campaign 40 1"]]}
+};
+// @@DATA_END
+// Se suman las 9 semanas por producto y filtro; "weeks" guarda cada semana para la evolución.
+const P = {};
+for (const [name, p] of Object.entries(RAW)) {
+  const agg = {}, weeks = [];
+  p.w.forEach(([v, s], i) => {
+    const m = {};
+    s.split(';').forEach(x => { const [f, c, t] = x.split(' '); m[f] = [+c, +t];
+      (agg[f] = agg[f] || [0, 0]); agg[f][0] += +c; agg[f][1] += +t; });
+    weeks.push({label: WEEKS[i], v, m});
+  });
+  P[name] = {card: p.card, visits: weeks.reduce((s, w) => s + w.v, 0), rows: Object.entries(agg).map(([f, [c, t]]) => [f, c, t]), weeks};
+}
+// Mismos datos abiertos por país: RAWC[producto][país] = 9 semanas de [visitas, "filtro clicks thanks;..."].
+// «OT» agrupa todos los países que no son BR, MX, CO, AR, CL ni PE.
+// @@RAWC_BEGIN
+const RAWC = {
+ "Hoteles":{
+  "BR":[[29215,"hotel_name 5716 224;meal_plans 5091 117;zones 1711 48;accommodation_type 1546 32;rate_score 910 15;hotel_type 749 19;total_price_range 609 9;stars 555 8;roompack_tags 370 6;amenities_groups 204 5;hotel_chains 177 9;amenities 64 1;payment_type 30 0;offers 29 0;promo_campaign 1 0"],[25991,"hotel_name 4915 242;meal_plans 4390 104;zones 1520 41;accommodation_type 1150 30;rate_score 763 9;hotel_type 653 15;total_price_range 538 18;stars 467 8;roompack_tags 303 7;hotel_chains 166 5;amenities_groups 165 1;amenities 80 0;payment_type 26 0;offers 22 0;promo_campaign 4 0"],[30363,"hotel_name 5867 240;meal_plans 5338 122;zones 1814 47;accommodation_type 1497 41;rate_score 890 16;hotel_type 789 16;total_price_range 635 18;stars 609 11;roompack_tags 366 9;amenities_groups 207 5;hotel_chains 138 7;amenities 88 1;offers 32 1;payment_type 30 1;promo_campaign 12 0"],[28979,"hotel_name 5776 253;meal_plans 5039 112;zones 1563 40;accommodation_type 1375 52;rate_score 863 18;hotel_type 785 17;stars 592 9;total_price_range 527 23;roompack_tags 354 10;amenities_groups 188 7;hotel_chains 162 6;amenities 92 5;payment_type 25 0;offers 20 1;promo_campaign 8 0"],[28498,"hotel_name 5504 224;meal_plans 5050 94;zones 1662 47;accommodation_type 1270 27;rate_score 849 12;hotel_type 779 16;stars 585 8;total_price_range 539 14;roompack_tags 338 10;amenities_groups 200 7;hotel_chains 158 6;amenities 71 0;payment_type 30 0;offers 16 0;promo_campaign 6 1"],[28028,"hotel_name 5417 241;meal_plans 4818 116;zones 1585 41;accommodation_type 1283 19;rate_score 760 22;hotel_type 707 17;stars 556 19;total_price_range 550 20;roompack_tags 346 8;amenities_groups 200 6;hotel_chains 152 5;amenities 73 0;payment_type 43 0;offers 16 2;promo_campaign 7 0"],[25627,"hotel_name 4971 207;meal_plans 4558 126;zones 1530 43;accommodation_type 1233 39;hotel_type 725 27;rate_score 722 11;total_price_range 525 23;stars 482 18;roompack_tags 342 8;amenities_groups 186 6;hotel_chains 120 5;amenities 63 2;payment_type 27 1;offers 13 0;promo_campaign 10 0"],[28667,"hotel_name 5549 204;meal_plans 5183 99;zones 1660 47;accommodation_type 1311 27;rate_score 896 16;hotel_type 784 27;total_price_range 570 23;stars 564 9;roompack_tags 388 9;amenities_groups 198 5;hotel_chains 165 10;amenities 71 3;payment_type 24 0;offers 20 1;promo_campaign 2 0"],[26932,"hotel_name 5125 188;meal_plans 4743 100;zones 1461 30;accommodation_type 1271 27;rate_score 796 14;hotel_type 741 9;stars 587 8;total_price_range 521 17;roompack_tags 285 5;hotel_chains 169 8;amenities_groups 165 5;amenities 82 2;payment_type 25 0;offers 19 0;promo_campaign 10 0"]],
+  "MX":[[15459,"meal_plans 4328 101;hotel_name 2391 142;zones 367 23;accommodation_type 294 6;roompack_tags 257 3;stars 253 8;total_price_range 135 7;rate_score 108 2;hotel_type 88 3;hotel_chains 71 5;amenities 60 2;amenities_groups 55 2;payment_type 30 0;offers 30 0;promo_campaign 5 0"],[16436,"meal_plans 4337 101;hotel_name 2381 112;zones 429 26;accommodation_type 357 9;roompack_tags 272 6;stars 243 7;total_price_range 111 3;rate_score 105 2;amenities 80 2;hotel_type 78 2;amenities_groups 66 3;hotel_chains 64 6;payment_type 31 1;offers 19 0;promo_campaign 2 1"],[13626,"meal_plans 3625 88;hotel_name 1960 83;zones 383 13;accommodation_type 285 7;stars 227 7;roompack_tags 206 4;total_price_range 125 3;rate_score 79 7;hotel_type 72 3;hotel_chains 62 5;amenities 57 2;amenities_groups 48 3;payment_type 23 0;offers 18 0;promo_campaign 4 0"],[16691,"meal_plans 4363 116;hotel_name 2529 122;zones 438 13;accommodation_type 358 8;roompack_tags 323 3;stars 247 14;total_price_range 161 4;rate_score 100 0;amenities 92 3;hotel_type 83 3;amenities_groups 73 2;hotel_chains 51 2;payment_type 48 2;offers 29 0;promo_campaign 9 1"],[15590,"meal_plans 4183 91;hotel_name 2376 127;zones 438 19;accommodation_type 337 9;roompack_tags 289 6;stars 249 8;total_price_range 115 5;hotel_type 102 0;rate_score 89 1;amenities 72 2;hotel_chains 65 4;amenities_groups 59 1;payment_type 42 1;offers 34 0;promo_campaign 10 0"],[16686,"meal_plans 4367 102;hotel_name 2650 136;zones 538 24;accommodation_type 338 9;stars 321 14;roompack_tags 285 5;total_price_range 156 10;hotel_type 123 1;rate_score 110 3;amenities 86 5;hotel_chains 72 2;amenities_groups 68 3;payment_type 45 0;offers 32 2;promo_campaign 4 0"],[16241,"meal_plans 4232 99;hotel_name 2372 121;zones 473 15;accommodation_type 353 6;roompack_tags 304 7;stars 292 13;rate_score 115 2;total_price_range 111 7;hotel_type 110 4;hotel_chains 76 3;amenities 55 1;amenities_groups 53 3;payment_type 32 1;offers 26 2;promo_campaign 10 0"],[15087,"meal_plans 3759 72;hotel_name 2266 98;zones 426 9;roompack_tags 311 6;accommodation_type 310 9;stars 268 11;total_price_range 119 4;rate_score 93 1;hotel_type 86 3;amenities 68 4;amenities_groups 51 2;hotel_chains 46 3;offers 29 0;payment_type 27 0;promo_campaign 8 0"],[14698,"meal_plans 3885 86;hotel_name 2300 105;zones 450 16;accommodation_type 335 14;roompack_tags 274 8;stars 237 10;total_price_range 111 3;hotel_type 105 2;rate_score 103 3;amenities_groups 73 2;amenities 71 4;hotel_chains 64 4;payment_type 49 1;offers 18 1;promo_campaign 6 0"]],
+  "CO":[[13498,"meal_plans 5767 116;hotel_name 1315 62;zones 950 25;roompack_tags 448 9;accommodation_type 318 4;stars 202 5;hotel_type 159 6;rate_score 76 1;total_price_range 71 3;amenities_groups 63 1;hotel_chains 52 0;amenities 38 3;payment_type 22 0;offers 8 0;promo_campaign 8 0"],[14420,"meal_plans 5723 125;hotel_name 1307 61;zones 965 26;roompack_tags 447 8;accommodation_type 265 5;stars 203 10;hotel_type 155 2;amenities_groups 74 5;rate_score 65 5;hotel_chains 60 2;total_price_range 60 3;amenities 46 4;payment_type 21 0;offers 12 0;promo_campaign 3 0"],[14925,"meal_plans 6050 153;hotel_name 1364 54;zones 997 26;roompack_tags 453 10;accommodation_type 283 3;stars 236 13;hotel_type 172 4;rate_score 76 1;amenities_groups 74 0;total_price_range 63 1;hotel_chains 49 1;amenities 37 2;payment_type 19 1;offers 9 1;promo_campaign 4 0"],[14044,"meal_plans 5662 100;hotel_name 1260 53;zones 902 28;roompack_tags 412 1;accommodation_type 274 6;stars 222 13;hotel_type 134 7;total_price_range 81 1;rate_score 69 2;amenities_groups 69 2;hotel_chains 54 1;amenities 37 0;payment_type 29 0;offers 16 0;promo_campaign 2 0"],[14394,"meal_plans 5594 116;hotel_name 1349 63;zones 920 36;roompack_tags 409 9;accommodation_type 235 8;stars 216 6;hotel_type 143 6;total_price_range 82 8;rate_score 76 3;amenities_groups 67 4;hotel_chains 54 0;amenities 32 1;payment_type 25 0;offers 8 0;promo_campaign 4 0"],[14634,"meal_plans 5819 161;hotel_name 1226 70;zones 963 42;roompack_tags 421 7;accommodation_type 285 6;stars 229 6;hotel_type 132 4;rate_score 86 3;amenities_groups 76 3;total_price_range 62 6;hotel_chains 55 4;amenities 21 0;payment_type 19 2;offers 15 0;promo_campaign 3 0"],[12219,"meal_plans 4872 117;hotel_name 1033 45;zones 803 28;roompack_tags 385 2;accommodation_type 244 6;stars 199 7;hotel_type 135 1;rate_score 54 2;total_price_range 53 3;amenities_groups 52 1;hotel_chains 51 2;amenities 32 1;payment_type 19 0;offers 7 0;promo_campaign 2 0"],[14641,"meal_plans 5983 155;hotel_name 1339 55;zones 978 44;roompack_tags 491 7;accommodation_type 287 3;stars 258 11;hotel_type 164 6;rate_score 97 3;total_price_range 84 3;amenities_groups 83 2;hotel_chains 57 4;amenities 40 3;payment_type 26 0;offers 10 0;promo_campaign 8 0"],[14442,"meal_plans 5948 107;hotel_name 1495 62;zones 1018 26;roompack_tags 455 4;accommodation_type 260 6;stars 223 5;hotel_type 150 5;amenities_groups 73 3;rate_score 71 0;hotel_chains 65 1;total_price_range 64 5;payment_type 43 0;amenities 34 2;offers 13 0;promo_campaign 2 0"]],
+  "AR":[[5070,"meal_plans 993 28;hotel_name 839 48;roompack_tags 421 7;zones 328 11;accommodation_type 298 7;hotel_type 159 4;rate_score 118 2;stars 93 8;total_price_range 65 3;amenities_groups 46 2;amenities 27 1;hotel_chains 21 1;payment_type 10 0;promo_campaign 2 0"],[5182,"meal_plans 996 26;hotel_name 746 47;roompack_tags 390 2;zones 341 19;accommodation_type 267 15;hotel_type 173 4;stars 111 4;rate_score 106 1;total_price_range 92 4;amenities_groups 47 1;amenities 38 2;hotel_chains 25 0;payment_type 12 0;offers 5 0;promo_campaign 1 0"],[5144,"meal_plans 912 14;hotel_name 771 46;roompack_tags 386 3;zones 309 12;accommodation_type 238 6;hotel_type 167 3;rate_score 111 1;total_price_range 86 0;stars 70 1;amenities_groups 57 3;amenities 33 1;hotel_chains 21 2;payment_type 8 0;offers 8 0;promo_campaign 4 0"],[5084,"meal_plans 1044 21;hotel_name 762 41;roompack_tags 391 5;zones 361 13;accommodation_type 278 8;hotel_type 159 2;rate_score 124 2;stars 116 1;total_price_range 95 5;amenities_groups 61 1;amenities 32 0;hotel_chains 15 1;payment_type 9 0;offers 5 1;promo_campaign 2 0"],[4919,"meal_plans 1016 37;hotel_name 741 35;roompack_tags 466 6;zones 362 16;accommodation_type 270 7;hotel_type 156 3;rate_score 103 3;stars 97 2;total_price_range 77 2;amenities_groups 40 2;amenities 32 1;payment_type 18 2;hotel_chains 9 0;offers 7 0"],[5246,"meal_plans 1132 28;hotel_name 793 40;roompack_tags 458 6;zones 348 7;accommodation_type 276 8;hotel_type 178 2;rate_score 117 4;stars 113 5;total_price_range 88 5;amenities_groups 59 1;amenities 39 1;hotel_chains 32 0;payment_type 9 0;offers 2 0"],[4586,"meal_plans 957 30;hotel_name 727 38;roompack_tags 381 6;zones 333 18;accommodation_type 279 11;hotel_type 182 4;stars 123 6;rate_score 116 2;total_price_range 81 3;amenities_groups 57 2;amenities 32 0;hotel_chains 17 1;payment_type 9 0;offers 5 0;promo_campaign 3 0"],[4979,"meal_plans 1126 33;hotel_name 762 44;roompack_tags 457 6;zones 356 18;accommodation_type 261 7;hotel_type 157 4;stars 137 9;rate_score 132 5;total_price_range 87 5;amenities_groups 52 2;amenities 27 2;hotel_chains 23 4;payment_type 11 1;offers 5 0;promo_campaign 3 0"],[5537,"meal_plans 1230 34;hotel_name 869 41;roompack_tags 495 7;zones 396 11;accommodation_type 345 14;hotel_type 203 8;stars 123 7;rate_score 119 5;total_price_range 69 1;amenities_groups 54 1;amenities 21 0;hotel_chains 21 0;payment_type 7 1;offers 5 0"]],
+  "CL":[[1881,"meal_plans 622 18;hotel_name 280 16;zones 201 4;roompack_tags 79 0;accommodation_type 73 2;hotel_type 59 1;rate_score 44 0;stars 40 1;hotel_chains 28 3;amenities_groups 17 0;total_price_range 15 0;offers 10 1;amenities 8 0;payment_type 7 0;promo_campaign 2 0"],[1457,"meal_plans 412 10;hotel_name 222 7;zones 143 2;accommodation_type 50 0;roompack_tags 48 0;hotel_type 45 0;rate_score 45 2;stars 43 0;total_price_range 22 1;hotel_chains 14 0;amenities_groups 12 0;amenities 9 0;payment_type 2 0;offers 1 0"],[1176,"meal_plans 326 5;hotel_name 175 7;zones 104 1;accommodation_type 42 1;roompack_tags 40 0;stars 35 0;hotel_type 24 0;amenities_groups 14 0;rate_score 13 0;total_price_range 13 0;hotel_chains 11 0;amenities 10 0;payment_type 3 0;offers 3 0;promo_campaign 1 0"],[1122,"meal_plans 303 2;hotel_name 175 3;zones 103 0;accommodation_type 60 2;roompack_tags 56 1;rate_score 31 0;stars 27 0;hotel_type 26 0;hotel_chains 17 0;total_price_range 16 0;amenities_groups 9 0;amenities 6 0;offers 5 0;payment_type 3 0"],[1281,"meal_plans 363 8;hotel_name 204 14;zones 103 2;roompack_tags 61 1;accommodation_type 55 1;hotel_type 45 1;rate_score 33 0;stars 31 1;hotel_chains 16 0;total_price_range 16 1;amenities_groups 8 0;payment_type 6 0;amenities 5 0;offers 1 0;promo_campaign 1 0"],[2351,"meal_plans 685 10;hotel_name 354 18;zones 241 5;accommodation_type 100 1;roompack_tags 83 0;stars 67 1;hotel_type 54 2;rate_score 48 1;total_price_range 29 0;hotel_chains 29 0;amenities_groups 23 0;amenities 13 0;offers 6 0;payment_type 3 0;promo_campaign 1 0"],[1499,"meal_plans 425 8;hotel_name 215 6;zones 136 1;accommodation_type 66 0;hotel_type 64 2;roompack_tags 51 0;rate_score 31 0;stars 30 0;total_price_range 23 1;amenities_groups 14 0;hotel_chains 11 0;amenities 5 0;offers 5 0;promo_campaign 2 0;payment_type 1 0"],[1464,"meal_plans 432 12;hotel_name 184 8;zones 145 0;accommodation_type 74 1;roompack_tags 60 0;hotel_type 47 0;stars 38 0;rate_score 19 0;hotel_chains 18 0;total_price_range 15 0;amenities_groups 12 1;amenities 9 0;offers 2 0"],[1305,"meal_plans 368 4;hotel_name 173 6;zones 123 1;accommodation_type 72 0;roompack_tags 44 0;hotel_type 30 0;hotel_chains 25 1;stars 19 0;rate_score 14 0;total_price_range 12 1;amenities_groups 10 0;amenities 7 0;offers 3 0"]],
+  "PE":[[1121,"meal_plans 343 10;hotel_name 244 6;zones 78 3;roompack_tags 72 1;accommodation_type 57 1;stars 32 1;hotel_type 22 0;total_price_range 20 0;offers 11 0;rate_score 8 0;hotel_chains 5 0;amenities_groups 4 0;payment_type 1 0;amenities 1 0"],[1286,"meal_plans 364 4;hotel_name 240 8;zones 87 5;roompack_tags 72 0;stars 48 1;accommodation_type 34 1;hotel_type 16 0;hotel_chains 13 0;rate_score 13 1;offers 11 0;total_price_range 8 2;amenities 3 1;amenities_groups 2 0"],[1146,"meal_plans 337 4;hotel_name 195 6;zones 78 0;accommodation_type 54 1;roompack_tags 41 0;stars 31 0;hotel_type 16 0;total_price_range 10 1;hotel_chains 8 1;offers 7 1;amenities_groups 5 1;rate_score 4 0;amenities 2 0;payment_type 1 1"],[1011,"meal_plans 322 8;hotel_name 158 7;zones 88 2;roompack_tags 50 0;stars 32 2;accommodation_type 29 2;rate_score 10 0;amenities_groups 9 1;hotel_chains 5 0;hotel_type 5 0;total_price_range 5 0;offers 5 0;amenities 2 0"],[1150,"meal_plans 396 3;hotel_name 199 10;zones 115 1;roompack_tags 73 0;accommodation_type 33 1;stars 31 1;hotel_type 30 2;rate_score 18 0;offers 10 1;total_price_range 8 1;amenities_groups 7 0;hotel_chains 6 0;payment_type 2 0;amenities 2 0;promo_campaign 1 0"],[1050,"meal_plans 331 5;hotel_name 176 7;zones 91 1;roompack_tags 45 0;accommodation_type 40 4;stars 30 0;hotel_type 19 1;total_price_range 12 2;rate_score 11 1;hotel_chains 8 0;amenities_groups 7 0;offers 6 0;amenities 6 0;payment_type 1 0;promo_campaign 1 0"],[1090,"meal_plans 338 3;hotel_name 185 8;zones 109 1;roompack_tags 74 1;accommodation_type 35 1;stars 35 0;hotel_type 14 0;total_price_range 13 0;rate_score 12 0;hotel_chains 5 0;offers 5 0;amenities 3 0;amenities_groups 3 0;payment_type 1 0"],[1136,"meal_plans 355 5;hotel_name 201 5;zones 90 2;roompack_tags 64 0;stars 40 0;accommodation_type 35 0;hotel_type 10 0;amenities_groups 9 0;hotel_chains 9 1;rate_score 6 0;total_price_range 6 0;offers 5 0;payment_type 3 0;promo_campaign 1 0;amenities 1 0"],[1066,"meal_plans 328 4;hotel_name 176 3;zones 83 1;accommodation_type 43 3;stars 41 0;roompack_tags 36 1;hotel_chains 17 0;hotel_type 12 0;total_price_range 11 0;amenities_groups 10 0;rate_score 9 0;offers 9 0;payment_type 3 0;amenities 1 0;promo_campaign 1 0"]],
+  "OT":[[586,"meal_plans 105 1;hotel_name 51 3;roompack_tags 29 0;zones 19 0;accommodation_type 17 0;total_price_range 13 0;stars 10 0;rate_score 9 0;amenities 8 0;hotel_type 7 1;offers 4 0;amenities_groups 4 0;hotel_chains 1 0;payment_type 1 0"],[649,"meal_plans 139 6;hotel_name 67 0;roompack_tags 31 1;accommodation_type 28 0;zones 22 2;total_price_range 14 0;rate_score 12 1;stars 12 2;hotel_type 9 0;payment_type 6 0;amenities 4 0;amenities_groups 3 0;offers 2 0;promo_campaign 1 0"],[642,"meal_plans 113 2;hotel_name 47 3;roompack_tags 37 0;stars 24 0;zones 13 1;total_price_range 12 1;accommodation_type 12 1;rate_score 8 0;amenities 5 0;hotel_type 5 0;payment_type 4 0;offers 3 0;amenities_groups 1 0;hotel_chains 1 0"],[667,"meal_plans 123 2;hotel_name 51 4;roompack_tags 29 0;zones 23 0;accommodation_type 21 0;total_price_range 14 1;rate_score 12 0;amenities 9 1;stars 7 0;hotel_type 6 0;amenities_groups 4 0;promo_campaign 1 0;hotel_chains 1 0;payment_type 1 0"],[705,"meal_plans 126 5;hotel_name 45 3;zones 30 1;roompack_tags 23 1;accommodation_type 21 0;total_price_range 11 0;hotel_type 11 0;stars 10 1;rate_score 7 1;amenities 5 0;payment_type 4 0;hotel_chains 3 1;offers 2 0;amenities_groups 2 0"],[694,"meal_plans 136 1;hotel_name 34 2;roompack_tags 34 0;accommodation_type 28 1;zones 25 0;hotel_type 14 0;stars 12 0;offers 9 0;total_price_range 8 0;rate_score 8 0;amenities_groups 5 0;amenities 5 0;hotel_chains 4 0;promo_campaign 2 0;payment_type 1 0"],[718,"meal_plans 135 8;hotel_name 47 4;roompack_tags 38 2;accommodation_type 25 0;zones 15 0;stars 11 0;total_price_range 10 0;rate_score 8 0;hotel_type 5 0;amenities 3 0;hotel_chains 2 0;offers 2 0;payment_type 2 0;amenities_groups 1 0"],[656,"meal_plans 145 7;roompack_tags 53 1;hotel_name 49 3;accommodation_type 24 0;zones 23 1;total_price_range 10 0;stars 8 0;rate_score 7 0;hotel_type 5 0;amenities 4 0;amenities_groups 2 0;payment_type 1 0;offers 1 0"],[685,"meal_plans 121 3;hotel_name 66 2;roompack_tags 39 1;zones 22 0;accommodation_type 22 1;rate_score 16 0;total_price_range 14 0;stars 10 0;amenities_groups 8 1;hotel_type 8 0;amenities 5 0;hotel_chains 1 0;payment_type 1 0"]]
+ },
+ "Vuelos":{
+  "BR":[[36078,"aerolinea_matrix 6082 190;escalas_matrix 5101 159;precio_matrix_suggestion 3722 126;escalas_side 3717 106;Baggages_side 3602 87;precio_matrix_default 2658 84;aerolinea_side 1004 33;horariosal_side 995 32;horarioregreso_side 560 14;durvuelosalida_side 357 4;durvuelollegada_side 227 3;aeropuertoorigen_side 123 8;precios_side 78 1;aeropuertodest_side 43 0;escalas_cluster-non-stop 6 0;Alianza_side 2 0"],[31648,"aerolinea_matrix 5295 174;escalas_matrix 4461 146;precio_matrix_suggestion 3248 110;Baggages_side 3229 65;escalas_side 3143 74;precio_matrix_default 2426 82;aerolinea_side 822 19;horariosal_side 805 30;horarioregreso_side 422 9;durvuelosalida_side 315 5;durvuelollegada_side 201 1;aeropuertoorigen_side 93 0;precios_side 68 3;aeropuertodest_side 33 0;escalas_cluster-non-stop 7 0;Alianza_side 2 0"],[37433,"aerolinea_matrix 6337 184;escalas_matrix 5353 162;precio_matrix_suggestion 3911 111;Baggages_side 3842 99;escalas_side 3568 84;precio_matrix_default 2770 86;aerolinea_side 1051 32;horariosal_side 930 41;horarioregreso_side 559 16;durvuelosalida_side 394 8;durvuelollegada_side 242 6;aeropuertoorigen_side 94 1;precios_side 65 2;aeropuertodest_side 46 1;escalas_cluster-non-stop 7 1;Alianza_side 3 0"],[35103,"aerolinea_matrix 5657 161;escalas_matrix 4773 129;precio_matrix_suggestion 3526 100;Baggages_side 3460 78;escalas_side 3415 85;precio_matrix_default 2438 62;aerolinea_side 958 27;horariosal_side 829 39;horarioregreso_side 454 20;durvuelosalida_side 319 6;durvuelollegada_side 206 2;aeropuertoorigen_side 94 1;precios_side 60 3;aeropuertodest_side 44 0;escalas_cluster-non-stop 5 0;Alianza_side 1 0"],[33418,"aerolinea_matrix 5431 153;escalas_matrix 4588 128;Baggages_side 3487 83;precio_matrix_suggestion 3331 91;escalas_side 3231 64;precio_matrix_default 2462 66;aerolinea_side 893 28;horariosal_side 889 18;horarioregreso_side 509 6;durvuelosalida_side 350 3;durvuelollegada_side 229 3;aeropuertoorigen_side 87 0;precios_side 80 2;aeropuertodest_side 48 1;escalas_cluster-non-stop 2 0;Alianza_side 1 0"],[33550,"aerolinea_matrix 5352 161;escalas_matrix 4521 143;Baggages_side 3564 97;precio_matrix_suggestion 3273 100;escalas_side 3232 74;precio_matrix_default 2388 83;aerolinea_side 938 30;horariosal_side 870 23;horarioregreso_side 460 11;durvuelosalida_side 323 3;durvuelollegada_side 196 0;aeropuertoorigen_side 79 3;precios_side 54 1;aeropuertodest_side 41 1;escalas_cluster-non-stop 4 0"],[32107,"aerolinea_matrix 5080 176;escalas_matrix 4294 142;Baggages_side 3157 101;precio_matrix_suggestion 3123 108;escalas_side 2933 63;precio_matrix_default 2243 80;aerolinea_side 798 22;horariosal_side 786 14;horarioregreso_side 397 5;durvuelosalida_side 274 6;durvuelollegada_side 168 4;aeropuertoorigen_side 74 1;aeropuertodest_side 49 0;precios_side 46 0;escalas_cluster-non-stop 3 1;Alianza_side 1 0"],[35624,"aerolinea_matrix 5552 183;escalas_matrix 4678 164;Baggages_side 3474 74;precio_matrix_suggestion 3366 121;escalas_side 3359 81;precio_matrix_default 2522 83;aerolinea_side 980 24;horariosal_side 917 34;horarioregreso_side 469 12;durvuelosalida_side 440 7;durvuelollegada_side 264 5;aeropuertoorigen_side 117 4;precios_side 77 1;aeropuertodest_side 41 3;escalas_cluster-non-stop 7 0;Alianza_side 2 0"],[34457,"aerolinea_matrix 5238 196;escalas_matrix 4434 173;Baggages_side 3401 94;precio_matrix_suggestion 3215 114;escalas_side 3185 94;precio_matrix_default 2309 108;horariosal_side 927 29;aerolinea_side 866 25;durvuelosalida_side 446 6;horarioregreso_side 437 8;durvuelollegada_side 229 4;aeropuertoorigen_side 100 3;precios_side 74 2;aeropuertodest_side 51 1;escalas_cluster-non-stop 5 0;Alianza_side 3 0"]],
+  "MX":[[10797,"escalas_side 2623 133;aerolinea_matrix 1803 112;escalas_matrix 1163 73;Baggages_side 1150 60;precio_matrix_suggestion 795 45;aerolinea_side 604 49;horariosal_side 572 37;precio_matrix_default 564 38;horarioregreso_side 360 23;aeropuertoorigen_side 285 19;aeropuertodest_side 77 5;durvuelosalida_side 29 2;precios_side 20 0;durvuelollegada_side 15 1;escalas_cluster-non-stop 8 0;Alianza_side 5 0"],[12016,"escalas_side 2928 138;aerolinea_matrix 1871 130;Baggages_side 1294 53;escalas_matrix 1170 75;precio_matrix_suggestion 771 52;aerolinea_side 732 37;horariosal_side 686 49;precio_matrix_default 595 43;horarioregreso_side 418 26;aeropuertoorigen_side 301 25;aeropuertodest_side 106 3;durvuelosalida_side 45 2;precios_side 33 2;durvuelollegada_side 27 0;Alianza_side 4 0;escalas_cluster-non-stop 4 0"],[10404,"escalas_side 2499 124;aerolinea_matrix 1659 108;escalas_matrix 1104 70;Baggages_side 1071 51;precio_matrix_suggestion 735 44;aerolinea_side 622 39;precio_matrix_default 561 43;horariosal_side 522 23;horarioregreso_side 333 14;aeropuertoorigen_side 221 13;aeropuertodest_side 117 4;durvuelosalida_side 34 2;precios_side 23 2;durvuelollegada_side 17 2;escalas_cluster-non-stop 3 0;Alianza_side 3 0"],[13103,"escalas_side 3082 166;aerolinea_matrix 2017 123;Baggages_side 1324 66;escalas_matrix 1243 72;precio_matrix_suggestion 830 43;aerolinea_side 828 84;horariosal_side 684 63;precio_matrix_default 658 44;horarioregreso_side 429 43;aeropuertoorigen_side 353 36;aeropuertodest_side 126 11;durvuelosalida_side 30 1;precios_side 28 1;durvuelollegada_side 11 0;Alianza_side 4 0;escalas_cluster-non-stop 3 0"],[12743,"escalas_side 2842 115;aerolinea_matrix 1975 124;escalas_matrix 1278 76;Baggages_side 1236 56;precio_matrix_suggestion 829 54;aerolinea_side 680 44;precio_matrix_default 666 42;horariosal_side 633 39;horarioregreso_side 390 17;aeropuertoorigen_side 334 26;aeropuertodest_side 101 9;precios_side 40 8;durvuelosalida_side 39 2;durvuelollegada_side 17 0;escalas_cluster-non-stop 6 0;Alianza_side 2 0"],[13600,"escalas_side 2994 151;aerolinea_matrix 2004 137;Baggages_side 1272 65;escalas_matrix 1269 83;precio_matrix_suggestion 811 53;aerolinea_side 785 53;precio_matrix_default 660 50;horariosal_side 612 36;horarioregreso_side 356 23;aeropuertoorigen_side 317 26;aeropuertodest_side 102 9;durvuelosalida_side 37 1;precios_side 23 0;durvuelollegada_side 16 0;escalas_cluster-non-stop 5 0;Alianza_side 2 0"],[12902,"escalas_side 2835 134;aerolinea_matrix 1901 111;escalas_matrix 1197 77;Baggages_side 1180 42;precio_matrix_suggestion 770 53;aerolinea_side 702 47;precio_matrix_default 652 49;horariosal_side 609 36;horarioregreso_side 353 17;aeropuertoorigen_side 347 32;aeropuertodest_side 144 12;durvuelosalida_side 42 1;precios_side 29 0;durvuelollegada_side 20 0;Alianza_side 4 0;escalas_cluster-non-stop 4 0"],[12305,"escalas_side 2851 122;aerolinea_matrix 1844 91;Baggages_side 1282 47;escalas_matrix 1164 59;aerolinea_side 772 60;precio_matrix_suggestion 735 40;precio_matrix_default 627 27;horariosal_side 618 34;aeropuertoorigen_side 386 32;horarioregreso_side 338 17;aeropuertodest_side 118 7;precios_side 38 2;durvuelosalida_side 35 1;durvuelollegada_side 15 0;escalas_cluster-non-stop 8 0;Alianza_side 6 1"],[12146,"escalas_side 2704 151;aerolinea_matrix 1822 109;Baggages_side 1206 66;escalas_matrix 1154 65;aerolinea_side 730 53;precio_matrix_suggestion 727 43;precio_matrix_default 626 37;horariosal_side 566 31;aeropuertoorigen_side 325 29;horarioregreso_side 325 18;aeropuertodest_side 113 12;durvuelosalida_side 48 2;precios_side 26 3;durvuelollegada_side 23 0;escalas_cluster-non-stop 9 0;Alianza_side 2 0"]],
+  "CO":[[8101,"aerolinea_matrix 1135 71;escalas_side 1118 66;escalas_matrix 821 56;Baggages_side 651 61;precio_matrix_suggestion 508 31;horariosal_side 483 22;precio_matrix_default 482 39;horarioregreso_side 325 12;aerolinea_side 274 20;durvuelosalida_side 59 3;durvuelollegada_side 26 1;precios_side 13 0;escalas_cluster-non-stop 2 1;Alianza_side 1 0;aeropuertodest_side 1 0;aeropuertoorigen_side 1 0"],[8786,"aerolinea_matrix 1274 95;escalas_side 1110 67;escalas_matrix 916 71;Baggages_side 603 54;precio_matrix_suggestion 588 45;precio_matrix_default 518 37;horariosal_side 491 28;horarioregreso_side 343 16;aerolinea_side 292 28;durvuelosalida_side 77 5;durvuelollegada_side 31 2;precios_side 26 1;aeropuertoorigen_side 5 0;Alianza_side 2 1"],[9145,"aerolinea_matrix 1297 100;escalas_side 1200 76;escalas_matrix 908 67;Baggages_side 644 51;precio_matrix_suggestion 561 44;precio_matrix_default 535 40;horariosal_side 431 24;aerolinea_side 316 33;horarioregreso_side 288 10;durvuelosalida_side 88 5;durvuelollegada_side 27 1;precios_side 14 1;Alianza_side 4 1;aeropuertodest_side 2 0;escalas_cluster-non-stop 2 0"],[8985,"aerolinea_matrix 1180 107;escalas_side 1126 96;escalas_matrix 837 75;Baggages_side 571 54;precio_matrix_suggestion 537 45;precio_matrix_default 465 43;horariosal_side 435 28;horarioregreso_side 286 22;aerolinea_side 265 34;durvuelosalida_side 76 4;durvuelollegada_side 33 2;precios_side 20 1;aeropuertoorigen_side 2 1;Alianza_side 1 0"],[8834,"aerolinea_matrix 1197 102;escalas_side 997 66;escalas_matrix 877 74;Baggages_side 621 60;precio_matrix_suggestion 541 47;precio_matrix_default 478 36;horariosal_side 402 20;aerolinea_side 294 21;horarioregreso_side 284 12;durvuelosalida_side 63 3;durvuelollegada_side 24 3;precios_side 18 1;aeropuertodest_side 4 0;escalas_cluster-non-stop 2 0;aeropuertoorigen_side 1 0;Alianza_side 1 0"],[8930,"aerolinea_matrix 1241 81;escalas_side 1150 71;escalas_matrix 897 49;Baggages_side 647 46;precio_matrix_suggestion 553 28;precio_matrix_default 515 30;horariosal_side 454 26;horarioregreso_side 311 18;aerolinea_side 308 20;durvuelosalida_side 76 5;durvuelollegada_side 20 2;precios_side 15 0;aeropuertodest_side 5 1;Alianza_side 2 0"],[7539,"aerolinea_matrix 1014 93;escalas_side 1003 85;escalas_matrix 691 62;Baggages_side 590 54;precio_matrix_suggestion 445 34;precio_matrix_default 379 32;horariosal_side 337 21;aerolinea_side 261 23;horarioregreso_side 217 11;durvuelosalida_side 63 5;durvuelollegada_side 28 2;precios_side 16 1;aeropuertodest_side 2 0;aeropuertoorigen_side 2 0;Alianza_side 2 0;escalas_cluster-non-stop 1 0"],[8967,"aerolinea_matrix 1241 109;escalas_side 1168 83;escalas_matrix 850 78;Baggages_side 686 64;precio_matrix_suggestion 558 47;precio_matrix_default 471 40;horariosal_side 443 25;horarioregreso_side 292 12;aerolinea_side 281 17;durvuelosalida_side 88 7;durvuelollegada_side 44 3;precios_side 25 1;aeropuertodest_side 5 0;aeropuertoorigen_side 3 0;Alianza_side 1 0"],[8614,"escalas_side 1133 77;aerolinea_matrix 1126 87;escalas_matrix 806 61;Baggages_side 705 48;precio_matrix_suggestion 531 38;horariosal_side 442 29;precio_matrix_default 419 32;horarioregreso_side 300 19;aerolinea_side 260 20;durvuelosalida_side 62 2;durvuelollegada_side 31 0;precios_side 23 0;aeropuertoorigen_side 4 0;escalas_cluster-non-stop 2 0;aeropuertodest_side 1 0"]],
+  "AR":[[2380,"aerolinea_matrix 485 31;escalas_side 396 15;escalas_matrix 396 27;Baggages_side 333 13;precio_matrix_suggestion 297 19;precio_matrix_default 193 11;aerolinea_side 148 8;horariosal_side 84 2;horarioregreso_side 55 1;durvuelosalida_side 43 1;durvuelollegada_side 19 0;aeropuertoorigen_side 18 0;precios_side 10 0;aeropuertodest_side 3 0"],[2031,"aerolinea_matrix 399 12;escalas_matrix 329 9;Baggages_side 326 10;escalas_side 314 11;precio_matrix_suggestion 222 5;precio_matrix_default 160 5;aerolinea_side 136 4;horariosal_side 79 3;horarioregreso_side 42 2;durvuelosalida_side 36 1;durvuelollegada_side 23 0;aeropuertoorigen_side 15 0;precios_side 11 0;aeropuertodest_side 6 1;escalas_cluster-non-stop 1 0"],[2255,"aerolinea_matrix 411 15;escalas_side 348 13;escalas_matrix 348 9;Baggages_side 319 17;precio_matrix_suggestion 240 7;precio_matrix_default 177 2;aerolinea_side 132 4;horariosal_side 97 7;horarioregreso_side 56 3;durvuelosalida_side 51 0;durvuelollegada_side 37 0;precios_side 15 0;aeropuertoorigen_side 13 0;aeropuertodest_side 2 0"],[1968,"aerolinea_matrix 380 17;escalas_side 322 10;escalas_matrix 313 14;Baggages_side 259 9;precio_matrix_suggestion 199 9;precio_matrix_default 177 8;aerolinea_side 119 5;horariosal_side 82 3;horarioregreso_side 59 5;durvuelosalida_side 37 1;durvuelollegada_side 33 2;precios_side 12 0;aeropuertoorigen_side 11 0;aeropuertodest_side 7 1"],[2066,"aerolinea_matrix 328 8;escalas_side 317 10;Baggages_side 284 13;escalas_matrix 268 6;precio_matrix_suggestion 168 1;precio_matrix_default 152 5;aerolinea_side 119 9;horariosal_side 85 6;horarioregreso_side 39 3;durvuelosalida_side 27 0;durvuelollegada_side 24 0;precios_side 10 0;aeropuertoorigen_side 7 0;aeropuertodest_side 3 0;Alianza_side 1 0"],[2344,"aerolinea_matrix 423 17;escalas_side 358 11;escalas_matrix 355 12;Baggages_side 335 13;precio_matrix_suggestion 250 8;precio_matrix_default 196 7;aerolinea_side 112 9;horariosal_side 88 6;durvuelosalida_side 45 0;horarioregreso_side 44 4;durvuelollegada_side 23 0;aeropuertoorigen_side 14 0;precios_side 12 0;aeropuertodest_side 2 0;Alianza_side 1 0"],[2009,"aerolinea_matrix 359 15;escalas_side 317 11;Baggages_side 308 7;escalas_matrix 305 12;precio_matrix_suggestion 201 10;precio_matrix_default 163 7;aerolinea_side 101 7;horariosal_side 53 5;durvuelosalida_side 46 0;horarioregreso_side 28 4;durvuelollegada_side 26 0;aeropuertoorigen_side 14 1;precios_side 11 0;aeropuertodest_side 4 0;escalas_cluster-non-stop 1 0"],[2407,"aerolinea_matrix 458 18;escalas_matrix 384 12;escalas_side 381 13;Baggages_side 339 17;precio_matrix_suggestion 237 8;precio_matrix_default 224 4;aerolinea_side 144 5;horariosal_side 86 5;durvuelosalida_side 65 5;durvuelollegada_side 43 2;horarioregreso_side 34 3;precios_side 12 0;aeropuertoorigen_side 8 0;aeropuertodest_side 1 0;escalas_cluster-non-stop 1 0"],[2732,"aerolinea_matrix 471 20;escalas_side 447 12;escalas_matrix 397 17;Baggages_side 371 13;precio_matrix_suggestion 251 8;precio_matrix_default 210 11;aerolinea_side 141 8;horariosal_side 103 11;durvuelosalida_side 78 1;horarioregreso_side 46 6;durvuelollegada_side 44 1;precios_side 19 0;aeropuertoorigen_side 14 1;aeropuertodest_side 2 0"]],
+  "CL":[[1917,"Baggages_side 295 5;aerolinea_matrix 288 10;escalas_matrix 181 7;escalas_side 174 3;aerolinea_side 118 6;precio_matrix_default 117 4;precio_matrix_suggestion 106 5;horariosal_side 34 1;durvuelosalida_side 28 0;horarioregreso_side 20 1;durvuelollegada_side 14 0;precios_side 1 0;aeropuertodest_side 1 0"],[1421,"aerolinea_matrix 246 11;Baggages_side 211 6;escalas_matrix 167 6;escalas_side 142 1;precio_matrix_default 107 1;precio_matrix_suggestion 97 5;aerolinea_side 79 2;horariosal_side 37 1;horarioregreso_side 20 1;durvuelosalida_side 17 0;durvuelollegada_side 7 0;precios_side 2 0;Alianza_side 1 0"],[1283,"aerolinea_matrix 231 22;Baggages_side 197 8;escalas_matrix 136 16;escalas_side 107 3;precio_matrix_default 93 10;aerolinea_side 74 0;precio_matrix_suggestion 72 8;horariosal_side 25 1;durvuelosalida_side 16 0;horarioregreso_side 12 2;durvuelollegada_side 7 0;aeropuertodest_side 3 0;precios_side 2 0;aeropuertoorigen_side 1 0"],[1271,"aerolinea_matrix 226 4;Baggages_side 168 2;escalas_matrix 137 3;escalas_side 128 3;precio_matrix_default 96 2;aerolinea_side 82 1;precio_matrix_suggestion 72 2;horariosal_side 34 0;durvuelosalida_side 20 1;horarioregreso_side 19 0;durvuelollegada_side 11 0;precios_side 3 0;aeropuertodest_side 2 0;aeropuertoorigen_side 1 0"],[1443,"aerolinea_matrix 236 10;Baggages_side 223 8;escalas_matrix 158 7;escalas_side 132 6;precio_matrix_default 110 6;aerolinea_side 95 2;precio_matrix_suggestion 94 4;horariosal_side 41 4;horarioregreso_side 17 1;durvuelosalida_side 11 1;durvuelollegada_side 8 0;precios_side 3 0;escalas_cluster-non-stop 1 0;aeropuertoorigen_side 1 0"],[2521,"aerolinea_matrix 444 15;Baggages_side 289 8;escalas_matrix 287 11;precio_matrix_default 201 8;escalas_side 198 4;aerolinea_side 162 4;precio_matrix_suggestion 156 5;horariosal_side 81 4;horarioregreso_side 39 3;durvuelosalida_side 33 0;durvuelollegada_side 15 1;precios_side 6 0"],[1378,"aerolinea_matrix 235 10;Baggages_side 162 7;escalas_matrix 161 5;precio_matrix_default 114 3;escalas_side 107 3;aerolinea_side 84 3;precio_matrix_suggestion 83 3;horariosal_side 23 0;durvuelosalida_side 12 0;horarioregreso_side 8 0;durvuelollegada_side 6 0;precios_side 2 0;Alianza_side 1 0;aeropuertoorigen_side 1 0"],[1279,"aerolinea_matrix 238 8;Baggages_side 169 7;escalas_matrix 151 8;escalas_side 111 4;precio_matrix_default 104 7;precio_matrix_suggestion 86 5;aerolinea_side 79 0;horariosal_side 35 2;durvuelosalida_side 27 1;durvuelollegada_side 23 0;horarioregreso_side 21 1;precios_side 4 0;aeropuertodest_side 2 0"],[1335,"aerolinea_matrix 258 8;Baggages_side 200 4;escalas_matrix 166 5;escalas_side 133 0;precio_matrix_default 123 3;precio_matrix_suggestion 90 4;aerolinea_side 88 2;horariosal_side 30 0;durvuelosalida_side 25 0;horarioregreso_side 25 0;durvuelollegada_side 15 0;precios_side 3 0;aeropuertodest_side 1 0"]],
+  "PE":[[959,"aerolinea_matrix 248 6;escalas_matrix 217 6;precio_matrix_suggestion 134 2;precio_matrix_default 130 5;Baggages_side 105 1;escalas_side 55 1;aerolinea_side 44 2;horariosal_side 20 1;horarioregreso_side 12 1;durvuelosalida_side 2 0;precios_side 2 0;durvuelollegada_side 1 0"],[1108,"aerolinea_matrix 233 6;escalas_matrix 193 5;precio_matrix_suggestion 124 3;Baggages_side 115 2;precio_matrix_default 104 3;escalas_side 52 1;aerolinea_side 33 1;horariosal_side 20 0;horarioregreso_side 9 0;aeropuertodest_side 2 0;aeropuertoorigen_side 2 0;durvuelollegada_side 1 0;precios_side 1 0"],[1001,"aerolinea_matrix 239 9;escalas_matrix 183 7;precio_matrix_suggestion 130 6;Baggages_side 97 5;precio_matrix_default 86 2;aerolinea_side 56 1;escalas_side 48 1;horariosal_side 19 2;horarioregreso_side 10 1;aeropuertoorigen_side 2 2;precios_side 2 0"],[931,"aerolinea_matrix 195 5;escalas_matrix 146 4;precio_matrix_suggestion 101 2;precio_matrix_default 74 2;Baggages_side 70 1;escalas_side 36 1;aerolinea_side 22 0;horariosal_side 19 0;horarioregreso_side 13 0;aeropuertoorigen_side 2 0;aeropuertodest_side 1 0;precios_side 1 0"],[991,"aerolinea_matrix 206 7;escalas_matrix 154 5;Baggages_side 112 1;precio_matrix_suggestion 104 2;precio_matrix_default 87 4;escalas_side 50 0;aerolinea_side 30 3;horariosal_side 20 0;horarioregreso_side 6 0;precios_side 2 0;aeropuertoorigen_side 1 0"],[927,"aerolinea_matrix 164 6;escalas_matrix 133 6;precio_matrix_suggestion 88 4;precio_matrix_default 75 3;Baggages_side 64 2;escalas_side 56 2;aerolinea_side 38 0;horariosal_side 26 1;horarioregreso_side 11 0;durvuelosalida_side 2 0;durvuelollegada_side 1 0;aeropuertoorigen_side 1 1"],[850,"aerolinea_matrix 193 6;escalas_matrix 153 4;Baggages_side 107 0;precio_matrix_suggestion 95 3;precio_matrix_default 92 2;escalas_side 57 1;aerolinea_side 31 1;horariosal_side 24 0;horarioregreso_side 14 0;aeropuertoorigen_side 4 0;aeropuertodest_side 3 1;durvuelosalida_side 2 0;precios_side 2 0;durvuelollegada_side 1 0;Alianza_side 1 0"],[810,"aerolinea_matrix 184 4;escalas_matrix 140 2;Baggages_side 110 4;precio_matrix_suggestion 99 2;precio_matrix_default 77 2;escalas_side 61 1;aerolinea_side 29 0;horariosal_side 28 1;horarioregreso_side 16 0;aeropuertoorigen_side 2 0;aeropuertodest_side 2 0;durvuelosalida_side 1 0"],[838,"aerolinea_matrix 198 5;escalas_matrix 170 4;precio_matrix_suggestion 113 2;precio_matrix_default 97 3;Baggages_side 85 3;escalas_side 47 0;aerolinea_side 30 0;horariosal_side 19 1;horarioregreso_side 14 1;precios_side 3 0;durvuelollegada_side 2 0;aeropuertodest_side 1 0;aeropuertoorigen_side 1 0;durvuelosalida_side 1 0;Alianza_side 1 0;escalas_cluster-non-stop 1 0"]],
+  "OT":[[0,""],[0,""],[13,"escalas_side 3 0"],[34,"escalas_side 9 0;escalas_matrix 4 0;aerolinea_matrix 3 0;precio_matrix_default 2 0;precio_matrix_suggestion 1 0;Baggages_side 1 0"],[44,"escalas_side 6 0;aerolinea_matrix 3 0;escalas_matrix 2 0;precio_matrix_suggestion 2 0;durvuelosalida_side 1 0;aerolinea_side 1 0;Baggages_side 1 0"],[41,"Baggages_side 4 0;escalas_side 4 0;durvuelosalida_side 3 0;horariosal_side 2 0;escalas_matrix 2 0;aerolinea_matrix 2 0;durvuelollegada_side 1 0;precio_matrix_suggestion 1 0;horarioregreso_side 1 0"],[57,"escalas_side 7 0;aerolinea_matrix 4 0;escalas_matrix 4 0;precio_matrix_suggestion 3 0;durvuelosalida_side 2 0;durvuelollegada_side 2 0;horariosal_side 2 0;aerolinea_side 1 0;precios_side 1 0;precio_matrix_default 1 0;Baggages_side 1 0"],[54,"escalas_side 6 0;escalas_matrix 5 0;aerolinea_matrix 5 0;precio_matrix_suggestion 4 0;Baggages_side 2 0;durvuelollegada_side 1 0;durvuelosalida_side 1 0;horariosal_side 1 0;horarioregreso_side 1 0;precio_matrix_default 1 0"],[95,"escalas_side 11 0;Baggages_side 8 0;aerolinea_matrix 7 0;escalas_matrix 6 0;aerolinea_side 4 0;durvuelosalida_side 4 0;precio_matrix_default 3 0;precio_matrix_suggestion 2 0;durvuelollegada_side 2 0;aeropuertoorigen_side 2 0;horariosal_side 1 0;precios_side 1 0"]]
+ },
+ "Autos":{
+  "BR":[[3106,"filter_payment_method 1399 80;filter_category 533 21;filter_provider 502 35;filter_transmission 335 27;filter_number_of_passengers 310 11;filter_deliver_method 179 14;filter_zones 82 9;filter_engine_type 19 0;filter_promotion 8 1"],[2730,"filter_payment_method 1207 82;filter_category 512 29;filter_provider 397 40;filter_transmission 291 26;filter_number_of_passengers 278 9;filter_deliver_method 131 9;filter_zones 39 2;filter_engine_type 11 1;filter_promotion 8 0"],[2982,"filter_payment_method 1286 71;filter_category 513 27;filter_provider 436 29;filter_number_of_passengers 313 11;filter_transmission 301 21;filter_deliver_method 155 10;filter_zones 61 6;filter_engine_type 11 1;filter_promotion 11 0"],[3008,"filter_payment_method 1334 75;filter_category 535 20;filter_provider 453 31;filter_transmission 312 19;filter_number_of_passengers 312 15;filter_deliver_method 143 6;filter_zones 50 5;filter_engine_type 13 0;filter_promotion 7 0"],[2828,"filter_payment_method 1248 76;filter_category 480 17;filter_provider 438 34;filter_transmission 306 27;filter_number_of_passengers 304 11;filter_deliver_method 158 9;filter_zones 60 3;filter_engine_type 16 0;filter_promotion 8 0"],[3125,"filter_payment_method 1329 71;filter_category 550 25;filter_provider 463 26;filter_transmission 324 22;filter_number_of_passengers 266 10;filter_deliver_method 177 10;filter_zones 71 2;filter_engine_type 18 1;filter_promotion 9 2"],[2872,"filter_payment_method 1261 76;filter_category 532 19;filter_provider 433 39;filter_number_of_passengers 273 6;filter_transmission 266 21;filter_deliver_method 177 13;filter_zones 65 4;filter_promotion 12 0;filter_engine_type 3 0"],[2893,"filter_payment_method 1322 74;filter_category 580 24;filter_provider 456 36;filter_number_of_passengers 254 7;filter_transmission 251 15;filter_deliver_method 141 8;filter_zones 46 1;filter_engine_type 11 0;filter_promotion 6 0"],[2843,"filter_payment_method 1299 88;filter_category 594 40;filter_provider 488 34;filter_number_of_passengers 287 11;filter_transmission 259 27;filter_deliver_method 144 10;filter_zones 58 2;filter_promotion 8 0;filter_engine_type 8 0"]],
+  "MX":[[240,"filter_payment_method 81 3;filter_category 44 2;filter_number_of_passengers 35 0;filter_provider 17 1;filter_transmission 11 0;filter_deliver_method 11 0;filter_zones 5 0;filter_engine_type 1 0;filter_promotion 1 0"],[284,"filter_payment_method 102 6;filter_number_of_passengers 45 2;filter_category 44 2;filter_provider 27 2;filter_deliver_method 11 0;filter_transmission 6 0;filter_zones 2 0;filter_engine_type 1 0;filter_promotion 1 0"],[239,"filter_payment_method 89 5;filter_number_of_passengers 39 4;filter_category 38 1;filter_deliver_method 13 1;filter_provider 11 2;filter_transmission 7 1;filter_zones 6 1;filter_promotion 1 0"],[297,"filter_payment_method 104 13;filter_number_of_passengers 45 4;filter_category 41 4;filter_provider 26 6;filter_transmission 18 0;filter_deliver_method 15 0;filter_zones 6 0;filter_promotion 2 0;filter_engine_type 1 0"],[297,"filter_payment_method 120 8;filter_category 55 4;filter_number_of_passengers 40 2;filter_provider 28 3;filter_transmission 12 0;filter_deliver_method 9 0;filter_zones 7 0;filter_engine_type 2 0;filter_promotion 1 0"],[300,"filter_payment_method 106 7;filter_category 46 2;filter_number_of_passengers 31 0;filter_provider 28 4;filter_transmission 18 0;filter_deliver_method 15 1;filter_zones 8 0;filter_promotion 2 0;filter_engine_type 1 0"],[271,"filter_payment_method 87 6;filter_number_of_passengers 44 2;filter_category 31 1;filter_provider 13 2;filter_transmission 9 0;filter_deliver_method 6 1;filter_zones 6 0;filter_promotion 1 0"],[288,"filter_payment_method 105 6;filter_number_of_passengers 54 2;filter_category 40 2;filter_provider 33 3;filter_deliver_method 12 0;filter_transmission 8 1;filter_zones 6 0;filter_engine_type 1 0"],[285,"filter_payment_method 98 9;filter_category 43 3;filter_number_of_passengers 38 3;filter_provider 19 5;filter_deliver_method 16 1;filter_transmission 9 0;filter_zones 2 0;filter_promotion 1 0"]],
+  "CO":[[168,"filter_payment_method 59 4;filter_number_of_passengers 31 3;filter_category 23 0;filter_provider 20 1;filter_deliver_method 7 1;filter_promotion 1 0;filter_engine_type 1 0;filter_zones 1 0;filter_transmission 1 0"],[154,"filter_payment_method 48 4;filter_number_of_passengers 27 2;filter_category 22 1;filter_provider 10 1;filter_deliver_method 4 0;filter_engine_type 3 0;filter_zones 1 0"],[167,"filter_payment_method 59 1;filter_category 25 0;filter_number_of_passengers 24 0;filter_provider 14 1;filter_deliver_method 8 0;filter_transmission 5 0;filter_engine_type 2 0;filter_zones 2 0"],[181,"filter_payment_method 69 4;filter_category 29 1;filter_number_of_passengers 25 1;filter_provider 22 1;filter_deliver_method 17 0;filter_promotion 5 0;filter_transmission 4 1;filter_zones 3 0"],[201,"filter_payment_method 66 7;filter_number_of_passengers 31 1;filter_category 28 5;filter_provider 13 3;filter_deliver_method 11 2;filter_zones 5 2;filter_transmission 4 1;filter_promotion 2 1"],[196,"filter_payment_method 65 11;filter_number_of_passengers 28 5;filter_category 27 4;filter_provider 19 6;filter_deliver_method 8 2;filter_zones 6 2;filter_transmission 2 0"],[172,"filter_payment_method 50 4;filter_number_of_passengers 24 2;filter_category 19 2;filter_deliver_method 12 0;filter_provider 9 2;filter_zones 7 0"],[197,"filter_payment_method 65 5;filter_number_of_passengers 31 2;filter_category 24 0;filter_provider 19 2;filter_transmission 17 2;filter_deliver_method 16 1;filter_zones 5 1;filter_engine_type 1 0"],[156,"filter_payment_method 48 0;filter_category 23 0;filter_number_of_passengers 22 0;filter_provider 10 0;filter_deliver_method 5 0;filter_transmission 3 0;filter_zones 2 0;filter_promotion 1 0;filter_engine_type 1 0"]],
+  "AR":[[296,"filter_payment_method 67 5;filter_category 28 0;filter_provider 26 2;filter_number_of_passengers 18 1;filter_deliver_method 10 2;filter_transmission 5 2;filter_zones 4 0"],[305,"filter_payment_method 89 5;filter_category 45 4;filter_provider 28 3;filter_number_of_passengers 20 0;filter_deliver_method 10 1;filter_transmission 7 0;filter_zones 3 1;filter_engine_type 1 0"],[297,"filter_payment_method 78 6;filter_category 30 0;filter_provider 25 4;filter_number_of_passengers 25 2;filter_transmission 9 2;filter_deliver_method 7 0;filter_zones 4 0;filter_promotion 1 0;filter_engine_type 1 0"],[298,"filter_payment_method 61 1;filter_provider 22 1;filter_category 22 0;filter_number_of_passengers 17 0;filter_deliver_method 12 0;filter_transmission 8 0;filter_zones 1 0"],[263,"filter_payment_method 73 5;filter_category 30 2;filter_provider 24 3;filter_number_of_passengers 21 0;filter_deliver_method 13 0;filter_transmission 7 0;filter_zones 4 0;filter_promotion 1 0"],[291,"filter_payment_method 82 7;filter_category 30 1;filter_number_of_passengers 26 0;filter_provider 25 5;filter_deliver_method 15 2;filter_transmission 12 1;filter_zones 2 0"],[281,"filter_payment_method 74 3;filter_category 34 2;filter_number_of_passengers 24 1;filter_provider 22 0;filter_deliver_method 12 0;filter_transmission 7 0;filter_zones 4 0"],[313,"filter_payment_method 87 4;filter_category 33 1;filter_number_of_passengers 25 0;filter_provider 23 3;filter_deliver_method 17 2;filter_transmission 7 0;filter_zones 6 1"],[357,"filter_payment_method 111 7;filter_category 62 3;filter_number_of_passengers 31 0;filter_provider 25 4;filter_deliver_method 14 0;filter_transmission 8 0;filter_zones 6 0;filter_engine_type 1 0"]],
+  "CL":[[46,"filter_payment_method 15 1;filter_category 10 1;filter_provider 6 0;filter_number_of_passengers 4 0;filter_deliver_method 3 0;filter_zones 1 0"],[39,"filter_payment_method 15 0;filter_category 13 0;filter_number_of_passengers 3 0;filter_provider 2 0;filter_deliver_method 1 0;filter_transmission 1 0"],[34,"filter_payment_method 12 1;filter_category 9 1;filter_provider 3 0;filter_zones 1 0;filter_transmission 1 0;filter_number_of_passengers 1 0"],[43,"filter_payment_method 12 0;filter_category 9 0;filter_number_of_passengers 3 0;filter_provider 2 0;filter_deliver_method 1 0;filter_zones 1 0;filter_transmission 1 0"],[39,"filter_payment_method 10 0;filter_category 8 0;filter_number_of_passengers 4 0;filter_zones 1 0;filter_provider 1 0"],[82,"filter_payment_method 25 0;filter_category 19 0;filter_provider 5 0;filter_number_of_passengers 3 0;filter_zones 1 0;filter_deliver_method 1 0;filter_promotion 1 0;filter_transmission 1 0"],[44,"filter_payment_method 19 0;filter_category 11 0;filter_number_of_passengers 8 0;filter_transmission 5 0;filter_provider 2 0;filter_deliver_method 2 0"],[43,"filter_payment_method 17 1;filter_category 15 0;filter_provider 7 0;filter_number_of_passengers 3 0;filter_transmission 1 1;filter_deliver_method 1 0"],[57,"filter_payment_method 17 1;filter_category 8 0;filter_number_of_passengers 4 0;filter_deliver_method 4 1;filter_provider 3 0;filter_zones 2 0"]],
+  "PE":[[21,"filter_payment_method 9 1;filter_category 8 1;filter_provider 4 1;filter_number_of_passengers 3 0;filter_deliver_method 2 0"],[21,"filter_payment_method 8 0;filter_category 6 0;filter_provider 3 0;filter_transmission 2 0;filter_engine_type 1 0;filter_deliver_method 1 0;filter_promotion 1 0;filter_number_of_passengers 1 0"],[18,"filter_payment_method 10 2;filter_category 6 1;filter_transmission 5 2;filter_provider 4 0;filter_number_of_passengers 2 0"],[10,"filter_payment_method 5 0;filter_category 5 0;filter_number_of_passengers 2 0;filter_transmission 2 0;filter_deliver_method 1 0"],[20,"filter_payment_method 5 0;filter_deliver_method 2 0;filter_number_of_passengers 2 0;filter_category 2 0;filter_provider 1 0;filter_zones 1 0"],[11,"filter_provider 2 0;filter_payment_method 2 0;filter_category 1 0"],[15,"filter_payment_method 7 0;filter_category 6 0;filter_transmission 2 0;filter_number_of_passengers 1 0;filter_promotion 1 0;filter_zones 1 0;filter_provider 1 0;filter_deliver_method 1 0"],[30,"filter_payment_method 10 1;filter_provider 6 1;filter_category 5 0;filter_transmission 3 0;filter_deliver_method 2 0;filter_promotion 1 0"],[30,"filter_payment_method 18 0;filter_number_of_passengers 8 0;filter_deliver_method 8 0;filter_category 7 0;filter_provider 5 0;filter_promotion 1 0;filter_transmission 1 0;filter_engine_type 1 0;filter_zones 1 0"]],
+  "OT":[[0,""],[0,""],[1,""],[4,""],[4,""],[0,""],[0,""],[2,"filter_number_of_passengers 1 0;filter_payment_method 1 0"],[2,""]]
+ },
+ "Actividades":{
+  "BR":[[4134,"ai-keyword-filter 1049 17;experience-type-filter 25 0;score-filter 14 0;inclusions-filter 11 0;price 8 0;duration-filter 7 0"],[3667,"ai-keyword-filter 939 15;experience-type-filter 24 0;inclusions-filter 13 1;score-filter 6 0;price 1 0;duration-filter 1 0"],[4207,"ai-keyword-filter 1197 26;experience-type-filter 29 0;inclusions-filter 22 0;duration-filter 11 0;score-filter 7 0;price 4 0"],[3949,"ai-keyword-filter 1093 31;experience-type-filter 22 0;inclusions-filter 11 0;duration-filter 7 0;score-filter 5 0;price 4 0"],[3761,"ai-keyword-filter 1048 28;experience-type-filter 32 0;inclusions-filter 6 0;score-filter 5 0;duration-filter 3 0;price 3 0;category-filter 1 0"],[4029,"ai-keyword-filter 1076 33;experience-type-filter 21 0;inclusions-filter 17 0;price 6 0;score-filter 4 0;duration-filter 1 0"],[3320,"ai-keyword-filter 953 21;experience-type-filter 21 0;inclusions-filter 14 0;score-filter 7 0;duration-filter 2 1;price 2 0"],[3711,"ai-keyword-filter 1046 28;experience-type-filter 24 0;inclusions-filter 11 0;score-filter 6 0;duration-filter 4 0;price 1 0"],[3533,"ai-keyword-filter 907 23;experience-type-filter 21 0;inclusions-filter 17 0;score-filter 6 0;duration-filter 1 0;category-filter 1 0;price 1 0"]],
+  "MX":[[1086,"ai-keyword-filter 237 13;inclusions-filter 22 0;experience-type-filter 13 1;score-filter 4 0;duration-filter 3 0;price 2 0"],[1140,"ai-keyword-filter 265 7;experience-type-filter 13 0;inclusions-filter 12 0;score-filter 5 0;price 3 0;duration-filter 1 0"],[947,"ai-keyword-filter 207 11;inclusions-filter 9 1;experience-type-filter 7 0;score-filter 4 0;price 3 0;duration-filter 1 0"],[1214,"ai-keyword-filter 262 12;score-filter 16 1;experience-type-filter 8 0;price 6 0;inclusions-filter 6 0;duration-filter 3 0;category-filter 1 0"],[1195,"ai-keyword-filter 279 11;inclusions-filter 14 1;experience-type-filter 7 0;score-filter 6 1;duration-filter 2 0;price 2 0"],[1190,"ai-keyword-filter 280 6;experience-type-filter 6 0;duration-filter 5 0;inclusions-filter 4 0;score-filter 4 0;price 1 1"],[1142,"ai-keyword-filter 260 11;inclusions-filter 6 0;experience-type-filter 5 0;score-filter 3 0;duration-filter 3 0;price 1 0"],[1193,"ai-keyword-filter 253 12;experience-type-filter 11 0;inclusions-filter 8 0;duration-filter 3 0;score-filter 2 0;price 1 0"],[1023,"ai-keyword-filter 216 8;inclusions-filter 15 0;experience-type-filter 6 0;duration-filter 2 0;price 1 0;score-filter 1 0"]],
+  "CO":[[1302,"ai-keyword-filter 214 15;inclusions-filter 9 0;experience-type-filter 5 0;price 2 0;duration-filter 1 0;score-filter 1 0"],[1328,"ai-keyword-filter 223 12;experience-type-filter 5 0;inclusions-filter 3 0;score-filter 1 0;price 1 0"],[1422,"ai-keyword-filter 229 21;experience-type-filter 7 1;inclusions-filter 4 0;duration-filter 4 0;score-filter 2 0"],[1349,"ai-keyword-filter 255 25;inclusions-filter 6 0;duration-filter 6 0;experience-type-filter 5 0;price 3 0;score-filter 1 1"],[1373,"ai-keyword-filter 234 14;inclusions-filter 9 1;price 3 0;experience-type-filter 2 0;score-filter 1 0;duration-filter 1 0"],[1434,"ai-keyword-filter 243 16;inclusions-filter 4 1;price 3 0;experience-type-filter 3 0;duration-filter 2 0;score-filter 1 0"],[1232,"ai-keyword-filter 172 15;inclusions-filter 10 0;experience-type-filter 5 0;duration-filter 3 0;score-filter 3 0;price 3 0"],[1319,"ai-keyword-filter 201 16;inclusions-filter 12 0;experience-type-filter 6 0;score-filter 4 0;price 3 0;duration-filter 2 0"],[1381,"ai-keyword-filter 202 16;experience-type-filter 9 0;duration-filter 3 1;inclusions-filter 3 1;score-filter 2 0;price 2 0"]],
+  "AR":[[420,"ai-keyword-filter 67 4;experience-type-filter 2 0;score-filter 1 0;duration-filter 1 0"],[360,"ai-keyword-filter 75 8;duration-filter 2 0;inclusions-filter 1 0;experience-type-filter 1 0"],[326,"ai-keyword-filter 58 5;experience-type-filter 4 0;score-filter 3 0;duration-filter 2 0;inclusions-filter 2 0;price 2 0"],[344,"ai-keyword-filter 49 2;experience-type-filter 5 0;inclusions-filter 4 0;price 2 0"],[353,"ai-keyword-filter 56 5;inclusions-filter 3 0;score-filter 2 0;experience-type-filter 2 0;price 1 0;duration-filter 1 0"],[404,"ai-keyword-filter 58 5;score-filter 1 0;experience-type-filter 1 0;inclusions-filter 1 0"],[313,"ai-keyword-filter 45 4;experience-type-filter 4 0;inclusions-filter 2 0;price 1 0"],[340,"ai-keyword-filter 47 3;score-filter 2 0;experience-type-filter 2 0;duration-filter 2 0;price 2 0"],[354,"ai-keyword-filter 44 4;inclusions-filter 3 0;score-filter 2 0;experience-type-filter 2 0"]],
+  "CL":[[160,"ai-keyword-filter 43 0;inclusions-filter 1 0"],[135,"ai-keyword-filter 26 0;experience-type-filter 2 0;inclusions-filter 1 0;price 1 0"],[128,"ai-keyword-filter 27 0;score-filter 1 0;duration-filter 1 0;inclusions-filter 1 0;price 1 0"],[106,"ai-keyword-filter 19 1"],[154,"ai-keyword-filter 33 0;experience-type-filter 2 0;inclusions-filter 2 0;score-filter 2 0;price 1 0"],[233,"ai-keyword-filter 44 1;inclusions-filter 5 0;experience-type-filter 3 0;score-filter 1 0"],[141,"ai-keyword-filter 27 1;inclusions-filter 2 0;experience-type-filter 1 0;score-filter 1 0;price 1 0"],[126,"ai-keyword-filter 27 0;inclusions-filter 2 0"],[114,"ai-keyword-filter 12 0"]],
+  "PE":[[150,"ai-keyword-filter 38 3;duration-filter 1 0;experience-type-filter 1 0"],[171,"ai-keyword-filter 55 3;price 1 0"],[144,"ai-keyword-filter 45 2;experience-type-filter 2 0;inclusions-filter 1 0;price 1 0"],[173,"ai-keyword-filter 42 4;inclusions-filter 1 0"],[170,"ai-keyword-filter 50 5;experience-type-filter 1 0;score-filter 1 0;duration-filter 1 0;price 1 0"],[128,"ai-keyword-filter 32 1"],[151,"ai-keyword-filter 58 4;score-filter 1 0"],[133,"ai-keyword-filter 32 2;experience-type-filter 2 0;score-filter 1 0"],[160,"ai-keyword-filter 42 3;inclusions-filter 5 1"]],
+  "OT":[[9,"ai-keyword-filter 3 0"],[11,"ai-keyword-filter 5 0"],[16,"ai-keyword-filter 5 0"],[13,"ai-keyword-filter 2 0;category-filter 1 0"],[20,"ai-keyword-filter 9 2"],[14,"ai-keyword-filter 1 0"],[10,"ai-keyword-filter 3 1"],[20,"ai-keyword-filter 9 1;experience-type-filter 3 0;inclusions-filter 2 0"],[16,"ai-keyword-filter 4 0"]]
+ },
+ "Paquetes":{
+  "BR":[[20265,"meal_plans 5550 83;hotel_name 4136 122;zones 1517 27;accommodation_type 771 6;rate_score 714 8;hotel_type 598 5;stars 341 4;roompack_tags 230 3;amenities_groups 77 2;payment_type 67 0;hotel_chains 61 3;amenities 24 0;promo_campaign 7 0"],[17623,"meal_plans 4872 83;hotel_name 3753 107;zones 1354 20;accommodation_type 671 10;rate_score 642 9;hotel_type 507 6;stars 330 8;roompack_tags 189 4;hotel_chains 74 8;amenities_groups 61 1;payment_type 52 1;amenities 26 0;promo_campaign 10 0"],[21642,"meal_plans 5866 77;hotel_name 4379 132;zones 1678 27;accommodation_type 784 22;rate_score 709 4;hotel_type 574 7;stars 395 3;roompack_tags 195 2;amenities_groups 83 0;hotel_chains 67 1;payment_type 45 0;amenities 26 0;promo_campaign 26 0"],[21143,"meal_plans 5701 72;hotel_name 4455 141;zones 1506 18;accommodation_type 759 8;rate_score 684 9;hotel_type 541 5;stars 361 5;roompack_tags 200 1;amenities_groups 85 1;hotel_chains 65 0;payment_type 52 0;amenities 28 2;promo_campaign 11 0"],[20331,"meal_plans 5739 69;hotel_name 4380 119;zones 1543 18;accommodation_type 694 11;rate_score 662 8;hotel_type 586 5;stars 380 5;roompack_tags 211 1;amenities_groups 83 0;hotel_chains 58 0;amenities 34 0;payment_type 34 0;promo_campaign 13 0"],[19018,"meal_plans 5427 74;hotel_name 3957 94;zones 1369 18;accommodation_type 688 10;rate_score 601 5;hotel_type 511 5;stars 350 8;roompack_tags 188 0;amenities_groups 61 0;payment_type 52 0;hotel_chains 51 0;amenities 21 1;promo_campaign 16 0"],[17663,"meal_plans 4935 53;hotel_name 3646 99;zones 1297 19;accommodation_type 620 11;rate_score 573 6;hotel_type 555 2;stars 320 2;roompack_tags 184 1;hotel_chains 68 3;amenities_groups 67 1;payment_type 33 0;amenities 21 1;promo_campaign 10 1"],[20187,"meal_plans 5425 47;hotel_name 4032 80;zones 1377 9;accommodation_type 726 6;rate_score 711 7;hotel_type 597 3;stars 406 3;roompack_tags 187 3;amenities_groups 80 3;hotel_chains 57 4;payment_type 25 0;amenities 24 1;promo_campaign 14 0"],[19042,"meal_plans 5333 49;hotel_name 3753 62;zones 1224 11;accommodation_type 682 5;rate_score 640 9;hotel_type 543 3;stars 419 8;roompack_tags 189 3;amenities_groups 88 0;hotel_chains 78 0;payment_type 43 1;promo_campaign 25 0;amenities 24 1"]],
+  "MX":[[3429,"meal_plans 1231 17;hotel_name 687 15;zones 151 2;stars 69 0;roompack_tags 66 0;rate_score 43 0;accommodation_type 40 0;hotel_type 34 0;hotel_chains 28 3;payment_type 25 0;amenities_groups 22 1;amenities 22 1;promo_campaign 3 0"],[3587,"meal_plans 1217 11;hotel_name 688 13;zones 115 0;roompack_tags 63 0;stars 63 0;hotel_chains 52 3;accommodation_type 39 0;rate_score 32 0;amenities 27 1;payment_type 21 0;hotel_type 17 0;amenities_groups 13 0;promo_campaign 3 0"],[2998,"meal_plans 985 12;hotel_name 608 16;zones 133 4;roompack_tags 70 0;stars 62 1;accommodation_type 49 0;hotel_type 33 1;rate_score 30 1;hotel_chains 22 0;payment_type 21 0;amenities 19 0;amenities_groups 8 0;promo_campaign 2 0"],[3883,"meal_plans 1334 9;hotel_name 763 19;zones 126 1;stars 90 0;roompack_tags 67 0;accommodation_type 49 1;rate_score 46 0;hotel_type 34 0;hotel_chains 24 1;amenities 24 0;amenities_groups 22 0;payment_type 18 0;promo_campaign 5 0"],[3548,"meal_plans 1227 13;hotel_name 709 24;zones 133 1;stars 70 2;roompack_tags 55 0;payment_type 32 0;rate_score 32 0;accommodation_type 31 0;amenities_groups 28 0;hotel_type 27 0;hotel_chains 25 0;amenities 16 0;promo_campaign 6 0"],[3830,"meal_plans 1375 17;hotel_name 750 14;zones 126 0;stars 78 0;roompack_tags 64 0;accommodation_type 45 0;hotel_chains 37 0;payment_type 34 1;rate_score 32 0;hotel_type 26 0;amenities 25 0;amenities_groups 18 0;promo_campaign 3 0"],[3698,"meal_plans 1373 10;hotel_name 692 10;zones 156 0;roompack_tags 87 0;stars 70 0;rate_score 50 0;hotel_type 48 0;accommodation_type 38 0;payment_type 30 0;hotel_chains 19 0;amenities 16 0;amenities_groups 10 0;promo_campaign 6 0"],[3335,"meal_plans 1118 11;hotel_name 577 11;zones 134 2;stars 83 1;roompack_tags 54 1;accommodation_type 44 1;rate_score 43 0;payment_type 39 0;amenities 29 0;hotel_type 27 0;hotel_chains 25 0;amenities_groups 8 0;promo_campaign 3 0"],[3127,"meal_plans 1078 5;hotel_name 526 8;zones 107 1;stars 68 2;roompack_tags 47 0;rate_score 40 0;accommodation_type 39 0;payment_type 35 0;hotel_type 22 0;amenities_groups 19 1;hotel_chains 18 1;amenities 16 0;promo_campaign 4 1"]],
+  "CO":[[3231,"meal_plans 1313 16;hotel_name 262 10;zones 183 2;roompack_tags 57 0;hotel_type 46 1;accommodation_type 44 0;stars 37 1;rate_score 37 1;payment_type 22 0;amenities_groups 14 0;hotel_chains 10 0;promo_campaign 4 0;amenities 2 0"],[3387,"meal_plans 1337 22;hotel_name 254 8;zones 150 6;accommodation_type 50 2;roompack_tags 50 0;stars 44 0;hotel_type 37 0;payment_type 23 0;rate_score 18 1;hotel_chains 17 0;amenities_groups 15 1;amenities 8 1;promo_campaign 2 0"],[3803,"meal_plans 1561 20;hotel_name 298 8;zones 200 4;roompack_tags 87 1;hotel_type 57 1;accommodation_type 48 1;payment_type 38 1;stars 38 1;rate_score 25 0;hotel_chains 17 0;amenities_groups 14 1;amenities 10 0;promo_campaign 6 0"],[3624,"meal_plans 1482 24;hotel_name 298 4;zones 171 7;roompack_tags 74 0;hotel_type 60 1;accommodation_type 50 0;stars 48 0;amenities_groups 30 1;rate_score 26 1;payment_type 22 0;hotel_chains 14 0;amenities 4 0;promo_campaign 2 0"],[3787,"meal_plans 1601 28;hotel_name 309 9;zones 210 3;roompack_tags 93 1;stars 64 1;accommodation_type 59 1;hotel_type 46 0;payment_type 34 0;rate_score 31 0;amenities_groups 16 0;hotel_chains 11 0;amenities 7 0;promo_campaign 2 0"],[3825,"meal_plans 1571 26;hotel_name 288 12;zones 202 4;roompack_tags 107 0;stars 68 1;hotel_type 59 2;accommodation_type 57 0;payment_type 36 0;rate_score 25 0;amenities_groups 24 2;amenities 11 0;hotel_chains 9 0;promo_campaign 6 0"],[3142,"meal_plans 1262 16;hotel_name 265 7;zones 179 2;roompack_tags 71 1;stars 44 1;hotel_type 43 0;accommodation_type 41 1;rate_score 28 0;payment_type 22 0;amenities_groups 13 0;amenities 7 0;hotel_chains 4 0;promo_campaign 3 0"],[3754,"meal_plans 1539 23;hotel_name 336 9;zones 202 3;roompack_tags 99 1;accommodation_type 70 2;stars 57 2;hotel_type 54 1;rate_score 35 0;payment_type 30 0;amenities 11 0;amenities_groups 11 0;hotel_chains 10 0;promo_campaign 6 0"],[3693,"meal_plans 1516 19;hotel_name 330 6;zones 159 4;roompack_tags 118 0;accommodation_type 68 1;hotel_type 54 0;payment_type 37 0;amenities_groups 36 0;stars 33 0;rate_score 30 0;hotel_chains 13 0;amenities 9 0;promo_campaign 4 0"]],
+  "AR":[[2510,"meal_plans 464 2;hotel_name 229 7;zones 160 4;roompack_tags 83 1;hotel_type 62 1;accommodation_type 51 0;rate_score 47 0;stars 47 0;amenities_groups 15 0;hotel_chains 11 0;amenities 10 0;payment_type 10 0;promo_campaign 7 0"],[2269,"meal_plans 433 5;hotel_name 194 6;zones 156 3;roompack_tags 61 1;rate_score 54 0;hotel_type 54 0;accommodation_type 46 0;stars 30 1;amenities 18 0;amenities_groups 15 1;hotel_chains 13 0;payment_type 7 0;promo_campaign 1 0"],[2541,"meal_plans 452 2;hotel_name 195 3;zones 175 0;roompack_tags 76 0;rate_score 68 0;hotel_type 59 0;accommodation_type 58 0;stars 51 0;amenities_groups 17 0;amenities 14 0;hotel_chains 7 0;payment_type 6 0;promo_campaign 3 0"],[2352,"meal_plans 483 5;hotel_name 179 5;zones 163 1;roompack_tags 75 0;rate_score 61 1;stars 58 1;hotel_type 48 0;accommodation_type 45 0;amenities_groups 23 1;hotel_chains 19 0;payment_type 16 0;amenities 10 0;promo_campaign 3 0"],[2175,"meal_plans 455 3;hotel_name 160 4;zones 133 2;roompack_tags 82 1;rate_score 75 1;stars 66 1;accommodation_type 59 1;hotel_type 39 2;amenities_groups 18 1;hotel_chains 13 0;amenities 13 2;payment_type 12 0;promo_campaign 5 0"],[2409,"meal_plans 596 2;hotel_name 155 2;zones 143 1;roompack_tags 102 1;rate_score 82 0;hotel_type 73 0;stars 63 0;accommodation_type 54 0;payment_type 22 0;amenities 17 0;amenities_groups 14 0;hotel_chains 12 0;promo_campaign 8 0"],[2376,"meal_plans 542 4;hotel_name 216 5;zones 176 2;roompack_tags 103 1;rate_score 90 0;hotel_type 62 1;stars 60 0;accommodation_type 45 0;payment_type 26 0;amenities_groups 16 1;hotel_chains 14 0;amenities 12 1;promo_campaign 5 0"],[2239,"meal_plans 565 2;hotel_name 207 5;zones 195 2;roompack_tags 87 0;rate_score 68 0;hotel_type 64 2;stars 63 1;accommodation_type 31 0;amenities_groups 25 0;amenities 20 0;payment_type 18 1;hotel_chains 8 0;promo_campaign 4 0"],[2588,"meal_plans 666 2;hotel_name 261 6;zones 220 2;roompack_tags 134 0;rate_score 111 0;stars 77 0;hotel_type 66 0;accommodation_type 63 0;amenities_groups 32 0;amenities 26 0;payment_type 11 0;hotel_chains 8 0;promo_campaign 7 0"]],
+  "CL":[[2411,"meal_plans 1008 17;hotel_name 441 11;zones 326 7;roompack_tags 105 1;accommodation_type 86 0;hotel_type 80 0;rate_score 77 0;stars 60 4;hotel_chains 58 2;amenities_groups 19 0;amenities 16 0;payment_type 10 0;promo_campaign 2 0"],[1422,"meal_plans 612 7;hotel_name 226 4;zones 193 1;hotel_type 54 0;roompack_tags 53 0;accommodation_type 45 0;rate_score 44 0;stars 37 3;hotel_chains 32 0;payment_type 12 0;amenities 10 0;amenities_groups 6 0;promo_campaign 1 0"],[1174,"meal_plans 512 6;hotel_name 163 4;zones 150 2;rate_score 44 1;accommodation_type 40 0;roompack_tags 38 0;stars 33 1;hotel_type 31 0;hotel_chains 22 0;amenities 14 0;payment_type 9 0;amenities_groups 3 0;promo_campaign 2 0"],[1190,"meal_plans 538 8;hotel_name 193 4;zones 171 4;roompack_tags 60 0;accommodation_type 49 1;rate_score 47 0;stars 38 3;hotel_type 38 0;hotel_chains 29 0;payment_type 16 0;amenities 11 0;amenities_groups 5 0;promo_campaign 2 0"],[1517,"meal_plans 682 8;hotel_name 258 7;zones 195 4;roompack_tags 85 0;hotel_type 83 0;accommodation_type 53 2;stars 48 2;rate_score 42 0;hotel_chains 25 0;amenities_groups 18 0;amenities 15 0;payment_type 13 0;promo_campaign 3 0"],[4074,"meal_plans 1267 24;hotel_name 561 16;zones 460 13;accommodation_type 151 2;roompack_tags 147 2;hotel_type 111 2;stars 100 5;rate_score 91 0;hotel_chains 83 2;amenities_groups 29 2;amenities 28 0;payment_type 16 0;promo_campaign 6 0"],[1556,"meal_plans 692 11;hotel_name 215 4;zones 202 3;hotel_type 79 0;roompack_tags 61 0;accommodation_type 50 1;rate_score 48 2;stars 44 3;hotel_chains 23 0;amenities_groups 17 0;amenities 11 1;payment_type 8 0;promo_campaign 1 0"],[1514,"meal_plans 671 6;hotel_name 191 3;zones 154 2;accommodation_type 62 0;hotel_type 60 0;stars 57 0;roompack_tags 43 0;rate_score 36 0;hotel_chains 20 0;amenities_groups 9 0;amenities 9 0;payment_type 4 0;promo_campaign 1 0"],[1407,"meal_plans 595 2;hotel_name 201 1;zones 171 1;accommodation_type 55 0;hotel_type 47 0;roompack_tags 42 0;stars 37 0;hotel_chains 34 0;rate_score 22 0;amenities_groups 14 0;amenities 9 0"]],
+  "PE":[[444,"meal_plans 146 2;hotel_name 68 2;zones 15 0;stars 11 1;accommodation_type 10 0;hotel_type 7 0;hotel_chains 4 0;rate_score 3 0;amenities 2 0;amenities_groups 2 0;roompack_tags 2 0"],[482,"meal_plans 144 0;hotel_name 69 1;zones 33 0;stars 12 0;hotel_type 12 0;hotel_chains 6 0;rate_score 4 0;accommodation_type 4 0;roompack_tags 3 0;amenities_groups 2 0;amenities 2 0"],[454,"meal_plans 134 1;hotel_name 52 1;stars 17 0;zones 14 0;hotel_chains 5 0;roompack_tags 4 0;payment_type 3 0;hotel_type 3 0;rate_score 3 0;accommodation_type 3 0;amenities_groups 2 0"],[492,"meal_plans 134 0;hotel_name 64 2;zones 20 0;stars 12 0;accommodation_type 4 0;amenities_groups 2 0;hotel_chains 2 0;promo_campaign 2 0;rate_score 2 0;amenities 1 0;hotel_type 1 0;roompack_tags 1 0"],[460,"meal_plans 130 1;hotel_name 64 0;zones 26 0;stars 14 0;hotel_chains 8 0;accommodation_type 4 0;amenities 4 0;amenities_groups 4 0;hotel_type 4 0;rate_score 1 0"],[491,"meal_plans 123 1;hotel_name 78 1;zones 19 0;stars 10 0;hotel_chains 4 0;rate_score 3 0;hotel_type 3 0;amenities_groups 3 0;accommodation_type 3 1;amenities 3 0;roompack_tags 2 0;promo_campaign 1 0;payment_type 1 0"],[522,"meal_plans 158 0;hotel_name 86 1;stars 28 0;zones 26 0;hotel_type 9 0;rate_score 7 0;hotel_chains 6 0;amenities_groups 5 0;amenities 5 0;accommodation_type 5 0;payment_type 2 0;promo_campaign 1 0;roompack_tags 1 0"],[536,"meal_plans 179 1;hotel_name 77 0;stars 20 0;zones 20 0;hotel_chains 18 0;amenities_groups 9 0;hotel_type 8 0;roompack_tags 4 0;amenities 4 0;payment_type 2 0;accommodation_type 2 0;rate_score 1 0"],[536,"meal_plans 193 0;hotel_name 80 2;zones 21 0;hotel_chains 16 0;stars 14 0;rate_score 12 0;accommodation_type 7 0;hotel_type 6 0;roompack_tags 4 0;amenities_groups 4 0;amenities 4 0;payment_type 2 0"]],
+  "OT":[[1,""],[0,""],[2,""],[0,""],[0,""],[0,""],[0,""],[0,""],[0,""]]
+ }
+};
+// @@RAWC_END
+const CTY = [['ALL','Todos los países'],['BR','Brasil'],['MX','México'],['CO','Colombia'],['AR','Argentina'],['CL','Chile'],['PE','Perú'],['OT','Otros países']];
+const PC = {};
+for (const name in RAWC) {
+  PC[name] = {};
+  for (const cc in RAWC[name]) PC[name][cc] = {card: RAW[name].card, weeks: RAWC[name][cc].map(([v, s], i) => {
+    const m = {}; if (s) s.split(';').forEach(x => { const [f, c, t] = x.split(' '); m[f] = [+c, +t]; });
+    return {label: WEEKS[i], v, m}; })};
+}
+let cty = 'ALL';
+const src = name => cty === 'ALL' || !PC[name] || !PC[name][cty] ? P[name] : PC[name][cty];
+const ctyName = () => (CTY.find(c => c[0] === cty) || [, 'Todos los países'])[1];
+const LOW_CTR = 0.01;
+let cur = "Hoteles", sortKey = "c", sortDir = -1;
+const rng = {from:0, to:WEEKS.length-1};
+const pct = (x,d=1)=>(x*100).toFixed(d).replace('.',',')+'%';
+const num = x=>x.toLocaleString('es-AR');
+const $ = id=>document.getElementById(id);
+const TAB_LABEL = {"Hoteles":"Alojamientos"};
+const dmy = d=>String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
+const startOf = i=>new Date(WEEKS[i]+'T00:00:00');
+const endOf = i=>{const d=startOf(i);d.setDate(d.getDate()+6);return d};
+const withYear = d=>dmy(d)+'/'+d.getFullYear();
+
+// Datos del período elegido: se suman las semanas del rango.
+function view(name){
+  const p=src(name), ws=p.weeks.slice(rng.from,rng.to+1), agg={};
+  ws.forEach(w=>{for(const f in w.m){const a=agg[f]=agg[f]||[0,0];a[0]+=w.m[f][0];a[1]+=w.m[f][1]}});
+  return {card:p.card, weeks:ws, visits:ws.reduce((s,w)=>s+w.v,0), rows:Object.entries(agg).map(([f,[c,t]])=>[f,c,t])};
+}
+const MIN_CLICKS=50;   // por debajo, el CTR es ruido
+const MIN_WEEK=20;     // clicks mínimos por semana para comparar la variación
+function derive(name){
+  const v=view(name), tot=v.rows.reduce((a,r)=>a+r[1],0), p=src(name);
+  const ctrW=(i,f)=>{const w=p.weeks[i];return w&&w.m[f]?{c:w.m[f][0],ctr:w.m[f][0]/w.v}:null};
+  const rows=v.rows.map(([f,c,t])=>{
+    const a=ctrW(rng.to,f), b=rng.to>0?ctrW(rng.to-1,f):null;
+    const trend=a&&b&&a.c>=MIN_WEEK&&b.c>=MIN_WEEK?a.ctr/b.ctr-1:null;
+    return {f,c,t,ctr:c/v.visits,share:tot?c/tot:0,conv:c?t/c:0,trend,few:c<MIN_CLICKS};
+  }).sort((a,b)=>b.c-a.c);
+  // Nivel de uso: el tercio de filtros con mayor CTR es «Alto»; menos de LOW_CTR es «Bajo»; el resto «Medio».
+  const cut=rows.map(r=>r.ctr).sort((x,y)=>y-x)[Math.max(Math.ceil(rows.length/3)-1,0)];
+  rows.forEach(r=>r.level=r.ctr<LOW_CTR?'low':r.ctr>=cut?'high':'mid');
+  return rows;
+}
+const TIPS={c:'Visitas que aplicaron el filtro',ctr:'Visitas con el filtro / visitas a la búsqueda',trend:'Cambio del CTR de la última semana contra la anterior (– si hay menos de 20 clicks)',level:'Alto: tercio con mayor CTR · Bajo: menos de 1% · Medio: el resto',share:'Parte de todos los clicks en filtros',conv:'De quienes lo usaron, % que llega a THANKS'};
+const LEVEL={high:['Alto','var(--teal)'],mid:['Medio','#9aa3b2'],low:['Bajo','var(--orange)']};
+const trendHtml=t=>t==null?'<span class="muted">–</span>':`<span class="${t>=0.005?'up':t<=-0.005?'dn':'muted'}">${t>=0.005?'▲':t<=-0.005?'▼':'■'} ${Math.abs(t*100).toFixed(0)}%</span>`;
+function exportCsv(){
+  const rows=derive(cur), v=view(cur);
+  const head=['filtro','clicks','thanks','ctr','pct_de_clicks','conversion','uso','variacion_vs_semana_anterior'];
+  const body=rows.map(r=>[r.f,r.c,r.t,r.ctr.toFixed(5),r.share.toFixed(5),r.conv.toFixed(5),LEVEL[r.level][0],r.trend==null?'':r.trend.toFixed(4)].join(','));
+  const blob=new Blob(['﻿'+[head.join(','),...body].join('\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`usabilidad-${cur.toLowerCase()}-${cty}-${WEEKS[rng.from]}_${WEEKS[rng.to]}.csv`;a.click();URL.revokeObjectURL(a.href);
+}
+const tip=$('tip');
+const tipOn=(e,h)=>{tip.innerHTML=h;tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-250)+'px';tip.style.top=(e.clientY+14)+'px'};
+const tipOff=()=>{tip.style.opacity=0};
+
+// Columnas semanales: se rotula solo la última semana; el resto va en el tooltip.
+function columns(el,items,color,fmt,unit){
+  const max=Math.max(...items.map(i=>i.v),0.0001), H=118;
+  el.innerHTML=`<div class="cols">`+items.map((it,i)=>{
+    const h=Math.max(it.v/max*H,2), last=i===items.length-1;
+    return `<div class="col"><div class="bar" style="height:${h}px;background:${color}"></div>${last?`<div class="end" style="bottom:${h+6}px">${fmt(it.v)}</div>`:''}</div>`}).join('')+`</div>`+
+    `<div class="xlab">${items.map(i=>`<span>${i.l}</span>`).join('')}</div>`;
+  el.querySelectorAll('.col').forEach((n,i)=>{const it=items[i];
+    n.onmousemove=e=>tipOn(e,`<b>Semana del ${it.l}</b><br>${unit}: ${fmt(it.v)}`);
+    n.onmouseleave=tipOff});
+}
+function renderEvol(rows,v){
+  $('evF').innerHTML=rows.map(r=>`<option value="${r.f}" ${r.f===selF?'selected':''}>${r.f}</option>`).join('');
+  const wl=w=>{const [,m,d]=w.label.split('-');return d+'/'+m};
+  columns($('wkVisits'),v.weeks.map(w=>({l:wl(w),v:w.v})),'var(--teal)',num,'Visitas');
+  $('wkTitle').textContent='CTR de «'+selF+'» por semana';
+  columns($('wkCtr'),v.weeks.map(w=>({l:wl(w),v:w.v?(w.m[selF]||[0])[0]/w.v:0})),'var(--orange)',x=>pct(x),'CTR');
+}
+function render(name){
+  cur=name;
+  const v=view(name), rows=derive(name), top=rows[0];
+  if(!top){return}
+  if(!selF||!rows.some(r=>r.f===selF))selF=rows[0].f;
+  const low=rows.filter(r=>r.ctr<LOW_CTR).length;
+  const conv=rows.reduce((a,r)=>a+r.t,0)/rows.reduce((a,r)=>a+r.c,0);
+  const nw=v.weeks.length, label=TAB_LABEL[name]||name;
+  $('win').innerHTML=`<b>${cty==='ALL'?'':ctyName()+' · '}${nw} ${nw>1?'semanas':'semana'}</b> · ${withYear(startOf(rng.from))} – ${withYear(endOf(rng.to))}`;
+  $('kpis').innerHTML=[
+    ['Visitas a la búsqueda',num(v.visits),nw+(nw>1?' semanas':' semana')+' · visitas únicas','hero'],
+    ['Filtro más usado',top.f,'CTR '+pct(top.ctr)],
+    ['Filtros medidos',rows.length,low+' con CTR menor a '+pct(LOW_CTR,0)],
+    ['Conversión con filtro',pct(conv),'llegan a THANKS']
+  ].map(([l,val,s,k])=>`<div class="card kpi ${k||''}"><div class="l">${l}</div><div class="v" style="${!k&&String(val).length>13?'font-size:19px;margin-top:11px':''}">${val}</div><div class="s">${s}</div></div>`).join('');
+  $('tblTitle').textContent=label+(cty==='ALL'?'':' · '+ctyName())+' · '+rows.length+' filtros';
+  const sel=rows.find(r=>r.f===selF);
+  $('selBar').innerHTML=`<span>Filtro elegido: <b>${sel.f}</b> · CTR ${pct(sel.ctr,2)} · ${num(sel.c)} clicks</span><button type="button" class="go" data-go="evol">Ver evolución</button><button type="button" class="go" data-go="shot">Ver en la plataforma</button>`;
+  const cols=[['f','Filtro'],['c','Clicks'],['ctr','CTR'],['trend','vs. sem. ant.'],['level','Uso'],['share','% de clicks'],['conv','Conv.']];
+  const sv=r=>sortKey==='level'?{high:3,mid:2,low:1}[r.level]:sortKey==='trend'?(r.trend==null?-9:r.trend):r[sortKey];
+  const sorted=rows.slice().sort((a,b)=>(sv(a)>sv(b)?1:sv(a)<sv(b)?-1:0)*sortDir);
+  const sc=rows.reduce((s,r)=>s+r.c,0), st=rows.reduce((s,r)=>s+r.t,0), mx=Math.max(...rows.map(r=>r.ctr));
+  $('tbl').innerHTML=`<thead><tr>${cols.map(([k,l])=>`<th data-k="${k}" title="${TIPS[k]||''}" class="${k==='f'?'':'num'}">${l}${k===sortKey?(sortDir>0?' ▲':' ▼'):''}</th>`).join('')}</tr></thead><tbody>`+
+    sorted.map(r=>`<tr data-f="${r.f}"><td>${r.f}${r.few?' <span class="few" title="Menos de '+MIN_CLICKS+' clicks en el período: el CTR y la conversión no son confiables">pocos datos</span>':''}</td><td class="num">${num(r.c)}</td>
+      <td class="num"><span class="${r.ctr<LOW_CTR?'low':''}">${pct(r.ctr,2)}</span><span class="cell-bar" style="width:${Math.max(r.ctr/mx*120,2)}px"></span></td><td class="num">${trendHtml(r.trend)}</td><td class="num"><span class="lvl" style="--c:${LEVEL[r.level][1]}">${LEVEL[r.level][0]}</span></td><td class="num">${pct(r.share)}</td><td class="num">${r.few?'<span class="muted">–</span>':pct(r.conv)}</td></tr>`).join('')+
+    `</tbody><tfoot><tr><td>Total</td><td class="num">${num(sc)}</td><td></td><td></td><td></td><td></td><td class="num">${pct(sc?st/sc:0)}</td></tr></tfoot>`;
+  $('tbl').querySelectorAll('th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;sortDir=k===sortKey?-sortDir:-1;sortKey=k;render(cur)});
+  $('foot').textContent='Pasá el mouse por los encabezados para ver qué mide cada columna. El total suma clicks por filtro: una visita con varios filtros cuenta más de una vez.';
+  renderEvol(rows,v);
+  document.querySelectorAll('#tabs .tab').forEach(c=>c.setAttribute('aria-pressed',c.dataset.p===name));
+  renderSmart(name,rows,v);
+  renderCompare();
+  renderCountries(name);
+  renderShot(name,rows);
+}
+// Capturas de la plataforma con la zona de cada filtro: [x, y, ancho, alto, dónde está] en píxeles de la captura.
+// Cada producto puede tener varias capturas; se muestra la primera que contiene el filtro elegido.
+// Carpeta de las imágenes. Vacía = misma carpeta que este archivo; al publicar, build_html.py la reemplaza por la URL base.
+const IMG_BASE = "https://raw.githubusercontent.com/dananabel-netizen/tribu-b2b-dana-/tablero-live/usabilidad/";
+const SHOTS={
+  "Autos":[
+    {img:"autos-filtros.png",w:1669,h:880,spots:{
+      "filter_provider":[22,257,362,69,"Filtro lateral «Rentadoras» (viene plegado)."],
+      "filter_number_of_passengers":[22,326,362,68,"Filtro lateral «Cantidad de personas» (viene plegado)."],
+      "filter_deliver_method":[22,394,362,68,"Filtro lateral «Modalidad de entrega» (viene plegado)."],
+      "filter_engine_type":[22,462,362,68,"Filtro lateral «Tipo de combustible» (viene plegado)."],
+      "filter_transmission":[22,530,362,68,"Filtro lateral «Sistema de transmisión» (viene plegado)."],
+      "filter_zones":[22,598,362,69,"Filtro lateral «Lugares de retiro» (viene plegado). Ubicación a confirmar."],
+      "filter_payment_method":[22,667,362,160,"Filtro lateral «Alternativas de pago» (Todas las alternativas, En cuotas)."],
+      "filter_promotion":[22,826,362,54,"Filtro lateral «Ofertas» (se ve cortado). Ubicación a confirmar."]}},
+    {img:"autos-top.png",w:1683,h:673,spots:{
+      "filter_category":[412,66,1100,58,"Botones de categoría arriba de los resultados (Autos Chicos, Camionetas y SUV, Medianos…). Ubicación a confirmar."]}}
+  ],
+  "Actividades":[
+    {img:"actividades-top.png",w:1717,h:697,spots:{
+      "ai-keyword-filter":[15,106,384,47,"Buscador «Buscá actividades», arriba de los resultados. Ubicación a confirmar."],
+      "category-filter":[777,106,158,47,"Botón «Categorías» de la barra de filtros."],
+      "price":[950,106,121,47,"Botón «Precio» de la barra de filtros."],
+      "score-filter":[1085,106,164,47,"Botón «Puntuación» de la barra de filtros."],
+      "duration-filter":[1264,106,143,47,"Botón «Duración» de la barra de filtros."],
+      "inclusions-filter":[1421,106,130,47,"Botón «Incluye» de la barra de filtros."]}},
+    {img:"actividades-home.png",w:1654,h:820,spots:{
+      "experience-type-filter":[70,172,1315,126,"Tarjetas «¿Qué te copa más?» (Naturaleza, Cultura, Aventura…). Ubicación a confirmar."]}}
+  ],
+  "Paquetes":[
+    {img:"paquetes-filtros.png",w:1594,h:733,spots:{
+      "amenities_groups":[10,8,306,73,"Filtro lateral «Filtros populares» (viene plegado). Ubicación a confirmar."],
+      "hotel_name":[10,81,306,73,"Filtro lateral «Nombre del alojamiento» (viene plegado)."],
+      "meal_plans":[10,154,306,73,"Filtro lateral «Alimentación» (viene plegado)."],
+      "amenities":[10,227,306,73,"Filtro lateral «Servicios» (viene plegado). Ubicación a confirmar."],
+      "zones":[10,300,306,73,"Filtro lateral «Zonas» (viene plegado)."],
+      "rate_score":[10,373,306,73,"Filtro lateral «Puntuación» (viene plegado)."],
+      "stars":[10,446,306,73,"Filtro lateral «Estrellas» (viene plegado)."],
+      "accommodation_type":[10,519,306,73,"Filtro lateral «Tipo de alojamiento» (viene plegado). Ubicación a confirmar."],
+      "hotel_chains":[10,592,306,73,"Filtro lateral «Cadena hotelera» (viene plegado)."],
+      "hotel_type":[603,48,384,57,"Selector «Todos / Hoteles / Alquileres», arriba de los resultados. Ubicación a confirmar."]}},
+    {img:"paquetes-top.png",w:1852,h:958,spots:{
+      "roompack_tags":[168,708,306,38,"Interruptor «Reserva flexible», dentro de «Condiciones de tu reserva». Ubicación a confirmar."],
+      "payment_type":[168,752,306,38,"Interruptor «Pagar ahora», dentro de «Condiciones de tu reserva». Ubicación a confirmar."]}}
+  ],
+  "Vuelos":[
+    {img:"vuelos-filtros.png",w:1672,h:868,spots:{
+      "escalas_side":[60,30,362,278,"Filtro lateral «Escalas» (Todas las escalas, Directo, 1 escala, 2 o más)."],
+      "Baggages_side":[60,320,362,212,"Filtro lateral «Equipaje» (Todas las opciones, de mano, para despachar)."],
+      "precios_side":[60,545,362,125,"Filtro lateral «Precio», con el control deslizante de mínimo y máximo."],
+      "aerolinea_side":[60,688,362,66,"Filtro lateral «Aerolíneas» (viene plegado)."],
+      "durvuelosalida_side":[60,761,362,66,"Filtro lateral «Duración» (viene plegado). Ubicación a confirmar."],
+      "durvuelollegada_side":[60,761,362,66,"Filtro lateral «Duración» (viene plegado). Ubicación a confirmar."],
+      "horariosal_side":[60,833,362,35,"Filtro lateral «Horarios» (viene plegado, se ve cortado). Ubicación a confirmar."],
+      "horarioregreso_side":[60,833,362,35,"Filtro lateral «Horarios» (viene plegado, se ve cortado). Ubicación a confirmar."]}},
+    {img:"vuelos.png",w:1776,h:928,spots:{
+      "aerolinea_matrix":[524,264,1144,90,"Tabla de aerolíneas, arriba de los resultados."],
+      "escalas_matrix":[524,352,1144,110,"Filas «Directo» y «Con escalas» de esa misma tabla."],
+      "escalas_side":[133,800,362,105,"Filtro lateral «Escalas», con la casilla «Todas las escalas»."],
+      "precio_matrix_suggestion":[524,486,567,60,"Botones Recomendados / Más baratos / Más rápidos (ubicación a confirmar)."],
+      "precio_matrix_default":[524,486,567,60,"Botones Recomendados / Más baratos / Más rápidos (ubicación a confirmar)."]}}
+  ],
+  "Hoteles":[
+    {img:"alojamientos-filtros1.png",w:1548,h:928,spots:{
+      "roompack_tags":[26,42,307,38,"Interruptor «Cancelación gratis», dentro de «Condiciones de tu reserva». Ubicación a confirmar."],
+      "payment_type":[26,86,307,38,"Interruptor «Pagar ahora», dentro de «Condiciones de tu reserva». Ubicación a confirmar."],
+      "total_price_range":[26,232,307,215,"Filtro lateral «Precio total de la estadía», con mínimo y máximo."],
+      "offers":[26,462,307,70,"Filtro lateral «Descuentos» (viene plegado). Ubicación a confirmar."],
+      "amenities_groups":[26,535,307,70,"Filtro lateral «Filtros populares» (viene plegado). Ubicación a confirmar."],
+      "hotel_name":[26,608,307,70,"Filtro lateral «Nombre del alojamiento» (viene plegado)."],
+      "meal_plans":[26,681,307,70,"Filtro lateral «Alimentación» (viene plegado)."],
+      "amenities":[26,754,307,70,"Filtro lateral «Servicios» (viene plegado). Ubicación a confirmar."],
+      "zones":[26,827,307,70,"Filtro lateral «Zonas» (viene plegado)."]}},
+    {img:"alojamientos-filtros2.png",w:1563,h:664,spots:{
+      "rate_score":[10,32,306,70,"Filtro lateral «Puntuación» (viene plegado)."],
+      "stars":[10,105,306,70,"Filtro lateral «Estrellas» (viene plegado)."],
+      "accommodation_type":[10,178,306,70,"Filtro lateral «Tipo de alojamiento» (viene plegado). Ubicación a confirmar."],
+      "hotel_chains":[10,251,306,70,"Filtro lateral «Cadena hotelera» (viene plegado)."]}},
+    {img:"alojamientos-top.png",w:1455,h:964,spots:{
+      "hotel_type":[632,150,384,57,"Selector «Todos / Hoteles / Alquileres», arriba de los resultados. Ubicación a confirmar."]}}
+  ]
+};
+let selF=null;
+const shotFor=(name,f)=>{const L=SHOTS[name]; return L?(L.find(s=>s.spots[f])||L[0]):null};
+function renderShot(name,rows){
+  if(!selF||!rows.some(r=>r.f===selF)) selF=rows[0].f;
+  const box=$('shot'), side=$('shotSide'), S=shotFor(name,selF);
+  const r=rows.find(x=>x.f===selF), sp=S&&S.spots[selF];
+  const has=f=>(SHOTS[name]||[]).some(s=>s.spots[f]);
+  const chips=rows.map(x=>`<button class="fchip ${has(x.f)?'has':''}" data-f="${x.f}" aria-pressed="${x.f===selF}">${x.f}</button>`).join('');
+  if(!S){
+    box.innerHTML=`<div class="noshot">Todavía no tengo la captura de ${TAB_LABEL[name]||name}.<br>Pasámela y la agrego con cada filtro marcado.</div>`;
+  }else{
+    box.innerHTML=`<img src="${IMG_BASE}${S.img}" alt="Captura de ${TAB_LABEL[name]||name}" onerror="this.outerHTML='<div class=noshot>No encuentro ${S.img}. Tiene que estar en la misma carpeta que este archivo.</div>'">`+
+      (sp?`<div class="spot" style="left:${sp[0]/S.w*100}%;top:${sp[1]/S.h*100}%;width:${sp[2]/S.w*100}%;height:${sp[3]/S.h*100}%"></div>`:'');
+  }
+  side.innerHTML=`<h3 class="fname">${r.f}</h3>
+    <p class="fwhere ${S&&!sp?'warn':''}">${!S?'Sin captura de este producto todavía.':sp?sp[4]:'Todavía no ubiqué este filtro en las capturas.'}</p>
+    <div class="fstats"><div><b>${pct(r.ctr,2)}</b><span>CTR</span></div><div><b>${num(r.c)}</b><span>Clicks</span></div><div><b>${pct(r.conv)}</b><span>Conv.</span></div></div>
+    <div class="fchips">${chips}</div>`;
+  document.querySelectorAll('[data-f]').forEach(n=>{if(!n.classList.contains('fchip'))n.classList.toggle('sel',n.dataset.f===selF)});
+}
+// Insights automáticos. Cada regla solo habla si hay volumen suficiente y la diferencia es clara.
+// z de dos proporciones: conversión del filtro vs. conversión de quienes usan los demás filtros (aproximada: las visitas pueden repetirse entre filtros).
+const zConv=(c1,t1,C,T)=>{const c2=C-c1,t2=T-t1;if(c1<30||c2<30)return 0;const p=(t1+t2)/(c1+c2),se=Math.sqrt(p*(1-p)*(1/c1+1/c2));return se?(t1/c1-t2/c2)/se:0};
+const xs=r=>r.toFixed(1).replace('.',',')+'×';
+let smartAll=false;
+function renderSmart(name,rows,v){
+  const label=TAB_LABEL[name]||name, out=[], totC=rows.reduce((s,r)=>s+r.c,0), totT=rows.reduce((s,r)=>s+r.t,0);
+  const PRI={'Alerta':0,'Oportunidad':1,'Tendencia':2,'País':3,'Este país':3,'Poco uso':4,'Concentración':5};
+  const add=(tag,c,html,todo)=>out.push({p:PRI[tag]??9,html:`<div class="ins" style="--c:${c}"><span class="tag">${tag}</span><p>${html}</p></div>`});
+  const top=rows[0], avgConv=totC?totT/totC:0;
+  // 1. Concentración de clicks
+  let acc=0,k=0;for(const r of rows.slice().sort((a,b)=>b.c-a.c)){acc+=r.c;k++;if(acc/totC>=.8)break}
+  if(rows.length>=4)add('Concentración','var(--navy,#0b2e6f)',`${k} de ${rows.length} filtros concentran el 80% de los clicks.`,
+    k<=Math.ceil(rows.length/3)?'Muy poca variedad de uso: conviene poner lo importante en esos pocos filtros.':'');
+  // 2. Oportunidad: convierte claramente mejor que el resto y casi no se usa
+  const opp=rows.filter(r=>r.c>=150&&r.level!=='high'&&zConv(r.c,r.t,totC,totT)>=3).sort((a,b)=>b.conv-a.conv)[0];
+  if(opp){const rest=(totT-opp.t)/(totC-opp.c);
+    add('Oportunidad','var(--teal)',`Quienes usan <b>${opp.f}</b> llegan más a THANKS: <b>${pct(opp.conv)}</b> vs ${pct(rest)}, pero solo lo usa el ${pct(opp.ctr,2)}.`,
+      'Probá darle más visibilidad. Ojo: puede ser que lo use gente que ya decidió, no que el filtro cause la compra.')}
+  // 3. Alerta: muy usado pero convierte claramente peor
+  const bad=rows.filter(r=>r.c>=150&&r.level==='high'&&zConv(r.c,r.t,totC,totT)<=-3).sort((a,b)=>a.conv-b.conv)[0];
+  if(bad){const rest=(totT-bad.t)/(totC-bad.c);
+    add('Alerta','#c2410c',`<b>${bad.f}</b> es de los más usados (${pct(bad.ctr)}) pero convierte menos: <b>${pct(bad.conv)}</b> vs ${pct(rest)}.`,
+      'Puede indicar que la gente lo usa porque no encuentra lo que busca en los resultados.')}
+  // 4. Tendencia: primeras vs. últimas semanas del período
+  const ws=v.weeks, n=ws.length;
+  if(n>=4){const h=Math.floor(n/2), A=ws.slice(0,h), B=ws.slice(n-h), vA=A.reduce((s,w)=>s+w.v,0), vB=B.reduce((s,w)=>s+w.v,0);
+    const sum=(L,f)=>L.reduce((s,w)=>s+((w.m[f]||[0])[0]),0);
+    const ch=rows.map(r=>{const a=sum(A,r.f),b=sum(B,r.f);return a>=150&&b>=150?{r,a:a/vA,b:b/vB,d:(b/vB)/(a/vA)-1}:null}).filter(Boolean).sort((x,y)=>y.d-x.d);
+    const up=ch[0],dn=ch[ch.length-1],when=`primeras ${h} semanas → últimas ${h}`;
+    if(up&&up.d>=.15)add('Tendencia','var(--teal)',`<b>${up.r.f}</b> viene en alza: su CTR pasó de ${pct(up.a,2)} a ${pct(up.b,2)} (<span class="up">▲ ${(up.d*100).toFixed(0)}%</span>, ${when}).`);
+    if(dn&&dn.d<=-.15&&dn!==up)add('Tendencia','#c2410c',`<b>${dn.r.f}</b> viene en baja: su CTR pasó de ${pct(dn.a,2)} a ${pct(dn.b,2)} (<span class="dn">▼ ${Math.abs(dn.d*100).toFixed(0)}%</span>, ${when}).`)}
+  // 5. Filtros casi sin uso
+  const low=rows.filter(r=>r.ctr<LOW_CTR);
+  if(low.length)add('Poco uso','var(--orange)',`${low.length} de ${rows.length} filtros no llegan al ${pct(LOW_CTR,0)} de CTR: ${low.slice(0,4).map(r=>'<b>'+r.f+'</b>').join(', ')}${low.length>4?' y '+(low.length-4)+' más':''}.`,
+    'Candidatos a revisar: ¿hacen falta?, ¿están donde la gente los busca? (mirá «Cómo se ve cada filtro»).');
+  // 6. País
+  const pc=PC[name];
+  if(pc){
+    const aw=P[name].weeks.slice(rng.from,rng.to+1), aV=aw.reduce((s,w)=>s+w.v,0), aM={};
+    aw.forEach(w=>{for(const f in w.m)aM[f]=(aM[f]||0)+w.m[f][0]});
+    const agg=cc=>{const L=pc[cc].weeks.slice(rng.from,rng.to+1),m={};L.forEach(w=>{for(const f in w.m){const a=m[f]=m[f]||[0,0];a[0]+=w.m[f][0];a[1]+=w.m[f][1]}});return {v:L.reduce((s,w)=>s+w.v,0),m}};
+    const nm=cc=>(CTY.find(c=>c[0]===cc)||[,cc])[1];
+    if(cty==='ALL'){
+      const C=Object.keys(pc).map(cc=>({cc,...agg(cc)})).filter(x=>x.v/aV>=.03);
+      let best=null;
+      C.forEach(x=>{for(const f in x.m){const c=x.m[f][0],t=aM[f]/aV;if(c<200||t<LOW_CTR)continue;const r=(c/x.v)/t;
+        if(!best||Math.abs(Math.log(r))>Math.abs(Math.log(best.r)))best={x,f,r,ctr:c/x.v,t}}});
+      if(best&&(best.r>=1.8||best.r<=.55))add('País','var(--navy,#0b2e6f)',`<b>${nm(best.x.cc)}</b> se comporta distinto con <b>${best.f}</b>: lo usa ${best.r>=1?'<span class="up">'+xs(best.r)+' más</span>':'<span class="dn">'+xs(1/best.r)+' menos</span>'} que el promedio (${pct(best.ctr)} vs ${pct(best.t)}).`,'Mirá el comparativo por país más abajo.');
+      const cv=C.map(x=>{const a=Object.values(x.m);const c=a.reduce((s,y)=>s+y[0],0),t=a.reduce((s,y)=>s+y[1],0);return c>=500?{cc:x.cc,cv:t/c}:null}).filter(Boolean).sort((a,b)=>b.cv-a.cv);
+      if(cv.length>=2&&cv[0].cv/cv[cv.length-1].cv>=1.5)add('País','var(--teal)',`<b>${nm(cv[0].cc)}</b> es donde mejor convierte quien usa filtros (${pct(cv[0].cv)}); <b>${nm(cv[cv.length-1].cc)}</b> donde peor (${pct(cv[cv.length-1].cv)}).`,'Conversión aproximada: THANKS / clicks de todos los filtros.')
+    }else if(pc[cty]){
+      const x=agg(cty);let hi=null,lo=null;
+      for(const f in x.m){const c=x.m[f][0],t=aM[f]/aV;if(c<100||t<LOW_CTR)continue;const r=(c/x.v)/t;
+        if(!hi||r>hi.r)hi={f,r,ctr:c/x.v,t};if(!lo||r<lo.r)lo={f,r,ctr:c/x.v,t}}
+      if(hi&&hi.r>=1.25)add('Este país','var(--teal)',`En ${nm(cty)}, <b>${hi.f}</b> se usa <span class="up">${xs(hi.r)}</span> más que en el total (${pct(hi.ctr)} vs ${pct(hi.t)}).`);
+      if(lo&&lo.r<=.75&&lo!==hi)add('Este país','#c2410c',`En ${nm(cty)}, <b>${lo.f}</b> se usa <span class="dn">${xs(1/lo.r)}</span> menos que en el total (${pct(lo.ctr)} vs ${pct(lo.t)}).`)}
+  }
+  out.sort((a,b)=>a.p-b.p);
+  const shown=smartAll?out:out.slice(0,4), more=out.length-4;
+  $('smart').style.display=out.length?'':'none';
+  $('smartGrid').innerHTML=shown.map(x=>x.html).join('');
+  $('smartMore').hidden=more<=0;
+  $('smartMore').textContent=smartAll?'Ver menos':'Ver '+more+' más';
+  $('smartHint').textContent='';
+  $('smartFoot').textContent='Son correlaciones, no prueban causa. Solo se comentan filtros con volumen suficiente.';
+}
+// Mapa de calor filtro × país. Siempre muestra todos los países (no depende del selector de país) y respeta el período.
+const MIN_CTY_CLICKS=100;  // clicks mínimos de un país en un filtro para comentarlo
+function renderCountries(name){
+  const card=$('ctyCard'), pc=PC[name];
+  if(!pc){card.style.display='none';return}
+  card.style.display='';
+  const ccs=CTY.map(c=>c[0]).filter(k=>k!=='ALL'&&pc[k]);
+  const D={};  // D[cc]={v, m:{filtro:[clicks,thanks]}}
+  ccs.forEach(cc=>{const ws=pc[cc].weeks.slice(rng.from,rng.to+1), m={};
+    ws.forEach(w=>{for(const f in w.m){const a=m[f]=m[f]||[0,0];a[0]+=w.m[f][0];a[1]+=w.m[f][1]}});
+    D[cc]={v:ws.reduce((s,w)=>s+w.v,0),m}});
+  const V=ccs.reduce((s,k)=>s+D[k].v,0);
+  const T={};  // total del producto
+  ccs.forEach(k=>{for(const f in D[k].m){const a=T[f]=T[f]||[0,0];a[0]+=D[k].m[f][0];a[1]+=D[k].m[f][1]}});
+  const filters=Object.keys(T).sort((a,b)=>T[b][0]-T[a][0]).slice(0,12);
+  const label=TAB_LABEL[name]||name, nm=k=>(CTY.find(c=>c[0]===k)||[,k])[1];
+  $('ctyTitle').textContent='Comparativo por país · '+label;
+  const shade=r=>r>=1.15?`background:rgba(14,138,110,${Math.min(.1+(r-1.15)*.25,.5).toFixed(2)})`:r<=.85?`background:rgba(240,138,0,${Math.min(.1+(.85-r)*.7,.5).toFixed(2)})`:'';
+  $('ctyTbl').innerHTML=`<thead><tr><th>Filtro</th><th class="num">Total</th>${ccs.map(k=>`<th class="num">${nm(k)}<small>${pct(D[k].v/V)} de las visitas</small></th>`).join('')}</tr></thead><tbody>`+
+    filters.map(f=>{const tc=T[f][0]/V;
+      return `<tr data-f="${f}"><td>${f}</td><td class="num">${pct(tc,2)}</td>${ccs.map(k=>{const c=(D[k].m[f]||[0])[0];
+        if(c<MIN_CTY_CLICKS/2||!D[k].v)return `<td class="hm na" title="Pocos datos (${c} clicks)">–</td>`;
+        const ctr=c/D[k].v;return `<td class="hm" style="${shade(ctr/tc)}" title="${nm(k)}: ${num(c)} clicks · ${(ctr/tc).toFixed(2).replace('.',',')}× el promedio">${pct(ctr,2)}</td>`}).join('')}</tr>`}).join('')+
+    `<tr class="sub"><td>Visitas a la búsqueda</td><td class="num">${num(V)}</td>${ccs.map(k=>`<td class="hm">${num(D[k].v)}</td>`).join('')}</tr>`+
+    `<tr class="sub"><td>Conversión media de los filtros</td><td class="num">${pct(ccs.reduce((s,k)=>s+Object.values(D[k].m).reduce((x,a)=>x+a[1],0),0)/Math.max(ccs.reduce((s,k)=>s+Object.values(D[k].m).reduce((x,a)=>x+a[0],0),0),1))}</td>${ccs.map(k=>{const a=Object.values(D[k].m),c=a.reduce((x,y)=>x+y[0],0),t=a.reduce((x,y)=>x+y[1],0);return `<td class="hm ${c<MIN_CLICKS?'na':''}">${c>=MIN_CLICKS?pct(t/c):'–'}</td>`}).join('')}</tr></tbody>`;
+  $('ctyFoot').textContent='«–»: menos de '+MIN_CTY_CLICKS/2+' clicks · «Otros países»: todo lo que no es BR, MX, CO, AR, CL ni PE.';
+}
+function renderCompare(){
+  $('cmp').innerHTML=`<thead><tr><th>Producto</th><th class="num">Visitas</th><th>Filtro más usado</th><th class="num">CTR top</th><th class="num">Filtros</th><th class="num">Con CTR &lt; 1%</th></tr></thead><tbody>`+
+    Object.keys(P).map(n=>{const r=derive(n);if(!r.length)return '';return `<tr><td>${TAB_LABEL[n]||n}</td><td class="num">${num(view(n).visits)}</td><td>${r[0].f}</td><td class="num">${pct(r[0].ctr)}</td><td class="num">${r.length}</td><td class="num">${r.filter(x=>x.ctr<LOW_CTR).length}</td></tr>`}).join('')+'</tbody>';
+}
+
+// Pestañas al estilo de la barra de HotelDO: ícono arriba, etiqueta abajo; la activa lleva círculo oscuro y subrayado.
+const ICONS={
+  "Hoteles":'<path d="M3 6.5v12M3 14h18v4.5M21 14v-2.5a3 3 0 0 0-3-3h-7.5V14"/><circle cx="6.8" cy="10.8" r="1.7"/>',
+  "Vuelos":'<path d="M10.6 3.6a1.4 1.4 0 0 1 2.8 0l.4 6.2 7.7 4.6v2l-7.8-2.2-.3 4.1 2.1 1.6v1.5L12 20.4 8.5 21.4v-1.5l2.1-1.6-.3-4.1-7.8 2.2v-2l7.7-4.6z"/>',
+  "Autos":'<path d="M5 16.5v-5l2-5.5h10l2 5.5v5M3 16.5h18M7.5 19.5v-3M16.5 19.5v-3M5 11h14"/><circle cx="8.2" cy="13.7" r=".6"/><circle cx="15.8" cy="13.7" r=".6"/>',
+  "Actividades":'<path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/><path d="M15 8v8" stroke-dasharray="1.6 2.4"/>',
+  "Paquetes":'<rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 8V6.2A1.2 1.2 0 0 1 10.2 5h3.6A1.2 1.2 0 0 1 15 6.2V8M4 13.5h16"/>'
+};
+$('tabs').innerHTML=["Hoteles","Vuelos","Autos","Actividades","Paquetes"].filter(n=>P[n]).map(n=>
+  `<button class="tab" data-p="${n}" aria-pressed="false"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]}</svg></span><span class="lb">${TAB_LABEL[n]||n}</span></button>`).join('');
+$('tabs').onclick=e=>{const b=e.target.closest('.tab');if(b)render(b.dataset.p)};
+
+// Filtro de período (por semana): selectores, atajos y "Ver todo".
+const last=WEEKS.length-1;
+function fillSelects(){
+  $('selFrom').innerHTML=WEEKS.map((_,i)=>`<option value="${i}" ${i===rng.from?'selected':''}>${withYear(startOf(i))}</option>`).join('');
+  $('selTo').innerHTML=WEEKS.map((_,i)=>`<option value="${i}" ${i===rng.to?'selected':''}>${withYear(endOf(i))}</option>`).join('');
+  const presets=[['Últimas 4 semanas',last-3],['Últimas 8 semanas',last-7],['Todo el período',0]];
+  $('pills').innerHTML=presets.map(([l,f])=>`<button class="pill" data-w="${Math.max(f,0)}" aria-pressed="${rng.to===last&&rng.from===Math.max(f,0)}">${l}</button>`).join('');
+}
+function setRange(f,t){rng.from=f;rng.to=t;fillSelects();render(cur)}
+$('selFrom').onchange=e=>{const f=+e.target.value;setRange(f,Math.max(f,rng.to))};
+$('selTo').onchange=e=>{const t=+e.target.value;setRange(Math.min(t,rng.from),t)};
+$('csv').onclick=exportCsv;
+$('selCty').innerHTML=CTY.filter(c=>c[0]==='ALL'||Object.values(PC).some(p=>p[c[0]])).map(([k,l])=>`<option value="${k}">${l}</option>`).join('');
+$('selCty').onchange=e=>{cty=e.target.value;render(cur)};
+$('pills').onclick=e=>{const b=e.target.closest('.pill');if(b)setRange(+b.dataset.w,last)};
+$('reset').onclick=()=>setRange(0,last);
+// Un filtro elegido (tabla, chips o comparativo por país) se mantiene en todas las secciones.
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]'); if(g){showPane(g.dataset.go);return}
+  const n=e.target.closest('[data-f]'); if(!n) return;
+  selF=n.dataset.f; render(cur);
+});
+let pane='filtros';
+function showPane(p){
+  pane=p;
+  document.querySelectorAll('.pane').forEach(s=>s.hidden=s.id!=='pane-'+p);
+  document.querySelectorAll('#seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pane===p));
+}
+$('seg').onclick=e=>{const b=e.target.closest('button');if(b)showPane(b.dataset.pane)};
+$('evF').onchange=e=>{selF=e.target.value;render(cur)};
+$('smartMore').onclick=()=>{smartAll=!smartAll;render(cur)};
+{const li=document.querySelector('.logo img');if(li&&IMG_BASE)li.src=IMG_BASE+'logo-horizontal.png'}
+fillSelects();
+render("Hoteles");
+</script>
+</body>
+</html>

@@ -3,16 +3,16 @@
     {
       "mes": "2026-10-01",
       "semanas": 4,
-      "agencias_cotizadoras": 7202,
+      "agencias_cotizadoras": 7375,
       "target": 7500,
-      "pct_cumplimiento": 96.0
+      "pct_cumplimiento": 98.3
     },
     {
       "mes": "2026-11-01",
       "semanas": 4,
-      "agencias_cotizadoras": 0,
+      "agencias_cotizadoras": 510,
       "target": 7718,
-      "pct_cumplimiento": 0.0
+      "pct_cumplimiento": 6.6
     },
     {
       "mes": "2026-12-01",
@@ -47,15 +47,15 @@
     {
       "mes_comercial": "2026-10",
       "semanas": 4,
-      "estado": "EN_CURSO",
-      "agencias_frecuentes": 2530,
+      "estado": "CIERRE",
+      "agencias_frecuentes": 2936,
       "target": 3396,
-      "pct_cumplimiento": 74.5
+      "pct_cumplimiento": 86.5
     },
     {
       "mes_comercial": "2026-11",
       "semanas": 4,
-      "estado": "PENDIENTE",
+      "estado": "EN_CURSO",
       "agencias_frecuentes": 0,
       "target": 3584,
       "pct_cumplimiento": 0.0
@@ -121,8 +121,20 @@
     {
       "mes": "2026-10-01",
       "semana_inicio": "2026-10-26",
-      "agencias_semana": 3260,
-      "agencias_acum_mes": 7202
+      "agencias_semana": 4107,
+      "agencias_acum_mes": 7375
+    },
+    {
+      "mes": "2026-11-01",
+      "semana_inicio": "2026-10-26",
+      "agencias_semana": 449,
+      "agencias_acum_mes": 449
+    },
+    {
+      "mes": "2026-11-01",
+      "semana_inicio": "2026-11-02",
+      "agencias_semana": 94,
+      "agencias_acum_mes": 510
     }
   ],
   "kr22_sem": [
@@ -154,25 +166,33 @@
       "mes_comercial": "2026-10",
       "semana": 4,
       "semana_inicio": "2026-10-26",
+      "estado": "CIERRE",
+      "compradoras_semana": 4442,
+      "frecuentes_acum": 2936
+    },
+    {
+      "mes_comercial": "2026-11",
+      "semana": 1,
+      "semana_inicio": "2026-11-02",
       "estado": "EN_CURSO",
-      "compradoras_semana": 2926,
-      "frecuentes_acum": 2530
+      "compradoras_semana": 88,
+      "frecuentes_acum": 0
     }
   ],
   "kr21_prog": [
     {
       "mes": "2026-10-01",
       "semanas": 4,
-      "agencias_cotizadoras": 7202,
+      "agencias_cotizadoras": 7375,
       "target": 7500,
-      "pct_cumplimiento": 96.0
+      "pct_cumplimiento": 98.3
     },
     {
       "mes": "2026-11-01",
       "semanas": 4,
-      "agencias_cotizadoras": 0,
+      "agencias_cotizadoras": 510,
       "target": 7718,
-      "pct_cumplimiento": 0.0
+      "pct_cumplimiento": 6.6
     },
     {
       "mes": "2026-12-01",
@@ -207,15 +227,15 @@
     {
       "mes_comercial": "2026-10",
       "semanas": 4,
-      "estado": "EN_CURSO",
-      "agencias_frecuentes": 2530,
+      "estado": "CIERRE",
+      "agencias_frecuentes": 2936,
       "target": 3396,
-      "pct_cumplimiento": 74.5
+      "pct_cumplimiento": 86.5
     },
     {
       "mes_comercial": "2026-11",
       "semanas": 4,
-      "estado": "PENDIENTE",
+      "estado": "EN_CURSO",
       "agencias_frecuentes": 0,
       "target": 3584,
       "pct_cumplimiento": 0.0

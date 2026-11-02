@@ -95,6 +95,52 @@ t as (select p, max(an) an, max(c) c, count(distinct r) n, round(sum(gb)) g from
 select p, an, c, n, g from t order by g desc limit 10
 """
 
+# ── Combinaciones de MDP con HDO pay: prendido escalonado ──────────────────────────────────────────
+# HDO pay = reserva cobrada con 2+ medios en el scheduler y al menos uno es DWALLET (query de Metabase 175574).
+# Denominador = todas las reservas confirmadas del canal HTML (todos los productos), desde el lanzamiento de cada país.
+HDO_LAUNCH = {'AR': '2026-10-26', 'CL': '2026-10-26', 'MX': '2026-10-26', 'BR': '2026-10-29', 'CO': '2026-10-29'}
+HDO_FROM = min(HDO_LAUNCH.values())
+_HDO_LD = "case mdp.country_code " + " ".join(f"when '{c}' then date '{d}'" for c, d in HDO_LAUNCH.items()) + " end"
+_HDO_IN = ",".join(f"'{c}'" for c in HDO_LAUNCH)
+
+_HDO_BASE = f"""
+sch as (
+  select sc_ps.transaction_id
+  from raw.scheduler_confirmed_payment_schedule sc_ps
+  join raw.scheduler_confirmed_payment_intention sc_pi on sc_ps.id = sc_pi.payment_schedule_id
+  join raw.scheduler_confirmed_collection sc on sc.payment_intention_id = sc_pi.id
+  join data.lake.chewie_collection cc on sc.collectionId = cc.cobra_id
+  join data.lake.chewie_reservation r on r.oid = cc.reservation_id
+  where r.last_version = true and sc_pi.status = 'COLLECTED' and sc_ps.status = 'CLOSED'
+    and r.channel in {CHANNELS} and sc_ps.created_at >= timestamp '{HDO_FROM}'
+  group by sc_ps.transaction_id
+  having count(distinct cc.channel_id) >= 2 and sum(case when cc.channel_id = 'DWALLET' then 1 else 0 end) > 0),
+b as (
+  select mdp.reservation_date d, mdp.country_code c, tr.transaction_code r, tr.partner_data_id p, mdp.gross_booking gb,
+         case when sch.transaction_id is not null then 1 else 0 end w
+  from analytics.prd_payment_methods_fact mdp
+  join analytics.bi_transactional_fact_transactions tr on tr.transaction_code = mdp.transaction_code
+       and tr.reservation_year_month >= date '{HDO_FROM[:7]}-01'
+  left join sch on sch.transaction_id = cast(tr.transaction_code as varchar)
+  where mdp.reservation_year_month >= date '{HDO_FROM[:7]}-01' and mdp.is_confirmed_flg = 1
+    and tr.channel in {CHANNELS} and mdp.country_code in ({_HDO_IN})
+    and mdp.reservation_date >= {_HDO_LD}
+    and lower(coalesce(tr.agency_fantasy_name,'')) not like '%test%')
+"""
+
+Q_HDO_DAILY = f"""
+with {_HDO_BASE}
+select cast(d as varchar) d, c, count(distinct case when w=1 then r end) nw, round(sum(case when w=1 then gb end)) gw,
+       count(distinct r) nt, round(sum(gb)) gt
+from b group by d, c order by d, c
+"""
+
+Q_HDO_TOT = f"""
+with {_HDO_BASE}
+select c, count(distinct case when w=1 then p end) agw, count(distinct p) agt from b group by c
+union all select 'ALL', count(distinct case when w=1 then p end), count(distinct p) from b
+"""
+
 # ── Pago diferido AR ───────────────────────────────────────────────────────────────────────────────
 PD_LAUNCH = '2026-10-19'
 Q_PD_DAILY = f"""
@@ -141,6 +187,8 @@ def fetch_all():
         out['ldp_totals'] = q('ldp_totals', Q_LDP_TOTALS)
         out['ldp_top'] = q('ldp_top', Q_LDP_TOP)
         out['pd_daily'] = q('pd_daily', Q_PD_DAILY)
+        out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
+        out['hdo_tot'] = q('hdo_tot', Q_HDO_TOT)
         return out, q   # q se reusa para las reservas de pago diferido
     except Exception:
         conn.close()
@@ -167,6 +215,26 @@ def build_ldp(cfg_old, r, today):
     cfg.pop('remote', None)   # ya no se usa
     cfg.update(kind='ldp', title=cfg_old.get('title', 'Link de pago en hoteles non ref'), asof=today.isoformat(),
                partial=(today + timedelta(days=1)).isoformat(), daily=daily, countries=countries, tot=tot, top=top)
+    return cfg
+
+
+def build_hdo(cfg_old, r, today):
+    # daily: [fecha, país, reservas HDO pay, GB HDO pay, reservas HTML, GB HTML]
+    daily = [[row[0], row[1]] + [num(float(x)) if x is not None else 0 for x in row[2:]] for row in r['hdo_daily']]   # algunos decimales llegan como texto
+    ag = {row[0]: row for row in r['hdo_tot']}
+    countries = []
+    for c in HDO_LAUNCH:
+        rows = [x for x in daily if x[1] == c]
+        a = ag.get(c, [c, 0, 0])
+        # [país, prendido, reservas HDO pay, GB HDO pay, reservas HTML, GB HTML, agencias HDO pay, agencias con venta]
+        countries.append([c, HDO_LAUNCH[c], sum(x[2] for x in rows), sum(x[3] for x in rows),
+                          sum(x[4] for x in rows), sum(x[5] for x in rows), num(a[1]), num(a[2])])
+    A = ag.get('ALL', ['ALL', 0, 0])
+    tot = {'nw': sum(x[2] for x in countries), 'gw': sum(x[3] for x in countries), 'nt': sum(x[4] for x in countries),
+           'gt': sum(x[5] for x in countries), 'agw': num(A[1]), 'agt': num(A[2])}
+    cfg = dict(cfg_old)
+    cfg.update(kind='hdo', title=cfg_old.get('title', 'Combinaciones de MDP con HDO pay'), asof=today.isoformat(),
+               daily=daily, countries=countries, tot=tot)
     return cfg
 
 
@@ -198,6 +266,9 @@ def main():
     cfgs = data['impact']['configs']
     r, q = fetch_all()
     cfgs['ldp'] = build_ldp(cfgs.get('ldp', {}), r, today)
+    cfgs['hdo'] = build_hdo(cfgs.get('hdo', {}), r, today)
+    data['impact']['map'].update({'Combinaciones de MDP con HDO pay|2026-10-26': 'hdo',
+                                  'Combinaciones de MDP con HDO pay|2026-10-29': 'hdo'})
     cfgs['pd_ar'] = build_pd(cfgs['pd_ar'], r, q, today)
     data['updated'] = today.isoformat()
     DATA.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding='utf-8')

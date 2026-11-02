@@ -17,8 +17,10 @@ Uso: .venv\\Scripts\\python.exe tablero-live/h2/refresh_h2.py [--modo auto|diari
 
 import argparse
 import json
+import random
 import subprocess
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -43,6 +45,20 @@ def git(*args):
     if r.returncode != 0:
         raise RuntimeError(f"git {' '.join(args)}: {(r.stderr or r.stdout).strip()[:400]}")
     return r.stdout.strip()
+
+
+def sync_remoto(intentos=4):
+    """fetch + rebase sobre la ref remota (sin FETCH_HEAD, que se pisa cuando otras tareas
+    programadas hacen fetch en el mismo worktree a la vez). Reintenta ante colisiones."""
+    for i in range(intentos):
+        try:
+            git('fetch', REMOTE, BRANCH)
+            git('rebase', '--autostash', f'{REMOTE}/{BRANCH}')
+            return
+        except RuntimeError:
+            if i == intentos - 1:
+                raise
+            time.sleep(5 + random.randint(0, 20))
 
 
 def modos_de_hoy(modo):
@@ -92,7 +108,7 @@ def main():
         git('checkout', '--', str(DATA))   # descarta restos de una corrida anterior fallida
     except RuntimeError:
         pass
-    git('pull', '--rebase', REMOTE, BRANCH)
+    sync_remoto()
 
     existing = json.loads(DATA.read_text(encoding='utf-8')) if DATA.exists() else {}
     existing.update(run_keys(keys))

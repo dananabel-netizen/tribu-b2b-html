@@ -56,7 +56,7 @@ body,main,.card,.filter-bar{transition:background .25s,border-color .25s,color .
     <div class="logo-sub">H2 FY27 · Octubre 2026 — Marzo 2027</div>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
-    <span class="upd">Actualizado: 2026-11-02 20:14</span>
+    <span class="upd">Actualizado: 2026-11-02 17:14</span>
     <a id="portal-btn" href="https://script.google.com/a/macros/despegar.com/s/AKfycbw7nuX4vsH9zFXOtLwxTpXszKAFKMGKH9uJhPr5JQkX5BYeZWLy7PaSiyyn-X-LqXx5tw/exec" target="_blank" rel="noopener" title="Portal de dashboards">🗂️ Portal de dashboards</a>
     <button id="theme-btn" onclick="toggleTheme()" title="Modo noche/día">🌙</button>
   </div>
@@ -86,9 +86,10 @@ function dataKey(base){return (SRC==='p'&&DATA[base+'_prog'])?DATA[base+'_prog']
 function rowByMonth(rows,field,m){return (rows||[]).find(function(r){return String(r[field]||"").substring(0,7)===m;});}
 
 var KRS=[
-  {id:"kr11",squad:"es",peso:0,pending:true,label:"KR 1.1 - GB de ventas por utilización de métodos de pago propios (HDOpay y Cta Cte)",targets:null,inverted:false,
-   fmtA:function(v){return v!==null?Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return v.toLocaleString("es-AR");},
-   getActual:function(i){return null;}},
+  {id:"kr11",squad:"es",peso:1,label:"KR 1.1 - GB de ventas por utilización de métodos de pago propios (HDOpay y Cta Cte)",targets:[3282530.45,3883044.26,4461921.25,5729302.40,6214359.64,7760774.05],inverted:false,
+   fmtA:function(v){return v!==null?'$'+Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return '$'+Math.round(v).toLocaleString("es-AR");},
+   getActual:function(i){var r=rowByMonth(dataKey('kr11'),"mes",MONTHS[i]);return r?r.gb_metodo_propio:null;},
+   getTarget:function(i){var r=rowByMonth(dataKey('kr11'),"mes",MONTHS[i]);return(r&&r.target!=null)?Number(r.target):null;}},
   {id:"kr12",squad:"es",peso:0,pending:true,label:"KR 1.2 - CPO Costo por Order",targets:null,inverted:true,
    fmtA:function(v){return v!==null?v.toFixed(2):null;},fmtT:function(v){return '≤ '+v;},
    getActual:function(i){return null;}},
@@ -219,7 +220,8 @@ function renderMensual(){
   var link='style="color:var(--purple);font-weight:600;text-decoration:none;font-size:12px;border:1px solid var(--border2);padding:4px 10px;border-radius:4px"';
   html+='<p class="sec-title">Queries</p>';
   html+='<div class="card" style="padding:0;overflow:visible"><table style="font-size:13px;width:100%;border-collapse:collapse"><tbody>';
-  html+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap;width:80px">KR 2.1</td><td style="padding:10px 12px;text-align:left">Agencias que utilizan cotizaciones</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/173704" target="_blank" '+link+'>Ver en Metabase ↗</a></td></tr>';
+  html+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap;width:80px">KR 1.1</td><td style="padding:10px 12px;text-align:left">GB con métodos de pago propios (Wallet / Cta Cte)</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/175680" target="_blank" '+link+'>Ver en Metabase ↗</a></td></tr>';
+  html+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap">KR 2.1</td><td style="padding:10px 12px;text-align:left">Agencias que utilizan cotizaciones</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/173704" target="_blank" '+link+'>Ver en Metabase ↗</a></td></tr>';
   html+='<tr><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap">KR 2.2</td><td style="padding:10px 12px;text-align:left">Agencias que compran 3 o más semanas al mes</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/173707" target="_blank" '+link+'>Ver en Metabase ↗</a></td></tr>';
   html+='</tbody></table></div>';
   return html;

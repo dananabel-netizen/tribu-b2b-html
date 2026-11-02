@@ -5,7 +5,7 @@ Uso: cd tribu-b2b-dana && .venv\\Scripts\\python.exe data-analytics/okrs-html-h2
 
 Las queries son las mismas de las cards de Metabase (los targets viajan dentro de la query):
   KR 2.1 -> card 173704   KR 2.2 -> card 173707
-Los KRs de E&S (1.1 GMV medios de pago propios, 1.2 CPO) quedan como placeholders hasta tener query y target.
+KR 1.1 -> card 175680 (E&S). El KR 1.2 (CPO) queda como placeholder hasta tener query y target.
 """
 
 import json
@@ -15,6 +15,44 @@ from pathlib import Path
 from datetime import datetime
 
 # ── Queries ────────────────────────────────────────────────────────────────────
+
+# KR 1.1 — GB (USD) de ventas con medios de pago propios: Wallet / Cuenta Corriente / Cuenta de agencia (Metabase card 175680)
+# Reservas confirmadas, canal hoteldo-html. Targets en USD (Oct 2026 – Abr 2027).
+QUERY_KR11 = """
+WITH targets AS (
+    SELECT '2026-10' AS mes, CAST(3282530.45 AS DOUBLE) AS target
+    UNION ALL SELECT '2026-11', 3883044.26
+    UNION ALL SELECT '2026-12', 4461921.25
+    UNION ALL SELECT '2027-01', 5729302.40
+    UNION ALL SELECT '2027-02', 6214359.64
+    UNION ALL SELECT '2027-03', 7760774.05
+    UNION ALL SELECT '2027-04', 9942669.48
+),
+act AS (
+    SELECT bi.partition_period AS mes,
+           ROUND(SUM(CASE
+               WHEN product.payment_methods LIKE '%WALLET%' THEN bi.gb
+               WHEN product.payment_methods LIKE '%CURRENT_ACCOUNT%' THEN bi.gb
+               WHEN product.payment_methods LIKE '%AGENCY_ACCOUNT%' THEN bi.gb
+           END), 2) AS gb_metodo_propio,
+           ROUND(SUM(bi.gb), 2) AS gb_total_usd
+    FROM data.analytics.bi_sales_fact_sales_recognition bi
+    JOIN data.lake.channels_bo_product product
+      ON product.transaction_id = bi.origin_product_id
+    WHERE bi.partition_period >= '2026-10'
+      AND bi.channel LIKE '%hoteldo-html%'
+      AND bi.transaction_status = 'Confirmado'
+    GROUP BY bi.partition_period
+)
+SELECT t.mes,
+       COALESCE(a.gb_metodo_propio, 0) AS gb_metodo_propio,
+       COALESCE(a.gb_total_usd, 0)     AS gb_total_usd,
+       t.target AS target,
+       ROUND(100.0 * COALESCE(a.gb_metodo_propio, 0) / NULLIF(t.target, 0), 1) AS pct_cumplimiento
+FROM targets t
+LEFT JOIN act a ON a.mes = t.mes
+ORDER BY t.mes
+"""
 
 # KR 2.1 — # de agencias que utilizan cotizaciones (Metabase card 173704)
 QUERY_KR21 = """
@@ -234,6 +272,8 @@ ORDER BY s.periodo, s.semana
 # kr21/kr22 alimentan la pestaña Mensual (se refrescan el dia 1); *_prog son las mismas queries
 # pero alimentan Progreso (se refrescan todos los dias); *_sem alimentan Semanal (lunes).
 QUERIES = [
+    ('kr11', QUERY_KR11),
+    ('kr11_prog', QUERY_KR11),
     ('kr21', QUERY_KR21),
     ('kr22', QUERY_KR22),
     ('kr21_prog', QUERY_KR21),
@@ -367,9 +407,10 @@ function dataKey(base){return (SRC==='p'&&DATA[base+'_prog'])?DATA[base+'_prog']
 function rowByMonth(rows,field,m){return (rows||[]).find(function(r){return String(r[field]||"").substring(0,7)===m;});}
 
 var KRS=[
-  {id:"kr11",squad:"es",peso:0,pending:true,label:"KR 1.1 - GB de ventas por utilización de métodos de pago propios (HDOpay y Cta Cte)",targets:null,inverted:false,
-   fmtA:function(v){return v!==null?Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return v.toLocaleString("es-AR");},
-   getActual:function(i){return null;}},
+  {id:"kr11",squad:"es",peso:1,label:"KR 1.1 - GB de ventas por utilización de métodos de pago propios (HDOpay y Cta Cte)",targets:[3282530.45,3883044.26,4461921.25,5729302.40,6214359.64,7760774.05],inverted:false,
+   fmtA:function(v){return v!==null?'$'+Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return '$'+Math.round(v).toLocaleString("es-AR");},
+   getActual:function(i){var r=rowByMonth(dataKey('kr11'),"mes",MONTHS[i]);return r?r.gb_metodo_propio:null;},
+   getTarget:function(i){var r=rowByMonth(dataKey('kr11'),"mes",MONTHS[i]);return(r&&r.target!=null)?Number(r.target):null;}},
   {id:"kr12",squad:"es",peso:0,pending:true,label:"KR 1.2 - CPO Costo por Order",targets:null,inverted:true,
    fmtA:function(v){return v!==null?v.toFixed(2):null;},fmtT:function(v){return '≤ '+v;},
    getActual:function(i){return null;}},
@@ -500,7 +541,8 @@ function renderMensual(){
   var link='style="color:var(--purple);font-weight:600;text-decoration:none;font-size:12px;border:1px solid var(--border2);padding:4px 10px;border-radius:4px"';
   html+='<p class="sec-title">Queries</p>';
   html+='<div class="card" style="padding:0;overflow:visible"><table style="font-size:13px;width:100%;border-collapse:collapse"><tbody>';
-  html+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap;width:80px">KR 2.1</td><td style="padding:10px 12px;text-align:left">Agencias que utilizan cotizaciones</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/173704" target="_blank" '+link+'>Ver en Metabase ↗</a></td></tr>';
+  html+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap;width:80px">KR 1.1</td><td style="padding:10px 12px;text-align:left">GB con métodos de pago propios (Wallet / Cta Cte)</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/175680" target="_blank" '+link+'>Ver en Metabase ↗</a></td></tr>';
+  html+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap">KR 2.1</td><td style="padding:10px 12px;text-align:left">Agencias que utilizan cotizaciones</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/173704" target="_blank" '+link+'>Ver en Metabase ↗</a></td></tr>';
   html+='<tr><td style="padding:10px 16px;font-weight:700;color:#5B21B6;white-space:nowrap">KR 2.2</td><td style="padding:10px 12px;text-align:left">Agencias que compran 3 o más semanas al mes</td><td style="padding:10px 16px;white-space:nowrap"><a href="https://metabase.despegar.com/question/173707" target="_blank" '+link+'>Ver en Metabase ↗</a></td></tr>';
   html+='</tbody></table></div>';
   return html;

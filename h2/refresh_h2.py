@@ -6,9 +6,9 @@ Corre desde tablero-live/h2/. Trae los datos del datalake, actualiza data.json, 
 el GitHub Action (build-dashboard-h2.yml) regenera el HTML y el Apps Script lo sirve.
 
 Modos (que claves de data.json se refrescan):
-  diario   -> kr21_prog, kr22_prog   (pestaña Progreso)
+  diario   -> kr11_prog, kr21_prog, kr22_prog   (pestaña Progreso)
   semanal  -> kr21_sem,  kr22_sem    (pestaña Semanal)
-  mensual  -> kr21,      kr22        (pestaña Mensual)
+  mensual  -> kr11, kr21, kr22        (pestaña Mensual)
   todo     -> las tres
   auto     -> siempre diario; + semanal si hoy es lunes; + mensual si hoy es dia 1   (default)
 
@@ -34,9 +34,9 @@ sys.path.insert(0, str(HERE))
 import build_dashboard as bd
 
 MODOS = {
-    'diario':  ['kr21_prog', 'kr22_prog'],
+    'diario':  ['kr11_prog', 'kr21_prog', 'kr22_prog'],
     'semanal': ['kr21_sem', 'kr22_sem'],
-    'mensual': ['kr21', 'kr22'],
+    'mensual': ['kr11', 'kr21', 'kr22'],
 }
 
 

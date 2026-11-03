@@ -2,6 +2,20 @@
  "updated": "2026-11-03",
  "initiatives": [
   [
+   "Cambios en CHK | Part I",
+   "2026-10-29",
+   "CO",
+   "",
+   "Payment hub Hito 3"
+  ],
+  [
+   "Combinar medios de pago",
+   "2026-07-01",
+   "AR",
+   "",
+   "Se creó un *documento no fiscal* dentro del módulo de Mambo para todas las reservas emitidas con cuenta corriente. En el menú de tres puntos (⋮) del módulo de ventas aparece la opción *\"Ver Liquidación\"  PPT* "
+  ],
+  [
    "Combinaciones de MDP con HDO pay",
    "2026-10-29",
    "BR,CO",

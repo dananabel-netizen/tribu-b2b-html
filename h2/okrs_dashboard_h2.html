@@ -56,7 +56,7 @@ body,main,.card,.filter-bar{transition:background .25s,border-color .25s,color .
     <div class="logo-sub">H2 FY27 · Octubre 2026 — Marzo 2027</div>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
-    <span class="upd">Actualizado: 2026-11-02 17:14</span>
+    <span class="upd">Actualizado: 2026-11-03 14:33</span>
     <a id="portal-btn" href="https://script.google.com/a/macros/despegar.com/s/AKfycbw7nuX4vsH9zFXOtLwxTpXszKAFKMGKH9uJhPr5JQkX5BYeZWLy7PaSiyyn-X-LqXx5tw/exec" target="_blank" rel="noopener" title="Portal de dashboards">🗂️ Portal de dashboards</a>
     <button id="theme-btn" onclick="toggleTheme()" title="Modo noche/día">🌙</button>
   </div>
@@ -90,8 +90,8 @@ var KRS=[
    fmtA:function(v){return v!==null?'$'+Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return '$'+Math.round(v).toLocaleString("es-AR");},
    getActual:function(i){var r=rowByMonth(dataKey('kr11'),"mes",MONTHS[i]);return r?r.gb_metodo_propio:null;},
    getTarget:function(i){var r=rowByMonth(dataKey('kr11'),"mes",MONTHS[i]);return(r&&r.target!=null)?Number(r.target):null;}},
-  {id:"kr12",squad:"es",peso:0,pending:true,label:"KR 1.2 - CPO Costo por Order",targets:null,inverted:true,
-   fmtA:function(v){return v!==null?v.toFixed(2):null;},fmtT:function(v){return '≤ '+v;},
+  {id:"kr12",squad:"es",peso:0,pending:true,label:"KR 1.2 - CPO Costo por Order",targets:[3.64,3.6,3.98,3.72,3.93,3.49],inverted:true,
+   fmtA:function(v){return v!==null?v.toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2}):null;},fmtT:function(v){return '≤ '+v.toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2});},
    getActual:function(i){return null;}},
   {id:"kr21",squad:"ce",peso:1,label:"KR 2.1 - Aumentar la cantidad de agencias que utilizan cotizaciones",targets:[7500,7718,7601,7910,7818,8100],inverted:false,
    fmtA:function(v){return v!==null?Math.round(v).toLocaleString("es-AR"):null;},fmtT:function(v){return v.toLocaleString("es-AR");},

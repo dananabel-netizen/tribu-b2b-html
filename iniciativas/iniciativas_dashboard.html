@@ -344,6 +344,8 @@ body.dopen .drawer{transform:none}
 .d-cty{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--ink)}
 .d-btn{background:linear-gradient(135deg,#F5A02A,var(--orange));color:#fff;border:none;border-radius:12px;padding:12px;font:700 13px 'Rubik',sans-serif;cursor:pointer;box-shadow:0 4px 12px rgba(237,139,8,.35)}
 .d-btn:hover{filter:brightness(1.05)}
+.d-lnkrow{display:flex;gap:8px}.d-lnkrow input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:10px;padding:9px 10px;font:500 12px 'Rubik',sans-serif;background:var(--panel2);color:inherit}.d-lnkrow .d-btn{padding:9px 14px}
+.d-lnk{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:6px;color:var(--mut)}.d-lnk small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.d-lnk button{background:none;border:none;color:var(--orange);font:600 11px 'Rubik',sans-serif;cursor:pointer;padding:2px 4px}
 .d-btn.alt{background:var(--panel2);color:var(--orange);border:1.5px solid var(--line);box-shadow:none;margin-top:8px}
 .d-noimp{background:var(--panel2);border:1.5px dashed var(--line);border-radius:12px;padding:12px;text-align:center;color:var(--mut);font-size:12px}
 .d-back2{align-self:flex-start;background:none;border:none;color:var(--oranged);font:600 12px 'Rubik',sans-serif;cursor:pointer;padding:0}
@@ -754,8 +756,23 @@ function showList(items,title){
   $("dTitle").textContent=`${title} · ${items.length}`;
   $("dBody").innerHTML=items.map(d=>`<div class="d-item" style="--cc:${catCol(d.cat)}" data-i="${DATA.indexOf(d)}"><b>${d.name}</b><small>${d.countries.map(flag).join("")}<span>${d.cat==="Sin categoría"?"":d.cat}</span></small></div>`).join("")||'<div class="empty">Sin iniciativas</div>';
 }
+/* links al impacto cargados a mano: se guardan en Apps Script y los ven todos (window.IMPACT_LINKS lo inyecta Code.gs) */
+const LINKS=window.IMPACT_LINKS||{};
+const linkKey=d=>d.name+"|"+d.date;
+let editLink=false,lastBack=false;
+function linkBox(d){
+  const u=LINKS[linkKey(d)];
+  if(u&&!editLink)return `<a class="d-btn alt" style="display:block;text-align:center;text-decoration:none;margin-top:0" href="${esc(u)}" target="_blank" rel="noopener">🔗 Abrir link al impacto</a>
+    <div class="d-lnk"><small>${esc(u)}</small><span><button id="dLnkEdit">Editar</button><button id="dLnkDel">Quitar</button></span></div>`;
+  return `<div class="d-lnkrow"><input id="dLnkIn" type="url" placeholder="Pegá el link al impacto (https://...)" value="${esc(u||"")}"><button class="d-btn" id="dLnkSave">Guardar</button></div>`;
+}
+function saveLink(d,url){
+  if(!(window.google&&google.script&&google.script.run)){toast("Solo se puede guardar desde el tablero publicado");return;}
+  google.script.run.withSuccessHandler(()=>{if(url)LINKS[linkKey(d)]=url;else delete LINKS[linkKey(d)];editLink=false;showDetail(d,lastBack);toast(url?"🔗 Link guardado":"Link quitado");})
+    .withFailureHandler(e=>toast("No se pudo guardar: "+(e&&e.message||e))).setLink(linkKey(d),url);
+}
 function showDetail(d,back){
-  curDrawerItem=d;
+  curDrawerItem=d;lastBack=back;
   const age=(NOW-new Date(d.date))/864e5;
   $("dTitle").textContent="Detalle de la iniciativa";
   $("dBody").innerHTML=`${back?'<button class="d-back2" id="dBackL">← Volver a la lista</button>':""}
@@ -763,7 +780,8 @@ function showDetail(d,back){
       <div class="tags">${d.cat!=="Sin categoría"?`<span class="tag cat" style="background:${catCol(d.cat)}22;color:${catCol(d.cat)}">${d.cat}</span>`:""}${age<=14&&age>=0?'<span class="tag new">Nuevo</span>':""}${isRb(d)?'<span class="tag warn">Apagado/rollback</span>':""}</div></div>
     <div class="d-sec"><label>Mercados</label><div class="d-ctys">${d.countries.map(c=>`<span class="d-cty">${flag(c)} ${CN[c]||c}</span>`).join("")||"—"}</div></div>
     <div class="d-sec"><label>Detalle</label><p>${d.note||"<i>Sin detalle cargado en la bitácora.</i>"}</p></div>
-    ${hasImp(d)?'<button class="d-btn" id="dImp">📈 Ver impacto</button><button class="d-btn alt" id="dLink">🔗 Copiar link al impacto</button>':'<div class="d-noimp">📭 Todavía no hay impacto cargado para esta iniciativa.</div>'}`;
+    ${hasImp(d)?'<button class="d-btn" id="dImp">📈 Ver impacto</button>':(LINKS[linkKey(d)]?"":'<div class="d-noimp">📭 Todavía no hay impacto cargado para esta iniciativa.</div>')}
+    <div class="d-sec"><label>Link al impacto</label>${linkBox(d)}</div>`;
 }
 
 /* ---------- tab de impacto ---------- */
@@ -1077,7 +1095,13 @@ $("dBody").onclick=e=>{
   const it=e.target.closest(".d-item");if(it){showDetail(DATA[+it.dataset.i],true);return;}
   if(e.target.closest("#dBackL")&&lastList){showList(lastList.items,lastList.title);return;}
   if(e.target.closest("#dImp")){const d=curDrawerItem;closeDrawer();openImpact(d);}
-  if(e.target.closest("#dLink"))copyLink(impLink(curDrawerItem));
+  if(e.target.closest("#dLnkEdit")){editLink=true;showDetail(curDrawerItem,lastBack);return;}
+  if(e.target.closest("#dLnkDel")){saveLink(curDrawerItem,"");return;}
+  if(e.target.closest("#dLnkSave")){
+    const u=$("dLnkIn").value.trim();
+    if(u&&!/^https?:\/\//i.test(u)){toast("El link tiene que empezar con http:// o https://");return;}
+    saveLink(curDrawerItem,u);
+  }
 };
 $("dClose").onclick=closeDrawer;$("dBg").onclick=closeDrawer;
 $("bPdf").onclick=()=>window.print();

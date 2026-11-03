@@ -2,6 +2,27 @@
  "updated": "2026-11-03",
  "initiatives": [
   [
+   "Rollout (Prefondeo) Anticipo",
+   "2026-10-27",
+   "CL",
+   "",
+   "Las agencias anticipan su cuenta por transferencia bancaria: el agente registra el depósito como Anticipo, adjunta el comprobante y HotelDO lo valida para que el saldo quede disponible en el checkout de cualquier producto."
+  ],
+  [
+   "Filtro en Reprogramaciones",
+   "2026-10-21",
+   "Todos",
+   "",
+   "Filtro por fechas (desde / hasta) en la pantalla de alternativas de reprogramación de Mis Viajes. Es opcional: si no se elige ninguna fecha, se sigue mostrando la alternativa ofrecida por la aerolínea."
+  ],
+  [
+   "HDO Pay para Buy Failure",
+   "2026-10-13",
+   "Todos",
+   "",
+   "Se habilitó la opción de HDO pay en Buy Failure CASH para el usuario en Mi Reserva: se le consulta el método de devolución de la cancelación. Está activa 48 hs; si no elige, se usa la forma de pago original. Incluye todas las formas de pago CASH en todos los países y, al elegir HDO pay, la devolución es inmediata en su cuenta."
+  ],
+  [
    "Cambios en CHK | Part I",
    "2026-10-29",
    "CO",
@@ -13,7 +34,7 @@
    "2026-07-01",
    "AR",
    "",
-   "Se creó un *documento no fiscal* dentro del módulo de Mambo para todas las reservas emitidas con cuenta corriente. En el menú de tres puntos (⋮) del módulo de ventas aparece la opción *\"Ver Liquidación\"  PPT* "
+   "Se creó un documento no fiscal dentro del módulo de Mambo para todas las reservas emitidas con cuenta corriente. En el menú de tres puntos (⋮) del módulo de ventas aparece la opción \"Ver Liquidación\" PPT"
   ],
   [
    "Combinaciones de MDP con HDO pay",

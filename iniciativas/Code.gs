@@ -26,7 +26,7 @@ function setLink(key, url) {
   key = String(key || '');
   url = String(url || '').trim();
   if (!key) throw new Error('Falta la iniciativa');
-  if (url && !/^https?:\/\//i.test(url)) throw new Error('El link tiene que empezar con http:// o https://');
+  if (url && !/^https?:\/\//i.test(url)) throw new Error('El link tiene que empezar con http o https');
   if (url.length > 2000) throw new Error('El link es demasiado largo');
   var props = PropertiesService.getScriptProperties();
   if (url) props.setProperty(_id(key), JSON.stringify({k: key, u: url}));

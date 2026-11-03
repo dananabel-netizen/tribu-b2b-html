@@ -764,7 +764,7 @@ function linkBox(d){
   const u=LINKS[linkKey(d)];
   if(u&&!editLink)return `<a class="d-btn alt" style="display:block;text-align:center;text-decoration:none;margin-top:0" href="${esc(u)}" target="_blank" rel="noopener">🔗 Abrir link al impacto</a>
     <div class="d-lnk"><small>${esc(u)}</small><span><button id="dLnkEdit">Editar</button><button id="dLnkDel">Quitar</button></span></div>`;
-  return `<div class="d-lnkrow"><input id="dLnkIn" type="url" placeholder="Pegá el link al impacto (https://...)" value="${esc(u||"")}"><button class="d-btn" id="dLnkSave">Guardar</button></div>`;
+  return `<div class="d-lnkrow"><input id="dLnkIn" type="url" placeholder="Pegá el link al impacto" value="${esc(u||"")}"><button class="d-btn" id="dLnkSave">Guardar</button></div>`;
 }
 function saveLink(d,url){
   if(!(window.google&&google.script&&google.script.run)){toast("Solo se puede guardar desde el tablero publicado");return;}
@@ -1099,7 +1099,7 @@ $("dBody").onclick=e=>{
   if(e.target.closest("#dLnkDel")){saveLink(curDrawerItem,"");return;}
   if(e.target.closest("#dLnkSave")){
     const u=$("dLnkIn").value.trim();
-    if(u&&!/^https?:\/\//i.test(u)){toast("El link tiene que empezar con http:// o https://");return;}
+    if(u&&!/^https?:/i.test(u)){toast("El link tiene que empezar con http o https");return;}
     saveLink(curDrawerItem,u);
   }
 };

@@ -768,8 +768,10 @@ function linkBox(d){
 }
 function saveLink(d,url){
   if(!(window.google&&google.script&&google.script.run)){toast("Solo se puede guardar desde el tablero publicado");return;}
-  google.script.run.withSuccessHandler(()=>{if(url)LINKS[linkKey(d)]=url;else delete LINKS[linkKey(d)];editLink=false;showDetail(d,lastBack);toast(url?"🔗 Link guardado":"Link quitado");})
-    .withFailureHandler(e=>toast("No se pudo guardar: "+(e&&e.message||e))).setLink(linkKey(d),url);
+  const run=google.script.run.withSuccessHandler(()=>{if(url)LINKS[linkKey(d)]=url;else delete LINKS[linkKey(d)];editLink=false;showDetail(d,lastBack);toast(url?"🔗 Link guardado":"Link quitado");})
+    .withFailureHandler(e=>toast("No se pudo guardar: "+(e&&e.message||e)));
+  if(typeof run.setLink!=="function"){toast("Falta actualizar el Code.gs en Apps Script (nueva versión)");return;}
+  run.setLink(linkKey(d),url);
 }
 function showDetail(d,back){
   curDrawerItem=d;lastBack=back;

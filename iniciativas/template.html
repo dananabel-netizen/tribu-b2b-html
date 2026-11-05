@@ -895,7 +895,7 @@ function renderLdp(d,cfg){
     <span class="tags">${C.map(r=>`<span class="tag" title="${CN[r[0]]||r[0]}">${flag(r[0])}</span>`).join("")}</span></div>
     <button class="btn-back" id="impBack">← Volver a iniciativas</button></div>`;
   const kpis=[
-    ["kpi-g kpi-hero","💰","GB confirmado",`<span class="u">USD</span>${fmtN(T.gl)}`,`<span class="delta nd">ticket prom. USD ${fmtN(T.gl/T.nl)} · hoteles non ref USD ${fmtN(T.gt/T.nt)}</span>`],
+    ["kpi-g kpi-hero","💰","GB confirmado",`<span class="u">USD</span>${fmtN(T.gl)}`,`<span class="delta nd">ticket promedio con link de pago USD ${fmtN(T.gl/T.nl)}</span>`],
     ["kpi-b","📊","Share total",pf(T.gl/T.gt*100),`<span class="delta nd">del GB de hoteles non ref · USD ${fmtN(T.gt)}</span>`],
     ["kpi-c","🧾","Bookings confirmados",fmtN(T.nl),`<span class="delta nd">${pf(T.nl/T.nt*100)} de ${fmtN(T.nt)} reservas de hoteles non ref</span>`],
     ["kpi-p","🏢","Agencias que lo usan",fmtN(T.ag),`<span class="delta nd">${pf(T.rep/T.ag*100)} repitió · ${pf(T.ag/T.agt*100)} de ${fmtN(T.agt)} agencias con venta non ref</span>`]

@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-30",
+ "updated": "2026-11-06",
  "weeks": [
   "2026-08-28",
   "2026-09-04",
@@ -9,7 +9,8 @@
   "2026-10-02",
   "2026-10-09",
   "2026-10-16",
-  "2026-10-23"
+  "2026-10-23",
+  "2026-10-30"
  ],
  "card": {
   "Hoteles": 171325,
@@ -55,6 +56,10 @@
    [
     64665,
     "meal_plans 16623 338;hotel_name 10204 407;zones 3553 85;accommodation_type 2348 65;roompack_tags 1628 26;hotel_type 1249 24;stars 1240 30;rate_score 1128 22;total_price_range 802 27;amenities_groups 393 12;hotel_chains 362 14;amenities 221 8;payment_type 128 2;offers 67 1;promo_campaign 19 0"
+   ],
+   [
+    61916,
+    "meal_plans 15978 413;hotel_name 9976 462;zones 3246 107;accommodation_type 2266 72;roompack_tags 1683 35;hotel_type 1216 21;stars 1202 36;rate_score 1135 24;total_price_range 768 28;amenities_groups 395 18;hotel_chains 335 9;amenities 193 1;payment_type 100 3;offers 81 1;promo_campaign 15 0"
    ]
   ],
   "Vuelos": [
@@ -93,6 +98,10 @@
    [
     60217,
     "aerolinea_matrix 9120 425;escalas_side 7660 334;escalas_matrix 7133 325;Baggages_side 5976 228;precio_matrix_suggestion 4929 209;precio_matrix_default 3787 194;aerolinea_side 2119 108;horariosal_side 2088 101;horarioregreso_side 1147 52;durvuelosalida_side 664 11;aeropuertoorigen_side 446 33;durvuelollegada_side 346 5;aeropuertodest_side 169 13;precios_side 149 5;escalas_cluster-non-stop 17 0;Alianza_side 6 0"
+   ],
+   [
+    57716,
+    "aerolinea_matrix 8964 482;escalas_side 7382 327;escalas_matrix 7018 362;Baggages_side 5659 248;precio_matrix_suggestion 4964 240;precio_matrix_default 3671 195;aerolinea_side 2112 128;horariosal_side 1946 107;horarioregreso_side 1047 60;durvuelosalida_side 680 22;aeropuertoorigen_side 406 39;durvuelollegada_side 351 10;aeropuertodest_side 205 18;precios_side 120 6;escalas_cluster-non-stop 16 0;Alianza_side 3 0"
    ]
   ],
   "Paquetes": [
@@ -131,6 +140,10 @@
    [
     30393,
     "meal_plans 9381 77;hotel_name 5151 85;zones 1902 19;accommodation_type 914 6;rate_score 855 9;hotel_type 738 3;stars 648 10;roompack_tags 534 3;amenities_groups 193 1;hotel_chains 167 1;payment_type 128 1;amenities 88 1;promo_campaign 40 1"
+   ],
+   [
+    29957,
+    "meal_plans 9191 80;hotel_name 4907 112;zones 2095 33;rate_score 903 9;hotel_type 830 11;accommodation_type 810 9;stars 660 4;roompack_tags 518 2;payment_type 148 0;amenities_groups 143 0;hotel_chains 129 0;amenities 82 0;promo_campaign 36 0"
    ]
   ],
   "Autos": [
@@ -169,6 +182,10 @@
    [
     3730,
     "filter_payment_method 1591 105;filter_category 737 46;filter_provider 550 43;filter_number_of_passengers 390 14;filter_transmission 280 27;filter_deliver_method 191 12;filter_zones 71 2;filter_promotion 11 0;filter_engine_type 11 0"
+   ],
+   [
+    3645,
+    "filter_payment_method 1522 85;filter_category 643 31;filter_provider 515 35;filter_number_of_passengers 382 17;filter_transmission 275 18;filter_deliver_method 215 10;filter_zones 71 3;filter_engine_type 10 0;filter_promotion 9 0"
    ]
   ],
   "Actividades": [
@@ -207,6 +224,10 @@
    [
     6581,
     "ai-keyword-filter 1427 54;inclusions-filter 43 2;experience-type-filter 38 0;score-filter 11 0;duration-filter 6 1;price 4 0;category-filter 1 0"
+   ],
+   [
+    6115,
+    "ai-keyword-filter 1364 51;experience-type-filter 38 0;inclusions-filter 27 1;score-filter 12 0;price 11 0;duration-filter 6 0;category-filter 1 0"
    ]
   ]
  },
@@ -248,6 +269,10 @@
     [
      26932,
      "hotel_name 5125 188;meal_plans 4743 100;zones 1461 30;accommodation_type 1271 27;rate_score 796 14;hotel_type 741 9;stars 587 8;total_price_range 521 17;roompack_tags 285 5;hotel_chains 169 8;amenities_groups 165 5;amenities 82 2;payment_type 25 0;offers 19 0;promo_campaign 10 0"
+    ],
+    [
+     25833,
+     "hotel_name 4951 183;meal_plans 4729 97;zones 1384 40;accommodation_type 1265 40;rate_score 816 12;hotel_type 708 11;stars 605 12;total_price_range 481 17;roompack_tags 286 8;amenities_groups 188 5;hotel_chains 153 8;amenities 63 1;offers 23 0;payment_type 20 0;promo_campaign 5 0"
     ]
    ],
    "MX": [
@@ -286,6 +311,10 @@
     [
      14698,
      "meal_plans 3885 86;hotel_name 2300 105;zones 450 16;accommodation_type 335 14;roompack_tags 274 8;stars 237 10;total_price_range 111 3;hotel_type 105 2;rate_score 103 3;amenities_groups 73 2;amenities 71 4;hotel_chains 64 4;payment_type 49 1;offers 18 1;promo_campaign 6 0"
+    ],
+    [
+     14528,
+     "meal_plans 3870 79;hotel_name 2255 120;zones 387 20;accommodation_type 330 12;stars 252 7;roompack_tags 244 3;total_price_range 110 4;rate_score 101 3;hotel_type 89 2;amenities_groups 61 2;amenities 49 0;hotel_chains 45 0;payment_type 32 1;offers 27 0;promo_campaign 6 0"
     ]
    ],
    "CO": [
@@ -324,6 +353,10 @@
     [
      14442,
      "meal_plans 5948 107;hotel_name 1495 62;zones 1018 26;roompack_tags 455 4;accommodation_type 260 6;stars 223 5;hotel_type 150 5;amenities_groups 73 3;rate_score 71 0;hotel_chains 65 1;total_price_range 64 5;payment_type 43 0;amenities 34 2;offers 13 0;promo_campaign 2 0"
+    ],
+    [
+     11914,
+     "meal_plans 4940 154;hotel_name 1125 56;zones 835 19;roompack_tags 384 5;accommodation_type 205 6;stars 148 7;hotel_type 104 1;amenities_groups 65 6;rate_score 54 4;total_price_range 52 2;hotel_chains 42 1;amenities 32 0;payment_type 30 0;offers 11 0;promo_campaign 1 0"
     ]
    ],
    "AR": [
@@ -362,6 +395,10 @@
     [
      5537,
      "meal_plans 1230 34;hotel_name 869 41;roompack_tags 495 7;zones 396 11;accommodation_type 345 14;hotel_type 203 8;stars 123 7;rate_score 119 5;total_price_range 69 1;amenities_groups 54 1;amenities 21 0;hotel_chains 21 0;payment_type 7 1;offers 5 0"
+    ],
+    [
+     6383,
+     "meal_plans 1487 51;hotel_name 1129 81;roompack_tags 659 15;zones 391 20;accommodation_type 366 7;hotel_type 238 3;stars 126 7;rate_score 107 4;total_price_range 83 1;amenities_groups 57 3;hotel_chains 47 0;amenities 38 0;payment_type 14 2;offers 10 0;promo_campaign 3 0"
     ]
    ],
    "CL": [
@@ -400,6 +437,10 @@
     [
      1305,
      "meal_plans 368 4;hotel_name 173 6;zones 123 1;accommodation_type 72 0;roompack_tags 44 0;hotel_type 30 0;hotel_chains 25 1;stars 19 0;rate_score 14 0;total_price_range 12 1;amenities_groups 10 0;amenities 7 0;offers 3 0"
+    ],
+    [
+     1320,
+     "meal_plans 370 14;hotel_name 211 9;zones 131 5;hotel_type 49 3;roompack_tags 39 1;accommodation_type 36 3;stars 29 1;total_price_range 19 3;hotel_chains 18 0;rate_score 17 0;amenities_groups 12 1;amenities 5 0;payment_type 2 0;offers 1 1"
     ]
    ],
    "PE": [
@@ -438,6 +479,10 @@
     [
      1066,
      "meal_plans 328 4;hotel_name 176 3;zones 83 1;accommodation_type 43 3;stars 41 0;roompack_tags 36 1;hotel_chains 17 0;hotel_type 12 0;total_price_range 11 0;amenities_groups 10 0;rate_score 9 0;offers 9 0;payment_type 3 0;amenities 1 0;promo_campaign 1 0"
+    ],
+    [
+     1274,
+     "meal_plans 436 14;hotel_name 241 12;zones 97 2;accommodation_type 42 3;roompack_tags 38 1;stars 30 0;hotel_chains 23 0;hotel_type 17 0;rate_score 16 0;total_price_range 13 1;amenities_groups 9 1;offers 7 0;amenities 3 0;payment_type 1 0"
     ]
    ],
    "OT": [
@@ -476,6 +521,10 @@
     [
      685,
      "meal_plans 121 3;hotel_name 66 2;roompack_tags 39 1;zones 22 0;accommodation_type 22 1;rate_score 16 0;total_price_range 14 0;stars 10 0;amenities_groups 8 1;hotel_type 8 0;amenities 5 0;hotel_chains 1 0;payment_type 1 0"
+    ],
+    [
+     664,
+     "meal_plans 146 4;hotel_name 64 1;roompack_tags 33 2;rate_score 24 1;accommodation_type 22 1;zones 21 1;stars 12 2;hotel_type 11 1;total_price_range 10 0;hotel_chains 7 0;amenities_groups 3 0;amenities 3 0;offers 2 0;payment_type 1 0"
     ]
    ]
   },
@@ -516,6 +565,10 @@
     [
      34457,
      "aerolinea_matrix 5238 196;escalas_matrix 4434 173;Baggages_side 3401 94;precio_matrix_suggestion 3215 114;escalas_side 3185 94;precio_matrix_default 2309 108;horariosal_side 927 29;aerolinea_side 866 25;durvuelosalida_side 446 6;horarioregreso_side 437 8;durvuelollegada_side 229 4;aeropuertoorigen_side 100 3;precios_side 74 2;aeropuertodest_side 51 1;escalas_cluster-non-stop 5 0;Alianza_side 3 0"
+    ],
+    [
+     32912,
+     "aerolinea_matrix 5189 242;escalas_matrix 4377 204;precio_matrix_suggestion 3247 144;escalas_side 3138 94;Baggages_side 3137 107;precio_matrix_default 2262 108;aerolinea_side 865 30;horariosal_side 863 31;durvuelosalida_side 410 15;horarioregreso_side 393 12;durvuelollegada_side 205 6;aeropuertoorigen_side 100 7;precios_side 69 2;aeropuertodest_side 65 1;escalas_cluster-non-stop 6 0"
     ]
    ],
    "MX": [
@@ -554,6 +607,10 @@
     [
      12146,
      "escalas_side 2704 151;aerolinea_matrix 1822 109;Baggages_side 1206 66;escalas_matrix 1154 65;aerolinea_side 730 53;precio_matrix_suggestion 727 43;precio_matrix_default 626 37;horariosal_side 566 31;aeropuertoorigen_side 325 29;horarioregreso_side 325 18;aeropuertodest_side 113 12;durvuelosalida_side 48 2;precios_side 26 3;durvuelollegada_side 23 0;escalas_cluster-non-stop 9 0;Alianza_side 2 0"
+    ],
+    [
+     11258,
+     "escalas_side 2523 135;aerolinea_matrix 1693 109;Baggages_side 1078 58;escalas_matrix 1060 63;precio_matrix_suggestion 675 40;aerolinea_side 674 52;precio_matrix_default 581 38;horariosal_side 525 34;horarioregreso_side 315 21;aeropuertoorigen_side 289 31;aeropuertodest_side 129 16;durvuelosalida_side 61 0;durvuelollegada_side 33 0;precios_side 19 3;escalas_cluster-non-stop 7 0;Alianza_side 3 0"
     ]
    ],
    "CO": [
@@ -592,6 +649,10 @@
     [
      8614,
      "escalas_side 1133 77;aerolinea_matrix 1126 87;escalas_matrix 806 61;Baggages_side 705 48;precio_matrix_suggestion 531 38;horariosal_side 442 29;precio_matrix_default 419 32;horarioregreso_side 300 19;aerolinea_side 260 20;durvuelosalida_side 62 2;durvuelollegada_side 31 0;precios_side 23 0;aeropuertoorigen_side 4 0;escalas_cluster-non-stop 2 0;aeropuertodest_side 1 0"
+    ],
+    [
+     7359,
+     "escalas_side 943 66;aerolinea_matrix 925 74;escalas_matrix 627 53;Baggages_side 570 45;precio_matrix_suggestion 385 34;horariosal_side 372 23;precio_matrix_default 324 23;horarioregreso_side 247 18;aerolinea_side 216 24;durvuelosalida_side 70 3;durvuelollegada_side 30 1;precios_side 14 0;aeropuertoorigen_side 3 0;escalas_cluster-non-stop 1 0;aeropuertodest_side 1 0"
     ]
    ],
    "AR": [
@@ -630,6 +691,10 @@
     [
      2732,
      "aerolinea_matrix 471 20;escalas_side 447 12;escalas_matrix 397 17;Baggages_side 371 13;precio_matrix_suggestion 251 8;precio_matrix_default 210 11;aerolinea_side 141 8;horariosal_side 103 11;durvuelosalida_side 78 1;horarioregreso_side 46 6;durvuelollegada_side 44 1;precios_side 19 0;aeropuertoorigen_side 14 1;aeropuertodest_side 2 0"
+    ],
+    [
+     3470,
+     "escalas_side 573 24;aerolinea_matrix 570 30;Baggages_side 527 22;escalas_matrix 495 26;precio_matrix_suggestion 335 13;precio_matrix_default 254 18;aerolinea_side 231 16;horariosal_side 114 14;durvuelosalida_side 100 3;durvuelollegada_side 59 1;horarioregreso_side 54 5;aeropuertoorigen_side 14 1;precios_side 9 1;aeropuertodest_side 8 1;escalas_cluster-non-stop 2 0"
     ]
    ],
    "CL": [
@@ -668,6 +733,10 @@
     [
      1335,
      "aerolinea_matrix 258 8;Baggages_side 200 4;escalas_matrix 166 5;escalas_side 133 0;precio_matrix_default 123 3;precio_matrix_suggestion 90 4;aerolinea_side 88 2;horariosal_side 30 0;durvuelosalida_side 25 0;horarioregreso_side 25 0;durvuelollegada_side 15 0;precios_side 3 0;aeropuertodest_side 1 0"
+    ],
+    [
+     1282,
+     "aerolinea_matrix 220 15;Baggages_side 217 11;escalas_matrix 145 9;escalas_side 109 3;precio_matrix_default 92 5;precio_matrix_suggestion 86 4;aerolinea_side 71 4;horariosal_side 53 2;horarioregreso_side 27 2;durvuelosalida_side 24 0;durvuelollegada_side 16 1;precios_side 3 0;aeropuertodest_side 1 0"
     ]
    ],
    "PE": [
@@ -706,6 +775,10 @@
     [
      838,
      "aerolinea_matrix 198 5;escalas_matrix 170 4;precio_matrix_suggestion 113 2;precio_matrix_default 97 3;Baggages_side 85 3;escalas_side 47 0;aerolinea_side 30 0;horariosal_side 19 1;horarioregreso_side 14 1;precios_side 3 0;durvuelollegada_side 2 0;aeropuertodest_side 1 0;aeropuertoorigen_side 1 0;durvuelosalida_side 1 0;Alianza_side 1 0;escalas_cluster-non-stop 1 0"
+    ],
+    [
+     1360,
+     "aerolinea_matrix 365 12;escalas_matrix 313 7;precio_matrix_suggestion 235 5;precio_matrix_default 158 3;Baggages_side 122 5;escalas_side 87 5;aerolinea_side 52 2;horariosal_side 18 3;horarioregreso_side 11 2;durvuelosalida_side 8 1;precios_side 5 0;durvuelollegada_side 4 1;aeropuertodest_side 1 0"
     ]
    ],
    "OT": [
@@ -744,6 +817,10 @@
     [
      95,
      "escalas_side 11 0;Baggages_side 8 0;aerolinea_matrix 7 0;escalas_matrix 6 0;aerolinea_side 4 0;durvuelosalida_side 4 0;precio_matrix_default 3 0;precio_matrix_suggestion 2 0;durvuelollegada_side 2 0;aeropuertoorigen_side 2 0;horariosal_side 1 0;precios_side 1 0"
+    ],
+    [
+     75,
+     "escalas_side 9 0;Baggages_side 8 0;durvuelosalida_side 7 0;durvuelollegada_side 4 0;aerolinea_side 3 0;aerolinea_matrix 2 0;escalas_matrix 1 0;precio_matrix_suggestion 1 0;precios_side 1 0;horariosal_side 1 0"
     ]
    ]
   },
@@ -784,6 +861,10 @@
     [
      2843,
      "filter_payment_method 1299 88;filter_category 594 40;filter_provider 488 34;filter_number_of_passengers 287 11;filter_transmission 259 27;filter_deliver_method 144 10;filter_zones 58 2;filter_promotion 8 0;filter_engine_type 8 0"
+    ],
+    [
+     2734,
+     "filter_payment_method 1208 68;filter_category 498 25;filter_provider 417 29;filter_number_of_passengers 267 7;filter_transmission 245 16;filter_deliver_method 161 8;filter_zones 54 2;filter_engine_type 8 0;filter_promotion 7 0"
     ]
    ],
    "MX": [
@@ -822,6 +903,10 @@
     [
      285,
      "filter_payment_method 98 9;filter_category 43 3;filter_number_of_passengers 38 3;filter_provider 19 5;filter_deliver_method 16 1;filter_transmission 9 0;filter_zones 2 0;filter_promotion 1 0"
+    ],
+    [
+     278,
+     "filter_payment_method 121 8;filter_number_of_passengers 52 5;filter_category 45 3;filter_provider 39 2;filter_deliver_method 23 2;filter_transmission 17 2;filter_zones 8 1;filter_engine_type 2 0"
     ]
    ],
    "CO": [
@@ -860,6 +945,10 @@
     [
      156,
      "filter_payment_method 48 0;filter_category 23 0;filter_number_of_passengers 22 0;filter_provider 10 0;filter_deliver_method 5 0;filter_transmission 3 0;filter_zones 2 0;filter_promotion 1 0;filter_engine_type 1 0"
+    ],
+    [
+     158,
+     "filter_payment_method 49 4;filter_category 28 1;filter_number_of_passengers 15 3;filter_provider 11 1;filter_deliver_method 7 0;filter_zones 3 0;filter_transmission 2 0;filter_promotion 2 0"
     ]
    ],
    "AR": [
@@ -898,6 +987,10 @@
     [
      357,
      "filter_payment_method 111 7;filter_category 62 3;filter_number_of_passengers 31 0;filter_provider 25 4;filter_deliver_method 14 0;filter_transmission 8 0;filter_zones 6 0;filter_engine_type 1 0"
+    ],
+    [
+     399,
+     "filter_payment_method 109 5;filter_category 56 2;filter_number_of_passengers 39 2;filter_provider 30 3;filter_deliver_method 20 0;filter_transmission 10 0;filter_zones 4 0"
     ]
    ],
    "CL": [
@@ -936,6 +1029,10 @@
     [
      57,
      "filter_payment_method 17 1;filter_category 8 0;filter_number_of_passengers 4 0;filter_deliver_method 4 1;filter_provider 3 0;filter_zones 2 0"
+    ],
+    [
+     36,
+     "filter_payment_method 12 0;filter_number_of_passengers 5 0;filter_category 4 0;filter_provider 3 0;filter_deliver_method 2 0"
     ]
    ],
    "PE": [
@@ -974,6 +1071,10 @@
     [
      30,
      "filter_payment_method 18 0;filter_number_of_passengers 8 0;filter_deliver_method 8 0;filter_category 7 0;filter_provider 5 0;filter_promotion 1 0;filter_transmission 1 0;filter_engine_type 1 0;filter_zones 1 0"
+    ],
+    [
+     38,
+     "filter_payment_method 22 0;filter_provider 14 0;filter_category 12 0;filter_number_of_passengers 4 0;filter_zones 2 0;filter_deliver_method 2 0;filter_transmission 1 0"
     ]
    ],
    "OT": [
@@ -1012,6 +1113,10 @@
     [
      2,
      ""
+    ],
+    [
+     2,
+     "filter_payment_method 1 0;filter_provider 1 0"
     ]
    ]
   },
@@ -1052,6 +1157,10 @@
     [
      3533,
      "ai-keyword-filter 907 23;experience-type-filter 21 0;inclusions-filter 17 0;score-filter 6 0;duration-filter 1 0;category-filter 1 0;price 1 0"
+    ],
+    [
+     3277,
+     "ai-keyword-filter 847 24;experience-type-filter 23 0;inclusions-filter 11 0;price 8 0;score-filter 5 0;duration-filter 2 0"
     ]
    ],
    "MX": [
@@ -1090,6 +1199,10 @@
     [
      1023,
      "ai-keyword-filter 216 8;inclusions-filter 15 0;experience-type-filter 6 0;duration-filter 2 0;price 1 0;score-filter 1 0"
+    ],
+    [
+     983,
+     "ai-keyword-filter 225 10;experience-type-filter 7 0;inclusions-filter 7 0;score-filter 2 0;duration-filter 1 0"
     ]
    ],
    "CO": [
@@ -1128,6 +1241,10 @@
     [
      1381,
      "ai-keyword-filter 202 16;experience-type-filter 9 0;duration-filter 3 1;inclusions-filter 3 1;score-filter 2 0;price 2 0"
+    ],
+    [
+     1181,
+     "ai-keyword-filter 177 13;experience-type-filter 5 0;inclusions-filter 5 0;price 2 0;duration-filter 1 0;score-filter 1 0"
     ]
    ],
    "AR": [
@@ -1166,6 +1283,10 @@
     [
      354,
      "ai-keyword-filter 44 4;inclusions-filter 3 0;score-filter 2 0;experience-type-filter 2 0"
+    ],
+    [
+     345,
+     "ai-keyword-filter 49 0;duration-filter 2 0;score-filter 2 0;experience-type-filter 1 0"
     ]
    ],
    "CL": [
@@ -1204,6 +1325,10 @@
     [
      114,
      "ai-keyword-filter 12 0"
+    ],
+    [
+     135,
+     "ai-keyword-filter 23 3;score-filter 2 0;inclusions-filter 1 0;experience-type-filter 1 0;price 1 0"
     ]
    ],
    "PE": [
@@ -1242,6 +1367,10 @@
     [
      160,
      "ai-keyword-filter 42 3;inclusions-filter 5 1"
+    ],
+    [
+     168,
+     "ai-keyword-filter 40 1;inclusions-filter 3 1"
     ]
    ],
    "OT": [
@@ -1280,6 +1409,10 @@
     [
      16,
      "ai-keyword-filter 4 0"
+    ],
+    [
+     26,
+     "ai-keyword-filter 3 0;experience-type-filter 1 0;category-filter 1 0"
     ]
    ]
   },
@@ -1320,6 +1453,10 @@
     [
      19042,
      "meal_plans 5333 49;hotel_name 3753 62;zones 1224 11;accommodation_type 682 5;rate_score 640 9;hotel_type 543 3;stars 419 8;roompack_tags 189 3;amenities_groups 88 0;hotel_chains 78 0;payment_type 43 1;promo_campaign 25 0;amenities 24 1"
+    ],
+    [
+     18315,
+     "meal_plans 5201 48;hotel_name 3475 81;zones 1332 24;rate_score 699 7;accommodation_type 634 9;hotel_type 560 8;stars 396 4;roompack_tags 170 2;amenities_groups 82 0;hotel_chains 64 0;payment_type 38 0;amenities 22 0;promo_campaign 20 0"
     ]
    ],
    "MX": [
@@ -1358,6 +1495,10 @@
     [
      3127,
      "meal_plans 1078 5;hotel_name 526 8;zones 107 1;stars 68 2;roompack_tags 47 0;rate_score 40 0;accommodation_type 39 0;payment_type 35 0;hotel_type 22 0;amenities_groups 19 1;hotel_chains 18 1;amenities 16 0;promo_campaign 4 1"
+    ],
+    [
+     3068,
+     "meal_plans 1090 5;hotel_name 496 10;zones 123 0;stars 78 0;payment_type 45 0;roompack_tags 43 0;rate_score 37 0;accommodation_type 28 0;hotel_type 25 0;amenities 20 0;amenities_groups 11 0;hotel_chains 11 0;promo_campaign 7 0"
     ]
    ],
    "CO": [
@@ -1396,6 +1537,10 @@
     [
      3693,
      "meal_plans 1516 19;hotel_name 330 6;zones 159 4;roompack_tags 118 0;accommodation_type 68 1;hotel_type 54 0;payment_type 37 0;amenities_groups 36 0;stars 33 0;rate_score 30 0;hotel_chains 13 0;amenities 9 0;promo_campaign 4 0"
+    ],
+    [
+     3166,
+     "meal_plans 1328 18;hotel_name 239 4;zones 181 4;roompack_tags 92 0;hotel_type 58 1;rate_score 41 0;payment_type 37 0;stars 34 0;accommodation_type 27 0;amenities_groups 16 0;hotel_chains 9 0;amenities 7 0;promo_campaign 1 0"
     ]
    ],
    "AR": [
@@ -1434,6 +1579,10 @@
     [
      2588,
      "meal_plans 666 2;hotel_name 261 6;zones 220 2;roompack_tags 134 0;rate_score 111 0;stars 77 0;hotel_type 66 0;accommodation_type 63 0;amenities_groups 32 0;amenities 26 0;payment_type 11 0;hotel_chains 8 0;promo_campaign 7 0"
+    ],
+    [
+     3375,
+     "meal_plans 788 5;hotel_name 344 11;zones 238 3;roompack_tags 152 0;hotel_type 98 1;rate_score 80 2;accommodation_type 76 0;stars 75 0;payment_type 22 0;amenities 19 0;hotel_chains 19 0;amenities_groups 16 0;promo_campaign 5 0"
     ]
    ],
    "CL": [
@@ -1472,6 +1621,10 @@
     [
      1407,
      "meal_plans 595 2;hotel_name 201 1;zones 171 1;accommodation_type 55 0;hotel_type 47 0;roompack_tags 42 0;stars 37 0;hotel_chains 34 0;rate_score 22 0;amenities_groups 14 0;amenities 9 0"
+    ],
+    [
+     1321,
+     "meal_plans 547 2;hotel_name 232 4;zones 173 2;hotel_type 78 1;stars 54 0;roompack_tags 48 0;accommodation_type 41 0;rate_score 37 0;hotel_chains 15 0;amenities 8 0;amenities_groups 4 0;payment_type 2 0;promo_campaign 2 0"
     ]
    ],
    "PE": [
@@ -1510,6 +1663,10 @@
     [
      536,
      "meal_plans 193 0;hotel_name 80 2;zones 21 0;hotel_chains 16 0;stars 14 0;rate_score 12 0;accommodation_type 7 0;hotel_type 6 0;roompack_tags 4 0;amenities_groups 4 0;amenities 4 0;payment_type 2 0"
+    ],
+    [
+     712,
+     "meal_plans 237 2;hotel_name 121 2;zones 48 0;stars 23 0;amenities_groups 14 0;roompack_tags 13 0;hotel_chains 11 0;hotel_type 11 0;rate_score 9 0;amenities 6 0;payment_type 4 0;accommodation_type 4 0;promo_campaign 1 0"
     ]
    ],
    "OT": [
@@ -1523,6 +1680,10 @@
     ],
     [
      2,
+     ""
+    ],
+    [
+     0,
      ""
     ],
     [

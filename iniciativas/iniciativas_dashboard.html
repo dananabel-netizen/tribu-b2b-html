@@ -60,6 +60,12 @@ body{margin:0;background:var(--bg);color:var(--txt);font:13px/1.45 'Rubik',syste
 .ms-item{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;cursor:pointer;font-size:13px}
 .ms-item:hover{background:var(--panel2)}
 .ms-item input{accent-color:var(--orange)}
+.swt{display:flex;align-items:center;gap:7px;height:30px;cursor:pointer;user-select:none;font:600 12px 'Rubik',sans-serif;color:var(--ink);white-space:nowrap}
+.swt input{display:none}
+.swt-s{width:34px;height:18px;border-radius:99px;background:var(--line);position:relative;transition:background .15s;flex:none}
+.swt-s:after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .15s}
+.swt input:checked+.swt-s{background:var(--green)}
+.swt input:checked+.swt-s:after{left:18px}
 .btn-clear{background:linear-gradient(135deg,#F5A02A,var(--orange));box-shadow:0 2px 6px rgba(237,139,8,.35);color:#fff;border:none;border-radius:10px;padding:0 12px;height:30px;font:700 12px 'Rubik',sans-serif;white-space:nowrap;cursor:pointer}
 .btn-clear:hover{background:var(--oranged)}
 .fcount{margin-left:auto;color:var(--mut);font-size:12px;align-self:center}
@@ -522,6 +528,7 @@ details.q summary{font-size:14px;display:flex;align-items:center;gap:8px}
   <div class="fl"><label>Buscar</label><input type="text" id="q" placeholder="Iniciativa o detalle…"></div>
   <div class="fl"><label>País</label><div class="ms-wrap" id="ms-wrap-country"></div></div>
   <div class="fl"><label>Año</label><div class="ms-wrap" id="ms-wrap-year"></div></div>
+  <label class="swt" title="Mostrar solo las iniciativas que tienen Impacto disponible"><input type="checkbox" id="fImp"><span class="swt-s"></span><span class="swt-t">Solo con impacto</span></label>
   <button class="btn-clear" id="clearAll">🧹 Limpiar filtros</button>
   <span class="fcount" id="fcount"></span>
 </div>
@@ -573,7 +580,7 @@ const CATCOL={"Medios de Pago":"#8B5CF6","Otros":"#F59E0B","ONA":"#06B6D4","Tari
 const catCol=c=>CATCOL[c]||PAL[[...c].reduce((a,ch)=>a+ch.charCodeAt(0),0)%PAL.length];
 const CN={AR:"Argentina",BR:"Brasil",CO:"Colombia",MX:"México",CL:"Chile",PE:"Perú",PA:"Panamá",US:"Estados Unidos",EC:"Ecuador",Todos:"Todos los mercados"};
 const flag=c=>c==="Todos"?'<span class="fg-all" title="Todos los mercados">🌎</span>':`<img class="fg" src="https://flagcdn.com/w20/${c.toLowerCase()}.png" alt="${c}" title="${CN[c]||c}" onerror="this.replaceWith(document.createTextNode(this.alt))">`;
-const F={country:[],year:[],cat:[],q:"",from:"",to:"",rb:false};
+const F={country:[],year:[],cat:[],q:"",from:"",to:"",rb:false,imp:false};
 const fmtPct=(a,b)=>b===0?(a>0?"nuevo":"="):((a-b)/b*100>=0?"+":"")+Math.round((a-b)/b*100)+"%";
 
 /* ---------- multi-select ---------- */
@@ -617,6 +624,7 @@ function match(d,skip){
   if(F.q&&!(d.name+" "+d.note).toLowerCase().includes(F.q.toLowerCase()))return false;
   if(F.country.length&&!(d.countries.includes("Todos")||d.countries.some(c=>F.country.includes(c))))return false;
   if(F.year.length&&!F.year.includes(String(d.y)))return false;
+  if(F.imp&&!hasImp(d))return false;
   return true;
 }
 
@@ -654,6 +662,7 @@ const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{displ
 
 
 /* ---------- estado de vista ---------- */
+const MINY=2022;
 const NOWY=NOW.getUTCFullYear(),NOWM=NOW.getUTCMonth();
 let view="list",calY=NOWY,calM=NOWM,weekStart=mondayOf(NOW),sortBy="date-desc",groupBy="month";
 const DOW=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
@@ -763,6 +772,7 @@ function renderList(rows){
   $("cal").style.display=isList?"none":"";
   $("list").style.display=isList?"":"none";
   $("calNav").style.display=isList?"none":"flex";
+  {const pb=$("calNav").querySelector("[data-n=\"-1\"]");pb.disabled=view!=="week"&&calY<=MINY;pb.style.opacity=pb.disabled?".35":"";pb.style.cursor=pb.disabled?"default":"";}
   $("listCtl").style.display=isList?"flex":"none";
   [...$("vSeg").children].forEach(b=>b.classList.toggle("on",b.dataset.v===view));
   if(view==="cal")renderCal(rows);else if(view==="week")renderWeek(rows);else if(view==="year")renderYear(rows);else renderListView(rows);
@@ -1056,6 +1066,7 @@ function render(){
 
 /* ---------- eventos ---------- */
 $("q").oninput=e=>{F.q=e.target.value;render();};
+$("fImp").onchange=e=>{F.imp=e.target.checked;render();};
 $("tabs").onclick=e=>{const p=e.target.dataset.p;if(!p)return;setPage(p);};
 /* ---------- navegación, herramientas, link compartible ---------- */
 const root=document.documentElement;
@@ -1073,6 +1084,7 @@ function saveHash(){
     if(F.country.length)p.set("c",F.country.join(","));
     if(F.year.length)p.set("a",F.year.join(","));
     if(F.q)p.set("q",F.q);
+    if(F.imp)p.set("imp","1");
     if(view==="list"){p.set("s",sortBy);p.set("g",groupBy);}
     if(root.dataset.theme==="dark")p.set("th","d");
     history.replaceState(null,"","#"+p.toString());
@@ -1087,6 +1099,7 @@ function loadHash(){
   if(p.get("c"))MS.country(p.get("c").split(","));
   if(p.get("a"))MS.year(p.get("a").split(","));
   if(p.get("q")){F.q=p.get("q");$("q").value=F.q;}
+  if(p.get("imp")==="1"){F.imp=true;$("fImp").checked=true;}
   if(cmpMap[p.get("s")]){sortBy=p.get("s");}
   if(["month","year","cat","none"].includes(p.get("g")))groupBy=p.get("g");
   $("sortSel").value=sortBy;$("grpSel").value=groupBy;
@@ -1095,7 +1108,7 @@ function loadHash(){
 function step(n){
   if(n===0){calAll=false;calY=NOWY;calM=NOWM;weekStart=mondayOf(NOW);}
   else if(view==="week"){weekStart=new Date(weekStart.getTime()+n*7*864e5);calY=weekStart.getUTCFullYear();calM=weekStart.getUTCMonth();}
-  else{calAll=false;calY+=n;}
+  else{calAll=false;calY=Math.max(MINY,calY+n);}
   render();
 }
 
@@ -1156,8 +1169,8 @@ document.addEventListener("keydown",e=>{
   const n=e.key==="ArrowLeft"?-1:e.key==="ArrowRight"?1:0;if(n)step(n);
 });
 $("clearAll").onclick=()=>{
-  Object.assign(F,{q:""});
-  $("q").value="";
+  Object.assign(F,{q:"",imp:false});
+  $("q").value="";$("fImp").checked=false;
   document.querySelectorAll(".ms-search input").forEach(i=>{i.value="";i.dispatchEvent(new Event("input"));});
   ["country","year"].forEach(f=>MS[f]([]));
   render();

@@ -2,6 +2,20 @@
  "updated": "2026-11-11",
  "initiatives": [
   [
+   "Grilla de tarifas y opciones rápidas en vuelos",
+   "2026-11-12",
+   "AR,BR,CL,CO,MX,PE",
+   "",
+   "Se implementa la grilla de tarifas en la vertical vuelos (rango -/+3 días) para comparar fácilmente tarifas."
+  ],
+  [
+   "Link de pago en hoteles non ref | USA",
+   "2026-11-11",
+   "US",
+   "",
+   "Únicamente en USA (en PA no aplica)."
+  ],
+  [
    "Rollout (Prefondeo) Anticipo",
    "2026-10-27",
    "CL",

@@ -655,7 +655,7 @@ const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{displ
 
 /* ---------- estado de vista ---------- */
 const NOWY=NOW.getUTCFullYear(),NOWM=NOW.getUTCMonth();
-let view="cal",calY=NOWY,calM=NOWM,weekStart=mondayOf(NOW),sortBy="date-desc",groupBy="month";
+let view="list",calY=NOWY,calM=NOWM,weekStart=mondayOf(NOW),sortBy="date-desc",groupBy="month";
 const DOW=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
 const MAXC=2;
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
@@ -671,15 +671,17 @@ function inWin(d,a,b){const x=(NOW-new Date(d.date))/864e5;return x>=a&&x<b;}
 const chipHtml=d=>`<div class="chip-i ${isRb(d)?"rb":""} ${hasImp(d)?"im":""}" style="--cc:${catCol(d.cat)}" data-i="${DATA.indexOf(d)}" title="${esc(d.name)} · ${d.countries.join(", ")||"—"}"><span class="cn-t">${d.name}</span><span class="fgs">${d.countries.filter(c=>c!=="Todos").slice(0,3).map(flag).join("")}</span></div>`;
 let calAll=false;
 const MAXCAT=6;
+const VIV=["#EF4444","#F97316","#F59E0B","#84CC16","#10B981","#14B8A6","#06B6D4","#3B82F6","#6366F1","#8B5CF6","#D946EF","#EC4899","#E11D48","#0EA5E9","#22C55E","#A855F7"];
+const itCol=d=>VIV[[...(d.name+d.date)].reduce((a,ch)=>(a*31+ch.charCodeAt(0))>>>0,7)%VIV.length];
 function monthCard(rows,y,m){
   const its=rows.filter(d=>d.y===y&&d.m===m).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
   const n=its.length,cur=(y===NOWY&&m===NOWM);
   const tag=`data-yy="${y}" data-mm="${m}"`;
   const cc={};its.forEach(d=>cc[d.cat]=(cc[d.cat]||0)+1);
   const dom=Object.keys(cc).sort((a,b)=>cc[b]-cc[a])[0];
-  let h=`<div class="mc ${cur?"cur":""}" style="--mcc:${dom?catCol(dom):"var(--line)"}"><div class="mc-h ${n?"has":""}" ${tag}><b>${MONTHS[m]} ${y}</b><span>${n} lanz.</span></div>`;
+  let h=`<div class="mc ${cur?"cur":""}" style="--mcc:hsl(${m*30+8},80%,52%)"><div class="mc-h ${n?"has":""}" ${tag}><b>${MONTHS[m]} ${y}</b><span>${n} lanz.</span></div>`;
   if(!n)h+='<div class="mc-e">Sin lanzamientos</div>';
-  its.slice(0,MAXCAT).forEach(d=>{h+=`<div class="mc-b" data-i="${DATA.indexOf(d)}" title="${esc(d.name)} · ${d.date.slice(8)}/${d.date.slice(5,7)} · ${d.cat}" style="background:${catCol(d.cat)}"><span class="mc-n">${d.name}</span>${hasImp(d)?"<i>📈</i>":""}</div>`;});
+  its.slice(0,MAXCAT).forEach(d=>{h+=`<div class="mc-b" data-i="${DATA.indexOf(d)}" title="${esc(d.name)} · ${d.date.slice(8)}/${d.date.slice(5,7)} · ${d.cat}" style="background:linear-gradient(90deg,${itCol(d)},color-mix(in srgb,${itCol(d)} 68%,#000))"><span class="mc-n">${d.name}</span>${hasImp(d)?"<i>📈</i>":""}</div>`;});
   if(n>MAXCAT)h+=`<div class="mc-m" ${tag}>+${n-MAXCAT} más</div>`;
   return {h:h+"</div>",n};
 }
@@ -695,7 +697,7 @@ function renderCal(rows){
   list.forEach(([y,m])=>{const g=monthCard(rows,y,m);tot+=g.n;body+=g.h;});
   setTitle(calAll?"<b>Todos</b>":`<b>${calY}</b>`,tot);
   const tabs='<div class="seg cal-yt">'+years.map(y=>`<button data-y="${y}" class="${!calAll&&y===calY?"on":""}">${y}</button>`).join("")+`<button data-y="all" class="${calAll?"on":""}">Todo</button></div>`;
-  $("cal").innerHTML=tabs+'<div class="mc-grid">'+body+"</div>"+'<div class="leg2"><span>Click en una iniciativa para ver el detalle · el color es la categoría</span></div>';
+  $("cal").innerHTML=tabs+'<div class="mc-grid">'+body+"</div>"+'<div class="leg2"><span>Click en una iniciativa para ver el detalle · cada iniciativa tiene su color</span></div>';
 }
 
 /* ---------- vista semana ---------- */

@@ -226,6 +226,7 @@ details.q summary{color:var(--ink)}
 .mc-h.has{cursor:pointer}
 .mc-b{display:flex;justify-content:space-between;color:#fff;font-size:12px;font-weight:700;border-radius:4px;padding:5px 8px;cursor:pointer;gap:6px}
 .mc-b:hover{filter:brightness(1.1)}
+.mc-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.mc-b i{font-style:normal;flex:none}
 .mc-e,.mc-m{font-size:11px;color:var(--mut)}.mc-m{cursor:pointer}
 .cal-t .cy{color:var(--mut);font-weight:400}
 .cal-t .cn{font-size:11px;font-weight:700;color:var(--oranged);background:var(--orangesoft);border-radius:99px;padding:3px 10px;align-self:center;margin-left:4px}
@@ -667,17 +668,15 @@ function inWin(d,a,b){const x=(NOW-new Date(d.date))/864e5;return x>=a&&x<b;}
 /* ---------- vista mes ---------- */
 const chipHtml=d=>`<div class="chip-i ${isRb(d)?"rb":""} ${hasImp(d)?"im":""}" style="--cc:${catCol(d.cat)}" data-i="${DATA.indexOf(d)}" title="${esc(d.name)} · ${d.countries.join(", ")||"—"}"><span class="cn-t">${d.name}</span><span class="fgs">${d.countries.filter(c=>c!=="Todos").slice(0,3).map(flag).join("")}</span></div>`;
 let calAll=false;
-const MAXCAT=5;
+const MAXCAT=6;
 function monthCard(rows,y,m){
-  const cnt={};let n=0;
-  rows.forEach(d=>{if(d.y===y&&d.m===m){cnt[d.cat]=(cnt[d.cat]||0)+1;n++;}});
-  const cats=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]||CATS.indexOf(a)-CATS.indexOf(b));
-  const cur=(y===NOWY&&m===NOWM);
+  const its=rows.filter(d=>d.y===y&&d.m===m).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+  const n=its.length,cur=(y===NOWY&&m===NOWM);
   const tag=`data-yy="${y}" data-mm="${m}"`;
-  let h=`<div class="mc ${cur?"cur":""}"><div class="mc-h ${n?"has":""}" ${tag} data-k=""><b>${MONTHS[m]} ${y}</b><span>${n} lanz.</span></div>`;
+  let h=`<div class="mc ${cur?"cur":""}"><div class="mc-h ${n?"has":""}" ${tag}><b>${MONTHS[m]} ${y}</b><span>${n} lanz.</span></div>`;
   if(!n)h+='<div class="mc-e">Sin lanzamientos</div>';
-  cats.slice(0,MAXCAT).forEach(c=>{h+=`<div class="mc-b" ${tag} data-k="${esc(c)}" style="background:${catCol(c)}">${c} <b>${cnt[c]}</b></div>`;});
-  if(cats.length>MAXCAT)h+=`<div class="mc-m" ${tag} data-k="">+${cats.length-MAXCAT} más</div>`;
+  its.slice(0,MAXCAT).forEach(d=>{h+=`<div class="mc-b" data-i="${DATA.indexOf(d)}" title="${esc(d.name)} · ${d.date.slice(8)}/${d.date.slice(5,7)} · ${d.cat}" style="background:${catCol(d.cat)}"><span class="mc-n">${d.name}</span>${hasImp(d)?"<i>📈</i>":""}</div>`;});
+  if(n>MAXCAT)h+=`<div class="mc-m" ${tag}>+${n-MAXCAT} más</div>`;
   return {h:h+"</div>",n};
 }
 function renderCal(rows){
@@ -692,7 +691,7 @@ function renderCal(rows){
   list.forEach(([y,m])=>{const g=monthCard(rows,y,m);tot+=g.n;body+=g.h;});
   setTitle(calAll?"<b>Todos</b>":`<b>${calY}</b>`,tot);
   const tabs='<div class="seg cal-yt">'+years.map(y=>`<button data-y="${y}" class="${!calAll&&y===calY?"on":""}">${y}</button>`).join("")+`<button data-y="all" class="${calAll?"on":""}">Todo</button></div>`;
-  $("cal").innerHTML=tabs+'<div class="mc-grid">'+body+"</div>"+'<div class="leg2"><span>Click en una categoría para ver las iniciativas de ese mes</span></div>';
+  $("cal").innerHTML=tabs+'<div class="mc-grid">'+body+"</div>"+'<div class="leg2"><span>Click en una iniciativa para ver el detalle · el color es la categoría</span></div>';
 }
 
 /* ---------- vista semana ---------- */
@@ -1097,8 +1096,10 @@ function step(n){
 $("cal").onclick=e=>{
   const yb=e.target.closest(".cal-yt [data-y]");
   if(yb){calAll=yb.dataset.y==="all";if(!calAll)calY=+yb.dataset.y;render();return;}
-  const mc=e.target.closest(".mc-h.has,.mc-b,.mc-m");
-  if(mc){const yy=+mc.dataset.yy,mm=+mc.dataset.mm,k=mc.dataset.k;openDrawer(DATA.filter(d=>match(d)&&d.y===yy&&d.m===mm&&(!k||d.cat===k)),(k?k+" · ":"")+MONTHS_L[mm]+" "+yy);return;}
+  const mi=e.target.closest(".mc-b");
+  if(mi){openDrawer([DATA[+mi.dataset.i]]);return;}
+  const mc=e.target.closest(".mc-h.has,.mc-m");
+  if(mc){const yy=+mc.dataset.yy,mm=+mc.dataset.mm;openDrawer(DATA.filter(d=>match(d)&&d.y===yy&&d.m===mm),MONTHS_L[mm]+" "+yy);return;}
   const c=e.target.closest(".chip-i,.wk-card");
   if(c){openDrawer([DATA[+c.dataset.i]]);return;}
   const m=e.target.closest(".more,.cal-d.has");

@@ -217,6 +217,11 @@ details.q summary{color:var(--ink)}
 #calNav{gap:10px!important}
 .cal-t{display:flex;align-items:baseline;justify-content:center;gap:8px;width:290px;min-width:290px;font-size:20px;font-weight:500;color:var(--ink)}
 .cal-t b{font-weight:800;letter-spacing:-.01em}
+.cal-yt{display:flex;justify-content:center;margin:0 0 14px}
+.cal-mo{margin:0 0 26px}
+.cal-mt{display:flex;align-items:baseline;gap:8px;font-size:18px;color:var(--ink);margin:0 0 8px}
+.cal-mt b{font-weight:800}.cal-mt .cy{color:var(--mut)}
+.cal-mt .cn{font-size:11px;font-weight:700;color:var(--oranged);background:var(--orangesoft);border-radius:99px;padding:3px 10px}
 .cal-t .cy{color:var(--mut);font-weight:400}
 .cal-t .cn{font-size:11px;font-weight:700;color:var(--oranged);background:var(--orangesoft);border-radius:99px;padding:3px 10px;align-self:center;margin-left:4px}
 .cal-grid{position:relative}
@@ -656,24 +661,31 @@ function inWin(d,a,b){const x=(NOW-new Date(d.date))/864e5;return x>=a&&x<b;}
 
 /* ---------- vista mes ---------- */
 const chipHtml=d=>`<div class="chip-i ${isRb(d)?"rb":""} ${hasImp(d)?"im":""}" style="--cc:${catCol(d.cat)}" data-i="${DATA.indexOf(d)}" title="${esc(d.name)} · ${d.countries.join(", ")||"—"}"><span class="cn-t">${d.name}</span><span class="fgs">${d.countries.filter(c=>c!=="Todos").slice(0,3).map(flag).join("")}</span></div>`;
-function renderCal(rows){
-  const start=(new Date(Date.UTC(calY,calM,1)).getUTCDay()+6)%7;
-  const dim=new Date(Date.UTC(calY,calM+1,0)).getUTCDate();
+function monthGrid(rows,y,m){
+  const start=(new Date(Date.UTC(y,m,1)).getUTCDay()+6)%7;
+  const dim=new Date(Date.UTC(y,m+1,0)).getUTCDate();
   const by={};let n=0;
-  rows.forEach(d=>{if(d.y===calY&&d.m===calM){const k=+d.date.slice(8);(by[k]=by[k]||[]).push(d);n++;}});
-  setTitle(`<b>${MONTHS_L[calM]}</b> <span class="cy">${calY}</span>`,n);
-  let h='<div class="cal-grid">'+DOW.map(x=>`<div class="cal-h">${x}</div>`).join("");
+  rows.forEach(d=>{if(d.y===y&&d.m===m){const k=+d.date.slice(8);(by[k]=by[k]||[]).push(d);n++;}});
+  let h=`<div class="cal-mt"><b>${MONTHS_L[m]}</b> <span class="cy">${y}</span><span class="cn">${n} ${n===1?"iniciativa":"iniciativas"}</span></div><div class="cal-grid">`+DOW.map(x=>`<div class="cal-h">${x}</div>`).join("");
   const cells=Math.ceil((start+dim)/7)*7;
   for(let i=0;i<cells;i++){
     const day=i-start+1;
     if(day<1||day>dim){h+='<div class="cal-c out"></div>';continue;}
-    const key=`${calY}-${String(calM+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+    const key=`${y}-${String(m+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
     const list=by[day]||[];
     h+=`<div class="cal-c ${i%7>=5?"we":""} ${key===TODAY_ISO?"today":""}"><div class="cal-d ${list.length?"has":""}" data-day="${key}">${day}</div>`+
       list.slice(0,MAXC).map(chipHtml).join("")+
       (list.length>MAXC?`<button class="more" data-day="${key}">+${list.length-MAXC} más</button>`:"")+"</div>";
   }
-  $("cal").innerHTML=h+(n?"":'<div class="empty-m">Sin iniciativas prendidas este mes</div>')+"</div>"+LEG2;
+  return {h:h+"</div>",n};
+}
+function renderCal(rows){
+  const years=[...new Set(DATA.map(d=>d.y).concat([NOWY,calY]))].sort();
+  let tot=0,body="";
+  for(let m=0;m<12;m++){const g=monthGrid(rows,calY,m);tot+=g.n;body+=`<section class="cal-mo" id="mo-${m}">${g.h}</section>`;}
+  setTitle(`<b>${calY}</b>`,tot);
+  const tabs='<div class="seg cal-yt">'+years.map(y=>`<button data-y="${y}" class="${y===calY?"on":""}">${y}</button>`).join("")+"</div>";
+  $("cal").innerHTML=tabs+body+LEG2;
 }
 
 /* ---------- vista semana ---------- */
@@ -1071,12 +1083,13 @@ function loadHash(){
 function step(n){
   if(n===0){calY=NOWY;calM=NOWM;weekStart=mondayOf(NOW);}
   else if(view==="week"){weekStart=new Date(weekStart.getTime()+n*7*864e5);calY=weekStart.getUTCFullYear();calM=weekStart.getUTCMonth();}
-  else if(view==="year")calY+=n;
-  else{calM+=n;if(calM<0){calM=11;calY--;}if(calM>11){calM=0;calY++;}}
+  else calY+=n;
   render();
 }
 
 $("cal").onclick=e=>{
+  const yb=e.target.closest(".cal-yt [data-y]");
+  if(yb){calY=+yb.dataset.y;render();return;}
   const c=e.target.closest(".chip-i,.wk-card");
   if(c){openDrawer([DATA[+c.dataset.i]]);return;}
   const m=e.target.closest(".more,.cal-d.has");

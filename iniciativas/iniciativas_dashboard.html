@@ -218,7 +218,7 @@ details.q summary{color:var(--ink)}
 .cal-t{display:flex;align-items:baseline;justify-content:center;gap:8px;width:290px;min-width:290px;font-size:20px;font-weight:500;color:var(--ink)}
 .cal-t b{font-weight:800;letter-spacing:-.01em}
 .cal-yt{display:flex;justify-content:center;margin:0 0 14px}
-.mc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.mc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
 .mc{background:color-mix(in srgb,var(--mcc) 9%,var(--panel));border:1px solid color-mix(in srgb,var(--mcc) 35%,var(--line));border-top:3px solid var(--mcc);border-radius:10px;padding:0 0 7px;display:flex;flex-direction:column;gap:3px;min-height:90px;overflow:hidden;box-shadow:var(--shmd)}
 .mc.cur{box-shadow:0 0 0 2px var(--orange),var(--shmd)}
 .mc-h{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:5px 8px;margin-bottom:3px}
@@ -696,7 +696,7 @@ function renderCal(rows){
   let tot=0,body="";
   list.forEach(([y,m])=>{const g=monthCard(rows,y,m);tot+=g.n;body+=g.h;});
   setTitle(calAll?"<b>Todos</b>":`<b>${calY}</b>`,tot);
-  const tabs='<div class="seg cal-yt">'+years.map(y=>`<button data-y="${y}" class="${!calAll&&y===calY?"on":""}">${y}</button>`).join("")+`<button data-y="all" class="${calAll?"on":""}">Todo</button></div>`;
+  const tabs="";
   $("cal").innerHTML=tabs+'<div class="mc-grid">'+body+"</div>"+'<div class="leg2"><span>Click en una iniciativa para ver el detalle · cada iniciativa tiene su color</span></div>';
 }
 

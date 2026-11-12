@@ -218,15 +218,15 @@ details.q summary{color:var(--ink)}
 .cal-t{display:flex;align-items:baseline;justify-content:center;gap:8px;width:290px;min-width:290px;font-size:20px;font-weight:500;color:var(--ink)}
 .cal-t b{font-weight:800;letter-spacing:-.01em}
 .cal-yt{display:flex;justify-content:center;margin:0 0 14px}
-.mc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+.mc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
 .mc{background:color-mix(in srgb,var(--mcc) 9%,var(--panel));border:1px solid color-mix(in srgb,var(--mcc) 35%,var(--line));border-top:3px solid var(--mcc);border-radius:10px;padding:0 0 7px;display:flex;flex-direction:column;gap:3px;min-height:90px;overflow:hidden;box-shadow:var(--shmd)}
 .mc.cur{box-shadow:0 0 0 2px var(--orange),var(--shmd)}
 .mc-h{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:5px 8px;margin-bottom:3px}
 .mc.cur .mc-h{background:var(--orange)}
-.mc-h b{font-size:12px;font-weight:800;letter-spacing:.02em;text-transform:uppercase}
+.mc-h b{font-size:13px;font-weight:800;letter-spacing:.02em;text-transform:uppercase}
 .mc-h span{font-size:9.5px;font-weight:700;background:rgba(255,255,255,.2);border-radius:99px;padding:1px 7px}
 .mc-h.has{cursor:pointer}
-.mc-b{display:flex;justify-content:space-between;color:#fff;font-size:10.5px;font-weight:600;border-radius:4px;padding:3px 6px;margin:0 7px;cursor:pointer;gap:4px;line-height:1.25}
+.mc-b{display:flex;justify-content:space-between;color:#fff;font-size:11.5px;font-weight:600;border-radius:5px;padding:4px 7px;margin:0 7px;cursor:pointer;gap:4px;line-height:1.25}
 .mc-b:hover{filter:brightness(1.12);transform:translateX(1px)}
 .mc-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.mc-b i{font-style:normal;flex:none;font-size:9px}
 .mc-e,.mc-m{font-size:10px;color:var(--mut);padding:0 8px}.mc-m{cursor:pointer;font-weight:700;color:var(--oranged)}.mc-m{cursor:pointer}
@@ -529,7 +529,7 @@ details.q summary{font-size:14px;display:flex;align-items:center;gap:8px}
 <main class="wrap">
   <section class="page active" id="p-lista">
     <div class="view-bar">
-      <div class="seg" id="vSeg"><button data-v="cal" class="on">📅 Mes</button><button data-v="week">🗓️ Semana</button><button data-v="year">📊 Año</button><button data-v="list">☰ Lista</button></div>
+      <div class="seg" id="vSeg"><button data-v="list" class="on">☰ Lista</button><button data-v="cal">📅 Mes</button><button data-v="week">🗓️ Semana</button><button data-v="year">📊 Año</button></div>
       <span id="calNav" style="display:flex;align-items:center;gap:6px"><button class="nav-b arr" data-n="-1" aria-label="Anterior">‹</button><span class="cal-t" id="calT"></span><button class="nav-b arr" data-n="1" aria-label="Siguiente">›</button><button class="nav-b hoy" data-n="0">Hoy</button></span>
       <span id="listCtl"><label>Ordenar <select id="sortSel"><option value="date-desc">Fecha ↓ (recientes)</option><option value="date-asc">Fecha ↑ (antiguas)</option><option value="name">Nombre A–Z</option><option value="cat">Categoría</option></select></label><label>Agrupar <select id="grpSel"><option value="month">Por mes</option><option value="year">Por año</option><option value="cat">Por categoría</option><option value="none">Sin agrupar</option></select></label></span>
     </div>

@@ -95,6 +95,32 @@ t as (select p, max(an) an, max(c) c, count(distinct r) n, round(sum(gb)) g from
 select p, an, c, n, g from t order by g desc limit 10
 """
 
+# Mix de medios de pago del GB non ref (canibalización): semanal por país, desde antes del lanzamiento.
+# Link de pago = payment_methods con REMOTE (siempre viene como REMOTE,CREDIT_CARD). El resto se clasifica por prioridad.
+LDP_MIX_FROM = '2026-08-31'
+# Fecha de comparación antes/después. MX: el 29/9 fue solo prueba en classic; el rollout completo terminó el 13/10.
+LDP_MIX_CMP = {'MX': '2026-10-13', 'AR': '2026-10-13', 'CL': '2026-10-13', 'BR': '2026-10-19', 'CO': '2026-10-19', 'PE': '2026-10-19'}
+Q_LDP_MIX = f"""
+select cast(date_trunc('week', bi.creation_date) as varchar) w, bi.country_code c,
+ case when product.payment_methods like '%REMOTE%' then 'Link de pago'
+      when product.payment_methods like '%AGENCY_ACCOUNT%' then 'Cuenta corriente'
+      when product.payment_methods like '%WALLET%' then 'HDO pay'
+      when product.payment_methods like '%DEFERRED%' then 'Pago diferido'
+      when product.payment_methods like '%CASH%' then 'Cash'
+      when product.payment_methods like '%DEBIT%' then 'Débito'
+      when product.payment_methods like '%CREDIT%' then 'Tarjeta crédito'
+      else 'Otros' end g,
+ count(distinct bi.transaction_code) n, round(sum(bi.gb)) gb
+from analytics.bi_sales_fact_sales_recognition bi
+left join lake.channels_bo_product product on bi.origin_product_id = product.transaction_id
+where bi.channel in {CHANNELS}
+  and bi.creation_date >= date '{LDP_MIX_FROM}' and bi.partition_period >= '{LDP_MIX_FROM[:7]}'
+  and bi.product = 'Hoteles' and bi.country_code in ({_IN})
+  and bi.transaction_status = 'Confirmado' and product.refundable = false
+  and lower(coalesce(bi.agency_name,'')) not like '%test%'
+group by 1, 2, 3
+"""
+
 # ── Combinaciones de MDP con HDO pay: prendido escalonado ──────────────────────────────────────────
 # HDO pay = reserva cobrada con 2+ medios en el scheduler y al menos uno es DWALLET (query de Metabase 175574).
 # Denominador = todas las reservas confirmadas del canal HTML (todos los productos), desde el lanzamiento de cada país.
@@ -186,6 +212,7 @@ def fetch_all():
         out['ldp_country'] = q('ldp_country', Q_LDP_COUNTRY)
         out['ldp_totals'] = q('ldp_totals', Q_LDP_TOTALS)
         out['ldp_top'] = q('ldp_top', Q_LDP_TOP)
+        out['ldp_mix'] = q('ldp_mix', Q_LDP_MIX)
         out['pd_daily'] = q('pd_daily', Q_PD_DAILY)
         out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
         out['hdo_tot'] = q('hdo_tot', Q_HDO_TOT)
@@ -213,8 +240,9 @@ def build_ldp(cfg_old, r, today):
     top = [[row[0], row[1], row[2], num(row[3]), num(row[4])] for row in r['ldp_top']]
     cfg = dict(cfg_old)
     cfg.pop('remote', None)   # ya no se usa
+    mix = [[row[0], row[1], row[2], num(row[3]), num(float(row[4])) if row[4] is not None else 0] for row in r['ldp_mix']]
     cfg.update(kind='ldp', title=cfg_old.get('title', 'Link de pago en hoteles non ref'), asof=today.isoformat(),
-               partial=(today + timedelta(days=1)).isoformat(), daily=daily, countries=countries, tot=tot, top=top)
+               partial=(today + timedelta(days=1)).isoformat(), daily=daily, countries=countries, tot=tot, top=top, mix=mix, mixcmp=LDP_MIX_CMP)
     return cfg
 
 

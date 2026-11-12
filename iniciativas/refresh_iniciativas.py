@@ -98,7 +98,7 @@ select p, an, c, n, g from t order by g desc limit 10
 # ── Combinaciones de MDP con HDO pay: prendido escalonado ──────────────────────────────────────────
 # HDO pay = reserva cobrada con 2+ medios en el scheduler y al menos uno es DWALLET (query de Metabase 175574).
 # Denominador = todas las reservas confirmadas del canal HTML (todos los productos), desde el lanzamiento de cada país.
-HDO_LAUNCH = {'AR': '2026-10-26', 'CL': '2026-10-26', 'MX': '2026-10-26', 'BR': '2026-10-29', 'CO': '2026-10-29'}
+HDO_LAUNCH = {'AR': '2026-10-26', 'CL': '2026-10-26', 'CO': '2026-10-26', 'MX': '2026-10-26', 'BR': '2026-10-29', 'PE': '2026-10-29'}
 HDO_FROM = min(HDO_LAUNCH.values())
 _HDO_LD = "case mdp.country_code " + " ".join(f"when '{c}' then date '{d}'" for c, d in HDO_LAUNCH.items()) + " end"
 _HDO_IN = ",".join(f"'{c}'" for c in HDO_LAUNCH)

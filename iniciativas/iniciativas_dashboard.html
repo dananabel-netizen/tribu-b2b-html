@@ -218,16 +218,18 @@ details.q summary{color:var(--ink)}
 .cal-t{display:flex;align-items:baseline;justify-content:center;gap:8px;width:290px;min-width:290px;font-size:20px;font-weight:500;color:var(--ink)}
 .cal-t b{font-weight:800;letter-spacing:-.01em}
 .cal-yt{display:flex;justify-content:center;margin:0 0 14px}
-.mc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
-.mc{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:6px;min-height:150px}
-.mc.cur{border-color:var(--orange);box-shadow:0 0 0 1px var(--orange)}
-.mc-h{display:flex;justify-content:space-between;align-items:baseline;color:var(--ink);margin-bottom:2px}
-.mc-h b{font-size:15px;font-weight:800}.mc-h span{font-size:11px;color:var(--mut)}
+.mc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.mc{background:color-mix(in srgb,var(--mcc) 9%,var(--panel));border:1px solid color-mix(in srgb,var(--mcc) 35%,var(--line));border-top:3px solid var(--mcc);border-radius:10px;padding:0 0 7px;display:flex;flex-direction:column;gap:3px;min-height:90px;overflow:hidden;box-shadow:var(--shmd)}
+.mc.cur{box-shadow:0 0 0 2px var(--orange),var(--shmd)}
+.mc-h{display:flex;justify-content:space-between;align-items:center;background:var(--navy);color:#fff;padding:5px 8px;margin-bottom:3px}
+.mc.cur .mc-h{background:var(--orange)}
+.mc-h b{font-size:12px;font-weight:800;letter-spacing:.02em;text-transform:uppercase}
+.mc-h span{font-size:9.5px;font-weight:700;background:rgba(255,255,255,.2);border-radius:99px;padding:1px 7px}
 .mc-h.has{cursor:pointer}
-.mc-b{display:flex;justify-content:space-between;color:#fff;font-size:12px;font-weight:700;border-radius:4px;padding:5px 8px;cursor:pointer;gap:6px}
-.mc-b:hover{filter:brightness(1.1)}
-.mc-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.mc-b i{font-style:normal;flex:none}
-.mc-e,.mc-m{font-size:11px;color:var(--mut)}.mc-m{cursor:pointer}
+.mc-b{display:flex;justify-content:space-between;color:#fff;font-size:10.5px;font-weight:600;border-radius:4px;padding:3px 6px;margin:0 7px;cursor:pointer;gap:4px;line-height:1.25}
+.mc-b:hover{filter:brightness(1.12);transform:translateX(1px)}
+.mc-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.mc-b i{font-style:normal;flex:none;font-size:9px}
+.mc-e,.mc-m{font-size:10px;color:var(--mut);padding:0 8px}.mc-m{cursor:pointer;font-weight:700;color:var(--oranged)}.mc-m{cursor:pointer}
 .cal-t .cy{color:var(--mut);font-weight:400}
 .cal-t .cn{font-size:11px;font-weight:700;color:var(--oranged);background:var(--orangesoft);border-radius:99px;padding:3px 10px;align-self:center;margin-left:4px}
 .cal-grid{position:relative}
@@ -673,7 +675,9 @@ function monthCard(rows,y,m){
   const its=rows.filter(d=>d.y===y&&d.m===m).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
   const n=its.length,cur=(y===NOWY&&m===NOWM);
   const tag=`data-yy="${y}" data-mm="${m}"`;
-  let h=`<div class="mc ${cur?"cur":""}"><div class="mc-h ${n?"has":""}" ${tag}><b>${MONTHS[m]} ${y}</b><span>${n} lanz.</span></div>`;
+  const cc={};its.forEach(d=>cc[d.cat]=(cc[d.cat]||0)+1);
+  const dom=Object.keys(cc).sort((a,b)=>cc[b]-cc[a])[0];
+  let h=`<div class="mc ${cur?"cur":""}" style="--mcc:${dom?catCol(dom):"var(--line)"}"><div class="mc-h ${n?"has":""}" ${tag}><b>${MONTHS[m]} ${y}</b><span>${n} lanz.</span></div>`;
   if(!n)h+='<div class="mc-e">Sin lanzamientos</div>';
   its.slice(0,MAXCAT).forEach(d=>{h+=`<div class="mc-b" data-i="${DATA.indexOf(d)}" title="${esc(d.name)} · ${d.date.slice(8)}/${d.date.slice(5,7)} · ${d.cat}" style="background:${catCol(d.cat)}"><span class="mc-n">${d.name}</span>${hasImp(d)?"<i>📈</i>":""}</div>`;});
   if(n>MAXCAT)h+=`<div class="mc-m" ${tag}>+${n-MAXCAT} más</div>`;

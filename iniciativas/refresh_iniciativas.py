@@ -381,8 +381,8 @@ group by 1, 2
 """
 
 
-# CTR de la grilla de tarifas (calendarPricesMatrix): sobre usuarios únicos a los que se les mostró la grilla en la búsqueda de vuelos.
-# Se cuenta cada usuario una vez por período y país (por eso hay una query por granularidad: los únicos no se suman entre días).
+# CTR de la grilla de tarifas (calendarPricesMatrix): sobre visitas únicas (bi_web_traffic.visit) en las que se mostró la grilla en la búsqueda de vuelos.
+# Se cuenta cada visita una vez por período y país (por eso hay una query por granularidad: los únicos no se suman entre días).
 GV_CTR_PER = {'d': "split_part(fe.datetime,'T',1)", 'w': "cast(date_trunc('week', date(split_part(fe.datetime,'T',1))) as varchar)",
               'm': "substr(fe.datetime,1,7)", 't': "'total'"}
 
@@ -390,11 +390,11 @@ GV_CTR_PER = {'d': "split_part(fe.datetime,'T',1)", 'w': "cast(date_trunc('week'
 def q_gv_ctr(per):
     return f"""
 with b as (
-  select pageview_id from data.lake.bi_web_traffic
+  select pageview_id, visit from data.lake.bi_web_traffic
   where product='FLIGHTS' and flow='SEARCH' and date>='{GV_LAUNCH}' and ispageview=1 and flg_detalle_cp=0 and is_bot=0
     and channel in {CHANNELS}),
 ev as (
-  select {per} p, fe.event.cc c, fe.event.user_id u, fe.event.type t, fe.event.code k
+  select {per} p, fe.event.cc c, b.visit u, fe.event.type t, fe.event.code k
   from data.sot.flights_events fe join b on fe.event.pageview_id=b.pageview_id
   where fe.datetime>='{GV_LAUNCH}' and fe.event.fl='search' and fe.event.type in ('show','click')
     and fe.event.code in ('calendarPricesMatrix','calendarPricesMatrixTab','calendarPricesMatrixCheapestTab')

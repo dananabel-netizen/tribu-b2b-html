@@ -139,6 +139,77 @@ def mix_blocks(rows, today):
     return [[c, b, g, v[0], num(round(v[1]))] for (c, b, g), v in sorted(acc.items())]
 
 
+# ── Contrafactual: proyección lineal de la tendencia previa ────────────────────────────────────────
+# Serie: GB semanal de hoteles (todas las tarifas) en bloques de 7 días desde la prendida de cada país.
+#  'link'  = hoteles pagados con link de pago (REMOTE), reembolsables y no reembolsables.
+#  'total' = GB total de hoteles (todos los medios de pago), para ver si el crecimiento es neto o es migración.
+# Se ajusta una recta (OLS) a las N semanas previas a la prendida y se proyecta hacia adelante; la diferencia contra el real es el crecimiento
+# atribuible a la iniciativa. La banda es el intervalo de predicción del 80%.
+CF_WINDOWS = (8, 12, 16)
+CF_MAIN = 12
+CF_FROM = (min(date.fromisoformat(v) for v in LDP_LAUNCH.values()) - timedelta(days=7 * max(CF_WINDOWS))).isoformat()
+_T80 = {6: 1.440, 7: 1.415, 8: 1.397, 9: 1.383, 10: 1.372, 11: 1.363, 12: 1.356, 13: 1.350, 14: 1.345}   # t(0.90, gl)
+Q_CF_DAILY = f"""
+select cast(bi.creation_date as varchar) d, bi.country_code c,
+ round(sum(case when product.payment_methods like '%REMOTE%' then bi.gb end)) gl, round(sum(bi.gb)) gt
+from analytics.bi_sales_fact_sales_recognition bi
+left join lake.channels_bo_product product on bi.origin_product_id = product.transaction_id
+where bi.channel in {CHANNELS}
+  and bi.creation_date >= date '{CF_FROM}' and bi.partition_period >= '{CF_FROM[:7]}'
+  and bi.product = 'Hoteles' and bi.country_code in ({_IN})
+  and bi.transaction_status = 'Confirmado'
+  and lower(coalesce(bi.agency_name,'')) not like '%test%'
+group by 1, 2
+"""
+
+
+def _ols(xs, ys):
+    n = len(xs)
+    mx, my = sum(xs) / n, sum(ys) / n
+    sxx = sum((x - mx) ** 2 for x in xs)
+    b = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / sxx
+    a = my - b * mx
+    res = sum((y - (a + b * x)) ** 2 for x, y in zip(xs, ys))
+    sd = (res / (n - 2)) ** 0.5
+    return a, b, sd, mx, sxx, n
+
+
+def build_cf(rows, today):
+    blocks = {}   # (país, bloque) -> [gl, gt]
+    for d, c, gl, gt in rows:
+        launch = date.fromisoformat(LDP_LAUNCH[c])
+        b = (date.fromisoformat(d) - launch).days // 7
+        if launch + timedelta(days=7 * (b + 1)) > today:
+            continue   # bloque incompleto
+        a = blocks.setdefault((c, b), [0.0, 0.0])
+        a[0] += float(gl) if gl is not None else 0.0
+        a[1] += float(gt) if gt is not None else 0.0
+    out = {'w': CF_MAIN, 'sens': list(CF_WINDOWS), 'm': {}}
+    for mi, mname in enumerate(('link', 'total')):
+        res = {}
+        for c in LDP_COUNTRIES:
+            bmax = max((b for (cc, b) in blocks if cc == c), default=-1)
+            if bmax < 0:
+                continue
+            val = lambda b: blocks.get((c, b), [0.0, 0.0])[mi]
+            sens, rows_out = {}, []
+            for w in CF_WINDOWS:
+                xs = list(range(-w, 0))
+                a, bb, sd, mx, sxx, n = _ols(xs, [val(x) for x in xs])
+                inc = sum(val(b) - (a + bb * b) for b in range(0, bmax + 1))
+                sens[str(w)] = round(inc)
+                if w != CF_MAIN:
+                    continue
+                t = _T80.get(n - 2, 1.372)
+                for b in range(-w, bmax + 1):
+                    fit = a + bb * b
+                    half = t * sd * (1 + 1 / n + (b - mx) ** 2 / sxx) ** 0.5 if b >= 0 else 0
+                    rows_out.append([b, round(val(b)), round(fit), round(max(0, fit - half)), round(fit + half)])
+            res[c] = {'rows': rows_out, 'sens': sens}
+        out['m'][mname] = res
+    return out
+
+
 # ── Combinaciones de MDP con HDO pay: prendido escalonado ──────────────────────────────────────────
 # HDO pay = reserva cobrada con 2+ medios en el scheduler y al menos uno es DWALLET (query de Metabase 175574).
 # Denominador = todas las reservas confirmadas del canal HTML (todos los productos), desde el lanzamiento de cada país.
@@ -231,6 +302,7 @@ def fetch_all():
         out['ldp_totals'] = q('ldp_totals', Q_LDP_TOTALS)
         out['ldp_top'] = q('ldp_top', Q_LDP_TOP)
         out['ldp_mix'] = q('ldp_mix', Q_LDP_MIX)
+        out['cf_daily'] = q('cf_daily', Q_CF_DAILY)
         out['pd_daily'] = q('pd_daily', Q_PD_DAILY)
         out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
         out['hdo_tot'] = q('hdo_tot', Q_HDO_TOT)
@@ -260,7 +332,7 @@ def build_ldp(cfg_old, r, today):
     cfg.pop('remote', None)   # ya no se usa
     mix = mix_blocks(r['ldp_mix'], today)
     cfg.update(kind='ldp', title=cfg_old.get('title', 'Link de pago en hoteles non ref'), asof=today.isoformat(),
-               partial=(today + timedelta(days=1)).isoformat(), daily=daily, countries=countries, tot=tot, top=top, mix=mix)
+               partial=(today + timedelta(days=1)).isoformat(), daily=daily, countries=countries, tot=tot, top=top, mix=mix, cf=build_cf(r['cf_daily'], today))
     return cfg
 
 

@@ -985,7 +985,7 @@ function renderImpact(){
 }
 
 /* ---------- impacto: grilla de tarifas en vuelos (GB de vuelos standalone, antes y después) ---------- */
-let gvC="ALL",gvF="f";
+let gvC="ALL";
 function renderGv(d,cfg){
   const C=cfg.countries;
   const pf=v=>(v>=0?"+":"")+v.toFixed(1).replace(".",",")+"%";
@@ -997,11 +997,10 @@ function renderGv(d,cfg){
    `<div class="sec-nav">${[["isec1","1 · Antes y después"],["isec2","2 · Evolución"],["isec3","3 · Por país"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>
    <section class="imp-sec" id="isec1"><div class="sec-h"><span class="sec-n">1</span><div><h3>Antes y después</h3><p>GB de vuelos standalone por día, contra el mismo día de la semana de las 4 semanas previas</p></div></div>
     <div class="card"><div class="card-hdr"><div><div class="card-title">GB diario de vuelos, después vs antes de la grilla</div><div class="card-sub" id="gvSub"></div></div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="gran" id="gvFl"><button data-f="f">Vuelo solo</button><button data-f="fc">Vuelo + carrito</button></div>
-      <div class="gran" id="gvCty"><button data-c="ALL">Todos</button>${C.map(c=>`<button data-c="${c}" title="${CN[c]||c}">${flag(c)}</button>`).join("")}</div></div></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="gran" id="gvCty"><button data-c="ALL">Todos</button>${C.map(c=>`<button data-c="${c}" title="${CN[c]||c}">${flag(c)}</button>`).join("")}</div></div></div>
       <div id="gvK" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 4px"></div>
       <div class="card-sub" id="gvNote" style="margin-top:8px;font-weight:600"></div>
-      <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">GB confirmado de Vuelos, canal HTML (classic, silver, gold y platinum), agencias sin "test", por fecha de creación de la reserva. "Vuelo solo" = flujo de compra FLIGHT (vuelo standalone, sin paquete); "Vuelo + carrito" suma las reservas de vuelo que entraron por el carrito. Para cada día posterior a la prendida, la base es el promedio del mismo día de la semana en las 4 semanas previas (así no pesa que el fin de semana venda menos). Se cuentan solo días completos. Es una comparación simple, no causalidad: no controla estacionalidad (Black Friday, Cyber, vacaciones) ni otras iniciativas. Con pocos días posteriores el resultado es ruido, hay que esperar al menos 2 semanas.</div></details></div>
+      <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">GB confirmado de Vuelos, canal HTML (classic, silver, gold y platinum), agencias sin "test", por fecha de creación de la reserva. Vuelos standalone = reservas de Vuelos con flujo de compra FLIGHT o CART, sumados en una sola serie (se excluyen los paquetes, flujo FLIGHT_HOTEL). Para cada día posterior a la prendida, la base es el promedio del mismo día de la semana en las 4 semanas previas (así no pesa que el fin de semana venda menos). Se cuentan solo días completos. Es una comparación simple, no causalidad: no controla estacionalidad (Black Friday, Cyber, vacaciones) ni otras iniciativas. Con pocos días posteriores el resultado es ruido, hay que esperar al menos 2 semanas.</div></details></div>
     </section><section class="imp-sec" id="isec2"><div class="sec-h"><span class="sec-n">2</span><div><h3>Evolución</h3><p>GB de vuelos standalone por día, semana y mes</p></div></div>
     <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del GB de vuelos standalone</div><div class="card-sub" id="gvEvSub"></div></div>
       <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
@@ -1015,7 +1014,7 @@ function renderGv(d,cfg){
   const keyOf=(dd,g)=>g==="d"?dd:g==="w"?iso(mondayOf(new Date(dd+"T00:00:00Z"))):dd.slice(0,7);
   const lblOf=(k,g)=>g==="d"?fdate(k):g==="w"?"Sem "+fdate(k):MONTHS_L[+k.slice(5)-1]+" "+k.slice(2,4);
   const XT={d:"Día",w:"Semana (inicia el lunes)",m:"Mes"};
-  const val=r=>r[2]+(gvF==="fc"?r[4]:0);
+  const val=r=>r[2]+r[4];
   const sel=c=>cfg.daily.filter(r=>c==="ALL"||r[1]===c);
   const addD=(dd,n)=>iso(new Date(new Date(dd+"T00:00:00Z").getTime()+n*864e5));
   // por día: GB real y base (promedio del mismo día de la semana, 4 semanas previas a la prendida)
@@ -1033,13 +1032,12 @@ function renderGv(d,cfg){
   let gran="d";
   function draw(){
     document.querySelectorAll("#gvCty button").forEach(b=>b.classList.toggle("active",b.dataset.c===gvC));
-    document.querySelectorAll("#gvFl button").forEach(b=>b.classList.toggle("active",b.dataset.f===gvF));
     document.querySelectorAll(".impGran").forEach(g=>[...g.children].forEach(b=>b.classList.toggle("active",b.dataset.g===gran)));
     const ctyTxt=gvC==="ALL"?"todos los países":(CN[gvC]||gvC);
     const cp=comp(gvC),act=cp.reduce((a,r)=>a+r[1],0),bas=cp.reduce((a,r)=>a+r[2],0),nd=cp.length;
     const kb=(l,v,sub)=>`<div style="background:var(--panel2);border-radius:10px;padding:10px 12px"><div class="kpi-lbl">${l}</div><div class="kpi-val" style="font-size:20px">${v}</div><div class="kpi-sub" style="font-size:11px;color:var(--mut)">${sub}</div></div>`;
     const sg=v=>(v>=0?"+":"")+fmtN(v);
-    $("gvSub").textContent="GB de vuelos standalone ("+(gvF==="fc"?"vuelo + carrito":"vuelo solo")+"), "+ctyTxt+", desde el "+fdate(cfg.launch);
+    $("gvSub").textContent="GB de vuelos standalone (flujos FLIGHT y CART), "+ctyTxt+", desde el "+fdate(cfg.launch);
     $("gvK").innerHTML=kb("GB desde la prendida","USD "+fmtN(act),nd+(nd===1?" día completo":" días completos"))+
       kb("GB base (mismo día, 4 sem previas)","USD "+fmtN(bas),"si todo hubiera seguido igual")+
       kb("Diferencia","USD "+sg(act-bas),"promedio diario USD "+fmtN(nd?(act-bas)/nd:0))+
@@ -1060,7 +1058,6 @@ function renderGv(d,cfg){
     $("gvTb").innerHTML=rows.map(r=>tr(flag(r[0])+" "+(CN[r[0]]||r[0]),r[1],r[2],r[3])).join("")+tr("<b>Total</b>",rows[0]?rows[0][1]:0,tA,tB,' style="border-top:2px solid var(--line)"');
   }
   document.querySelectorAll("#gvCty button").forEach(b=>b.onclick=()=>{gvC=b.dataset.c;draw();});
-  document.querySelectorAll("#gvFl button").forEach(b=>b.onclick=()=>{gvF=b.dataset.f;draw();});
   document.querySelectorAll(".impGran").forEach(el=>el.onclick=e=>{const g=e.target.dataset.g;if(!g)return;gran=g;draw();});
   draw();
 }

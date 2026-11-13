@@ -256,6 +256,32 @@ select c, count(distinct case when w=1 then p end) agw, count(distinct p) agt fr
 union all select 'ALL', count(distinct case when w=1 then p end), count(distinct p) from b
 """
 
+# Con qué se combina el wallet: medios (channel_id del cobro) distintos de DWALLET en cada reserva HDO pay.
+Q_HDO_PART = f"""
+with sch as (
+  select sc_ps.transaction_id,
+         array_join(array_sort(filter(array_agg(distinct cc.channel_id), x -> x <> 'DWALLET')), '+') partner
+  from raw.scheduler_confirmed_payment_schedule sc_ps
+  join raw.scheduler_confirmed_payment_intention sc_pi on sc_ps.id = sc_pi.payment_schedule_id
+  join raw.scheduler_confirmed_collection sc on sc.payment_intention_id = sc_pi.id
+  join data.lake.chewie_collection cc on sc.collectionId = cc.cobra_id
+  join data.lake.chewie_reservation r on r.oid = cc.reservation_id
+  where r.last_version = true and sc_pi.status = 'COLLECTED' and sc_ps.status = 'CLOSED'
+    and r.channel in {CHANNELS} and sc_ps.created_at >= timestamp '{HDO_FROM}'
+  group by sc_ps.transaction_id
+  having count(distinct cc.channel_id) >= 2 and sum(case when cc.channel_id = 'DWALLET' then 1 else 0 end) > 0)
+select mdp.country_code c, sch.partner, count(distinct tr.transaction_code) n, round(sum(mdp.gross_booking)) gb
+from analytics.prd_payment_methods_fact mdp
+join analytics.bi_transactional_fact_transactions tr on tr.transaction_code = mdp.transaction_code
+     and tr.reservation_year_month >= date '{HDO_FROM[:7]}-01'
+join sch on sch.transaction_id = cast(tr.transaction_code as varchar)
+where mdp.reservation_year_month >= date '{HDO_FROM[:7]}-01' and mdp.is_confirmed_flg = 1
+  and tr.channel in {CHANNELS} and mdp.country_code in ({_HDO_IN})
+  and mdp.reservation_date >= {_HDO_LD}
+  and lower(coalesce(tr.agency_fantasy_name,'')) not like '%test%'
+group by 1, 2
+"""
+
 # ── Pago diferido AR ───────────────────────────────────────────────────────────────────────────────
 PD_LAUNCH = '2026-10-19'
 Q_PD_DAILY = f"""
@@ -306,6 +332,7 @@ def fetch_all():
         out['pd_daily'] = q('pd_daily', Q_PD_DAILY)
         out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
         out['hdo_tot'] = q('hdo_tot', Q_HDO_TOT)
+        out['hdo_part'] = q('hdo_part', Q_HDO_PART)
         return out, q   # q se reusa para las reservas de pago diferido
     except Exception:
         conn.close()
@@ -352,7 +379,8 @@ def build_hdo(cfg_old, r, today):
            'gt': sum(x[5] for x in countries), 'agw': num(A[1]), 'agt': num(A[2])}
     cfg = dict(cfg_old)
     cfg.update(kind='hdo', title=cfg_old.get('title', 'Combinaciones de MDP con HDO pay'), asof=today.isoformat(),
-               daily=daily, countries=countries, tot=tot)
+               daily=daily, countries=countries, tot=tot,
+               partners=[[row[0], row[1], num(row[2]), num(float(row[3])) if row[3] is not None else 0] for row in r['hdo_part']])
     return cfg
 
 

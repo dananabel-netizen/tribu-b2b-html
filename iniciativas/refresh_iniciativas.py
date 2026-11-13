@@ -412,9 +412,7 @@ def build_ldp(cfg_old, r, today):
     nr = tt.pop('ALL')
     countries = []
     for c in LDP_COUNTRIES:
-        if c not in cty:
-            continue
-        x, t = cty[c], tt.get(c, [c, 0, 0, 0])
+        x, t = cty.get(c, [c, '', 0, 0, 0, 0, 0, 0]), tt.get(c, [c, 0, 0, 0])   # país prendido sin link nuevo todavía: fila en cero
         # [país, prendido, bookings link, GB link, agencias link, GB hoteles total, bookings hoteles total, canceladas link, repitieron]
         countries.append([c, LDP_LAUNCH[c], num(x[2]), num(x[3]), num(x[4]), num(t[1]), num(t[2]), num(x[5]), num(x[7])])
     A, T = cty['ALL'], cty['TOT']

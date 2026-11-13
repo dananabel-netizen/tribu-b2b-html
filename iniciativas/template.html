@@ -998,9 +998,10 @@ function renderLdp(d,cfg){
     ["kpi-c","🧾","Bookings confirmados",fmtN(T.nl),`<span class="delta nd">${pf(T.nl/T.nt*100)} de ${fmtN(T.nt)} reservas de hoteles non ref</span>`],
     ["kpi-p","🏢","Agencias que lo usan",fmtN(T.ag),`<span class="delta nd">${pf(T.rep/T.ag*100)} repitió · ${pf(T.ag/T.agt*100)} de ${fmtN(T.agt)} agencias con venta non ref</span>`]
   ];
-  const mx=Math.max(...C.map(r=>r[3]/r[5]));
-  const rowsC=[...C].sort((a,b)=>b[3]/b[5]-a[3]/a[5]).map(r=>{const sh=r[3]/r[5]*100;
-    return `<tr><td><span class="cty-n">${flag(r[0])} ${CN[r[0]]||r[0]}</span></td><td class="dt">${fdate(r[1])}</td><td class="num">${fmtN(r[3])}</td><td class="num">${fmtN(r[2])}</td><td class="num">${fmtN(r[4])}</td><td class="num">${pf(r[7]/(r[2]+r[7])*100)}</td><td><div style="display:flex;align-items:center;gap:8px"><div class="sbar" style="flex:1;min-width:50px"><i style="width:${sh/ (mx*100)*100}%"></i></div><b>${pf(sh)}</b></div></td></tr>`;}).join("");
+  const shOf=r=>r[5]?r[3]/r[5]:0;
+  const mx=Math.max(...C.map(shOf),1e-9);
+  const rowsC=[...C].sort((a,b)=>shOf(b)-shOf(a)).map(r=>{const sh=shOf(r)*100;
+    return `<tr><td><span class="cty-n">${flag(r[0])} ${CN[r[0]]||r[0]}</span></td><td class="dt">${fdate(r[1])}</td><td class="num">${fmtN(r[3])}</td><td class="num">${fmtN(r[2])}</td><td class="num">${fmtN(r[4])}</td><td class="num">${(r[2]+r[7])?pf(r[7]/(r[2]+r[7])*100):"-"}</td><td><div style="display:flex;align-items:center;gap:8px"><div class="sbar" style="flex:1;min-width:50px"><i style="width:${sh/ (mx*100)*100}%"></i></div><b>${pf(sh)}</b></div></td></tr>`;}).join("");
   $("impact").innerHTML=head+
    `<div class="sec-nav">${[["isec1","1 · Adopción"],["isec2","2 · Venta de hoteles"],["isec3","3 · Canibalización"],["isec4","4 · Incrementalidad"],["isec5","5 · Agencias"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>
    <section class="imp-sec" id="isec1"><div class="sec-h"><span class="sec-n">1</span><div><h3>Adopción</h3><p>¿Cuánto se usa el link de pago nuevo y en qué países?</p></div></div>

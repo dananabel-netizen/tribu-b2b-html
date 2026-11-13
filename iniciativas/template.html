@@ -888,18 +888,22 @@ function renderImpact(){
   ];
   const rowsT=[...cfg.bookings].sort((a,b)=>b[0].localeCompare(a[0])||a[1].localeCompare(b[1])).map(r=>`<tr class="${inPost(r)?"post":"pre"}"><td class="dt">${fdate(r[0])}</td><td><span class="pill-st ${r[1]==="Confirmado"?"ok":"ko"}">${r[1]==="Confirmado"?"Confirmada":"Cancelada"}</span></td><td><div class="ag"><span class="av" style="background:${PAL[[...r[3]].reduce((a,c)=>a+c.charCodeAt(0),0)%PAL.length]}">${r[3].trim()[0].toUpperCase()}</span><div><b class="name-txt">${r[3]}</b><small class="aid">${r[2]}</small></div></div></td><td class="rsv">${r[4]}</td><td class="num"><b>USD ${fmtN(r[5])}</b></td><td><span class="mom ${inPost(r)?"mp":"mo"}">${inPost(r)?"Post-lanzamiento":"Pre-lanzamiento"}</span></td></tr>`).join("");
   $("impact").innerHTML=head+
-   `<div class="kpis k3 mini">${kpis.map(([c,i,l,v,s])=>`<div class="kpi ${c}"><div class="kpi-icon">${i}</div><div class="kpi-body"><div class="kpi-lbl">${l}</div><div class="kpi-val">${v}</div><div class="kpi-sub">${s}</div></div></div>`).join("")}</div>
+   `<div class="sec-nav">${[["isec1","1 · Adopción"],["isec2","2 · Evolución"],["isec3","3 · Detalle de reservas"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>
+   <section class="imp-sec" id="isec1"><div class="sec-h"><span class="sec-n">1</span><div><h3>Adopción</h3><p>¿Cuánto se usa este medio de pago y cuánto pesa en la venta?</p></div></div>
+    <div class="kpis k3 mini">${kpis.map(([c,i,l,v,s])=>`<div class="kpi ${c}"><div class="kpi-icon">${i}</div><div class="kpi-body"><div class="kpi-lbl">${l}</div><div class="kpi-val">${v}</div><div class="kpi-sub">${s}</div></div></div>`).join("")}</div>
+    </section><section class="imp-sec" id="isec2"><div class="sec-h"><span class="sec-n">2</span><div><h3>Evolución</h3><p>GB confirmado y share del medio de pago a lo largo del tiempo</p></div></div>
     <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del GB confirmado</div><div class="card-sub">USD con este medio de pago, ${since}</div></div>
       <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
       <div class="ch"><canvas id="cImpG"></canvas></div></div>
     <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del share del medio de pago</div><div class="card-sub">% del GB confirmado total de AR que se pagó con este medio, ${since} · el último día es parcial</div></div>
       <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
       <div class="ch"><canvas id="cImpS"></canvas></div></div>
-
+    </section><section class="imp-sec" id="isec3"><div class="sec-h"><span class="sec-n">3</span><div><h3>Detalle de reservas</h3><p>Reservas confirmadas y canceladas, una por una</p></div></div>
     <details class="q"><summary>Ver detalle de reservas · ${okN} confirmadas · ${koN} canceladas desde el lanzamiento</summary>
       <table class="stbl" style="margin-top:10px"><thead><tr><th>Fecha</th><th>Estado</th><th>Agencia</th><th>Reserva</th><th class="num">GB</th><th>Momento</th></tr></thead><tbody>${rowsT}</tbody></table>
-      <div class="card-sub" style="margin-top:8px">Las filas de pre-lanzamiento son anteriores al ${fdate(cfg.launch)} y no cuentan en las métricas.</div></details>`;
+      <div class="card-sub" style="margin-top:8px">Las filas de pre-lanzamiento son anteriores al ${fdate(cfg.launch)} y no cuentan en las métricas.</div></details></section>`;
   $("impBack").onclick=()=>setPage("lista");
+  $("impact").querySelectorAll(".sec-nav a").forEach(a=>a.onclick=()=>$(a.dataset.t).scrollIntoView({behavior:"smooth",block:"start"}));
 
   // gráfico de evolución con granularidad día / semana / mes
   const days=[];for(let t=new Date(cfg.launch+"T00:00:00Z");iso(t)<=cfg.asof;t=new Date(t.getTime()+864e5))days.push(iso(t));

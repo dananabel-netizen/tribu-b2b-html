@@ -863,6 +863,7 @@ function renderImpact(){
   const cfg=IMPACT[d.name+"|"+d.date];
   if(cfg&&cfg.kind==="ldp"){renderLdp(d,cfg);return;}
   if(cfg&&cfg.kind==="hdo"){renderHdo(d,cfg);return;}
+  if(cfg&&cfg.kind==="gv"){renderGv(d,cfg);return;}
   const head=`<div class="imp-hdr one"><div class="imp-line"><span class="imp-eye">Impacto de iniciativa</span><h2>${d.name}</h2>
     <span class="imp-meta">Prendida el <b>${da}/${mo}/${y}</b>${cfg?` · datos al ${fdate(cfg.asof)} (hoy parcial)`:""}</span>
     <span class="tags">${d.countries.map(c=>`<span class="tag">${flag(c)} ${CN[c]||c}</span>`).join("")}${d.cat!=="Sin categoría"?`<span class="tag cat" style="background:${catCol(d.cat)}22;color:${catCol(d.cat)}">${d.cat}</span>`:""}</span></div>
@@ -981,6 +982,87 @@ function renderImpact(){
     $("pkTb").innerHTML=rowsT+(cp?`<tr style="border-top:2px solid var(--line)"><td><b>Resto (control)</b></td><td class="num">${fmtN(ca)}</td><td class="num">${fmtN(cp)}</td><td class="num">${sg(ca-cp)}</td><td class="num"><b style="color:${ca>=cp?"#059669":"#DC2626"}">${pf((ca/cp-1)*100)}</b></td></tr>`:"");
   }
   drawPkg();
+}
+
+/* ---------- impacto: grilla de tarifas en vuelos (GB de vuelos standalone, antes y después) ---------- */
+let gvC="ALL",gvF="f";
+function renderGv(d,cfg){
+  const C=cfg.countries;
+  const pf=v=>(v>=0?"+":"")+v.toFixed(1).replace(".",",")+"%";
+  const head=`<div class="imp-hdr one"><div class="imp-line"><span class="imp-eye">Impacto de iniciativa</span><h2>${cfg.title}</h2>
+    <span class="imp-meta">Prendida el <b>${fdate(cfg.launch)}</b> · datos al ${fdate(cfg.asof)} (hoy parcial)</span>
+    <span class="tags">${C.map(c=>`<span class="tag" title="${CN[c]||c}">${flag(c)}</span>`).join("")}</span></div>
+    <button class="btn-back" id="impBack">← Volver a iniciativas</button></div>`;
+  $("impact").innerHTML=head+
+   `<div class="sec-nav">${[["isec1","1 · Antes y después"],["isec2","2 · Evolución"],["isec3","3 · Por país"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>
+   <section class="imp-sec" id="isec1"><div class="sec-h"><span class="sec-n">1</span><div><h3>Antes y después</h3><p>GB de vuelos standalone por día, contra el mismo día de la semana de las 4 semanas previas</p></div></div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">GB diario de vuelos, después vs antes de la grilla</div><div class="card-sub" id="gvSub"></div></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="gran" id="gvFl"><button data-f="f">Vuelo solo</button><button data-f="fc">Vuelo + carrito</button></div>
+      <div class="gran" id="gvCty"><button data-c="ALL">Todos</button>${C.map(c=>`<button data-c="${c}" title="${CN[c]||c}">${flag(c)}</button>`).join("")}</div></div></div>
+      <div id="gvK" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 4px"></div>
+      <div class="card-sub" id="gvNote" style="margin-top:8px;font-weight:600"></div>
+      <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">GB confirmado de Vuelos, canal HTML (classic, silver, gold y platinum), agencias sin "test", por fecha de creación de la reserva. "Vuelo solo" = flujo de compra FLIGHT (vuelo standalone, sin paquete); "Vuelo + carrito" suma las reservas de vuelo que entraron por el carrito. Para cada día posterior a la prendida, la base es el promedio del mismo día de la semana en las 4 semanas previas (así no pesa que el fin de semana venda menos). Se cuentan solo días completos. Es una comparación simple, no causalidad: no controla estacionalidad (Black Friday, Cyber, vacaciones) ni otras iniciativas. Con pocos días posteriores el resultado es ruido, hay que esperar al menos 2 semanas.</div></details></div>
+    </section><section class="imp-sec" id="isec2"><div class="sec-h"><span class="sec-n">2</span><div><h3>Evolución</h3><p>GB de vuelos standalone por día, semana y mes</p></div></div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del GB de vuelos standalone</div><div class="card-sub" id="gvEvSub"></div></div>
+      <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
+      <div class="ch"><canvas id="cGv"></canvas></div></div>
+    </section><section class="imp-sec" id="isec3"><div class="sec-h"><span class="sec-n">3</span><div><h3>Por país</h3><p>Cómo se movió cada país desde la prendida</p></div></div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Antes vs después por país</div><div class="card-sub">GB diario promedio desde la prendida contra el mismo día de la semana en las 4 semanas previas</div></div></div>
+      <table class="stbl"><thead><tr><th>País</th><th class="num">Días</th><th class="num">GB real</th><th class="num">GB base</th><th class="num">Diferencia</th><th class="num">% vs antes</th></tr></thead><tbody id="gvTb"></tbody></table></div>
+    </section>`;
+  $("impBack").onclick=()=>setPage("lista");
+  $("impact").querySelectorAll(".sec-nav a").forEach(a=>a.onclick=()=>$(a.dataset.t).scrollIntoView({behavior:"smooth",block:"start"}));
+  const keyOf=(dd,g)=>g==="d"?dd:g==="w"?iso(mondayOf(new Date(dd+"T00:00:00Z"))):dd.slice(0,7);
+  const lblOf=(k,g)=>g==="d"?fdate(k):g==="w"?"Sem "+fdate(k):MONTHS_L[+k.slice(5)-1]+" "+k.slice(2,4);
+  const XT={d:"Día",w:"Semana (inicia el lunes)",m:"Mes"};
+  const val=r=>r[2]+(gvF==="fc"?r[4]:0);
+  const sel=c=>cfg.daily.filter(r=>c==="ALL"||r[1]===c);
+  const addD=(dd,n)=>iso(new Date(new Date(dd+"T00:00:00Z").getTime()+n*864e5));
+  // por día: GB real y base (promedio del mismo día de la semana, 4 semanas previas a la prendida)
+  function comp(c){
+    const m=new Map();sel(c).forEach(r=>m.set(r[0],(m.get(r[0])||0)+val(r)));
+    const out=[];
+    for(let dd=cfg.launch;dd<cfg.asof;dd=addD(dd,1)){
+      const w=Math.floor((new Date(dd+"T00:00:00Z")-new Date(cfg.launch+"T00:00:00Z"))/864e5/7)+1;
+      let b=0,n=0;
+      for(let k=1;k<=4;k++){const p=addD(dd,-7*(w+k-1));if(p<cfg.launch&&m.has(p)){b+=m.get(p);n++;}}
+      out.push([dd,m.get(dd)||0,n?b/n:0]);
+    }
+    return out;
+  }
+  let gran="d";
+  function draw(){
+    document.querySelectorAll("#gvCty button").forEach(b=>b.classList.toggle("active",b.dataset.c===gvC));
+    document.querySelectorAll("#gvFl button").forEach(b=>b.classList.toggle("active",b.dataset.f===gvF));
+    document.querySelectorAll(".impGran").forEach(g=>[...g.children].forEach(b=>b.classList.toggle("active",b.dataset.g===gran)));
+    const ctyTxt=gvC==="ALL"?"todos los países":(CN[gvC]||gvC);
+    const cp=comp(gvC),act=cp.reduce((a,r)=>a+r[1],0),bas=cp.reduce((a,r)=>a+r[2],0),nd=cp.length;
+    const kb=(l,v,sub)=>`<div style="background:var(--panel2);border-radius:10px;padding:10px 12px"><div class="kpi-lbl">${l}</div><div class="kpi-val" style="font-size:20px">${v}</div><div class="kpi-sub" style="font-size:11px;color:var(--mut)">${sub}</div></div>`;
+    const sg=v=>(v>=0?"+":"")+fmtN(v);
+    $("gvSub").textContent="GB de vuelos standalone ("+(gvF==="fc"?"vuelo + carrito":"vuelo solo")+"), "+ctyTxt+", desde el "+fdate(cfg.launch);
+    $("gvK").innerHTML=kb("GB desde la prendida","USD "+fmtN(act),nd+(nd===1?" día completo":" días completos"))+
+      kb("GB base (mismo día, 4 sem previas)","USD "+fmtN(bas),"si todo hubiera seguido igual")+
+      kb("Diferencia","USD "+sg(act-bas),"promedio diario USD "+fmtN(nd?(act-bas)/nd:0))+
+      kb("% vs antes",bas?`<span style="color:${act>=bas?"#059669":"#DC2626"}">${pf((act/bas-1)*100)}</span>`:"-","real contra base");
+    $("gvNote").textContent=nd<14?"Todavía hay "+nd+(nd===1?" día":" días")+" desde la prendida: con tan pocos días el resultado es ruido, conviene esperar al menos 2 semanas.":"";
+    // evolución
+    const m=new Map();sel(gvC).forEach(r=>{if(r[0]>=cfg.partial)return;const k=keyOf(r[0],gran);m.set(k,(m.get(k)||0)+val(r));});
+    const ks=[...m.keys()].sort(),lk=keyOf(cfg.launch,gran),todayK=keyOf(cfg.asof,gran);
+    $("gvEvSub").textContent="USD por "+(gran==="d"?"día":gran==="w"?"semana":"mes")+", "+ctyTxt+" · gris = antes, naranja = desde la prendida"+(gran!=="d"?" (más claro: período con la prendida en el medio)":"")+" · el último período es parcial";
+    chart("cGv",{type:"bar",data:{labels:ks.map(k=>lblOf(k,gran)),datasets:[{data:ks.map(k=>Math.round(m.get(k))),backgroundColor:ks.map(k=>k<lk?"#CBD5E1":k===lk&&gran!=="d"?"#F7B955":"#ED8B08"),borderRadius:{topLeft:6,topRight:6},maxBarThickness:60}]},
+      options:{...baseOpts,plugins:{legend:{display:false},tooltip:{backgroundColor:"#0F1834",padding:10,cornerRadius:8,displayColors:false,callbacks:{label:c=>"GB: USD "+fmtN(c.parsed.y)}},vlabels:{on:gran!=="d",size:11,fmt:v=>"USD "+fmtN(v/1000)+"k"}},
+        scales:{y:{beginAtZero:true,grace:"12%",grid:{color:"rgba(100,116,139,.15)",borderDash:[4,4]},ticks:{callback:v=>fmtN(v/1000)+"k"},title:{display:true,text:"GB (USD)",color:"#64748B",font:{size:11,weight:"600"}}},
+                x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[gran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
+    // por país
+    const rows=C.map(c=>{const x=comp(c),a=x.reduce((s,r)=>s+r[1],0),b=x.reduce((s,r)=>s+r[2],0);return [c,x.length,a,b];});
+    const tA=rows.reduce((s,r)=>s+r[2],0),tB=rows.reduce((s,r)=>s+r[3],0);
+    const tr=(lbl,n,a,b,st)=>`<tr${st||""}><td>${lbl}</td><td class="num">${n}</td><td class="num">${fmtN(a)}</td><td class="num">${fmtN(b)}</td><td class="num">${sg(a-b)}</td><td class="num"><b style="color:${a>=b?"#059669":"#DC2626"}">${b?pf((a/b-1)*100):"-"}</b></td></tr>`;
+    $("gvTb").innerHTML=rows.map(r=>tr(flag(r[0])+" "+(CN[r[0]]||r[0]),r[1],r[2],r[3])).join("")+tr("<b>Total</b>",rows[0]?rows[0][1]:0,tA,tB,' style="border-top:2px solid var(--line)"');
+  }
+  document.querySelectorAll("#gvCty button").forEach(b=>b.onclick=()=>{gvC=b.dataset.c;draw();});
+  document.querySelectorAll("#gvFl button").forEach(b=>b.onclick=()=>{gvF=b.dataset.f;draw();});
+  document.querySelectorAll(".impGran").forEach(el=>el.onclick=e=>{const g=e.target.dataset.g;if(!g)return;gran=g;draw();});
+  draw();
 }
 
 /* ---------- impacto: link de pago en hoteles non ref (multi-país, escalonado) ---------- */

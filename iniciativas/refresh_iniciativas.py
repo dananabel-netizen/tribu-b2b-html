@@ -358,6 +358,38 @@ def build_pkg(rows, today):
     return out
 
 
+# Grilla de tarifas en vuelos (prendida 12/11 en AR, BR, CL, CO, MX, PE): GB de vuelos standalone, antes y después.
+# flujo FLIGHT = vuelo solo; flujo CART = vuelo comprado desde el carrito (se muestra aparte para poder sumarlo).
+GV_LAUNCH = '2026-11-12'
+GV_COUNTRIES = ['AR', 'BR', 'CL', 'CO', 'MX', 'PE']
+GV_FROM = (date.fromisoformat(GV_LAUNCH) - timedelta(days=7 * 10)).isoformat()
+Q_GV_DAILY = f"""
+select cast(bi.creation_date as varchar) d, bi.country_code c,
+ round(sum(case when c2.shopping_flow_source = 'FLIGHT' then bi.gb end)) gb_f,
+ count(distinct case when c2.shopping_flow_source = 'FLIGHT' then bi.transaction_code end) n_f,
+ round(sum(case when c2.shopping_flow_source = 'CART' then bi.gb end)) gb_c,
+ count(distinct case when c2.shopping_flow_source = 'CART' then bi.transaction_code end) n_c
+from analytics.bi_sales_fact_sales_recognition bi
+left join data.lake.chewie_reservation c2 on cast(bi.transaction_code as varchar) = c2.id and c2.last_version = true
+where bi.channel in {CHANNELS}
+  and bi.creation_date >= date '{GV_FROM}' and bi.partition_period >= '{GV_FROM[:7]}'
+  and bi.transaction_status = 'Confirmado' and bi.product = 'Vuelos'
+  and c2.shopping_flow_source in ('FLIGHT', 'CART')
+  and bi.country_code in ({",".join("'" + x + "'" for x in GV_COUNTRIES)})
+  and lower(coalesce(bi.agency_name,'')) not like '%test%'
+group by 1, 2
+"""
+
+
+def build_gv(cfg_old, r, today):
+    # daily: [fecha, país, GB vuelo, reservas vuelo, GB carrito, reservas carrito]
+    daily = [[row[0], row[1]] + [num(float(x)) if x is not None else 0 for x in row[2:]] for row in r['gv_daily']]
+    cfg = dict(cfg_old)
+    cfg.update(kind='gv', title=cfg_old.get('title', 'Grilla de tarifas y opciones rápidas en vuelos'), launch=GV_LAUNCH,
+               asof=today.isoformat(), partial=(today + timedelta(days=1)).isoformat(), countries=GV_COUNTRIES, daily=daily)
+    return cfg
+
+
 def num(v):
     if v is None:
         return 0
@@ -397,6 +429,7 @@ def fetch_all():
         out['pd_daily'] = q('pd_daily', Q_PD_DAILY)
         out['pkg_daily'] = q('pkg_daily', Q_PKG_DAILY)
         out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
+        out['gv_daily'] = q('gv_daily', Q_GV_DAILY)
         out['hdo_tot'] = q('hdo_tot', Q_HDO_TOT)
         out['hdo_part'] = q('hdo_part', Q_HDO_PART)
         return out, q   # q se reusa para las reservas de pago diferido
@@ -480,6 +513,8 @@ def main():
     cfgs['hdo'] = build_hdo(cfgs.get('hdo', {}), r, today)
     data['impact']['map'].update({'Combinaciones de MDP con HDO pay|2026-10-26': 'hdo',
                                   'Combinaciones de MDP con HDO pay|2026-10-29': 'hdo'})
+    cfgs['gv'] = build_gv(cfgs.get('gv', {}), r, today)
+    data['impact']['map']['Grilla de tarifas y opciones rápidas en vuelos|2026-11-12'] = 'gv'
     cfgs['pd_ar'] = build_pd(cfgs['pd_ar'], r, q, today)
     data['updated'] = today.isoformat()
     DATA.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding='utf-8')

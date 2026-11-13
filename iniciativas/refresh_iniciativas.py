@@ -381,12 +381,43 @@ group by 1, 2
 """
 
 
+# CTR de la grilla de tarifas (calendarPricesMatrix): sobre usuarios únicos a los que se les mostró la grilla en la búsqueda de vuelos.
+# Se cuenta cada usuario una vez por período y país (por eso hay una query por granularidad: los únicos no se suman entre días).
+GV_CTR_PER = {'d': "split_part(fe.datetime,'T',1)", 'w': "cast(date_trunc('week', date(split_part(fe.datetime,'T',1))) as varchar)",
+              'm': "substr(fe.datetime,1,7)", 't': "'total'"}
+
+
+def q_gv_ctr(per):
+    return f"""
+with b as (
+  select pageview_id from data.lake.bi_web_traffic
+  where product='FLIGHTS' and flow='SEARCH' and date>='{GV_LAUNCH}' and ispageview=1 and flg_detalle_cp=0 and is_bot=0
+    and channel in {CHANNELS}),
+ev as (
+  select {per} p, fe.event.cc c, fe.event.user_id u, fe.event.type t, fe.event.code k
+  from data.sot.flights_events fe join b on fe.event.pageview_id=b.pageview_id
+  where fe.datetime>='{GV_LAUNCH}' and fe.event.fl='search' and fe.event.type in ('show','click')
+    and fe.event.code in ('calendarPricesMatrix','calendarPricesMatrixTab','calendarPricesMatrixCheapestTab')
+    and fe.event.cc in ({",".join("'" + x + "'" for x in GV_COUNTRIES)}) and fe.event.ft in ('ONEWAY','ROUNDTRIP')),
+u as (
+  select p, c, u,
+   max(case when t='show' and k='calendarPricesMatrix' then 1 else 0 end) s,
+   max(case when t='click' and k='calendarPricesMatrix' then 1 else 0 end) ct,
+   max(case when t='click' and k='calendarPricesMatrixTab' then 1 else 0 end) ca,
+   max(case when t='click' and k='calendarPricesMatrixCheapestTab' then 1 else 0 end) cc
+  from ev group by 1, 2, 3)
+select p, c, sum(s) shows, sum(ct) c_tab, sum(ca) c_any, sum(cc) c_cheap
+from u where s = 1 group by 1, 2 order by 1, 2
+"""
+
+
 def build_gv(cfg_old, r, today):
     # daily: [fecha, país, GB vuelo, reservas vuelo, GB carrito, reservas carrito]
     daily = [[row[0], row[1]] + [num(float(x)) if x is not None else 0 for x in row[2:]] for row in r['gv_daily']]
     cfg = dict(cfg_old)
     cfg.update(kind='gv', title=cfg_old.get('title', 'Grilla de tarifas y opciones rápidas en vuelos'), launch=GV_LAUNCH,
-               asof=today.isoformat(), partial=(today + timedelta(days=1)).isoformat(), countries=GV_COUNTRIES, daily=daily)
+               asof=today.isoformat(), partial=(today + timedelta(days=1)).isoformat(), countries=GV_COUNTRIES, daily=daily,
+               ctr={g: [[str(x[0]), x[1]] + [num(v) for v in x[2:]] for x in r['gv_ctr_' + g]] for g in GV_CTR_PER})   # [período, país, usuarios con grilla, clic tab, clic celda, clic más barata]
     return cfg
 
 
@@ -430,6 +461,8 @@ def fetch_all():
         out['pkg_daily'] = q('pkg_daily', Q_PKG_DAILY)
         out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
         out['gv_daily'] = q('gv_daily', Q_GV_DAILY)
+        for g, per in GV_CTR_PER.items():
+            out['gv_ctr_' + g] = q('gv_ctr_' + g, q_gv_ctr(per))
         out['hdo_tot'] = q('hdo_tot', Q_HDO_TOT)
         out['hdo_part'] = q('hdo_part', Q_HDO_PART)
         return out, q   # q se reusa para las reservas de pago diferido

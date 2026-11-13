@@ -940,7 +940,7 @@ function renderLdp(d,cfg){
   $("impact").innerHTML=head+
    `<div class="kpis k3 mini">${kpis.map(([c,i,l,v,s])=>`<div class="kpi ${c}"><div class="kpi-icon">${i}</div><div class="kpi-body"><div class="kpi-lbl">${l}</div><div class="kpi-val">${v}</div><div class="kpi-sub">${s}</div></div></div>`).join("")}</div>
     <div style="display:grid;grid-template-columns:5fr 6fr;gap:14px;align-items:stretch">
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Share y venta por país</div><div class="card-sub">Link de pago sobre el GB de hoteles non ref de cada país, ${sinceTxt}</div></div></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Share y venta por país</div><div class="card-sub">Link de pago nuevo sobre el GB de hoteles non ref de cada país, ${sinceTxt}</div></div></div>
         <table class="stbl"><thead><tr><th>País</th><th>Prendido</th><th class="num">GB (USD)</th><th class="num">Bookings</th><th class="num">Agencias</th><th class="num">Cancel.</th><th>Share</th></tr></thead><tbody>${rowsC}</tbody></table></div>
       <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del share del link de pago</div><div class="card-sub">% del GB de hoteles non ref de los países ya prendidos</div></div>
         <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
@@ -959,7 +959,7 @@ function renderLdp(d,cfg){
       <div class="card-sub" style="margin-top:6px">Mix del GB de hoteles no reembolsables confirmados. Después = desde el día de prendida de cada país (MX 29/9, AR y CL 13/10, BR, CO y PE 19/10), en bloques de 7 días completos. Antes = las 4 semanas previas, solo de referencia. Link de pago nuevo = non ref con penalidad futura al reservar; link pre-booking (previo) = penalidad ya vigente, el link de 1 hora que ya existía (criterio a validar con Producto). Muestra cambios de mix, no causalidad: el total también se mueve por estacionalidad y otras iniciativas.</div></div></div>
     <details class="q"><summary>Ver top 10 agencias por GB con link de pago · ${pf(cfg.top.reduce((a,r)=>a+r[4],0)/T.gl*100)} del GB del link</summary>
       <table class="stbl" style="margin-top:10px"><thead><tr><th>#</th><th>Agencia</th><th>País</th><th class="num">Bookings</th><th class="num">GB</th></tr></thead><tbody>${cfg.top.map((r,i)=>`<tr><td class="dt">${i+1}</td><td><div class="ag"><span class="av" style="background:${PAL[[...r[1]].reduce((a,c)=>a+c.charCodeAt(0),0)%PAL.length]}">${r[1].trim()[0].toUpperCase()}</span><div><b class="name-txt">${r[1]}</b><small class="aid">${r[0]}</small></div></div></td><td>${flag(r[2])} ${CN[r[2]]||r[2]}</td><td class="num">${r[3]}</td><td class="num"><b>USD ${fmtN(r[4])}</b></td></tr>`).join("")}</tbody></table>
-      <div class="card-sub" style="margin-top:8px">Reservas confirmadas desde el lanzamiento de cada país. Se excluyen agencias con "test" en el nombre.</div></details>`;
+      <div class="card-sub" style="margin-top:8px">Reservas confirmadas desde el lanzamiento de cada país, solo link nuevo (non ref con penalidad futura al reservar; no incluye el link pre-booking de 1 hora que ya existía). Se excluyen agencias con "test" en el nombre.</div></details>`;
   $("impBack").onclick=()=>setPage("lista");
   const keyOf=(dd,g)=>g==="d"?dd:g==="w"?iso(mondayOf(new Date(dd+"T00:00:00Z"))):dd.slice(0,7);
   const lblOf=(k,g)=>g==="d"?fdate(k):g==="w"?"Sem "+fdate(k):MONTHS_L[+k.slice(5)-1]+" "+k.slice(2,4);
@@ -982,7 +982,7 @@ function renderLdp(d,cfg){
         scales:{y:{beginAtZero:true,grace:"30%",grid,ticks:{callback:v=>v+"%"},title:{display:true,text:"% del GB",color:"#64748B",font:{size:11,weight:"600"}}},
                 x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
     const link=ldpMode==="link";
-    const ds=link?[["Otros medios no reembolsables",k=>m.get(k)[1],"#94A3B8","#1E293B"],["Link de pago",k=>m.get(k)[2],"#ED8B08"]]
+    const ds=link?[["Otros medios no reembolsables (incl. link pre-booking)",k=>m.get(k)[1],"#94A3B8","#1E293B"],["Link de pago nuevo",k=>m.get(k)[2],"#ED8B08"]]
                  :[["Reembolsable",k=>m.get(k)[0],"#3B82F6"],["No reembolsable",k=>m.get(k)[1]+m.get(k)[2],"#ED8B08"]];
     $("ldpVs").textContent=link?"GB confirmado en USD (etiquetas en miles) · solo hoteles no reembolsables: link de pago vs otros medios de pago · MX, AR, CL, BR, CO y PE"
                                :"GB confirmado en USD (etiquetas en miles) · incluye todos los medios de pago · MX, AR, CL, BR, CO y PE";

@@ -33,8 +33,8 @@ CHANNELS = "('hoteldo-html-platinum','hoteldo-html-gold','hoteldo-html-silver','
 LDP_COUNTRIES = ['MX', 'AR', 'CL', 'BR', 'CO', 'PE']
 LDP_LAUNCH = {'MX': '2026-09-29', 'AR': '2026-10-13', 'CL': '2026-10-13', 'BR': '2026-10-19', 'CO': '2026-10-19', 'PE': '2026-10-19'}
 LDP_FROM = min(LDP_LAUNCH.values())
-# Link de pago (KPIs, tabla por país, evolución del share) = hoteles NO reembolsables con medio de pago REMOTE, desde el lanzamiento de cada país.
-# En el gráfico "Solo link de pago" = cualquier reserva con medio de pago REMOTE (solo o combinado), reembolsable o no.
+# Link de pago NUEVO (KPIs, tabla por país, evolución del share) = hoteles NO reembolsables con medio de pago REMOTE y penalidad futura al reservar
+# (fut), desde el lanzamiento de cada país. El link pre-booking previo (REMOTE con penalidad ya vigente, 1 hora para pagar) NO cuenta como impacto.
 # Se excluyen agencias con "test" en el nombre.
 
 _LD_CASE = "case c " + " ".join(f"when '{c}' then date '{d}'" for c, d in LDP_LAUNCH.items()) + " end"
@@ -43,7 +43,8 @@ _IN = ",".join(f"'{c}'" for c in LDP_COUNTRIES)
 _BASE = f"""
 b as (
   select bi.creation_date d, bi.country_code c, bi.partner_id p, bi.agency_name an, bi.transaction_code r,
-         bi.transaction_status st, bi.gb, product.refundable rf, product.payment_methods pm
+         bi.transaction_status st, bi.gb, product.refundable rf, product.payment_methods pm,
+         coalesce(product.penalty_start_date >= bi.creation_date, false) fut
   from analytics.bi_sales_fact_sales_recognition bi
   left join lake.channels_bo_product product on bi.origin_product_id = product.transaction_id
   where bi.channel in {CHANNELS}
@@ -55,7 +56,7 @@ k as (select *, {_LD_CASE} ld from b)
 
 Q_LDP_DAILY = f"""
 with {_BASE},
-z as (select *, case when rf=false and pm like '%REMOTE%' and d>=ld then 'L' when rf=false then 'N' when rf=true then 'R' else 'X' end cls
+z as (select *, case when rf=false and pm like '%REMOTE%' and fut and d>=ld then 'L' when rf=false then 'N' when rf=true then 'R' else 'X' end cls
       from k where st='Confirmado')
 select cast(d as varchar) d,
  round(sum(case when cls='R' then gb end)) ref, round(sum(case when cls='N' then gb end)) non, round(sum(case when cls='L' then gb end)) link,
@@ -68,7 +69,7 @@ from z group by d order by d
 Q_LDP_COUNTRY = f"""
 with {_BASE},
 s as (select * from k where d>=ld),
-l as (select * from s where rf=false and pm like '%REMOTE%'),
+l as (select * from s where rf=false and pm like '%REMOTE%' and fut),
 pa as (select c, p, count(distinct r) n from l where st='Confirmado' group by c, p),
 pt as (select p, count(distinct r) n from l where st='Confirmado' group by p)
 select c, cast(max(ld) as varchar) ld,
@@ -91,7 +92,7 @@ union all select 'ALL', round(sum(gb)), count(distinct r), count(distinct p) fro
 Q_LDP_TOP = f"""
 with {_BASE},
 t as (select p, max(an) an, max(c) c, count(distinct r) n, round(sum(gb)) g from k
-      where d>=ld and st='Confirmado' and rf=false and pm like '%REMOTE%' group by p)
+      where d>=ld and st='Confirmado' and rf=false and pm like '%REMOTE%' and fut group by p)
 select p, an, c, n, g from t order by g desc limit 10
 """
 

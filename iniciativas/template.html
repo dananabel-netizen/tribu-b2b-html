@@ -1117,7 +1117,7 @@ function renderHdo(d,cfg){
     <div style="display:grid;grid-template-columns:5fr 6fr;gap:14px;align-items:stretch">
       <div class="card"><div class="card-hdr"><div><div class="card-title">Share y venta por país</div><div class="card-sub">Reservas con HDO pay (wallet + otro medio) sobre el GB HTML de cada país, ${sinceTxt}</div></div></div>
         <table class="stbl"><thead><tr><th>País</th><th>Prendido</th><th class="num">GB (USD)</th><th class="num">Reservas</th><th class="num">Agencias</th><th>Share del GB</th></tr></thead><tbody>${rowsC}</tbody></table></div>
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del share de HDO pay</div><div class="card-sub">% del GB confirmado HTML (todos los productos) de los países ya prendidos</div></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución del share de HDO pay</div><div class="card-sub">% del GB confirmado HTML (todos los productos) de los 6 países, desde 2 meses antes de la primera prendida · en gris, antes de la prendida (26/10)</div></div>
         <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
         <div class="ch" style="height:228px"><canvas id="cHdoS"></canvas></div></div>
     </div>
@@ -1147,9 +1147,10 @@ function renderHdo(d,cfg){
     const ks=[...m.keys()].sort(), lb=ks.map(k=>lblOf(k,impGran));
     document.querySelectorAll(".impGran").forEach(g=>[...g.children].forEach(b=>b.classList.toggle("active",b.dataset.g===impGran)));
     const sh=ks.map(k=>m.get(k)[3]?Math.round(m.get(k)[1]/m.get(k)[3]*10000)/100:0);
-    chart("cHdoS",{type:"line",data:{labels:lb,datasets:[{data:sh,borderColor:"#ED8B08",borderWidth:3,tension:.35,fill:true,
+    const cut=keyOf(C.map(r=>r[1]).sort()[0],impGran),on=i=>ks[i]>=cut;
+    chart("cHdoS",{type:"line",data:{labels:lb,datasets:[{data:sh,borderColor:"#ED8B08",borderWidth:3,tension:.35,fill:true,segment:{borderColor:c=>on(c.p1DataIndex)?"#ED8B08":"#94A3B8"},
         backgroundColor:c=>{const a=c.chart.chartArea;if(!a)return "rgba(237,139,8,.15)";const g=c.chart.ctx.createLinearGradient(0,a.top,0,a.bottom);g.addColorStop(0,"rgba(237,139,8,.30)");g.addColorStop(1,"rgba(237,139,8,0)");return g;},
-        pointRadius:impGran==="d"?3:6,pointHoverRadius:7,pointBackgroundColor:"#fff",pointBorderColor:"#ED8B08",pointBorderWidth:2}]},
+        pointRadius:impGran==="d"?3:6,pointHoverRadius:7,pointBackgroundColor:"#fff",pointBorderColor:ks.map((k,i)=>on(i)?"#ED8B08":"#94A3B8"),pointBorderWidth:2}]},
       options:{...baseOpts,plugins:{legend:{display:false},
         tooltip:{...tt,displayColors:false,callbacks:{label:c=>"Share: "+pf(c.parsed.y),afterLabel:c=>"USD "+fmtN(m.get(ks[c.dataIndex])[1])+" de USD "+fmtN(m.get(ks[c.dataIndex])[3])}},
         vlabels:{on:true,size:impGran==="d"?9:11,zero:true,fmt:pf}},

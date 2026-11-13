@@ -243,8 +243,14 @@ b as (
     and lower(coalesce(tr.agency_fantasy_name,'')) not like '%test%')
 """
 
+# Serie diaria con 2 meses previos a la primera prendida (para ver cómo era antes). Los KPIs y la tabla por país se calculan solo desde la prendida de cada país.
+HDO_PRE_FROM = (date.fromisoformat(HDO_FROM) - timedelta(days=60)).isoformat()
+_HDO_BASE_D = (_HDO_BASE.replace(f"timestamp '{HDO_FROM}'", f"timestamp '{HDO_PRE_FROM}'")
+               .replace(f"date '{HDO_FROM[:7]}-01'", f"date '{HDO_PRE_FROM[:7]}-01'")
+               .replace(f"mdp.reservation_date >= {_HDO_LD}", f"mdp.reservation_date >= date '{HDO_PRE_FROM}'"))
+
 Q_HDO_DAILY = f"""
-with {_HDO_BASE}
+with {_HDO_BASE_D}
 select cast(d as varchar) d, c, count(distinct case when w=1 then r end) nw, round(sum(case when w=1 then gb end)) gw,
        count(distinct r) nt, round(sum(gb)) gt
 from b group by d, c order by d, c
@@ -369,7 +375,7 @@ def build_hdo(cfg_old, r, today):
     ag = {row[0]: row for row in r['hdo_tot']}
     countries = []
     for c in HDO_LAUNCH:
-        rows = [x for x in daily if x[1] == c]
+        rows = [x for x in daily if x[1] == c and x[0] >= HDO_LAUNCH[c]]   # KPIs solo desde la prendida
         a = ag.get(c, [c, 0, 0])
         # [país, prendido, reservas HDO pay, GB HDO pay, reservas HTML, GB HTML, agencias HDO pay, agencias con venta]
         countries.append([c, HDO_LAUNCH[c], sum(x[2] for x in rows), sum(x[3] for x in rows),

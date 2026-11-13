@@ -30,8 +30,8 @@ REMOTE, BRANCH = 'personal', 'tablero-live'
 CHANNELS = "('hoteldo-html-platinum','hoteldo-html-gold','hoteldo-html-silver','hoteldo-html-classic')"
 
 # ── Link de pago en hoteles non ref: prendido escalonado ───────────────────────────────────────────
-LDP_COUNTRIES = ['MX', 'AR', 'CL', 'BR', 'CO', 'PE']
-LDP_LAUNCH = {'MX': '2026-09-29', 'AR': '2026-10-13', 'CL': '2026-10-13', 'BR': '2026-10-19', 'CO': '2026-10-19', 'PE': '2026-10-19'}
+LDP_COUNTRIES = ['MX', 'AR', 'CL', 'BR', 'CO', 'PE', 'US']
+LDP_LAUNCH = {'MX': '2026-09-29', 'AR': '2026-10-13', 'CL': '2026-10-13', 'BR': '2026-10-19', 'CO': '2026-10-19', 'PE': '2026-10-19', 'US': '2026-11-11'}
 LDP_FROM = min(LDP_LAUNCH.values())
 # Link de pago NUEVO (KPIs, tabla por país, evolución del share) = hoteles NO reembolsables con medio de pago REMOTE y penalidad futura al reservar
 # (fut), desde el lanzamiento de cada país. El link pre-booking previo (REMOTE con penalidad ya vigente, 1 hora para pagar) NO cuenta como impacto.

@@ -142,8 +142,8 @@ def mix_blocks(rows, today):
 
 # ── Contrafactual: proyección lineal de la tendencia previa ────────────────────────────────────────
 # Serie: GB semanal de hoteles (todas las tarifas) en bloques de 7 días desde la prendida de cada país.
-#  'link'  = hoteles pagados con link de pago (REMOTE), reembolsables y no reembolsables.
-#  'total' = GB total de hoteles (todos los medios de pago), para ver si el crecimiento es neto o es migración.
+#  'nonref' = GB de hoteles NO reembolsables, con todos los medios de pago (la venta que el link de pago puede hacer crecer).
+#  'total'  = GB total de hoteles (reembolsables + no reembolsables), para ver si el crecimiento es neto o es migración desde reembolsables.
 # Se ajusta una recta (OLS) a las N semanas previas a la prendida y se proyecta hacia adelante; la diferencia contra el real es el crecimiento
 # atribuible a la iniciativa. La banda es el intervalo de predicción del 80%.
 CF_WINDOWS = (8, 12, 16)
@@ -152,7 +152,7 @@ CF_FROM = (min(date.fromisoformat(v) for v in LDP_LAUNCH.values()) - timedelta(d
 _T80 = {6: 1.440, 7: 1.415, 8: 1.397, 9: 1.383, 10: 1.372, 11: 1.363, 12: 1.356, 13: 1.350, 14: 1.345}   # t(0.90, gl)
 Q_CF_DAILY = f"""
 select cast(bi.creation_date as varchar) d, bi.country_code c,
- round(sum(case when product.payment_methods like '%REMOTE%' then bi.gb end)) gl, round(sum(bi.gb)) gt
+ round(sum(case when product.refundable = false then bi.gb end)) gl, round(sum(bi.gb)) gt
 from analytics.bi_sales_fact_sales_recognition bi
 left join lake.channels_bo_product product on bi.origin_product_id = product.transaction_id
 where bi.channel in {CHANNELS}
@@ -186,7 +186,7 @@ def build_cf(rows, today):
         a[0] += float(gl) if gl is not None else 0.0
         a[1] += float(gt) if gt is not None else 0.0
     out = {'w': CF_MAIN, 'sens': list(CF_WINDOWS), 'm': {}}
-    for mi, mname in enumerate(('link', 'total')):
+    for mi, mname in enumerate(('nonref', 'total')):
         res = {}
         for c in LDP_COUNTRIES:
             bmax = max((b for (cc, b) in blocks if cc == c), default=-1)

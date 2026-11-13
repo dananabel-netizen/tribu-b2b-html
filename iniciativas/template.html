@@ -1029,8 +1029,8 @@ function renderLdp(d,cfg){
   }
   document.querySelectorAll(".impGran").forEach(el=>el.onclick=e=>{const g=e.target.dataset.g;if(!g)return;impGran=g;draw();});
   $("ldpMode").onclick=e=>{const g=e.target.dataset.m;if(!g)return;ldpMode=g;draw();};
-  const MG=["Link de pago (nuevo)","Link pre-booking (previo)","Tarjeta crédito","Débito","Cash","Cuenta corriente","HDO pay","Pago diferido","Otros"];
-  const MGC={"Link de pago (nuevo)":"#ED8B08","Link pre-booking (previo)":"#FBBF77","Tarjeta crédito":"#3B82F6","Débito":"#06B6D4","Cash":"#10B981","Cuenta corriente":"#6366F1","HDO pay":"#8B5CF6","Pago diferido":"#EC4899","Otros":"#94A3B8"};
+  const MG=["Link de pago (nuevo)","Link pre-booking (previo)","Tarjeta crédito","Débito","Cash","Cuenta corriente","HDO pay","Gestor de pagos","Pago diferido","Otros"];
+  const MGC={"Link de pago (nuevo)":"#ED8B08","Link pre-booking (previo)":"#FBBF77","Tarjeta crédito":"#3B82F6","Débito":"#06B6D4","Cash":"#10B981","Cuenta corriente":"#6366F1","HDO pay":"#8B5CF6","Gestor de pagos":"#F43F5E","Pago diferido":"#EC4899","Otros":"#94A3B8"};
   let mixC="ALL";
   function drawMix(){
     const mix=cfg.mix||[];

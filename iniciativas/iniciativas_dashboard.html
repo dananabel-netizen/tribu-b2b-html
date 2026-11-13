@@ -957,6 +957,13 @@ function renderLdp(d,cfg){
         <div class="ch" style="height:260px"><canvas id="cMix"></canvas></div></div>
       <div class="card-sub" id="mixIns" style="margin-top:10px;font-weight:600"></div>
       <div class="card-sub" style="margin-top:6px">Mix del GB de hoteles no reembolsables confirmados. Después = desde el día de prendida de cada país (MX 29/9, AR y CL 13/10, BR, CO y PE 19/10), en bloques de 7 días completos. Antes = las 4 semanas previas, solo de referencia. Link de pago nuevo = non ref con penalidad futura al reservar; link pre-booking (previo) = penalidad ya vigente, el link de 1 hora que ya existía (criterio a validar con Producto). Muestra cambios de mix, no causalidad: el total también se mueve por estacionalidad y otras iniciativas.</div></div></div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Contrafactual: ¿cuánto creció el link de pago respecto de su tendencia?</div><div class="card-sub" id="cfSub"></div></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="gran" id="cfMet"><button data-m="link">Link de pago en hoteles</button><button data-m="total">GB total de hoteles</button></div>
+      <div class="gran" id="cfCty"><button data-c="ALL">Todos</button>${C.map(r=>`<button data-c="${r[0]}" title="${CN[r[0]]||r[0]}">${flag(r[0])}</button>`).join("")}</div></div></div>
+      <div id="cfK" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 12px"></div>
+      <div class="ch" style="height:270px"><canvas id="cCf"></canvas></div>
+      <div class="card-sub" id="cfSens" style="margin-top:10px;font-weight:600"></div>
+      <div class="card-sub" style="margin-top:6px">En "Todos" el gráfico muestra solo las semanas que ya tienen todos los países (para que la suma no baje por composición); los KPIs suman todas las semanas completas. Se ajusta una recta a las 12 semanas previas a la prendida de cada país (semanas de 7 días contadas desde ese día) y se proyecta hacia adelante; lo incremental es el GB real menos esa proyección. La banda es el intervalo de predicción del 80% (el rango del total suma las bandas de cada semana, por eso es conservador). El link de pago en hoteles incluye reembolsables y no reembolsables, nuevo y pre-booking. Limitaciones: una recta no captura la estacionalidad (octubre y noviembre) ni el efecto de otras iniciativas que se solaparon (Combinaciones HDO pay, Pago diferido AR, Prefondeo), y el resultado cambia con la ventana elegida, mirá la sensibilidad. Si el GB total de hoteles no sube, el crecimiento del link es en parte migración desde otros medios y no venta nueva.</div></div>
     <details class="q"><summary>Ver top 10 agencias por GB con link de pago · ${pf(cfg.top.reduce((a,r)=>a+r[4],0)/T.gl*100)} del GB del link</summary>
       <table class="stbl" style="margin-top:10px"><thead><tr><th>#</th><th>Agencia</th><th>País</th><th class="num">Bookings</th><th class="num">GB</th></tr></thead><tbody>${cfg.top.map((r,i)=>`<tr><td class="dt">${i+1}</td><td><div class="ag"><span class="av" style="background:${PAL[[...r[1]].reduce((a,c)=>a+c.charCodeAt(0),0)%PAL.length]}">${r[1].trim()[0].toUpperCase()}</span><div><b class="name-txt">${r[1]}</b><small class="aid">${r[0]}</small></div></div></td><td>${flag(r[2])} ${CN[r[2]]||r[2]}</td><td class="num">${r[3]}</td><td class="num"><b>USD ${fmtN(r[4])}</b></td></tr>`).join("")}</tbody></table>
       <div class="card-sub" style="margin-top:8px">Reservas confirmadas desde el lanzamiento de cada país, solo link nuevo (non ref con penalidad futura al reservar; no incluye el link pre-booking de 1 hora que ya existía). Se excluyen agencias con "test" en el nombre.</div></details>`;
@@ -1024,8 +1031,42 @@ function renderLdp(d,cfg){
                 x:{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:"Semanas desde la prendida",color:"#64748B",font:{size:11,weight:"600"}}}}}});
   }
   $("mixCty").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;mixC=b.dataset.c;drawMix();};
+  let cfC="ALL",cfM="link";
+  function drawCf(){
+    const cf=cfg.cf;if(!cf)return;
+    const ms=cf.m[cfM],cs=cfC==="ALL"?Object.keys(ms):[cfC].filter(c=>ms[c]);
+    const byB={};let act=0,proj=0,lo=0,hi=0;const sens={};cf.sens.forEach(w=>sens[w]=0);
+    cs.forEach(c=>{ms[c].rows.forEach(([b,a,f,l,h])=>{const o=byB[b]=byB[b]||[0,0,0,0];o[0]+=a;o[1]+=f;o[2]+=l;o[3]+=h;
+        if(b>=0){act+=a;proj+=f;lo+=l;hi+=h;}});cf.sens.forEach(w=>sens[w]+=ms[c].sens[w]||0);});
+    const cmax=Math.min(...cs.map(c=>Math.max(...ms[c].rows.map(r=>r[0]))));
+    const bs=Object.keys(byB).map(Number).filter(b=>cfC!=="ALL"||b<=cmax).sort((a,b)=>a-b);
+    const inc=act-proj,incLo=act-hi,incHi=act-lo;
+    const kb=(l,v,sub)=>`<div style="background:var(--panel2);border-radius:10px;padding:10px 12px"><div class="kpi-lbl">${l}</div><div class="kpi-val" style="font-size:20px">${v}</div><div class="kpi-sub" style="font-size:11px;color:var(--mut)">${sub}</div></div>`;
+    $("cfK").innerHTML=kb("GB real desde la prendida","USD "+fmtN(act),"todas las semanas completas")+
+      kb("GB proyectado (tendencia previa)","USD "+fmtN(proj),"si todo hubiera seguido igual")+
+      kb("Crecimiento incremental","USD "+(inc>=0?"+":"")+fmtN(inc),"rango 80%: "+(incLo>=0?"+":"")+fmtN(incLo)+" a "+(incHi>=0?"+":"")+fmtN(incHi))+
+      kb("Sobre la proyección",proj?(inc>=0?"+":"")+pf(inc/proj*100):"-","real vs proyectado");
+    $("cfSub").textContent=(cfM==="link"?"GB de hoteles pagados con link de pago":"GB total de hoteles")+" por semana desde la prendida, real vs proyección lineal de las 12 semanas previas"+(cfC==="ALL"?" · todos los países":" · "+(CN[cfC]||cfC));
+    $("cfSens").textContent="Sensibilidad a la ventana previa: "+cf.sens.map(w=>w+" sem: "+(sens[w]>=0?"+":"")+"USD "+fmtN(sens[w])).join("  ·  ");
+    document.querySelectorAll("#cfMet button").forEach(b=>b.classList.toggle("active",b.dataset.m===cfM));
+    document.querySelectorAll("#cfCty button").forEach(b=>b.classList.toggle("active",b.dataset.c===cfC));
+    const lb=bs.map(b=>b<0?"Sem "+b:"Sem "+(b+1));
+    const cut=bs.findIndex(b=>b>=0);
+    chart("cCf",{type:"line",data:{labels:lb,datasets:[
+      {label:"lo",data:bs.map(b=>b>=0?byB[b][2]:null),borderWidth:0,pointRadius:0,fill:false,order:4},
+      {label:"Banda 80%",data:bs.map(b=>b>=0?byB[b][3]:null),borderWidth:0,pointRadius:0,fill:"-1",backgroundColor:"rgba(148,163,184,.28)",order:4},
+      {label:"Proyección (tendencia previa)",data:bs.map(b=>byB[b][1]),borderColor:"#64748B",borderDash:[6,5],borderWidth:2,pointRadius:0,tension:0,order:3},
+      {label:"Real",data:bs.map(b=>byB[b][0]),borderColor:"#ED8B08",backgroundColor:"#ED8B08",borderWidth:3,pointRadius:4,pointBackgroundColor:bs.map(b=>b>=0?"#ED8B08":"#fff"),pointBorderColor:"#ED8B08",tension:.25,order:1}]},
+      options:{...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11},filter:i=>i.text!=="lo"}},
+        tooltip:{...tt,filter:i=>i.dataset.label!=="lo",callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y)}},vlabels:{on:false},stacklabels:{on:false}},
+        scales:{y:{beginAtZero:true,grid,ticks:{callback:v=>fmtN(v/1000)+"k"},title:{display:true,text:"GB semanal (USD)",color:"#64748B",font:{size:11,weight:"600"}}},
+                x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:"Semanas respecto de la prendida (negativas = antes)",color:"#64748B",font:{size:11,weight:"600"}}}}}});
+  }
+  $("cfMet").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;cfM=b.dataset.m;drawCf();};
+  $("cfCty").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;cfC=b.dataset.c;drawCf();};
   draw();
   drawMix();
+  drawCf();
 }
 
 /* ---------- impacto: combinaciones de MDP con HDO pay (multi-país, escalonado) ---------- */

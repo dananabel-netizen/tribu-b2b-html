@@ -956,7 +956,7 @@ function renderLdp(d,cfg){
         <div><table class="stbl"><thead><tr><th>Medio de pago</th><th class="num">Antes</th><th class="num">Después</th><th class="num">Cambio</th></tr></thead><tbody id="mixTb"></tbody></table></div>
         <div class="ch" style="height:260px"><canvas id="cMix"></canvas></div></div>
       <div class="card-sub" id="mixIns" style="margin-top:10px;font-weight:600"></div>
-      <div class="card-sub" style="margin-top:6px">Mix del GB de hoteles no reembolsables confirmados. Antes = semanas completas desde el 31/8 hasta la prendida; después = semanas completas desde la prendida (MX desde el 13/10, cuando terminó el rollout; el 29/9 fue solo prueba en classic). El link de pago ya existía en non ref antes de la prendida, por eso no parte de cero. Esto muestra cambios de mix, no causalidad: el total vendido también se mueve por estacionalidad y por otras iniciativas, eso se mide en el contrafactual.</div></div>
+      <div class="card-sub" style="margin-top:6px">Mix del GB de hoteles no reembolsables confirmados. Después = desde el día de prendida de cada país (MX 29/9, AR y CL 13/10, BR, CO y PE 19/10), en bloques de 7 días completos. Antes = las 4 semanas previas, solo de referencia. Link de pago nuevo = non ref con penalidad futura al reservar; link pre-booking (previo) = penalidad ya vigente, el link de 1 hora que ya existía (criterio a validar con Producto). Muestra cambios de mix, no causalidad: el total también se mueve por estacionalidad y otras iniciativas.</div></div></div>
     <details class="q"><summary>Ver top 10 agencias por GB con link de pago · ${pf(cfg.top.reduce((a,r)=>a+r[4],0)/T.gl*100)} del GB del link</summary>
       <table class="stbl" style="margin-top:10px"><thead><tr><th>#</th><th>Agencia</th><th>País</th><th class="num">Bookings</th><th class="num">GB</th></tr></thead><tbody>${cfg.top.map((r,i)=>`<tr><td class="dt">${i+1}</td><td><div class="ag"><span class="av" style="background:${PAL[[...r[1]].reduce((a,c)=>a+c.charCodeAt(0),0)%PAL.length]}">${r[1].trim()[0].toUpperCase()}</span><div><b class="name-txt">${r[1]}</b><small class="aid">${r[0]}</small></div></div></td><td>${flag(r[2])} ${CN[r[2]]||r[2]}</td><td class="num">${r[3]}</td><td class="num"><b>USD ${fmtN(r[4])}</b></td></tr>`).join("")}</tbody></table>
       <div class="card-sub" style="margin-top:8px">Reservas confirmadas desde el lanzamiento de cada país. Se excluyen agencias con "test" en el nombre.</div></details>`;
@@ -995,39 +995,33 @@ function renderLdp(d,cfg){
   }
   document.querySelectorAll(".impGran").forEach(el=>el.onclick=e=>{const g=e.target.dataset.g;if(!g)return;impGran=g;draw();});
   $("ldpMode").onclick=e=>{const g=e.target.dataset.m;if(!g)return;ldpMode=g;draw();};
-  const MG=["Link de pago","Tarjeta crédito","Débito","Cash","Cuenta corriente","HDO pay","Pago diferido","Otros"];
-  const MGC={"Link de pago":"#ED8B08","Tarjeta crédito":"#3B82F6","Débito":"#06B6D4","Cash":"#10B981","Cuenta corriente":"#6366F1","HDO pay":"#8B5CF6","Pago diferido":"#EC4899","Otros":"#94A3B8"};
+  const MG=["Link de pago (nuevo)","Link pre-booking (previo)","Tarjeta crédito","Débito","Cash","Cuenta corriente","HDO pay","Pago diferido","Otros"];
+  const MGC={"Link de pago (nuevo)":"#ED8B08","Link pre-booking (previo)":"#FBBF77","Tarjeta crédito":"#3B82F6","Débito":"#06B6D4","Cash":"#10B981","Cuenta corriente":"#6366F1","HDO pay":"#8B5CF6","Pago diferido":"#EC4899","Otros":"#94A3B8"};
   let mixC="ALL";
   function drawMix(){
-    const mix=cfg.mix||[],cmp=cfg.mixcmp||{};
-    const addD=(w,n)=>iso(new Date(new Date(w+"T00:00:00Z").getTime()+n*864e5));
-    const full=w=>addD(w,7)<=cfg.asof;
-    const pre={},post={},pw=new Set(),qw=new Set(),byW={};
+    const mix=cfg.mix||[];
+    const pre={},post={},byB={},pc=new Set(),qb=new Set();
     MG.forEach(g=>{pre[g]=0;post[g]=0;});
-    mix.forEach(([w,c,g,n,gb])=>{
-      if(!full(w)||(mixC!=="ALL"&&c!==mixC))return;
-      const ld=cmp[c];if(!ld)return;
-      (byW[w]=byW[w]||{})[g]=(byW[w][g]||0)+gb;
-      if(addD(w,6)<ld){pre[g]+=gb;pw.add(c+w);}else if(w>=ld){post[g]+=gb;qw.add(c+w);}
+    mix.forEach(([c,b,g,n,gb])=>{
+      if(mixC!=="ALL"&&c!==mixC)return;
+      if(b<0){pre[g]+=gb;pc.add(c+b);}else{post[g]+=gb;qb.add(c+b);(byB[b]=byB[b]||{})[g]=(byB[b][g]||0)+gb;}
     });
     const tp=MG.reduce((a,g)=>a+pre[g],0),tq=MG.reduce((a,g)=>a+post[g],0);
     const sp=g=>tp?pre[g]/tp*100:0,sq=g=>tq?post[g]/tq*100:0;
-    const rowsM=MG.filter(g=>pre[g]||post[g]).map(g=>{const dl=sq(g)-sp(g);
-      return `<tr><td><span class="dot" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${MGC[g]};margin-right:6px"></span>${g}</td><td class="num">${pf(sp(g))}</td><td class="num">${pf(sq(g))}</td><td class="num"><b style="color:${Math.abs(dl)<0.5?"var(--mut)":dl>0?"#059669":"#DC2626"}">${dl>0?"+":""}${dl.toFixed(1).replace(".",",")} pp</b></td></tr>`;}).join("");
-    $("mixTb").innerHTML=rowsM;
-    const nPre=mixC==="ALL"?"":" · antes "+(new Set([...pw].map(x=>x.slice(2)))).size+" sem, después "+(new Set([...qw].map(x=>x.slice(2)))).size+" sem";
-    $("mixSub").textContent="Participación de cada medio en el GB de hoteles non ref, antes vs después de la prendida"+(mixC==="ALL"?" (cada país con su fecha)":" · "+(CN[mixC]||mixC)+nPre);
-    const others=MG.filter(g=>g!=="Link de pago"&&(pre[g]||post[g])).map(g=>[g,sq(g)-sp(g)]).sort((a,b)=>a[1]-b[1]);
-    const lk=sq("Link de pago")-sp("Link de pago"),top=others[0];
-    $("mixIns").textContent=top?`Link de pago ${lk>=0?"+":""}${lk.toFixed(1).replace(".",",")} pp. Medio que más cede: ${top[0]} (${top[1].toFixed(1).replace(".",",")} pp).`:"";
+    $("mixTb").innerHTML=MG.filter(g=>pre[g]||post[g]).map(g=>{const dl=sq(g)-sp(g);
+      return `<tr><td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${MGC[g]};margin-right:6px"></span>${g}</td><td class="num">${pf(sp(g))}</td><td class="num">${pf(sq(g))}</td><td class="num"><b style="color:${Math.abs(dl)<0.5?"var(--mut)":dl>0?"#059669":"#DC2626"}">${dl>0?"+":""}${dl.toFixed(1).replace(".",",")} pp</b></td></tr>`;}).join("");
+    $("mixSub").textContent="Participación de cada medio en el GB de hoteles non ref · después = desde el día de prendida"+(mixC==="ALL"?" de cada país":" en "+(CN[mixC]||mixC))+", en semanas completas de 7 días";
+    const lk="Link de pago (nuevo)",oth=MG.filter(g=>g!==lk&&g!=="Link pre-booking (previo)"&&(pre[g]||post[g])).map(g=>[g,sq(g)-sp(g)]).sort((a,b)=>a[1]-b[1]);
+    const dl=sq(lk)-sp(lk),top=oth[0];
+    $("mixIns").textContent=tq?`Link de pago nuevo ${dl>=0?"+":""}${dl.toFixed(1).replace(".",",")} pp. Medio que más cede: ${top[0]} (${top[1].toFixed(1).replace(".",",")} pp).`:"Todavía no hay una semana completa desde la prendida.";
     document.querySelectorAll("#mixCty button").forEach(b=>b.classList.toggle("active",b.dataset.c===mixC));
-    const wk=Object.keys(byW).sort();
-    chart("cMix",{type:"bar",data:{labels:wk.map(w=>"Sem "+fdate(w)),datasets:MG.map(g=>{const t=w=>MG.reduce((a,x)=>a+(byW[w][x]||0),0);
-        return {label:g,data:wk.map(w=>t(w)?Math.round((byW[w][g]||0)/t(w)*1000)/10:0),backgroundColor:MGC[g],maxBarThickness:48};})},
+    const bs=Object.keys(byB).map(Number).sort((a,b)=>a-b);
+    const cols=[["Antes (4 sem)",pre,tp],...bs.map(b=>["Sem "+(b+1),byB[b],MG.reduce((a,g)=>a+(byB[b][g]||0),0)])];
+    chart("cMix",{type:"bar",data:{labels:cols.map(c=>c[0]),datasets:MG.map(g=>({label:g,data:cols.map(([,o,t])=>t?Math.round((o[g]||0)/t*1000)/10:0),backgroundColor:MGC[g],maxBarThickness:56}))},
       options:{...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11}}},
         tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+pf(c.parsed.y)}},vlabels:{on:false},stacklabels:{on:false}},
         scales:{y:{stacked:true,beginAtZero:true,max:100,grid,ticks:{callback:v=>v+"%"},title:{display:true,text:"% del GB non ref",color:"#64748B",font:{size:11,weight:"600"}}},
-                x:{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true}}}}});
+                x:{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:"Semanas desde la prendida",color:"#64748B",font:{size:11,weight:"600"}}}}}});
   }
   $("mixCty").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;mixC=b.dataset.c;drawMix();};
   draw();

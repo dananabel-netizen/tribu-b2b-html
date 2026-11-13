@@ -95,14 +95,16 @@ t as (select p, max(an) an, max(c) c, count(distinct r) n, round(sum(gb)) g from
 select p, an, c, n, g from t order by g desc limit 10
 """
 
-# Mix de medios de pago del GB non ref (canibalización): semanal por país, desde antes del lanzamiento.
-# Link de pago = payment_methods con REMOTE (siempre viene como REMOTE,CREDIT_CARD). El resto se clasifica por prioridad.
-LDP_MIX_FROM = '2026-08-31'
-# Fecha de comparación antes/después. MX: el 29/9 fue solo prueba en classic; el rollout completo terminó el 13/10.
-LDP_MIX_CMP = {'MX': '2026-10-13', 'AR': '2026-10-13', 'CL': '2026-10-13', 'BR': '2026-10-19', 'CO': '2026-10-19', 'PE': '2026-10-19'}
+# Mix de medios de pago del GB non ref (canibalización), en bloques de 7 días contados desde el día de prendida de cada país.
+# Bloque 0 = días 0-6 desde la prendida, 1 = días 7-13, etc. Los bloques -4..-1 son las 4 semanas previas (solo referencia).
+# Link de pago nuevo = payment_methods con REMOTE y penalidad futura al reservar; link pre-booking (previo) = REMOTE con penalidad ya vigente
+# (el link de 1 hora que ya existía en hoteles con ventana chica). Criterio a validar con Producto.
+LDP_MIX_PRE = 4
+LDP_MIX_FROM = (min(date.fromisoformat(v) for v in LDP_LAUNCH.values()) - timedelta(days=7 * LDP_MIX_PRE)).isoformat()
 Q_LDP_MIX = f"""
-select cast(date_trunc('week', bi.creation_date) as varchar) w, bi.country_code c,
- case when product.payment_methods like '%REMOTE%' then 'Link de pago'
+select cast(bi.creation_date as varchar) d, bi.country_code c,
+ case when product.payment_methods like '%REMOTE%' and product.penalty_start_date >= bi.creation_date then 'Link de pago (nuevo)'
+      when product.payment_methods like '%REMOTE%' then 'Link pre-booking (previo)'
       when product.payment_methods like '%AGENCY_ACCOUNT%' then 'Cuenta corriente'
       when product.payment_methods like '%WALLET%' then 'HDO pay'
       when product.payment_methods like '%DEFERRED%' then 'Pago diferido'
@@ -120,6 +122,21 @@ where bi.channel in {CHANNELS}
   and lower(coalesce(bi.agency_name,'')) not like '%test%'
 group by 1, 2, 3
 """
+
+
+def mix_blocks(rows, today):
+    """Agrupa el mix diario en bloques de 7 días desde la prendida de cada país; solo bloques completos."""
+    acc = {}
+    for d, c, g, n, gb in rows:
+        launch = date.fromisoformat(LDP_LAUNCH[c])
+        b = (date.fromisoformat(d) - launch).days // 7
+        if b < -LDP_MIX_PRE or launch + timedelta(days=7 * (b + 1)) > today:
+            continue   # fuera de la ventana o bloque incompleto
+        a = acc.setdefault((c, b, g), [0, 0.0])
+        a[0] += int(n)
+        a[1] += float(gb) if gb is not None else 0.0
+    return [[c, b, g, v[0], num(round(v[1]))] for (c, b, g), v in sorted(acc.items())]
+
 
 # ── Combinaciones de MDP con HDO pay: prendido escalonado ──────────────────────────────────────────
 # HDO pay = reserva cobrada con 2+ medios en el scheduler y al menos uno es DWALLET (query de Metabase 175574).
@@ -240,9 +257,9 @@ def build_ldp(cfg_old, r, today):
     top = [[row[0], row[1], row[2], num(row[3]), num(row[4])] for row in r['ldp_top']]
     cfg = dict(cfg_old)
     cfg.pop('remote', None)   # ya no se usa
-    mix = [[row[0], row[1], row[2], num(row[3]), num(float(row[4])) if row[4] is not None else 0] for row in r['ldp_mix']]
+    mix = mix_blocks(r['ldp_mix'], today)
     cfg.update(kind='ldp', title=cfg_old.get('title', 'Link de pago en hoteles non ref'), asof=today.isoformat(),
-               partial=(today + timedelta(days=1)).isoformat(), daily=daily, countries=countries, tot=tot, top=top, mix=mix, mixcmp=LDP_MIX_CMP)
+               partial=(today + timedelta(days=1)).isoformat(), daily=daily, countries=countries, tot=tot, top=top, mix=mix)
     return cfg
 
 

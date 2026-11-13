@@ -1122,7 +1122,7 @@ function renderHdo(d,cfg){
         <div class="ch" style="height:228px"><canvas id="cHdoS"></canvas></div></div>
     </div>
     </section><section class="imp-sec" id="isec2"><div class="sec-h"><span class="sec-n">2</span><div><h3>Evolución</h3><p>GB y reservas con HDO pay a lo largo del tiempo</p></div></div>
-    <div class="card"><div class="card-hdr"><div><div class="card-title">GB con HDO pay por período</div><div class="card-sub">GB confirmado en USD de reservas con wallet combinado con otro medio · AR, CL, MX, BR y CO</div></div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">GB con HDO pay por período</div><div class="card-sub">GB confirmado en USD de reservas con wallet combinado con otro medio · AR, CL, CO, MX, BR y PE · desde 2 meses antes de la primera prendida</div></div>
       <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
       <div class="ch"><canvas id="cHdoV"></canvas></div></div>
         </section><section class="imp-sec" id="isec3"><div class="sec-h"><span class="sec-n">3</span><div><h3>Con qué se combina</h3><p>¿Qué medio completa el pago cuando el saldo no alcanza?</p></div></div>
@@ -1153,13 +1153,13 @@ function renderHdo(d,cfg){
         pointRadius:impGran==="d"?3:6,pointHoverRadius:7,pointBackgroundColor:"#fff",pointBorderColor:ks.map((k,i)=>on(i)?"#ED8B08":"#94A3B8"),pointBorderWidth:2}]},
       options:{...baseOpts,plugins:{legend:{display:false},
         tooltip:{...tt,displayColors:false,callbacks:{label:c=>"Share: "+pf(c.parsed.y),afterLabel:c=>"USD "+fmtN(m.get(ks[c.dataIndex])[1])+" de USD "+fmtN(m.get(ks[c.dataIndex])[3])}},
-        vlabels:{on:true,size:impGran==="d"?9:11,zero:true,fmt:pf}},
+        vlabels:{on:true,size:impGran==="d"?9:11,zero:false,fmt:pf}},
         scales:{y:{beginAtZero:true,grace:"30%",grid,ticks:{callback:v=>v+"%"},title:{display:true,text:"% del GB",color:"#64748B",font:{size:11,weight:"600"}}},
                 x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
     chart("cHdoV",{type:"bar",data:{labels:lb,datasets:[{label:"GB con HDO pay",data:ks.map(k=>Math.round(m.get(k)[1])),backgroundColor:"#ED8B08",borderRadius:{topLeft:6,topRight:6},maxBarThickness:64}]},
       options:{...baseOpts,plugins:{legend:{display:false},
         tooltip:{...tt,displayColors:false,callbacks:{label:c=>"GB con HDO pay: USD "+fmtN(c.parsed.y),afterLabel:c=>fmtN(m.get(ks[c.dataIndex])[0])+" reservas"}},
-        vlabels:{on:true,size:impGran==="d"?9:11,zero:true,fmt:v=>"USD "+fmtN(v)}},
+        vlabels:{on:true,size:impGran==="d"?9:11,zero:false,fmt:v=>"USD "+fmtN(v)}},
         scales:{y:{beginAtZero:true,grace:"18%",grid,title:{display:true,text:"GB (USD)",color:"#64748B",font:{size:11,weight:"600"}}},
                 x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
   }

@@ -1051,7 +1051,7 @@ function renderLdp(d,cfg){
     document.querySelectorAll("#mixCty button").forEach(b=>b.classList.toggle("active",b.dataset.c===mixC));
     const bs=Object.keys(byB).map(Number).sort((a,b)=>a-b);
     const cols=[["Antes (4 sem)",pre,tp],...bs.map(b=>["Sem "+(b+1),byB[b],MG.reduce((a,g)=>a+(byB[b][g]||0),0)])];
-    chart("cMix",{type:"bar",data:{labels:cols.map(c=>c[0]),datasets:MG.map(g=>({label:g,data:cols.map(([,o,t])=>t?Math.round((o[g]||0)/t*1000)/10:0),backgroundColor:MGC[g],maxBarThickness:56}))},
+    chart("cMix",{type:"bar",data:{labels:cols.map(c=>c[0]),datasets:MG.filter(g=>pre[g]||post[g]).map(g=>({label:g,data:cols.map(([,o,t])=>t?Math.round((o[g]||0)/t*1000)/10:0),backgroundColor:MGC[g],maxBarThickness:56}))},
       options:{...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11}}},
         tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+pf(c.parsed.y)}},vlabels:{on:false},stacklabels:{on:false}},
         scales:{y:{stacked:true,beginAtZero:true,max:100,grid,ticks:{callback:v=>v+"%"},title:{display:true,text:"% del GB non ref",color:"#64748B",font:{size:11,weight:"600"}}},

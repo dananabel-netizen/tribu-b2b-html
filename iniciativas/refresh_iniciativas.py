@@ -300,6 +300,64 @@ group by 1 order by 1
 """
 
 
+# Incrementalidad de Pago diferido AR con la venta de paquetes (flujo FLIGHT_HOTEL de chewie = paquete).
+# Se proyecta con una recta la venta semanal de paquetes de cada país en las semanas previas a la prendida de AR y se compara contra lo real.
+# AR es el país tratado; el resto es el control (el pago diferido en USD solo se prendió en AR).
+PKG_COUNTRIES = ['AR', 'BR', 'MX', 'CL', 'CO', 'PE']
+PKG_FROM = (date.fromisoformat(PD_LAUNCH) - timedelta(days=7 * 16)).isoformat()
+Q_PKG_DAILY = f"""
+select cast(bi.creation_date as varchar) d, bi.country_code c,
+ round(sum(bi.gb)) gb, count(distinct bi.transaction_code) n,
+ round(sum(case when product.payment_methods = 'DEFERRED_PAYMENT' then bi.gb end)) gb_pd,
+ count(distinct case when product.payment_methods = 'DEFERRED_PAYMENT' then bi.transaction_code end) n_pd
+from analytics.bi_sales_fact_sales_recognition bi
+left join data.lake.chewie_reservation c on cast(bi.transaction_code as varchar) = c.id and c.last_version = true
+left join lake.channels_bo_product product on bi.origin_product_id = product.transaction_id
+where bi.channel in {CHANNELS}
+  and bi.creation_date >= date '{PKG_FROM}' and bi.partition_period >= '{PKG_FROM[:7]}'
+  and bi.transaction_status = 'Confirmado' and c.shopping_flow_source = 'FLIGHT_HOTEL'
+  and bi.country_code in ({",".join("'" + x + "'" for x in PKG_COUNTRIES)})
+  and lower(coalesce(bi.agency_name,'')) not like '%test%'
+group by 1, 2
+"""
+
+
+def build_pkg(rows, today):
+    launch = date.fromisoformat(PD_LAUNCH)
+    blocks, tot = {}, {c: [0.0, 0, 0.0, 0] for c in PKG_COUNTRIES}   # tot: GB, reservas, GB pago diferido, reservas pago diferido (desde la prendida)
+    for d, c, gb, n, gbp, np_ in rows:
+        dd = date.fromisoformat(d)
+        gb, gbp = (float(gb) if gb is not None else 0.0), (float(gbp) if gbp is not None else 0.0)
+        if dd >= launch:
+            t = tot[c]
+            t[0] += gb; t[1] += int(n); t[2] += gbp; t[3] += int(np_ or 0)
+        b = (dd - launch).days // 7
+        if launch + timedelta(days=7 * (b + 1)) > today:
+            continue
+        a = blocks.setdefault((c, b), [0.0, 0.0])
+        a[0] += gb; a[1] += int(n)
+    out = {'launch': PD_LAUNCH, 'w': CF_MAIN, 'sens': list(CF_WINDOWS), 'c': {}, 'tot': {c: [round(v) for v in t] for c, t in tot.items()}}
+    for c in PKG_COUNTRIES:
+        bmax = max((b for (cc, b) in blocks if cc == c), default=-1)
+        if bmax < 0:
+            continue
+        val = lambda b: blocks.get((c, b), [0.0, 0.0])[0]
+        sens, rows_out = {}, []
+        for w in CF_WINDOWS:
+            xs = list(range(-w, 0))
+            a, bb, sd, mx, sxx, n = _ols(xs, [val(x) for x in xs])
+            sens[str(w)] = round(sum(val(b) - (a + bb * b) for b in range(0, bmax + 1)))
+            if w != CF_MAIN:
+                continue
+            t = _T80.get(n - 2, 1.372)
+            for b in range(-w, bmax + 1):
+                fit = a + bb * b
+                half = t * sd * (1 + 1 / n + (b - mx) ** 2 / sxx) ** 0.5 if b >= 0 else 0
+                rows_out.append([b, round(val(b)), round(fit), round(max(0, fit - half)), round(fit + half)])
+        out['c'][c] = {'rows': rows_out, 'sens': sens}
+    return out
+
+
 def num(v):
     if v is None:
         return 0
@@ -337,6 +395,7 @@ def fetch_all():
         out['ldp_mix'] = q('ldp_mix', Q_LDP_MIX)
         out['cf_daily'] = q('cf_daily', Q_CF_DAILY)
         out['pd_daily'] = q('pd_daily', Q_PD_DAILY)
+        out['pkg_daily'] = q('pkg_daily', Q_PKG_DAILY)
         out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
         out['hdo_tot'] = q('hdo_tot', Q_HDO_TOT)
         out['hdo_part'] = q('hdo_part', Q_HDO_PART)
@@ -396,7 +455,8 @@ def build_pd(cfg_old, r, q, today):
     sql = cfg_old['query']
     bookings = [[str(x[0]), x[1], x[2], x[3], str(x[4]), num(x[5])] for x in q('pd_bookings', sql)]
     cfg.update(asof=today.isoformat(), partial=(today + timedelta(days=1)).isoformat(),
-               daily=[[row[0], num(row[1]), num(row[2])] for row in r['pd_daily']], bookings=bookings)
+               daily=[[row[0], num(row[1]), num(row[2])] for row in r['pd_daily']], bookings=bookings,
+               pkg=build_pkg(r['pkg_daily'], today))
     return cfg
 
 

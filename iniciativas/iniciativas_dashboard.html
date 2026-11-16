@@ -1366,7 +1366,8 @@ const DL_PR={"1":["#B91C1C","rgba(220,38,38,.12)"],"2":["#C26F00","rgba(237,139,
 const DL_IMP={"DELY-8637":"Grilla de tarifas"};
 let dlView="sprint",dlQ="",dlOff=new Set();
 const dlSt=s=>s||"Sin definir";
-const dlId=id=>id?`<a class="dl-id dl-lnk" href="https://jira.despegar.com/browse/${id}" target="_blank" rel="noopener" title="Abrir ${id} en Jira">${id} ↗</a>`:'<span class="dl-note">sin Dely</span>';
+const JIRA="https:"+"/"+"/jira.despegar.com/browse/";
+const dlId=id=>id?`<a class="dl-id dl-lnk" href="${JIRA}${id}" target="_blank" rel="noopener" title="Abrir ${id} en Jira">${id} ↗</a>`:'<span class="dl-note">sin Dely</span>';
 const dlPill=s=>{const c=DL_ST[dlSt(s)]||DL_ST["Sin definir"];return `<span class="dl-st" style="color:${c[0]};background:${c[1]}"><i></i>${dlSt(s)}</span>`;};
 const dlPri=p=>{if(!p)return `<span class="dl-note">-</span>`;const c=DL_PR[p]||DL_PR["3"];return `<span class="dl-p" style="color:${c[0]};background:${c[1]}">${/^\d$/.test(p)?"P"+p:p}</span>`;};
 function renderDelys(){

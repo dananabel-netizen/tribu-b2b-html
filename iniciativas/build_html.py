@@ -28,6 +28,7 @@ def main():
     html = (html.replace('@@RAW@@', js(data['initiatives']))
                 .replace('@@CFG@@', js(data['impact']['configs']))
                 .replace('@@MAP@@', js(data['impact']['map']))
+                .replace('@@DELYS@@', js(data.get('delys', {'sprints': []})))
                 .replace('@@UPDATED@@', data['updated']))
     out = data_path.parent / 'iniciativas_dashboard.html'
     out.write_text(html, encoding='utf-8')

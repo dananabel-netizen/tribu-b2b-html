@@ -14914,5 +14914,362 @@
    "Link de pago en hoteles non ref | USA|2026-11-11": "ldp",
    "Grilla de tarifas y opciones rápidas en vuelos|2026-11-12": "gv"
   }
+ },
+ "delys": {
+  "asof": "2026-11-16",
+  "sheet": "https://docs.google.com/spreadsheets/d/1EygufCXYjLhPsZ_GKAy2e6ihGl4RRqCmZ9bCRYzr5Lw/edit?gid=103441681",
+  "sprints": [
+   {
+    "n": 14,
+    "start": null,
+    "items": [
+     [
+      "DELY-7718",
+      "Comparación de cotizaciones vuelos y paquetes",
+      "",
+      "Done",
+      ""
+     ],
+     [
+      "DELY-4529",
+      "Tarifa neta en shopping",
+      "",
+      "In progress",
+      ""
+     ],
+     [
+      "DELY-6419",
+      "HotelDo HTML - Visualización de comisiones en asistencias PI Paquetes (botón modo agencia)",
+      "",
+      "Done",
+      ""
+     ],
+     [
+      "DELY-6880",
+      "Switch dólares Disney y Universal",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-7588",
+      "Pop up de lanzamiento HDO Academy",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-3689",
+      "Spike - carrito en HotelDO",
+      "",
+      "Despriorizado",
+      ""
+     ]
+    ]
+   },
+   {
+    "n": 15,
+    "start": null,
+    "items": [
+     [
+      "DELY-6880",
+      "Switch dólares Disney y Universal",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-7588",
+      "Pop up de lanzamiento HDO Academy",
+      "",
+      "Done",
+      ""
+     ],
+     [
+      "DELY-6916",
+      "Spike - Cotizaciones vivas",
+      "",
+      "Priorizado",
+      ""
+     ],
+     [
+      "DELY-4529",
+      "Tarifa neta en shopping",
+      "",
+      "Done",
+      ""
+     ]
+    ]
+   },
+   {
+    "n": 16,
+    "start": "2026-09-14",
+    "items": [
+     [
+      "DELY-7984",
+      "Descuentos por MDP en Shopping (componente)",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-8628",
+      "Spike - Carritos por cliente",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-8630",
+      "Implementación Cotizaciones vivas",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-8637",
+      "Shopping vuelos - Grilla + opciones rápidas",
+      "",
+      "Despriorizado",
+      ""
+     ]
+    ]
+   },
+   {
+    "n": 17,
+    "start": "2026-10-05",
+    "items": [
+     [
+      "DELY-7984",
+      "Descuentos por MDP en Shopping (componente)",
+      "",
+      "In progress",
+      ""
+     ],
+     [
+      "DELY-9113",
+      "Badge de notificaciones en HDO Academy",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-8628",
+      "Spike - Carritos por cliente",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-8630",
+      "Implementación Cotizaciones vivas",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-8637",
+      "Shopping vuelos - Grilla + opciones rápidas",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-9114",
+      "Implementación de PI de Vuelos",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-9139",
+      "Spike - personalización de cotizaciones",
+      "",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-6880",
+      "Switch dólares Disney y Universal",
+      "",
+      "Despriorizado",
+      ""
+     ]
+    ]
+   },
+   {
+    "n": 18,
+    "start": "2026-10-26",
+    "items": [
+     [
+      "DELY-7984",
+      "Descuentos por MDP en Shopping (componente)",
+      "",
+      "Carry over",
+      ""
+     ],
+     [
+      "DELY-8628",
+      "Spike - Carritos por cliente",
+      "1",
+      "Priorizado",
+      ""
+     ],
+     [
+      "DELY-8630",
+      "Implementación Cotizaciones vivas",
+      "",
+      "Priorizado",
+      ""
+     ],
+     [
+      "DELY-8879",
+      "IT Cotizaciones vivas",
+      "1",
+      "Priorizado",
+      ""
+     ],
+     [
+      "DELY-9113",
+      "Badge de notificaciones en HDO Academy",
+      "3",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-8637",
+      "Shopping vuelos - Grilla + opciones rápidas",
+      "2",
+      "Priorizado · otro IT",
+      ""
+     ],
+     [
+      "DELY-9114",
+      "Implementación de PI de Vuelos",
+      "2",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-9139",
+      "Personalización de cotizaciones | BOX comentarios",
+      "1",
+      "Despriorizado",
+      ""
+     ],
+     [
+      "DELY-9592",
+      "Tope de comisiones en Brasil",
+      "1",
+      "Priorizado",
+      ""
+     ],
+     [
+      "DELY-9595",
+      "Mail de clientes en vuelos",
+      "No aplica",
+      "No se hace",
+      ""
+     ],
+     [
+      "DELY-9709",
+      "Iteración Tarifa Neta",
+      "1",
+      "Priorizado",
+      "Crear Dely"
+     ],
+     [
+      "DELY-6880",
+      "Switch dólares Disney y Universal",
+      "2",
+      "Despriorizado",
+      ""
+     ]
+    ]
+   },
+   {
+    "n": 19,
+    "start": "2026-11-16",
+    "items": [
+     [
+      "DELY-7984",
+      "Descuentos por MDP en Shopping (componente)",
+      "",
+      "Carry over",
+      ""
+     ],
+     [
+      "DELY-8879",
+      "IT Cotizaciones vivas",
+      "",
+      "Carry over",
+      "Mandar AG sbx"
+     ],
+     [
+      "DELY-9592",
+      "Tope de comisiones en Brasil",
+      "",
+      "Carry over",
+      ""
+     ],
+     [
+      "DELY-9709",
+      "Iteración Tarifa Neta",
+      "",
+      "Carry over",
+      ""
+     ],
+     [
+      "DELY-9114",
+      "Implementación de PI de Vuelos",
+      "3",
+      "",
+      ""
+     ],
+     [
+      "DELY-9139",
+      "Personalización de cotizaciones | BOX comentarios",
+      "1",
+      "",
+      ""
+     ],
+     [
+      "DELY-6880",
+      "Switch dólares Disney y Universal | AR",
+      "2",
+      "",
+      ""
+     ],
+     [
+      "DELY-9113",
+      "Badge de notificaciones en HDO Academy",
+      "3",
+      "",
+      ""
+     ],
+     [
+      "DELY-10103",
+      "Cancelación de reservas activas desde el BO",
+      "1",
+      "",
+      ""
+     ],
+     [
+      "",
+      "PDF de cotizaciones",
+      "",
+      "",
+      ""
+     ],
+     [
+      "DELY-10105",
+      "Modificación de medio de pago en mis ventas | Ex Gestor de pagos",
+      "No aplica",
+      "",
+      "Tony"
+     ]
+    ]
+   }
+  ]
  }
 }

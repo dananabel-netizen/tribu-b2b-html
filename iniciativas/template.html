@@ -35,6 +35,32 @@ body{margin:0;background:var(--bg);color:var(--txt);font:13px/1.45 'Rubik',syste
 .chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.14);color:#fff;border-radius:99px;padding:5px 14px;font-size:12px;font-weight:500;white-space:nowrap}
 .chip.live::first-letter{color:var(--green)}
 
+/* delys it */
+.dl-st{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.dl-st i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.dl-id{font:700 11px 'Rubik',sans-serif;color:var(--ink);background:rgba(34,50,96,.08);padding:2px 8px;border-radius:6px;white-space:nowrap}
+.dl-p{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px;letter-spacing:.04em}
+.dl-sp{background:var(--panel);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden}
+.dl-sp-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(237,139,8,.10),transparent)}
+.dl-sp-h b{font-size:15px;color:var(--ink)}
+.dl-sp-h .when{font-size:12px;color:var(--mut)}
+.dl-mini{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.dl-row{display:grid;grid-template-columns:96px 1fr 70px 170px 150px;gap:12px;align-items:center;padding:9px 16px;border-bottom:1px solid var(--line);font-size:13px}
+.dl-row:last-child{border-bottom:none}
+.dl-row.hd{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);font-weight:700;padding:6px 16px;background:var(--panel2)}
+.dl-ttl{font-weight:600;color:var(--txt)}
+.dl-note{font-size:12px;color:var(--mut)}
+.dl-chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.dl-chip{cursor:pointer;border:1.5px solid transparent;font-family:inherit}
+.dl-chip.off{opacity:.38}
+.dl-mx{width:100%;border-collapse:collapse;font-size:13px}
+.dl-mx th{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);padding:6px 8px;border-bottom:1px solid var(--line);text-align:center}
+.dl-mx th:first-child,.dl-mx td:first-child{text-align:left}
+.dl-mx td{padding:8px;border-bottom:1px solid var(--line);text-align:center}
+.dl-dot{display:inline-block;width:14px;height:14px;border-radius:50%}
+.dl-dot.cur{box-shadow:0 0 0 3px rgba(237,139,8,.25)}
+@media(max-width:900px){.dl-row{grid-template-columns:1fr;gap:4px}.dl-row.hd{display:none}}
+
 /* tabs */
 .tabs{position:sticky;top:59px;z-index:90;background:var(--panel);border-bottom:1px solid var(--line);display:flex;gap:4px;padding:0 28px}
 .tab{background:none;border:none;border-bottom:3px solid transparent;padding:12px 18px;font:600 13px 'Rubik',sans-serif;color:var(--mut);cursor:pointer}
@@ -536,6 +562,7 @@ details.q summary{font-size:14px;display:flex;align-items:center;gap:8px}
 
 <nav class="tabs" id="tabs">
   <button class="tab active" data-p="lista">🗂️ Iniciativas</button>
+  <button class="tab" data-p="delys">🧩 Delys IT</button>
   <button class="tab imp" data-p="impacto" id="tabImpacto" style="display:none"></button>
 </nav>
 
@@ -558,6 +585,8 @@ details.q summary{font-size:14px;display:flex;align-items:center;gap:8px}
     <div id="cal"></div>
     <div id="list"></div>
   </section>
+
+  <section class="page" id="p-delys"><div id="delys"></div></section>
 
   <section class="page" id="p-impacto"><div id="impact"></div></section>
 
@@ -584,6 +613,7 @@ const isRb=d=>/rollback|apag/i.test(d.note);
 
 /* ---------- impacto por iniciativa ---------- */
 // datos de impacto: los genera refresh_iniciativas.py (data.json)
+const DELYS=@@DELYS@@;
 const IMPACT_CFG=@@CFG@@, IMPACT_MAP=@@MAP@@;
 const IMPACT={};Object.keys(IMPACT_MAP).forEach(k=>IMPACT[k]=IMPACT_CFG[IMPACT_MAP[k]]);
 
@@ -851,7 +881,7 @@ function setPage(p){
   closeDrawer();
   [...$("tabs").children].forEach(b=>b.classList.toggle("active",b.dataset.p===p));
   document.querySelectorAll(".page").forEach(s=>s.classList.toggle("active",s.id==="p-"+p));
-  document.querySelector(".fbar").style.display=p==="impacto"?"none":"";
+  document.querySelector(".fbar").style.display=(p==="impacto"||p==="delys")?"none":"";
   window.scrollTo(0,0);
   render();
 }
@@ -1327,7 +1357,71 @@ function renderHdo(d,cfg){
   drawHp();
 }
 
+/* ---------- tab Delys IT (snapshot de la planilla Delys C&E) ---------- */
+const DL_ST={"Done":["#059669","rgba(16,185,129,.14)"],"In progress":["#2563EB","rgba(59,130,246,.14)"],"Priorizado":["#C26F00","rgba(237,139,8,.16)"],"Priorizado · otro IT":["#7C3AED","rgba(139,92,246,.14)"],"Carry over":["#A16207","rgba(234,179,8,.20)"],"Despriorizado":["#64748B","rgba(148,163,184,.20)"],"No se hace":["#DC2626","rgba(220,38,38,.12)"],"Sin definir":["#94A3B8","rgba(148,163,184,.10)"]};
+const DL_ORDER=["Done","In progress","Priorizado","Priorizado · otro IT","Carry over","Despriorizado","No se hace","Sin definir"];
+const DL_PR={"1":["#B91C1C","rgba(220,38,38,.12)"],"2":["#C26F00","rgba(237,139,8,.16)"],"3":["#475569","rgba(100,116,139,.16)"],"No aplica":["#64748B","rgba(148,163,184,.16)"]};
+const DL_IMP={"DELY-8637":"Grilla de tarifas"};
+let dlView="sprint",dlQ="",dlOff=new Set();
+const dlSt=s=>s||"Sin definir";
+const dlPill=s=>{const c=DL_ST[dlSt(s)]||DL_ST["Sin definir"];return `<span class="dl-st" style="color:${c[0]};background:${c[1]}"><i></i>${dlSt(s)}</span>`;};
+const dlPri=p=>{if(!p)return `<span class="dl-note">-</span>`;const c=DL_PR[p]||DL_PR["3"];return `<span class="dl-p" style="color:${c[0]};background:${c[1]}">${/^\d$/.test(p)?"P"+p:p}</span>`;};
+function renderDelys(){
+  const sp=[...(DELYS.sprints||[])];
+  if(!sp.length){$("delys").innerHTML='<div class="empty">📭 Todavía no hay datos de Delys IT cargados.</div>';return;}
+  const cur=sp[sp.length-1];
+  const all=sp.flatMap(s=>s.items.map(i=>({s:s.n,id:i[0],t:i[1],p:i[2],st:dlSt(i[3]),n:i[4]})));
+  const ids=[...new Set(all.map(x=>x.id||x.t))];
+  const cnt=k=>cur.items.filter(i=>dlSt(i[3])===k).length;
+  const doneIds=new Set(all.filter(x=>x.st==="Done").map(x=>x.id||x.t));
+  const fd=s=>s?s.slice(8)+"/"+s.slice(5,7)+"/"+s.slice(0,4):"";
+  const kpis=[["kpi-g kpi-hero","🧩","Items en Sprint "+cur.n,cur.items.length,`<span class="delta nd">${cur.start?"inicia el "+fd(cur.start):"sprint actual"}</span>`],
+    ["kpi-b","🔁","Carry over",cnt("Carry over"),`<span class="delta nd">pasan del sprint anterior</span>`],
+    ["kpi-c","🔥","Prioridad 1",cur.items.filter(i=>i[2]==="1").length,`<span class="delta nd">en el sprint actual</span>`],
+    ["kpi-p","✅","Delys terminados",doneIds.size,`<span class="delta nd">de ${ids.length} Delys en ${sp.length} sprints</span>`]];
+  $("delys").innerHTML=`<div class="imp-hdr one"><div class="imp-line"><span class="imp-eye">Delys IT</span><h2>Planificación de sprints de IT</h2>
+    <span class="imp-meta">Sprint ${sp[0].n} al ${cur.n} · foto de la planilla al ${fd(DELYS.asof)}</span></div>
+    <a class="btn-back" href="${DELYS.sheet}" target="_blank" rel="noopener" style="text-decoration:none">Abrir planilla ↗</a></div>
+    <div class="kpis k3 mini" style="margin-top:14px">${kpis.map(([c,i,l,v,s])=>`<div class="kpi ${c}"><div class="kpi-icon">${i}</div><div class="kpi-body"><div class="kpi-lbl">${l}</div><div class="kpi-val">${v}</div><div class="kpi-sub">${s}</div></div></div>`).join("")}</div>
+    <div class="card" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <div class="gran" id="dlV"><button data-v="sprint">Por sprint</button><button data-v="mx">Recorrido por Dely</button></div>
+      <input type="text" id="dlQ" placeholder="Buscar Dely o título…" value="${dlQ.replace(/"/g,"&quot;")}" style="border:1px solid var(--line);border-radius:10px;padding:6px 10px;font:500 13px 'Rubik',sans-serif;background:var(--panel);color:var(--txt);height:30px;min-width:230px">
+      <div class="dl-chips" id="dlChips"></div></div>
+    <div id="dlBody"></div>`;
+  const used=DL_ORDER.filter(k=>all.some(x=>x.st===k));
+  $("dlChips").innerHTML=used.map(k=>{const c=DL_ST[k];return `<button class="dl-st dl-chip ${dlOff.has(k)?"off":""}" data-k="${k}" style="color:${c[0]};background:${c[1]}"><i></i>${k} · ${all.filter(x=>x.st===k).length}</button>`;}).join("");
+  document.querySelectorAll("#dlV button").forEach(b=>b.classList.toggle("active",b.dataset.v===dlView));
+  const q=dlQ.trim().toLowerCase();
+  const hit=x=>(!q||(x.id+" "+x.t+" "+x.n).toLowerCase().includes(q));
+  const impBtn=id=>{const k=DL_IMP[id];if(!k)return "";const it=DATA.find(x=>x.name.startsWith(k)&&IMPACT[x.name+"|"+x.date]);return it?`<button class="btn-back dl-imp" data-i="${DATA.indexOf(it)}" style="margin-left:8px;padding:2px 8px;font-size:11px">📈 Ver impacto</button>`:"";};
+  if(dlView==="sprint"){
+    $("dlBody").innerHTML=[...sp].reverse().map(s=>{
+      const its=s.items.map(i=>({id:i[0],t:i[1],p:i[2],st:dlSt(i[3]),n:i[4]})).filter(x=>hit(x)&&!dlOff.has(x.st));
+      if(!its.length)return "";
+      const mini=DL_ORDER.map(k=>[k,s.items.filter(i=>dlSt(i[3])===k).length]).filter(a=>a[1]).map(([k,n])=>{const c=DL_ST[k];return `<span class="dl-st" style="color:${c[0]};background:${c[1]}"><i></i>${k} ${n}</span>`;}).join("");
+      return `<div class="dl-sp"><div class="dl-sp-h"><b>Sprint ${s.n}${s===cur?" · actual":""}</b><span class="when">${s.start?"desde el "+fd(s.start):"sin fecha en la planilla"}</span><div class="dl-mini">${mini}</div></div>
+        <div class="dl-row hd"><span>Dely</span><span>Título</span><span>Prioridad</span><span>Estado</span><span>Nota</span></div>
+        ${its.map(x=>`<div class="dl-row"><span>${x.id?`<span class="dl-id">${x.id}</span>`:'<span class="dl-note">sin Dely</span>'}</span><span class="dl-ttl">${x.t}${impBtn(x.id)}</span><span>${dlPri(x.p)}</span><span>${dlPill(x.st)}</span><span class="dl-note">${x.n||""}</span></div>`).join("")}</div>`;
+    }).join("")||'<div class="empty">Sin resultados con estos filtros.</div>';
+  }else{
+    const by=new Map();
+    all.forEach(x=>{const k=x.id||x.t;if(!by.has(k))by.set(k,{id:x.id,t:x.t,r:{}});const e=by.get(k);e.t=x.t;e.r[x.s]=x;});
+    const rows=[...by.values()].filter(e=>Object.values(e.r).some(hit)&&Object.values(e.r).some(x=>!dlOff.has(x.st)))
+      .sort((a,b)=>(b.r[cur.n]?1:0)-(a.r[cur.n]?1:0)||(a.id||"~").localeCompare(b.id||"~",undefined,{numeric:true}));
+    $("dlBody").innerHTML=`<div class="card"><div class="card-hdr"><div><div class="card-title">Recorrido de cada Dely por sprint</div><div class="card-sub">Cada punto es el estado del Dely en ese sprint · pasá el mouse para ver estado, prioridad y nota</div></div></div>
+      <table class="dl-mx"><thead><tr><th>Dely</th>${sp.map(s=>`<th>S${s.n}</th>`).join("")}</tr></thead><tbody>
+      ${rows.map(e=>`<tr><td><span class="dl-id">${e.id||"sin Dely"}</span> <span class="dl-ttl" style="margin-left:6px">${e.t}</span>${impBtn(e.id)}</td>${sp.map(s=>{const x=e.r[s.n];if(!x)return "<td></td>";const c=DL_ST[x.st];return `<td><span class="dl-dot ${s===cur?"cur":""}" style="background:${c[0]}" title="${x.st}${x.p?" · prioridad "+x.p:""}${x.n?" · "+x.n:""}"></span></td>`;}).join("")}</tr>`).join("")}
+      </tbody></table>
+      <div class="dl-chips" style="margin-top:12px">${used.map(k=>`<span class="dl-st" style="color:${DL_ST[k][0]};background:${DL_ST[k][1]}"><i></i>${k}</span>`).join("")}</div></div>`;
+  }
+  document.querySelectorAll("#dlV button").forEach(b=>b.onclick=()=>{dlView=b.dataset.v;renderDelys();});
+  document.querySelectorAll("#dlChips .dl-chip").forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(dlOff.has(k))dlOff.delete(k);else dlOff.add(k);renderDelys();});
+  $("dlQ").oninput=e=>{dlQ=e.target.value;const pos=e.target.selectionStart;renderDelys();const el=$("dlQ");el.focus();el.setSelectionRange(pos,pos);};
+  document.querySelectorAll(".dl-imp").forEach(b=>b.onclick=()=>openImpact(DATA[+b.dataset.i]));
+}
+
 function render(){
+  if($("p-delys").classList.contains("active")){renderDelys();return;}
   if($("p-impacto").classList.contains("active")){renderImpact();return;}
   const rows=DATA.filter(match);
   $("fcount").textContent=`${rows.length} de ${DATA.length} iniciativas`;
@@ -1453,6 +1547,7 @@ setZoom(+(store.get("zoom")||.85));
 loadHash();
 render();
 if(_open){const d=DATA.find(x=>x.name+"|"+x.date===_open&&hasImp(x));if(d)openImpact(d);}
+if(new URLSearchParams(location.search).get("p")==="delys")setPage("delys");
 </script>
 </body>
 </html>

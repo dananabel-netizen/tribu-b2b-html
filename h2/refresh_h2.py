@@ -12,6 +12,9 @@ Modos (que claves de data.json se refrescan):
   todo     -> las tres
   auto     -> siempre diario; + semanal si hoy es lunes; + mensual si hoy es dia 1   (default)
 
+--pedido: lo usa la tarea que corre cada pocos minutos. Mira si el boton "Actualizar" del tablero dejo un
+pedido nuevo (h2/refresh_request.json en tablero-live); si no hay, sale sin hacer nada. Si hay, refresca todo.
+
 Uso: .venv\\Scripts\\python.exe tablero-live/h2/refresh_h2.py [--modo auto|diario|semanal|mensual|todo] [--no-push]
 """
 
@@ -29,6 +32,8 @@ REPO = HERE.parent                              # .../tribu-b2b-dana/tablero-liv
 ROOT = REPO.parent                              # .../tribu-b2b-dana (.env, skills/)
 DATA = HERE / 'data.json'
 REMOTE, BRANCH = 'personal', 'tablero-live'
+PEDIDO_REMOTO = 'h2/refresh_request.json'       # lo escribe el Apps Script cuando se toca "Actualizar"
+PEDIDO_VISTO = ROOT / '.refresh_h2_pedido'      # ultimo pedido ya atendido (fuera del worktree)
 
 sys.path.insert(0, str(HERE))
 import build_dashboard as bd
@@ -59,6 +64,24 @@ def sync_remoto(intentos=4):
             if i == intentos - 1:
                 raise
             time.sleep(5 + random.randint(0, 20))
+
+
+def pedido_pendiente():
+    """Devuelve el requested_at del pedido del boton si todavia no se atendio; si no, None."""
+    for i in range(3):
+        try:
+            git('fetch', REMOTE, BRANCH)
+            break
+        except RuntimeError:
+            if i == 2:
+                raise
+            time.sleep(5 + random.randint(0, 20))
+    try:
+        req = json.loads(git('show', f'{REMOTE}/{BRANCH}:{PEDIDO_REMOTO}')).get('requested_at')
+    except (RuntimeError, ValueError):
+        return None
+    visto = PEDIDO_VISTO.read_text(encoding='utf-8').strip() if PEDIDO_VISTO.exists() else ''
+    return req if req and req > visto else None
 
 
 def modos_de_hoy(modo):
@@ -98,7 +121,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--modo', default='auto', choices=['auto', 'diario', 'semanal', 'mensual', 'todo'])
     ap.add_argument('--no-push', action='store_true')
+    ap.add_argument('--pedido', action='store_true', help='solo corre si el boton Actualizar dejo un pedido nuevo')
     args = ap.parse_args()
+
+    pedido = None
+    if args.pedido:
+        pedido = pedido_pendiente()
+        if not pedido:
+            return
+        args.modo = 'todo'
 
     modos = modos_de_hoy(args.modo)
     keys = [k for m in modos for k in MODOS[m]]
@@ -121,12 +152,16 @@ def main():
     git('add', str(DATA))
     if not git('diff', '--cached', '--name-only'):
         print("Sin cambios en los datos — nada para publicar.")
+        if pedido:
+            PEDIDO_VISTO.write_text(pedido, encoding='utf-8')
         return
     git('commit', '-m', f"Refresh H2 ({'+'.join(modos)}) {datetime.now():%Y-%m-%d %H:%M}")
     if args.no_push:
         print("Commit local hecho (--no-push).")
         return
     git('push', REMOTE, BRANCH)
+    if pedido:
+        PEDIDO_VISTO.write_text(pedido, encoding='utf-8')
     print("OK — data.json publicado; el Action regenera el HTML en ~1 min.")
 
 

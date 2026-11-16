@@ -37,7 +37,9 @@ tbody tr:last-child td{border-bottom:none}
 .tag{display:block;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
 .pend{font-size:10px;background:#FEF3C7;color:#92400E;border-radius:4px;padding:1px 6px;margin-left:6px;font-weight:700;white-space:nowrap}
 #portal-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;text-decoration:none;line-height:1.2;white-space:nowrap;transition:background .2s}
-#portal-btn:hover{background:rgba(255,255,255,.25)}
+#portal-btn:hover,#refresh-btn:hover:not(:disabled){background:rgba(255,255,255,.25)}
+#refresh-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:6px;padding:5px 10px;font-family:inherit;font-size:13px;font-weight:600;line-height:1.2;white-space:nowrap;cursor:pointer;transition:background .2s}
+#refresh-btn:disabled{cursor:default;opacity:.8}
 body.dark{--bg:#0f172a;--surface:#1e293b;--surface2:#162032;--border:#334155;--border2:#475569;--text:#e2e8f0;--muted:#94a3b8;--purple:#A78BFA}
 body.dark .ok{background:#14532d;color:#86efac}body.dark .warn{background:#713f12;color:#fde68a}body.dark .bad{background:#7f1d1d;color:#fca5a5}body.dark .na{background:#1e293b;color:#64748b}
 body.dark .filter-bar{background:var(--surface)}
@@ -56,7 +58,8 @@ body,main,.card,.filter-bar{transition:background .25s,border-color .25s,color .
     <div class="logo-sub">H2 FY27 · Octubre 2026 — Marzo 2027</div>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
-    <span class="upd">Actualizado: 2026-11-16 14:06</span>
+    <span class="upd">Actualizado: 2026-11-16 11:09</span>
+    <button id="refresh-btn" onclick="pedirActualizacion(this)" title="Pide traer los datos de hoy del datalake">🔄 Actualizar</button>
     <a id="portal-btn" href="https://script.google.com/a/macros/despegar.com/s/AKfycbw7nuX4vsH9zFXOtLwxTpXszKAFKMGKH9uJhPr5JQkX5BYeZWLy7PaSiyyn-X-LqXx5tw/exec" target="_blank" rel="noopener" title="Portal de dashboards">🗂️ Portal de dashboards</a>
     <button id="theme-btn" onclick="toggleTheme()" title="Modo noche/día">🌙</button>
   </div>
@@ -321,6 +324,18 @@ function renderSemanal(){
 function render(){
   SRC=activeTab==='progreso'?'p':'m';
   document.getElementById('root').innerHTML=activeTab==='progreso'?renderProgreso():activeTab==='semanal'?renderSemanal():renderMensual();
+}
+function pedirActualizacion(btn){
+  if(typeof google==='undefined'||!google.script||!google.script.run){
+    alert('El botón Actualizar funciona abriendo el tablero desde el Portal de dashboards.');return;
+  }
+  var orig='🔄 Actualizar';
+  btn.disabled=true;btn.textContent='⏳ Pidiendo…';
+  function fin(ok,msg,ms){btn.textContent=ok?'✅ Pedido enviado':'⚠️ '+msg;btn.title=msg;setTimeout(function(){btn.disabled=false;btn.textContent=orig;btn.title='Pide traer los datos de hoy del datalake';},ms);}
+  google.script.run
+    .withSuccessHandler(function(r){r=r||{};fin(!!r.ok,r.msg||'Error',r.ok?120000:6000);})
+    .withFailureHandler(function(e){fin(false,(e&&e.message)||'Error',6000);})
+    .requestRefresh();
 }
 function toggleTheme(){
   var dark=document.body.classList.toggle('dark');

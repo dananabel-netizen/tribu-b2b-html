@@ -537,7 +537,8 @@ def main():
             git('checkout', '--', str(DATA))   # descarta restos de una corrida anterior fallida
         except RuntimeError:
             pass
-        git('pull', '--rebase', REMOTE, BRANCH)
+        git('fetch', REMOTE, BRANCH)
+        git('rebase', f'{REMOTE}/{BRANCH}')   # sin 'pull': evita 'Cannot rebase onto multiple branches'
 
     data = json.loads(DATA.read_text(encoding='utf-8'))
     cfgs = data['impact']['configs']

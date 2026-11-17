@@ -1382,8 +1382,7 @@ function renderDelys(){
   const fd=s=>s?s.slice(8)+"/"+s.slice(5,7)+"/"+s.slice(0,4):"";
   const kpis=[["kpi-g kpi-hero","🧩","Items en Sprint "+cur.n,cur.items.length,`<span class="delta nd">${cur.start?"inicia el "+fd(cur.start):"sprint actual"}</span>`],
     ["kpi-b","🔁","Carry over",cnt("Carry over"),`<span class="delta nd">pasan del sprint anterior</span>`],
-    ["kpi-c","🔥","Prioridad 1",cur.items.filter(i=>i[2]==="1").length,`<span class="delta nd">en el sprint actual</span>`],
-    ["kpi-p","✅","Delys terminados",doneIds.size,`<span class="delta nd">de ${ids.length} Delys en ${sp.length} sprints</span>`]];
+    ["kpi-c","🔥","Prioridad 1",cur.items.filter(i=>i[2]==="1").length,`<span class="delta nd">en el sprint actual</span>`]];
   $("delys").innerHTML=`<div class="imp-hdr one"><div class="imp-line"><span class="imp-eye">Delys IT</span><h2>Planificación de sprints de IT</h2>
     <span class="imp-meta">Sprint ${sp[0].n} al ${cur.n} · foto de la planilla al ${fd(DELYS.asof)}</span></div>
     <a class="btn-back" href="${DELYS.sheet}" target="_blank" rel="noopener" style="text-decoration:none">Abrir planilla ↗</a></div>

@@ -15140,8 +15140,9 @@
       "DELY-8637",
       "Shopping vuelos - Grilla + opciones rápidas",
       "2",
-      "Priorizado · otro IT",
-      ""
+      "Done",
+      "Otro IT",
+      "Otro IT"
      ],
      [
       "DELY-9114",
@@ -15267,6 +15268,14 @@
       "No aplica",
       "",
       "Tony"
+     ],
+     [
+      "DELY-8273",
+      "Checkout B2B - Soporte de producto HOTEL_CHANGE en cambios de hotel L(3W)",
+      "",
+      "Carry over",
+      "Se toma al final y se va a carry-over",
+      "E&S"
      ]
     ]
    }

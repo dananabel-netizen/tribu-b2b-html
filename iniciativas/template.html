@@ -1366,6 +1366,7 @@ const DL_PR={"1":["#B91C1C","rgba(220,38,38,.12)"],"2":["#C26F00","rgba(237,139,
 const DL_IMP={"DELY-8637":"Grilla de tarifas"};
 let dlView="sprint",dlQ="",dlOff=new Set();
 const dlSt=s=>s||"Sin definir";
+const dlTag=(tag,off)=>(tag?`<span class="dl-st" style="margin-left:6px;color:#7C3AED;background:rgba(139,92,246,.14)">${tag}</span>`:"")+(off?`<span class="dl-st" style="margin-left:6px;color:#475569;background:rgba(100,116,139,.16)" title="No es el sprint actual y no terminó en Done: está del lado de IT, no del nuestro">Lado IT</span>`:"");
 const JIRA="https:"+"/"+"/jira.despegar.com/browse/";
 const dlId=id=>id?`<a class="dl-id dl-lnk" href="${JIRA}${id}" target="_blank" rel="noopener" title="Abrir ${id} en Jira">${id} ↗</a>`:'<span class="dl-note">sin Dely</span>';
 const dlPill=s=>{const c=DL_ST[dlSt(s)]||DL_ST["Sin definir"];return `<span class="dl-st" style="color:${c[0]};background:${c[1]}"><i></i>${dlSt(s)}</span>`;};
@@ -1374,7 +1375,7 @@ function renderDelys(){
   const sp=[...(DELYS.sprints||[])];
   if(!sp.length){$("delys").innerHTML='<div class="empty">📭 Todavía no hay datos de Delys IT cargados.</div>';return;}
   const cur=sp[sp.length-1];
-  const all=sp.flatMap(s=>s.items.map(i=>({s:s.n,id:i[0],t:i[1],p:i[2],st:dlSt(i[3]),n:i[4]})));
+  const all=sp.flatMap(s=>s.items.map(i=>({s:s.n,id:i[0],t:i[1],p:i[2],st:dlSt(i[3]),n:i[4],g:i[5]||"",o:s!==cur&&dlSt(i[3])!=="Done"})));
   const ids=[...new Set(all.map(x=>x.id||x.t))];
   const cnt=k=>cur.items.filter(i=>dlSt(i[3])===k).length;
   const doneIds=new Set(all.filter(x=>x.st==="Done").map(x=>x.id||x.t));
@@ -1400,12 +1401,12 @@ function renderDelys(){
   const impBtn=id=>{const k=DL_IMP[id];if(!k)return "";const it=DATA.find(x=>x.name.startsWith(k)&&IMPACT[x.name+"|"+x.date]);return it?`<button class="btn-back dl-imp" data-i="${DATA.indexOf(it)}" style="margin-left:8px;padding:2px 8px;font-size:11px">📈 Ver impacto</button>`:"";};
   if(dlView==="sprint"){
     $("dlBody").innerHTML=[...sp].reverse().map(s=>{
-      const its=s.items.map(i=>({id:i[0],t:i[1],p:i[2],st:dlSt(i[3]),n:i[4]})).filter(x=>hit(x)&&!dlOff.has(x.st));
+      const its=s.items.map(i=>({id:i[0],t:i[1],p:i[2],st:dlSt(i[3]),n:i[4],g:i[5]||"",o:s!==cur&&dlSt(i[3])!=="Done"})).filter(x=>hit(x)&&!dlOff.has(x.st));
       if(!its.length)return "";
       const mini=DL_ORDER.map(k=>[k,s.items.filter(i=>dlSt(i[3])===k).length]).filter(a=>a[1]).map(([k,n])=>{const c=DL_ST[k];return `<span class="dl-st" style="color:${c[0]};background:${c[1]}"><i></i>${k} ${n}</span>`;}).join("");
       return `<div class="dl-sp"><div class="dl-sp-h"><b>Sprint ${s.n}${s===cur?" · actual":""}</b><span class="when">${s.start?"desde el "+fd(s.start):"sin fecha en la planilla"}</span><div class="dl-mini">${mini}</div></div>
         <div class="dl-row hd"><span>Dely</span><span>Título</span><span>Prioridad</span><span>Estado</span><span>Nota</span></div>
-        ${its.map(x=>`<div class="dl-row"><span>${dlId(x.id)}</span><span class="dl-ttl">${x.t}${impBtn(x.id)}</span><span>${dlPri(x.p)}</span><span>${dlPill(x.st)}</span><span class="dl-note">${x.n||""}</span></div>`).join("")}</div>`;
+        ${its.map(x=>`<div class="dl-row"><span>${dlId(x.id)}</span><span class="dl-ttl">${x.t}${dlTag(x.g,x.o)}${impBtn(x.id)}</span><span>${dlPri(x.p)}</span><span>${dlPill(x.st)}</span><span class="dl-note">${x.n||""}</span></div>`).join("")}</div>`;
     }).join("")||'<div class="empty">Sin resultados con estos filtros.</div>';
   }else{
     const by=new Map();

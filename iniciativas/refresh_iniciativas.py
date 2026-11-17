@@ -58,12 +58,12 @@ Q_LDP_DAILY = f"""
 with {_BASE},
 z as (select *, case when rf=false and pm like '%REMOTE%' and fut and d>=ld then 'L' when rf=false then 'N' when rf=true then 'R' else 'X' end cls
       from k where st='Confirmado')
-select cast(d as varchar) d,
+select cast(d as varchar) d, c,
  round(sum(case when cls='R' then gb end)) ref, round(sum(case when cls='N' then gb end)) non, round(sum(case when cls='L' then gb end)) link,
  round(sum(case when cls='X' then gb end)) sd, round(sum(case when d>=ld then gb end)) scope,
  count(distinct case when cls='L' then r end) nl,
  round(sum(case when d>=ld and rf=false then gb end)) scope_nr
-from z group by d order by d
+from z group by d, c order by d, c
 """
 
 Q_LDP_COUNTRY = f"""
@@ -473,7 +473,13 @@ def fetch_all():
 
 
 def build_ldp(cfg_old, r, today):
-    daily = [[row[0]] + [num(x) for x in row[1:]] for row in r['ldp_daily']]
+    dc = [[row[0], row[1]] + [num(x) for x in row[2:]] for row in r['ldp_daily']]   # [fecha, país, ref, non, link, sd, scope, nl, scope_nr]
+    agg = {}
+    for row in dc:
+        a = agg.setdefault(row[0], [0] * 7)
+        for i, x in enumerate(row[2:]):
+            a[i] += x or 0
+    daily = [[d] + v for d, v in sorted(agg.items())]
     cty = {row[0]: row for row in r['ldp_country']}
     tt = {row[0]: row for row in r['ldp_totals']}
     nr = tt.pop('ALL')
@@ -490,7 +496,7 @@ def build_ldp(cfg_old, r, today):
     cfg.pop('remote', None)   # ya no se usa
     mix = mix_blocks(r['ldp_mix'], today)
     cfg.update(kind='ldp', title=cfg_old.get('title', 'Link de pago en hoteles non ref'), asof=today.isoformat(),
-               partial=(today + timedelta(days=1)).isoformat(), daily=daily, countries=countries, tot=tot, top=top, mix=mix, cf=build_cf(r['cf_daily'], today))
+               partial=(today + timedelta(days=1)).isoformat(), daily=daily, daily_c=dc, countries=countries, tot=tot, top=top, mix=mix, cf=build_cf(r['cf_daily'], today))
     return cfg
 
 

@@ -1146,6 +1146,7 @@ function renderLdp(d,cfg){
     </section><section class="imp-sec" id="isec2"><div class="sec-h"><span class="sec-n">2</span><div><h3>Venta de hoteles</h3><p>Cómo se reparte la venta entre reembolsable y no reembolsable</p></div></div>
     <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución de venta de hoteles: reembolsable vs no reembolsable</div><div class="card-sub" id="ldpVs"></div></div>
       <div style="display:flex;gap:8px;align-items:center"><div class="gran" id="ldpMode"><button data-m="all">Todos los MDP</button><button data-m="link">Solo non ref</button></div>
+      <div class="gran" id="ldpCty"><button data-c="ALL">Todos</button>${C.map(r=>`<button data-c="${r[0]}" title="${CN[r[0]]||r[0]}">${flag(r[0])}</button>`).join("")}</div>
       <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div></div>
       <div class="ch" style="height:520px"><canvas id="cLdpV"></canvas></div></div>
     </section><section class="imp-sec" id="isec3"><div class="sec-h"><span class="sec-n">3</span><div><h3>Canibalización</h3><p>¿Qué medios de pago pierden lo que gana el link?</p></div></div>
@@ -1173,7 +1174,7 @@ function renderLdp(d,cfg){
   const keyOf=(dd,g)=>g==="d"?dd:g==="w"?iso(mondayOf(new Date(dd+"T00:00:00Z"))):dd.slice(0,7);
   const lblOf=(k,g)=>g==="d"?fdate(k):g==="w"?"Sem "+fdate(k):MONTHS_L[+k.slice(5)-1]+" "+k.slice(2,4);
   const XT={d:"Día",w:"Semana (inicia el lunes)",m:"Mes"};
-  let ldpMode="all";
+  let ldpMode="all",ldpC="ALL";
   const grid={color:"rgba(100,116,139,.15)",borderDash:[4,4]};
   const tt={backgroundColor:"#0F1834",padding:10,cornerRadius:8};
   function draw(){
@@ -1190,19 +1191,24 @@ function renderLdp(d,cfg){
         vlabels:{on:true,size:impGran==="d"?9:11,zero:true,fmt:pf}},
         scales:{y:{beginAtZero:true,grace:"30%",grid,ticks:{callback:v=>v+"%"},title:{display:true,text:"% del GB",color:"#64748B",font:{size:11,weight:"600"}}},
                 x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
+    const mv=new Map();
+    (cfg.daily_c||[]).filter(r=>ldpC==="ALL"||r[1]===ldpC).forEach(r=>{const k=keyOf(r[0],impGran);const a=mv.get(k)||[0,0,0,0];a[0]+=r[2]||0;a[1]+=r[3]||0;a[2]+=r[4]||0;a[3]+=r[8]||0;mv.set(k,a);});
+    const vk=[...mv.keys()].sort(),vlb=vk.map(k=>lblOf(k,impGran));
     const link=ldpMode==="link";
-    const ds=link?[["Otros medios no reembolsables (incl. link pre-booking)",k=>m.get(k)[1],"#94A3B8","#1E293B"],["Link de pago nuevo",k=>m.get(k)[2],"#ED8B08"]]
-                 :[["Reembolsable",k=>m.get(k)[0],"#3B82F6"],["No reembolsable",k=>m.get(k)[1]+m.get(k)[2],"#ED8B08"]];
-    $("ldpVs").textContent=link?"GB confirmado en USD (etiquetas en miles) · solo hoteles no reembolsables: link de pago vs otros medios de pago · MX, AR, CL, BR, CO, PE y US"
-                               :"GB confirmado en USD (etiquetas en miles) · incluye todos los medios de pago · MX, AR, CL, BR, CO, PE y US";
+    const ds=link?[["Otros medios no reembolsables (incl. link pre-booking)",k=>mv.get(k)[1],"#94A3B8","#1E293B"],["Link de pago nuevo",k=>mv.get(k)[2],"#ED8B08"]]
+                 :[["Reembolsable",k=>mv.get(k)[0],"#3B82F6"],["No reembolsable",k=>mv.get(k)[1]+mv.get(k)[2],"#ED8B08"]];
+    $("ldpVs").textContent=link?"GB confirmado en USD (etiquetas en miles) · solo hoteles no reembolsables: link de pago vs otros medios de pago · "+(ldpC==="ALL"?"MX, AR, CL, BR, CO, PE y US":CN[ldpC]||ldpC)
+                               :"GB confirmado en USD (etiquetas en miles) · incluye todos los medios de pago · "+(ldpC==="ALL"?"MX, AR, CL, BR, CO, PE y US":CN[ldpC]||ldpC);
+    document.querySelectorAll("#ldpCty button").forEach(b=>b.classList.toggle("active",b.dataset.c===ldpC));
     document.querySelectorAll("#ldpMode button").forEach(b=>b.classList.toggle("active",b.dataset.m===ldpMode));
-    chart("cLdpV",{type:"bar",data:{labels:lb,datasets:ds.map(([n,f,col,lc],i)=>({label:n,lc,data:ks.map(k=>Math.round(f(k))),backgroundColor:col,borderRadius:i===1?{topLeft:6,topRight:6}:0,maxBarThickness:64}))},
+    chart("cLdpV",{type:"bar",data:{labels:vlb,datasets:ds.map(([n,f,col,lc],i)=>({label:n,lc,data:vk.map(k=>Math.round(f(k))),backgroundColor:col,borderRadius:i===1?{topLeft:6,topRight:6}:0,maxBarThickness:64}))},
       options:{...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11}}},
         tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y),footer:it=>"Total: USD "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}},vlabels:{on:false},stacklabels:{on:true,size:impGran==="d"?9:11}},
         scales:{y:{stacked:true,beginAtZero:true,grid,title:{display:true,text:"GB (USD)",color:"#64748B",font:{size:11,weight:"600"}}},
                 x:{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[impGran],color:"#64748B",font:{size:11,weight:"600"}}}}}});
   }
   document.querySelectorAll(".impGran").forEach(el=>el.onclick=e=>{const g=e.target.dataset.g;if(!g)return;impGran=g;draw();});
+  $("ldpCty").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;ldpC=b.dataset.c;draw();};
   $("ldpMode").onclick=e=>{const g=e.target.dataset.m;if(!g)return;ldpMode=g;draw();};
   const MG=["Link de pago (nuevo)","Link pre-booking (previo)","Tarjeta crédito","Débito","Cash","Cuenta corriente","HDO pay","Gestor de pagos","Pago diferido","Otros"];
   const MGC={"Link de pago (nuevo)":"#ED8B08","Link pre-booking (previo)":"#FBBF77","Tarjeta crédito":"#3B82F6","Débito":"#06B6D4","Cash":"#10B981","Cuenta corriente":"#6366F1","HDO pay":"#8B5CF6","Gestor de pagos":"#F43F5E","Pago diferido":"#EC4899","Otros":"#94A3B8"};

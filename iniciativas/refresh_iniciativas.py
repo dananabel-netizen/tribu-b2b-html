@@ -182,17 +182,18 @@ def build_cf(rows, today):
         b = (date.fromisoformat(d) - launch).days // 7
         if launch + timedelta(days=7 * (b + 1)) > today:
             continue   # bloque incompleto
-        a = blocks.setdefault((c, b), [0.0, 0.0])
+        a = blocks.setdefault((c, b), [0.0, 0.0, 0.0])
         a[0] += float(gl) if gl is not None else 0.0
         a[1] += float(gt) if gt is not None else 0.0
+        a[2] = a[1] - a[0]   # reembolsable = total - non ref
     out = {'w': CF_MAIN, 'sens': list(CF_WINDOWS), 'm': {}}
-    for mi, mname in enumerate(('nonref', 'total')):
+    for mi, mname in enumerate(('nonref', 'total', 'ref')):
         res = {}
         for c in LDP_COUNTRIES:
             bmax = max((b for (cc, b) in blocks if cc == c), default=-1)
             if bmax < 0:
                 continue
-            val = lambda b: blocks.get((c, b), [0.0, 0.0])[mi]
+            val = lambda b: blocks.get((c, b), [0.0, 0.0, 0.0])[mi]
             sens, rows_out = {}, []
             for w in CF_WINDOWS:
                 xs = list(range(-w, 0))

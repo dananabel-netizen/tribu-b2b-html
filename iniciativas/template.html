@@ -1147,7 +1147,7 @@ function renderLdp(d,cfg){
     <div class="card"><div class="card-hdr"><div><div class="card-title">Evolución de venta de hoteles: reembolsable vs no reembolsable</div><div class="card-sub" id="ldpVs"></div></div>
       <div style="display:flex;gap:8px;align-items:center"><div class="gran" id="ldpMode"><button data-m="all">Todos los MDP</button><button data-m="link">Solo non ref</button></div>
       <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div></div>
-      <div class="ch"><canvas id="cLdpV"></canvas></div></div>
+      <div class="ch" style="height:520px"><canvas id="cLdpV"></canvas></div></div>
     </section><section class="imp-sec" id="isec3"><div class="sec-h"><span class="sec-n">3</span><div><h3>Canibalización</h3><p>¿Qué medios de pago pierden lo que gana el link?</p></div></div>
     <div class="card"><div class="card-hdr"><div><div class="card-title">¿Canibaliza otros medios de pago?</div><div class="card-sub" id="mixSub"></div></div>
       <div class="gran" id="mixCty"><button data-c="ALL">Todos</button>${C.map(r=>`<button data-c="${r[0]}" title="${CN[r[0]]||r[0]}">${flag(r[0])}</button>`).join("")}</div></div>
@@ -1157,11 +1157,10 @@ function renderLdp(d,cfg){
       <div class="card-sub" id="mixIns" style="margin-top:10px;font-weight:600"></div>
       <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">Mix del GB de hoteles no reembolsables confirmados. Después = desde el día de prendida de cada país (MX 29/9, AR y CL 13/10, BR, CO y PE 19/10), en bloques de 7 días completos. Antes = las 4 semanas previas, solo de referencia. Link de pago nuevo = non ref con penalidad futura al reservar; link pre-booking (previo) = penalidad ya vigente, el link de 1 hora que ya existía (criterio a validar con Producto). Muestra cambios de mix, no causalidad: el total también se mueve por estacionalidad y otras iniciativas.</div></details></div></div>
     </section><section class="imp-sec" id="isec4"><div class="sec-h"><span class="sec-n">4</span><div><h3>Incrementalidad</h3><p>¿Cuánto del crecimiento es venta nueva y no un cambio de medio?</p></div></div>
-    <div class="card"><div class="card-hdr"><div><div class="card-title">Contrafactual: ¿cuánto creció la venta de hoteles non ref respecto de su tendencia?</div><div class="card-sub" id="cfSub"></div></div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="gran" id="cfMet"><button data-m="nonref">Hoteles non ref</button><button data-m="total">Hoteles (ref + non ref)</button></div>
-      <div class="gran" id="cfCty"><button data-c="ALL">Todos</button>${C.map(r=>`<button data-c="${r[0]}" title="${CN[r[0]]||r[0]}">${flag(r[0])}</button>`).join("")}</div></div></div>
-      <div id="cfK" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 12px"></div>
-      <div class="ch" style="height:270px"><canvas id="cCf"></canvas></div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Contrafactual: ¿cuánto crecieron la venta non ref y la reembolsable respecto de su tendencia?</div><div class="card-sub" id="cfSub"></div></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="gran" id="cfCty"><button data-c="ALL">Todos</button>${C.map(r=>`<button data-c="${r[0]}" title="${CN[r[0]]||r[0]}">${flag(r[0])}</button>`).join("")}</div></div></div>
+      <div id="cfK" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:2px 0 12px"></div>
+      <div class="ch" style="height:420px"><canvas id="cCf"></canvas></div>
       <div class="card-sub" id="cfSens" style="margin-top:10px;font-weight:600"></div>
       <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">En "Todos" el gráfico muestra solo las semanas que ya tienen todos los países (para que la suma no baje por composición); los KPIs suman todas las semanas completas. Se ajusta una recta a las 12 semanas previas a la prendida de cada país (semanas de 7 días contadas desde ese día) y se proyecta hacia adelante; lo incremental es el GB real menos esa proyección. La banda es el intervalo de predicción del 80% (el rango del total suma las bandas de cada semana, por eso es conservador). La serie principal es el GB de hoteles no reembolsables con todos los medios de pago, así se mide la venta que el link puede hacer crecer y no el GB del link. Limitaciones: una recta no captura la estacionalidad (octubre y noviembre) ni el efecto de otras iniciativas que se solaparon (Combinaciones HDO pay, Pago diferido AR, Prefondeo), y el resultado cambia con la ventana elegida, mirá la sensibilidad. Si el GB de hoteles reembolsables + no reembolsables no sube, el crecimiento del non ref es en parte migración desde reembolsables y no venta nueva.</div></details></div>
     </section><section class="imp-sec" id="isec5"><div class="sec-h"><span class="sec-n">5</span><div><h3>Agencias</h3><p>Quiénes concentran el uso del link</p></div></div>
@@ -1234,39 +1233,41 @@ function renderLdp(d,cfg){
                 x:{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:"Semanas desde la prendida",color:"#64748B",font:{size:11,weight:"600"}}}}}});
   }
   $("mixCty").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;mixC=b.dataset.c;drawMix();};
-  let cfC="ALL",cfM="nonref";
+  let cfC="ALL";
+  const CFM=[["nonref","Non ref","#ED8B08","rgba(237,139,8,.16)"],["ref","Reembolsable","#3B82F6","rgba(59,130,246,.16)"]];
+  function cfAgg(mk){
+    const ms=cfg.cf.m[mk],cs=cfC==="ALL"?Object.keys(ms):[cfC].filter(c=>ms[c]);
+    const byB={};let act=0,proj=0,lo=0,hi=0;const sens={};cfg.cf.sens.forEach(w=>sens[w]=0);
+    cs.forEach(c=>{ms[c].rows.forEach(([b,a,f,l,h])=>{const o=byB[b]=byB[b]||[0,0,0,0];o[0]+=a;o[1]+=f;o[2]+=l;o[3]+=h;
+        if(b>=0){act+=a;proj+=f;lo+=l;hi+=h;}});cfg.cf.sens.forEach(w=>sens[w]+=ms[c].sens[w]||0);});
+    const cmax=cs.length?Math.min(...cs.map(c=>Math.max(...ms[c].rows.map(r=>r[0])))):-1;
+    return {cs,byB,act,proj,lo,hi,sens,cmax};
+  }
   function drawCf(){
     const cf=cfg.cf;if(!cf)return;
-    const ms=cf.m[cfM],cs=cfC==="ALL"?Object.keys(ms):[cfC].filter(c=>ms[c]);
-    if(!cs.length){$("cfK").innerHTML='<div style="grid-column:1/-1;color:var(--mut);font-size:13px;padding:8px 2px">Todavía no hay una semana completa desde la prendida en este país, así que no se puede comparar contra la tendencia.</div>';$("cfSens").textContent="";if(charts.cCf){charts.cCf.destroy();delete charts.cCf;}document.querySelectorAll("#cfMet button").forEach(b=>b.classList.toggle("active",b.dataset.m===cfM));document.querySelectorAll("#cfCty button").forEach(b=>b.classList.toggle("active",b.dataset.c===cfC));return;}
-    const byB={};let act=0,proj=0,lo=0,hi=0;const sens={};cf.sens.forEach(w=>sens[w]=0);
-    cs.forEach(c=>{ms[c].rows.forEach(([b,a,f,l,h])=>{const o=byB[b]=byB[b]||[0,0,0,0];o[0]+=a;o[1]+=f;o[2]+=l;o[3]+=h;
-        if(b>=0){act+=a;proj+=f;lo+=l;hi+=h;}});cf.sens.forEach(w=>sens[w]+=ms[c].sens[w]||0);});
-    const cmax=Math.min(...cs.map(c=>Math.max(...ms[c].rows.map(r=>r[0]))));
-    const bs=Object.keys(byB).map(Number).filter(b=>cfC!=="ALL"||b<=cmax).sort((a,b)=>a-b);
-    const inc=act-proj,incLo=act-hi,incHi=act-lo;
-    const kb=(l,v,sub)=>`<div style="background:var(--panel2);border-radius:10px;padding:10px 12px"><div class="kpi-lbl">${l}</div><div class="kpi-val" style="font-size:20px">${v}</div><div class="kpi-sub" style="font-size:11px;color:var(--mut)">${sub}</div></div>`;
-    $("cfK").innerHTML=kb("GB real desde la prendida","USD "+fmtN(act),"todas las semanas completas")+
-      kb("GB proyectado (tendencia previa)","USD "+fmtN(proj),"si todo hubiera seguido igual")+
-      kb("Crecimiento incremental","USD "+(inc>=0?"+":"")+fmtN(inc),"rango 80%: "+(incLo>=0?"+":"")+fmtN(incLo)+" a "+(incHi>=0?"+":"")+fmtN(incHi))+
-      kb("Sobre la proyección",proj?(inc>=0?"+":"")+pf(inc/proj*100):"-","real vs proyectado");
-    $("cfSub").textContent=(cfM==="nonref"?"GB de hoteles no reembolsables, todos los medios de pago,":"GB de hoteles reembolsables + no reembolsables")+" por semana desde la prendida, real vs proyección lineal de las 12 semanas previas"+(cfC==="ALL"?" · todos los países":" · "+(CN[cfC]||cfC));
-    $("cfSens").textContent="Sensibilidad a la ventana previa: "+cf.sens.map(w=>w+" sem: "+(sens[w]>=0?"+":"")+"USD "+fmtN(sens[w])).join("  ·  ");
-    document.querySelectorAll("#cfMet button").forEach(b=>b.classList.toggle("active",b.dataset.m===cfM));
     document.querySelectorAll("#cfCty button").forEach(b=>b.classList.toggle("active",b.dataset.c===cfC));
+    const A={nonref:cfAgg("nonref"),ref:cfAgg("ref"),total:cfAgg("total")};
+    if(!A.nonref.cs.length){$("cfK").innerHTML='<div style="grid-column:1/-1;color:var(--mut);font-size:13px;padding:8px 2px">Todavía no hay una semana completa desde la prendida en este país, así que no se puede comparar contra la tendencia.</div>';$("cfSens").textContent="";if(charts.cCf){charts.cCf.destroy();delete charts.cCf;}return;}
+    const sg=v=>(v>=0?"+":"")+fmtN(v);
+    const kb=(l,v,sub,col)=>`<div style="background:var(--panel2);border-radius:10px;padding:10px 12px;border-left:4px solid ${col}"><div class="kpi-lbl">${l}</div><div class="kpi-val" style="font-size:20px">${v}</div><div class="kpi-sub" style="font-size:11px;color:var(--mut)">${sub}</div></div>`;
+    const kp=(k,l,col)=>{const a=A[k],inc=a.act-a.proj;return kb(l+": crecimiento incremental","USD "+sg(inc),"real "+fmtN(a.act)+" vs proyectado "+fmtN(a.proj)+" · rango 80%: "+sg(a.act-a.hi)+" a "+sg(a.act-a.lo),col)+kb(l+": sobre la proyección",a.proj?(inc>=0?"+":"")+pf(inc/a.proj*100):"-","real vs proyectado",col);};
+    $("cfK").innerHTML=kp("nonref","Non ref","#ED8B08")+kp("ref","Reembolsable","#3B82F6")+kp("total","Total hoteles","#64748B");
+    $("cfSub").textContent="GB semanal de hoteles no reembolsables y reembolsables (todos los medios de pago), real vs proyección lineal de las 12 semanas previas"+(cfC==="ALL"?" · todos los países":" · "+(CN[cfC]||cfC));
+    $("cfSens").textContent="Sensibilidad a la ventana previa (incremental total hoteles): "+cf.sens.map(w=>w+" sem: USD "+sg(A.total.sens[w])).join("  ·  ");
+    const cmax=A.nonref.cmax,bs=Object.keys(A.nonref.byB).map(Number).filter(b=>cfC!=="ALL"||b<=cmax).sort((a,b)=>a-b);
     const lb=bs.map(b=>b<0?"Sem "+b:"Sem "+(b+1));
-    const cut=bs.findIndex(b=>b>=0);
-    chart("cCf",{type:"line",data:{labels:lb,datasets:[
-      {label:"lo",data:bs.map(b=>b>=0?byB[b][2]:null),borderWidth:0,pointRadius:0,fill:false,order:4},
-      {label:"Banda 80%",data:bs.map(b=>b>=0?byB[b][3]:null),borderWidth:0,pointRadius:0,fill:"-1",backgroundColor:"rgba(148,163,184,.28)",order:4},
-      {label:"Proyección (tendencia previa)",data:bs.map(b=>byB[b][1]),borderColor:"#64748B",borderDash:[6,5],borderWidth:2,pointRadius:0,tension:0,order:3},
-      {label:"Real",data:bs.map(b=>byB[b][0]),borderColor:"#ED8B08",backgroundColor:"#ED8B08",borderWidth:3,pointRadius:4,pointBackgroundColor:bs.map(b=>b>=0?"#ED8B08":"#fff"),pointBorderColor:"#ED8B08",tension:.25,order:1}]},
-      options:{...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11},filter:i=>i.text!=="lo"}},
-        tooltip:{...tt,filter:i=>i.dataset.label!=="lo",callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y)}},vlabels:{on:false},stacklabels:{on:false}},
+    const ds=[];
+    CFM.forEach(([k,l,col,band],n)=>{const B=A[k].byB;
+      ds.push({label:"lo"+k,data:bs.map(b=>b>=0&&B[b]?B[b][2]:null),borderWidth:0,pointRadius:0,fill:false,order:5});
+      ds.push({label:"Banda 80% "+l,data:bs.map(b=>b>=0&&B[b]?B[b][3]:null),borderWidth:0,pointRadius:0,fill:"-1",backgroundColor:band,order:5});
+      ds.push({label:l+" · proyección",data:bs.map(b=>B[b]?B[b][1]:null),borderColor:col,borderDash:[6,5],borderWidth:2,pointRadius:0,tension:0,order:3});
+      ds.push({label:l+" · real",data:bs.map(b=>B[b]?B[b][0]:null),borderColor:col,backgroundColor:col,borderWidth:3,pointRadius:4,pointBackgroundColor:bs.map(b=>b>=0?col:"#fff"),pointBorderColor:col,tension:.25,order:1});});
+    chart("cCf",{type:"line",data:{labels:lb,datasets:ds},
+      options:{...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11},filter:i=>!i.text.startsWith("lo")}},
+        tooltip:{...tt,filter:i=>!i.dataset.label.startsWith("lo"),callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y)}},vlabels:{on:false},stacklabels:{on:false}},
         scales:{y:{beginAtZero:true,grid,ticks:{callback:v=>fmtN(v/1000)+"k"},title:{display:true,text:"GB semanal (USD)",color:"#64748B",font:{size:11,weight:"600"}}},
                 x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:"Semanas respecto de la prendida (negativas = antes)",color:"#64748B",font:{size:11,weight:"600"}}}}}});
   }
-  $("cfMet").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;cfM=b.dataset.m;drawCf();};
   $("cfCty").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;cfC=b.dataset.c;drawCf();};
   draw();
   drawMix();

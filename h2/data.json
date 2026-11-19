@@ -218,9 +218,9 @@
     {
       "mes": "2026-11-01",
       "semanas": 4,
-      "agencias_cotizadoras": 6188,
+      "agencias_cotizadoras": 6542,
       "target": 7718,
-      "pct_cumplimiento": 80.2
+      "pct_cumplimiento": 84.8
     },
     {
       "mes": "2026-12-01",
@@ -264,9 +264,9 @@
       "mes_comercial": "2026-11",
       "semanas": 4,
       "estado": "EN_CURSO",
-      "agencias_frecuentes": 616,
+      "agencias_frecuentes": 1421,
       "target": 3584,
-      "pct_cumplimiento": 17.2
+      "pct_cumplimiento": 39.6
     },
     {
       "mes_comercial": "2026-12",
@@ -304,17 +304,17 @@
   "kr11_prog": [
     {
       "mes": "2026-10",
-      "gb_metodo_propio": 3213158.29,
-      "gb_total_usd": 42502174.43,
+      "gb_metodo_propio": 3213921.66,
+      "gb_total_usd": 42563091.54,
       "target": 3282530.45,
       "pct_cumplimiento": 97.9
     },
     {
       "mes": "2026-11",
-      "gb_metodo_propio": 1900785.96,
-      "gb_total_usd": 20988064.65,
+      "gb_metodo_propio": 2173641.73,
+      "gb_total_usd": 24663004.03,
       "target": 3883044.26,
-      "pct_cumplimiento": 49.0
+      "pct_cumplimiento": 56.0
     },
     {
       "mes": "2026-12",

@@ -573,7 +573,15 @@ def main():
     if args.no_push:
         print("Commit local hecho (--no-push).")
         return
-    git('push', REMOTE, BRANCH)
+    for intento in range(4):   # otras tareas (H2, bitácora) empujan a la misma rama: si rechaza, rebase y reintento
+        try:
+            git('push', REMOTE, BRANCH)
+            break
+        except RuntimeError:
+            if intento == 3:
+                raise
+            git('fetch', REMOTE, BRANCH)
+            git('rebase', f'{REMOTE}/{BRANCH}')
     print("OK — data.json y HTML publicados.")
 
 

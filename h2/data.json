@@ -10,9 +10,9 @@
     {
       "mes": "2026-11-01",
       "semanas": 4,
-      "agencias_cotizadoras": 6011,
+      "agencias_cotizadoras": 7005,
       "target": 7718,
-      "pct_cumplimiento": 77.9
+      "pct_cumplimiento": 90.8
     },
     {
       "mes": "2026-12-01",
@@ -56,9 +56,9 @@
       "mes_comercial": "2026-11",
       "semanas": 4,
       "estado": "EN_CURSO",
-      "agencias_frecuentes": 63,
+      "agencias_frecuentes": 2133,
       "target": 3584,
-      "pct_cumplimiento": 1.8
+      "pct_cumplimiento": 59.5
     },
     {
       "mes_comercial": "2026-12",
@@ -145,8 +145,14 @@
     {
       "mes": "2026-11-01",
       "semana_inicio": "2026-11-16",
-      "agencias_semana": 166,
-      "agencias_acum_mes": 6011
+      "agencias_semana": 4436,
+      "agencias_acum_mes": 6862
+    },
+    {
+      "mes": "2026-11-01",
+      "semana_inicio": "2026-11-23",
+      "agencias_semana": 2015,
+      "agencias_acum_mes": 7005
     }
   ],
   "kr22_sem": [
@@ -195,16 +201,24 @@
       "semana": 2,
       "semana_inicio": "2026-11-09",
       "estado": "CIERRE",
-      "compradoras_semana": 4834,
+      "compradoras_semana": 4851,
       "frecuentes_acum": 0
     },
     {
       "mes_comercial": "2026-11",
       "semana": 3,
       "semana_inicio": "2026-11-16",
+      "estado": "CIERRE",
+      "compradoras_semana": 4509,
+      "frecuentes_acum": 1838
+    },
+    {
+      "mes_comercial": "2026-11",
+      "semana": 4,
+      "semana_inicio": "2026-11-23",
       "estado": "EN_CURSO",
-      "compradoras_semana": 123,
-      "frecuentes_acum": 63
+      "compradoras_semana": 1230,
+      "frecuentes_acum": 2133
     }
   ],
   "kr21_prog": [
@@ -312,7 +326,7 @@
     {
       "mes": "2026-11",
       "gb_metodo_propio": 2637091.34,
-      "gb_total_usd": 30126823.19,
+      "gb_total_usd": 30127612.25,
       "target": 3883044.26,
       "pct_cumplimiento": 67.9
     },
@@ -355,17 +369,17 @@
   "kr11": [
     {
       "mes": "2026-10",
-      "gb_metodo_propio": 3213158.29,
-      "gb_total_usd": 42470416.43,
+      "gb_metodo_propio": 3216172.75,
+      "gb_total_usd": 42682721.17,
       "target": 3282530.45,
-      "pct_cumplimiento": 97.9
+      "pct_cumplimiento": 98.0
     },
     {
       "mes": "2026-11",
-      "gb_metodo_propio": 1761269.35,
-      "gb_total_usd": 19536798.36,
+      "gb_metodo_propio": 2637091.34,
+      "gb_total_usd": 30127612.25,
       "target": 3883044.26,
-      "pct_cumplimiento": 45.4
+      "pct_cumplimiento": 67.9
     },
     {
       "mes": "2026-12",

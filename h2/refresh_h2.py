@@ -10,7 +10,7 @@ Modos (que claves de data.json se refrescan):
   semanal  -> kr21_sem,  kr22_sem    (pestaña Semanal)
   mensual  -> kr11, kr21, kr22        (pestaña Mensual)
   todo     -> las tres
-  auto     -> siempre diario; + semanal si hoy es lunes; + mensual si hoy es dia 1   (default)
+  auto     -> las tres, todos los dias   (default)
 
 --pedido: lo usa la tarea que corre cada pocos minutos. Mira si el boton "Actualizar" del tablero dejo un
 pedido nuevo (h2/refresh_request.json en tablero-live); si no hay, sale sin hacer nada. Si hay, refresca todo.
@@ -90,12 +90,9 @@ def modos_de_hoy(modo):
         return ['diario', 'semanal', 'mensual']
     if modo != 'auto':
         return [modo]
-    out = ['diario']
-    if hoy.weekday() == 0:
-        out.append('semanal')
-    if hoy.day == 1:
-        out.append('mensual')
-    return out
+    # Las 8 queries son livianas: se refrescan todas los dias. Antes semanal solo corria los lunes y
+    # mensual el dia 1, y si la PC estaba apagada ese dia la pestaña quedaba una semana/mes desactualizada.
+    return ['diario', 'semanal', 'mensual']
 
 
 def run_keys(keys):

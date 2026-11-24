@@ -12,7 +12,7 @@ Formato de data.json: {"kr21": [...filas de card 173704...], "kr22": [...filas d
 import json
 import sys
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, str(Path(__file__).parent))
 from build_dashboard import build_html as _render_html
@@ -25,7 +25,8 @@ def main():
         sys.exit(1)
 
     data = json.loads(data_path.read_text(encoding='utf-8'))
-    html = _render_html(data, datetime.now().strftime('%Y-%m-%d %H:%M'))
+    ahora = datetime.now(timezone(timedelta(hours=-3)))  # hora Argentina (el Action corre en UTC)
+    html = _render_html(data, ahora.strftime('%Y-%m-%d %H:%M'))
 
     output = data_path.parent / 'okrs_dashboard_h2.html'
     output.write_text(html, encoding='utf-8')

@@ -1045,6 +1045,10 @@ function renderPp(d,cfg){
      <div class="card"><div class="card-hdr"><div><div class="card-title">GB confirmado: con promesa vs otros medios de pago</div><div class="card-sub">USD confirmados de los productos seleccionados, por período</div></div></div>
        <div class="ch" style="height:300px"><canvas id="cPpG"></canvas></div></div>
     </section><section class="imp-sec" id="isec3"><div class="sec-h"><span class="sec-n">3</span><div><h3>Antes y después</h3><p>¿La venta de estos productos cambió desde que existe la promesa?</p></div></div>
+     <div class="card"><div class="card-hdr"><div><div class="card-title">GB semanal por producto vs contrafactual</div><div class="card-sub" id="ppLnSub"></div></div></div>
+       <div class="ch" style="height:400px"><canvas id="cPpL"></canvas></div>
+       <div class="card-sub" id="ppLnRes" style="margin-top:10px;font-weight:600"></div>
+       <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">Línea llena = GB confirmado real de cada producto por semana. Línea punteada = contrafactual: recta ajustada a las semanas previas a la semana de la prendida (hasta 8) y extendida hacia adelante, con el mismo color que el producto. La línea vertical marca la semana del lanzamiento (la semana de la prendida cuenta como lanzamiento). Se muestran solo semanas completas. La recta no captura estacionalidad (octubre y noviembre) ni otras iniciativas, y una sola semana con un feriado o una campaña puede mover mucho una línea, por eso es una referencia y no una prueba de causalidad.</div></details></div>
      <div class="card"><div class="card-hdr"><div><div class="card-title">GB confirmado diario: 8 semanas antes vs desde la prendida</div><div class="card-sub" id="ppBaSub"></div></div></div>
        <div id="ppBa" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 4px"></div>
        <div class="card-sub" id="ppBaNote" style="margin-top:8px;font-weight:600"></div>
@@ -1108,6 +1112,29 @@ function renderPp(d,cfg){
       kb("Diferencia","USD "+sg(aPost-aPre)+"/día",aPre?`<span style="color:${aPost>=aPre?"#059669":"#DC2626"}">${pf((aPost/aPre-1)*100)}</span> contra antes`:"-")+
       kb("Reservas confirmadas por día",fmtN(nPos)+" vs "+fmtN(nPre),"desde la prendida vs antes");
     $("ppBaNote").textContent=nPost<14?"Todavía hay "+nPost+" días desde la prendida: conviene esperar al menos 2 semanas.":"Comparación simple, sin ajustar por estacionalidad: la baja o suba puede deberse a otros factores y no a la promesa.";
+    // líneas por producto + contrafactual (recta sobre las semanas previas)
+    const PCOL={AU:"#ED8B08",TR:"#3B82F6",AS:"#10B981",AC:"#8B5CF6"},PL=PG.filter(x=>x[0]!=="ALL");
+    const lw=keyOf(cfg.launch,"w"),lastW=keyOf(addD(cfg.asof,-7),"w");   // última semana completa: la que arranca 7 días antes de hoy o antes
+    const wks=[];for(let w=keyOf(cfg.from_,"w");w<=lastW;w=addD(w,7))wks.push(w);
+    const li=wks.indexOf(lw),preN=Math.min(8,li);
+    const ser=Object.fromEntries(PL.map(([k])=>{const mm=new Map();rows(k,pcty).forEach(r=>{const w=keyOf(r[0],"w");mm.set(w,(mm.get(w)||0)+r[4]);});return [k,wks.map(w=>Math.round(mm.get(w)||0))];}));
+    const fitP=y=>{const n=y.length,xs=y.map((_,i)=>i),mx=(n-1)/2,my=y.reduce((a,b)=>a+b,0)/n;let sxy=0,sxx=0;xs.forEach(i=>{sxy+=(i-mx)*(y[i]-my);sxx+=(i-mx)**2;});const b=sxx?sxy/sxx:0;return x=>my+b*(x-mx);};
+    const dsL=[],res=[];
+    PL.forEach(([k,l])=>{
+      const y=ser[k],f=preN>=3?fitP(y.slice(li-preN,li)):null;
+      const proj=y.map((_,i)=>f&&i>=li?Math.max(0,Math.round(f(i-(li-preN)))):null);
+      dsL.push({label:l,data:y,borderColor:PCOL[k],backgroundColor:PCOL[k],borderWidth:3,pointRadius:3,tension:.25,_k:k});
+      dsL.push({label:l+" · contrafactual",data:proj,borderColor:PCOL[k],borderDash:[6,5],borderWidth:2,pointRadius:0,tension:0});
+      if(f){const a=y.slice(li).reduce((s,v)=>s+v,0),p=proj.slice(li).reduce((s,v)=>s+v,0);res.push(l+" "+(p?pf((a/p-1)*100):"-"));}
+    });
+    $("ppLnSub").textContent="GB confirmado por semana, "+ctyTxt+" · línea llena = real, punteada = contrafactual (tendencia de las "+preN+" semanas previas)";
+    $("ppLnRes").textContent=res.length?"Real vs contrafactual desde el lanzamiento: "+res.join("  ·  "):"No hay semanas previas suficientes para proyectar.";
+    chart("cPpL",{type:"line",data:{labels:wks.map(w=>"Sem "+fdate(w)),datasets:dsL},
+      options:{...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11}}},
+        tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y)}},vlabels:{on:false},stacklabels:{on:false}},
+        scales:{y:{beginAtZero:true,grid,ticks:{callback:v=>fmtN(v/1000)+"k"},title:{display:true,text:"GB semanal (USD)",color:"#64748B",font:{size:11,weight:"600"}}},
+                x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:"Semana (inicia el lunes)",color:"#64748B",font:{size:11,weight:"600"}}}}},
+      plugins:[{id:"ppLaunch",afterDatasetsDraw(c){if(li<0)return;const x=c.scales.x.getPixelForValue(li),a=c.chartArea,g=c.ctx;g.save();g.strokeStyle="#0F1834";g.lineWidth=1.5;g.setLineDash([5,4]);g.beginPath();g.moveTo(x,a.top);g.lineTo(x,a.bottom);g.stroke();g.setLineDash([]);g.fillStyle="#0F1834";g.font="600 11px Rubik,sans-serif";g.textAlign="left";g.fillText("Lanzamiento "+fdate(cfg.launch),x+6,a.top+12);g.restore();}}]});
     $("ppTbP").innerHTML=PG.filter(x=>x[0]!=="ALL").map(([k,l])=>tr(l,rows(k,pcty))).join("")+tr("Total",rows("ALL",pcty),' style="border-top:2px solid var(--line);font-weight:700"');
     $("ppTbC").innerHTML=C.map(c=>tr(flag(c)+" "+(CN[c]||c),rows(pg,c))).join("")+tr("Total",rows(pg,"ALL"),' style="border-top:2px solid var(--line);font-weight:700"');
   }

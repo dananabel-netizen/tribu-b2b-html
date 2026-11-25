@@ -421,6 +421,44 @@ def build_gv(cfg_old, r, today):
                ctr={g: [[str(x[0]), x[1]] + [num(v) for v in x[2:]] for x in r['gv_ctr_' + g]] for g in GV_CTR_PER})   # [período, país, usuarios con grilla, clic tab, clic celda, clic más barata]
     return cfg
 
+# ── Promesa de pago en otros productos (Autos, Traslados, Asistencias y Actividades), lanzada el 13/10 en todos los países salvo US y PA ──
+# Una reserva "con promesa" = tiene registro en chewie_deferred_condition con reason PROMISE-B2B (en todos sus estados: Activo = promesa abierta,
+# Confirmado = regularizada, Cancelado = vencida o cancelada). Se mira desde 8 semanas antes para tener base de comparación.
+PP_LAUNCH = '2026-10-13'
+PP_COUNTRIES = ['AR', 'BR', 'CL', 'CO', 'MX', 'PE']
+PP_FROM = (date.fromisoformat(PP_LAUNCH) - timedelta(days=56)).isoformat()
+
+Q_PP_DAILY = f"""
+select cast(bi.creation_date as varchar) d, bi.country_code c,
+ case when bi.product='Autos' then 'AU' when bi.product='Traslados' then 'TR' when bi.product='Asistencia al viajero' then 'AS' else 'AC' end g,
+ count(distinct case when bi.transaction_status='Confirmado' then bi.transaction_code end) n_conf,
+ round(sum(case when bi.transaction_status='Confirmado' then bi.gb end)) gb_conf,
+ count(distinct case when dc.reason='PROMISE-B2B' then bi.transaction_code end) n_prom,
+ count(distinct case when dc.reason='PROMISE-B2B' and bi.transaction_status='Confirmado' then bi.transaction_code end) n_prom_ok,
+ round(sum(case when dc.reason='PROMISE-B2B' and bi.transaction_status='Confirmado' then bi.gb end)) gb_prom_ok,
+ round(sum(case when dc.reason='PROMISE-B2B' then bi.gb end)) gb_prom,
+ count(distinct case when dc.reason='PROMISE-B2B' and bi.transaction_status='Activo' then bi.transaction_code end) n_prom_act,
+ count(distinct case when dc.reason='PROMISE-B2B' and bi.transaction_status='Cancelado' then bi.transaction_code end) n_prom_canc
+from analytics.bi_sales_fact_sales_recognition bi
+left join data.lake.chewie_reservation c2 on cast(bi.transaction_code as varchar) = c2.id and c2.last_version = true
+left join data.lake.chewie_deferred_condition dc on dc.reservation_id = c2.oid
+where bi.channel in {CHANNELS}
+  and bi.creation_date >= date '{PP_FROM}' and bi.partition_period >= '{PP_FROM[:7]}'
+  and bi.product in ('Autos','Traslados','Asistencia al viajero','Excursiones','Espectáculos')
+  and bi.country_code in ({",".join("'" + x + "'" for x in PP_COUNTRIES)})
+  and lower(coalesce(bi.agency_name,'')) not like '%test%'
+group by 1, 2, 3
+"""
+
+
+def build_pp(cfg_old, r, today):
+    # daily: [fecha, país, grupo, reservas conf, GB conf, promesas, promesas regularizadas, GB regularizado, GB promesas, abiertas, canceladas]
+    daily = [[row[0], row[1], row[2]] + [num(float(x)) if x is not None else 0 for x in row[3:]] for row in r['pp_daily']]
+    cfg = dict(cfg_old)
+    cfg.update(kind='pp', title=cfg_old.get('title', 'Promesa de pago en otros productos'), launch=PP_LAUNCH, from_=PP_FROM,
+               asof=today.isoformat(), partial=(today + timedelta(days=1)).isoformat(), countries=PP_COUNTRIES, daily=daily)
+    return cfg
+
 
 def num(v):
     if v is None:
@@ -462,6 +500,7 @@ def fetch_all():
         out['pkg_daily'] = q('pkg_daily', Q_PKG_DAILY)
         out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
         out['gv_daily'] = q('gv_daily', Q_GV_DAILY)
+        out['pp_daily'] = q('pp_daily', Q_PP_DAILY)
         for g, per in GV_CTR_PER.items():
             out['gv_ctr_' + g] = q('gv_ctr_' + g, q_gv_ctr(per))
         out['hdo_tot'] = q('hdo_tot', Q_HDO_TOT)
@@ -555,6 +594,8 @@ def main():
     data['impact']['map'].update({'Combinaciones de MDP con HDO pay|2026-10-26': 'hdo',
                                   'Combinaciones de MDP con HDO pay|2026-10-29': 'hdo'})
     cfgs['gv'] = build_gv(cfgs.get('gv', {}), r, today)
+    cfgs['pp'] = build_pp(cfgs.get('pp', {}), r, today)
+    data['impact']['map']['Promesa de pago en otros productos|2026-10-13'] = 'pp'
     data['impact']['map']['Grilla de tarifas y opciones rápidas en vuelos|2026-11-12'] = 'gv'
     cfgs['pd_ar'] = build_pd(cfgs['pd_ar'], r, q, today)
     data['updated'] = today.isoformat()

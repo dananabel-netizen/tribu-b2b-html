@@ -896,6 +896,7 @@ function renderImpact(){
   if(cfg&&cfg.kind==="ldp"){renderLdp(d,cfg);return;}
   if(cfg&&cfg.kind==="hdo"){renderHdo(d,cfg);return;}
   if(cfg&&cfg.kind==="gv"){renderGv(d,cfg);return;}
+  if(cfg&&cfg.kind==="pp"){renderPp(d,cfg);return;}
   const head=`<div class="imp-hdr one"><div class="imp-line"><span class="imp-eye">Impacto de iniciativa</span><h2>${d.name}</h2>
     <span class="imp-meta">Prendida el <b>${da}/${mo}/${y}</b>${cfg?` · datos al ${fdate(cfg.asof)} (hoy parcial)`:""}</span>
     <span class="tags">${d.countries.map(c=>`<span class="tag">${flag(c)} ${CN[c]||c}</span>`).join("")}${d.cat!=="Sin categoría"?`<span class="tag cat" style="background:${catCol(d.cat)}22;color:${catCol(d.cat)}">${d.cat}</span>`:""}</span></div>
@@ -1018,6 +1019,103 @@ function renderImpact(){
 
 /* ---------- impacto: grilla de tarifas en vuelos (GB de vuelos standalone, antes y después) ---------- */
 let gvC="ALL";
+function renderPp(d,cfg){
+  const C=cfg.countries;
+  const PG=[["ALL","Todos"],["AU","Autos"],["TR","Traslados"],["AS","Asistencias"],["AC","Actividades"]];
+  const PN=Object.fromEntries(PG);
+  const pf=v=>(v>=0?"+":"")+v.toFixed(1).replace(".",",")+"%";
+  const pc=(a,n)=>n?(a/n*100).toFixed(1).replace(".",",")+"%":"-";
+  const sg=v=>(v>=0?"+":"")+fmtN(v);
+  const head=`<div class="imp-hdr one"><div class="imp-line"><span class="imp-eye">Impacto de iniciativa</span><h2>${cfg.title}</h2>
+    <span class="imp-meta">Prendida el <b>${fdate(cfg.launch)}</b> · datos al ${fdate(cfg.asof)} (hoy parcial)</span>
+    <span class="tags">${C.map(c=>`<span class="tag" title="${CN[c]||c}">${flag(c)}</span>`).join("")}</span></div>
+    <button class="btn-back" id="impBack">← Volver a iniciativas</button></div>`;
+  const filt=`<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="gran" id="ppG">${PG.map(([k,l])=>`<button data-g="${k}">${l}</button>`).join("")}</div>
+      <div class="gran" id="ppC"><button data-c="ALL">Todos</button>${C.map(c=>`<button data-c="${c}" title="${CN[c]||c}">${flag(c)}</button>`).join("")}</div></div>`;
+  $("impact").innerHTML=head+
+   `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · Evolución"],["isec3","3 · Antes y después"],["isec4","4 · Por producto y país"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>
+    <section class="imp-sec" id="isec1"><div class="sec-h"><span class="sec-n">1</span><div><h3>Key Metrics</h3><p>Reservas de Autos, Traslados, Asistencias y Actividades que se generaron con promesa de pago</p></div></div>
+     <div class="card"><div class="card-hdr"><div><div class="card-title">Promesas de pago desde la prendida</div><div class="card-sub" id="ppSub"></div></div>${filt}</div>
+       <div id="ppK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:2px 0 4px"></div>
+       <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">Reservas del canal HTML (classic, silver, gold y platinum), agencias sin "test", por fecha de creación. Una reserva es "con promesa" si tiene registro en la tabla de condiciones diferidas con motivo PROMISE-B2B. Regularizada = la promesa ya se pagó y la reserva está confirmada; Abierta = todavía dentro del plazo; Vencida o cancelada = la reserva terminó cancelada. La tasa de regularización se calcula solo sobre las promesas ya cerradas (regularizadas + vencidas o canceladas), porque las abiertas todavía pueden resolverse. Productos: Autos, Traslados, Asistencia al viajero y Actividades (Excursiones y Espectáculos). Países: AR, BR, CL, CO, MX y PE (la iniciativa no aplica en USA ni Panamá). Antes de la prendida no había ninguna promesa en estos productos.</div></details></div>
+    </section><section class="imp-sec" id="isec2"><div class="sec-h"><span class="sec-n">2</span><div><h3>Evolución</h3><p>Cuántas promesas se generan y cómo terminan, y cuánto GB se vende con promesa</p></div></div>
+     <div class="card"><div class="card-hdr"><div><div class="card-title">Promesas generadas por estado</div><div class="card-sub" id="ppEvSub"></div></div>
+       <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
+       <div class="ch" style="height:300px"><canvas id="cPpN"></canvas></div></div>
+     <div class="card"><div class="card-hdr"><div><div class="card-title">GB confirmado: con promesa vs otros medios de pago</div><div class="card-sub">USD confirmados de los productos seleccionados, por período</div></div></div>
+       <div class="ch" style="height:300px"><canvas id="cPpG"></canvas></div></div>
+    </section><section class="imp-sec" id="isec3"><div class="sec-h"><span class="sec-n">3</span><div><h3>Antes y después</h3><p>¿La venta de estos productos cambió desde que existe la promesa?</p></div></div>
+     <div class="card"><div class="card-hdr"><div><div class="card-title">GB confirmado diario: 8 semanas antes vs desde la prendida</div><div class="card-sub" id="ppBaSub"></div></div></div>
+       <div id="ppBa" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 4px"></div>
+       <div class="card-sub" id="ppBaNote" style="margin-top:8px;font-weight:600"></div>
+       <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">Promedio de GB confirmado por día en las 8 semanas previas a la prendida contra el promedio diario desde la prendida hasta el último día completo. Es una comparación simple: no ajusta por estacionalidad (octubre y noviembre) ni por otras iniciativas que se solaparon, así que muestra cómo se movió la venta pero no prueba que la promesa la haya causado. Parte de lo que se vende con promesa pudo haberse vendido igual con otro medio de pago.</div></details></div>
+    </section><section class="imp-sec" id="isec4"><div class="sec-h"><span class="sec-n">4</span><div><h3>Por producto y país</h3><p>Dónde se usa más la promesa</p></div></div>
+     <div class="card"><div class="card-hdr"><div><div class="card-title">Por producto</div><div class="card-sub">Desde la prendida, según el filtro de país</div></div></div>
+       <table class="stbl"><thead><tr><th>Producto</th><th class="num">Promesas</th><th class="num">Regularizadas</th><th class="num">Tasa de regularización</th><th class="num">GB con promesa</th><th class="num">% del GB del producto</th></tr></thead><tbody id="ppTbP"></tbody></table></div>
+     <div class="card"><div class="card-hdr"><div><div class="card-title">Por país</div><div class="card-sub">Desde la prendida, según el filtro de producto</div></div></div>
+       <table class="stbl"><thead><tr><th>País</th><th class="num">Promesas</th><th class="num">Regularizadas</th><th class="num">Tasa de regularización</th><th class="num">GB con promesa</th><th class="num">% del GB del producto</th></tr></thead><tbody id="ppTbC"></tbody></table></div>
+    </section>`;
+  $("impBack").onclick=()=>setPage("lista");
+  $("impact").querySelectorAll(".sec-nav a").forEach(a=>a.onclick=()=>$(a.dataset.t).scrollIntoView({behavior:"smooth",block:"start"}));
+  const keyOf=(dd,g)=>g==="d"?dd:g==="w"?iso(mondayOf(new Date(dd+"T00:00:00Z"))):dd.slice(0,7);
+  const lblOf=(k,g)=>g==="d"?fdate(k):g==="w"?"Sem "+fdate(k):MONTHS_L[+k.slice(5)-1]+" "+k.slice(2,4);
+  const XT={d:"Día",w:"Semana (inicia el lunes)",m:"Mes"};
+  const grid={color:"rgba(100,116,139,.15)",borderDash:[4,4]};
+  const tt={backgroundColor:"#0F1834",padding:10,cornerRadius:8};
+  const addD=(dd,n)=>iso(new Date(new Date(dd+"T00:00:00Z").getTime()+n*864e5));
+  let gran="w",pg="ALL",pcty="ALL";
+  const rows=(g,c)=>cfg.daily.filter(r=>(g==="ALL"||r[2]===g)&&(c==="ALL"||r[1]===c));
+  // r: [fecha,país,grupo,n_conf,gb_conf,n_prom,n_prom_ok,gb_prom_ok,gb_prom,n_act,n_canc]
+  const post=r=>r[0]>=cfg.launch&&r[0]<cfg.partial;
+  const sum=a=>a.reduce((s,r)=>[s[0]+r[3],s[1]+r[4],s[2]+r[5],s[3]+r[6],s[4]+r[7],s[5]+r[9],s[6]+r[10]],[0,0,0,0,0,0,0]);
+  const kb=(l,v,sub)=>`<div style="background:var(--panel2);border-radius:10px;padding:10px 12px"><div class="kpi-lbl">${l}</div><div class="kpi-val" style="font-size:20px">${v}</div><div class="kpi-sub" style="font-size:11px;color:var(--mut)">${sub}</div></div>`;
+  const tr=(lbl,a,st)=>{const t=sum(a.filter(post));const cl=t[3]+t[6];return `<tr${st||""}><td>${lbl}</td><td class="num">${fmtN(t[2])}</td><td class="num">${fmtN(t[3])}</td><td class="num">${pc(t[3],cl)}</td><td class="num">USD ${fmtN(t[4])}</td><td class="num">${pc(t[4],t[1])}</td></tr>`;};
+  function draw(){
+    document.querySelectorAll("#ppG button").forEach(b=>b.classList.toggle("active",b.dataset.g===pg));
+    document.querySelectorAll("#ppC button").forEach(b=>b.classList.toggle("active",b.dataset.c===pcty));
+    document.querySelectorAll(".impGran").forEach(g=>[...g.children].forEach(b=>b.classList.toggle("active",b.dataset.g===gran)));
+    const ctyTxt=pcty==="ALL"?"todos los países":(CN[pcty]||pcty);
+    const sel=rows(pg,pcty),t=sum(sel.filter(post)),cl=t[3]+t[6];
+    $("ppSub").textContent=PN[pg]+", "+ctyTxt+", desde el "+fdate(cfg.launch);
+    $("ppK").innerHTML=kb("Promesas generadas",fmtN(t[2]),"reservas creadas con promesa de pago")+
+      kb("Regularizadas",fmtN(t[3]),pc(t[3],t[2])+" de las generadas ya se pagaron y están confirmadas")+
+      kb("Tasa de regularización",pc(t[3],cl),"sobre las "+fmtN(cl)+" ya cerradas (sin contar abiertas)")+
+      kb("Abiertas",fmtN(t[5]),"todavía dentro del plazo de pago")+
+      kb("Vencidas o canceladas",fmtN(t[6]),pc(t[6],t[2])+" de las generadas")+
+      kb("GB confirmado con promesa","USD "+fmtN(t[4]),pc(t[4],t[1])+" del GB confirmado del producto");
+    const m=new Map(),g2=new Map();
+    sel.forEach(r=>{if(!post(r))return;const k=keyOf(r[0],gran);const a=m.get(k)||[0,0,0];a[0]+=r[6];a[1]+=r[9];a[2]+=r[10];m.set(k,a);});
+    sel.forEach(r=>{if(r[0]>=cfg.partial)return;const k=keyOf(r[0],gran);const a=g2.get(k)||[0,0];a[0]+=r[7];a[1]+=r[4]-r[7];g2.set(k,a);});
+    const ks=[...m.keys()].sort(),ks2=[...g2.keys()].sort();
+    $("ppEvSub").textContent=PN[pg]+", "+ctyTxt+" · por "+(gran==="d"?"día":gran==="w"?"semana":"mes")+" de creación de la reserva · el último período es parcial y las abiertas todavía pueden cambiar de estado";
+    const bo=(stack)=>({...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11}}},tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+fmtN(c.parsed.y),footer:it=>"Total: "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}},vlabels:{on:false},stacklabels:{on:true,size:gran==="d"?9:11}},
+      scales:{y:{stacked:true,beginAtZero:true,grid,ticks:{callback:v=>stack?fmtN(v/1000)+"k":v},title:{display:true,text:stack?"GB (USD)":"Promesas",color:"#64748B",font:{size:11,weight:"600"}}},x:{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[gran],color:"#64748B",font:{size:11,weight:"600"}}}}});
+    chart("cPpN",{type:"bar",data:{labels:ks.map(k=>lblOf(k,gran)),datasets:[
+      {label:"Regularizadas",data:ks.map(k=>m.get(k)[0]),backgroundColor:"#10B981",maxBarThickness:60},
+      {label:"Abiertas",data:ks.map(k=>m.get(k)[1]),backgroundColor:"#F7B955",maxBarThickness:60},
+      {label:"Vencidas o canceladas",data:ks.map(k=>m.get(k)[2]),backgroundColor:"#EF4444",borderRadius:{topLeft:6,topRight:6},maxBarThickness:60}]},options:bo(false)});
+    chart("cPpG",{type:"bar",data:{labels:ks2.map(k=>lblOf(k,gran)),datasets:[
+      {label:"Otros medios de pago",data:ks2.map(k=>Math.round(g2.get(k)[1])),backgroundColor:"#CBD5E1",maxBarThickness:60},
+      {label:"Con promesa de pago",data:ks2.map(k=>Math.round(g2.get(k)[0])),backgroundColor:"#ED8B08",borderRadius:{topLeft:6,topRight:6},maxBarThickness:60}]},options:bo(true)});
+    const pre=sel.filter(r=>r[0]<cfg.launch),pos=sel.filter(r=>r[0]>=cfg.launch&&r[0]<cfg.asof);
+    const dPre=new Set(pre.map(r=>r[0])).size;
+    const nPost=Math.max(0,Math.round((new Date(cfg.asof+"T00:00:00Z")-new Date(cfg.launch+"T00:00:00Z"))/864e5));
+    const gPre=pre.reduce((a,r)=>a+r[4],0),gPost=pos.reduce((a,r)=>a+r[4],0);
+    const aPre=dPre?gPre/dPre:0,aPost=nPost?gPost/nPost:0;
+    const nPre=pre.reduce((a,r)=>a+r[3],0)/(dPre||1),nPos=pos.reduce((a,r)=>a+r[3],0)/(nPost||1);
+    $("ppBaSub").textContent=PN[pg]+", "+ctyTxt+" · GB confirmado promedio por día";
+    $("ppBa").innerHTML=kb("Antes (8 sem previas)","USD "+fmtN(aPre)+"/día",dPre+" días")+kb("Desde la prendida","USD "+fmtN(aPost)+"/día",nPost+" días completos")+
+      kb("Diferencia","USD "+sg(aPost-aPre)+"/día",aPre?`<span style="color:${aPost>=aPre?"#059669":"#DC2626"}">${pf((aPost/aPre-1)*100)}</span> contra antes`:"-")+
+      kb("Reservas confirmadas por día",fmtN(nPos)+" vs "+fmtN(nPre),"desde la prendida vs antes");
+    $("ppBaNote").textContent=nPost<14?"Todavía hay "+nPost+" días desde la prendida: conviene esperar al menos 2 semanas.":"Comparación simple, sin ajustar por estacionalidad: la baja o suba puede deberse a otros factores y no a la promesa.";
+    $("ppTbP").innerHTML=PG.filter(x=>x[0]!=="ALL").map(([k,l])=>tr(l,rows(k,pcty))).join("")+tr("Total",rows("ALL",pcty),' style="border-top:2px solid var(--line);font-weight:700"');
+    $("ppTbC").innerHTML=C.map(c=>tr(flag(c)+" "+(CN[c]||c),rows(pg,c))).join("")+tr("Total",rows(pg,"ALL"),' style="border-top:2px solid var(--line);font-weight:700"');
+  }
+  $("ppG").onclick=e=>{const b=e.target.closest("[data-g]");if(!b)return;pg=b.dataset.g;draw();};
+  $("ppC").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;pcty=b.dataset.c;draw();};
+  document.querySelectorAll(".impGran").forEach(el=>el.onclick=e=>{const g=e.target.dataset.g;if(!g)return;gran=g;draw();});
+  draw();
+}
 function renderGv(d,cfg){
   const C=cfg.countries;
   const pf=v=>(v>=0?"+":"")+v.toFixed(1).replace(".",",")+"%";

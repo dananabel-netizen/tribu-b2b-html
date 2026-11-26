@@ -1020,53 +1020,58 @@ function renderImpact(){
 /* ---------- impacto: grilla de tarifas en vuelos (GB de vuelos standalone, antes y después) ---------- */
 let gvC="ALL";
 function renderPp(d,cfg){
-  const C=cfg.countries;
-  const PG=[["ALL","Todos"],["AU","Autos"],["TR","Traslados"],["AS","Asistencias"],["AC","Actividades"]];
-  const PN=Object.fromEntries(PG);
+  const C=cfg.countries,L=cfg.launch,N=cfg.n;
+  const PNAME={HO:"Hoteles",CA:"Carrito",AU:"Autos",TR:"Traslados",AS:"Asistencia",AC:"Actividades"};
+  const PCOL={HO:"#64748B",CA:"#94A3B8",AU:"#ED8B08",TR:"#3B82F6",AS:"#10B981",AC:"#8B5CF6"};
+  const NEWC=["AU","TR","AS","AC"],isNew=x=>NEWC.includes(x[2]);
   const pf=v=>(v>=0?"+":"")+v.toFixed(1).replace(".",",")+"%";
+  const pp1=v=>(v>=0?"+":"")+v.toFixed(1).replace(".",",")+" pp";
   const pc=(a,n)=>n?(a/n*100).toFixed(1).replace(".",",")+"%":"-";
+  const pc0=(a,n)=>n?Math.round(a/n*100)+"%":"-";
   const sg=v=>(v>=0?"+":"")+fmtN(v);
+  const grid={color:"rgba(100,116,139,.15)",borderDash:[4,4]},tt={backgroundColor:"#0F1834",padding:10,cornerRadius:8};
+  const addD=(dd,n)=>iso(new Date(new Date(dd+"T00:00:00Z").getTime()+n*864e5));
   const head=`<div class="imp-hdr one"><div class="imp-line"><span class="imp-eye">Impacto de iniciativa</span><h2>${cfg.title}</h2>
-    <span class="imp-meta">Prendida el <b>${fdate(cfg.launch)}</b> · datos al ${fdate(cfg.asof)} (hoy parcial)</span>
-    <span class="tags">${C.map(c=>`<span class="tag" title="${CN[c]||c}">${flag(c)}</span>`).join("")}</span></div>
+    <span class="imp-meta">Prendida el <b>${fdate(L)}</b> en Autos, Traslados, Asistencias y Actividades · datos al ${fdate(cfg.asof)} (hoy parcial)</span></div>
     <button class="btn-back" id="impBack">← Volver a iniciativas</button></div>`;
-  const filt=`<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="gran" id="ppG">${PG.map(([k,l])=>`<button data-g="${k}">${l}</button>`).join("")}</div>
-      <div class="gran" id="ppC"><button data-c="ALL">Todos</button>${C.map(c=>`<button data-c="${c}" title="${CN[c]||c}">${flag(c)}</button>`).join("")}</div></div>`;
+  const kb=(l,v,sub,col)=>`<div style="background:var(--panel2);border-radius:10px;padding:10px 12px;${col?"border-left:4px solid "+col:""}"><div class="kpi-lbl">${l}</div><div class="kpi-val" style="font-size:20px">${v}</div><div class="kpi-sub" style="font-size:11px;color:var(--mut)">${sub}</div></div>`;
+  const sec=(i,t,p,body)=>`<section class="imp-sec" id="isec${i}"><div class="sec-h"><span class="sec-n">${i}</span><div><h3>${t}</h3><p>${p}</p></div></div>${body}</section>`;
+  const card=(t,sub,body,extra)=>`<div class="card"><div class="card-hdr"><div><div class="card-title">${t}</div><div class="card-sub" ${sub&&sub[0]==="#"?`id="${sub.slice(1)}"`:""}>${sub&&sub[0]!=="#"?sub:""}</div></div>${extra||""}</div>${body}</div>`;
+  const cv=(id,h)=>`<div class="ch" style="height:${h||280}px"><canvas id="${id}"></canvas></div>`;
+  const meth=t=>`<details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">${t}</div></details>`;
+  const filt=`<div class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="gran" id="ppC"><button data-c="ALL">Todos los países</button>${C.map(c=>`<button data-c="${c}" title="${CN[c]||c}">${flag(c)}</button>`).join("")}</div>
+      <div style="display:flex;gap:8px;align-items:center"><span class="card-sub">Confirmadas sin GB en la tabla (backoffice):</span><div class="gran" id="ppK"><button data-k="0">Excluir</button><button data-k="1">Incluir</button></div></div></div>`;
   $("impact").innerHTML=head+
-   `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · Evolución"],["isec3","3 · Antes y después"],["isec4","4 · Por producto y país"],["isec5","5 · Agencias"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>
-    <section class="imp-sec" id="isec1"><div class="sec-h"><span class="sec-n">1</span><div><h3>Key Metrics</h3><p>Reservas de Autos, Traslados, Asistencias y Actividades que se generaron con promesa de pago</p></div></div>
-     <div class="card"><div class="card-hdr"><div><div class="card-title">Promesas de pago desde la prendida</div><div class="card-sub" id="ppSub"></div></div>${filt}</div>
-       <div id="ppK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:2px 0 4px"></div>
-       <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">Reservas del canal HTML (classic, silver, gold y platinum), agencias sin "test", por fecha de creación. Una reserva es "con promesa" si tiene registro en la tabla de condiciones diferidas con motivo PROMISE-B2B. Regularizada = la promesa ya se pagó y la reserva está confirmada; Abierta = todavía dentro del plazo; Vencida o cancelada = la reserva terminó cancelada. La tasa de regularización se calcula solo sobre las promesas ya cerradas (regularizadas + vencidas o canceladas), porque las abiertas todavía pueden resolverse. Productos: Autos, Traslados, Asistencia al viajero y Actividades (Excursiones y Espectáculos). Países: AR, BR, CL, CO, MX y PE (la iniciativa no aplica en USA ni Panamá). Antes de la prendida no había ninguna promesa en estos productos.</div></details></div>
-    </section><section class="imp-sec" id="isec2"><div class="sec-h"><span class="sec-n">2</span><div><h3>Evolución</h3><p>Cuántas promesas se generan y cómo terminan, y cuánto GB se vende con promesa</p></div></div>
-     <div class="card"><div class="card-hdr"><div><div class="card-title">Promesas generadas por estado</div><div class="card-sub" id="ppEvSub"></div></div>
-       <div class="gran impGran"><button data-g="d">Día</button><button data-g="w">Semana</button><button data-g="m">Mes</button></div></div>
-       <div class="ch" style="height:300px"><canvas id="cPpN"></canvas></div></div>
-     <div class="card"><div class="card-hdr"><div><div class="card-title">GB confirmado: con promesa vs otros medios de pago</div><div class="card-sub">USD confirmados de los productos seleccionados, por período</div></div></div>
-       <div class="ch" style="height:300px"><canvas id="cPpG"></canvas></div></div>
-    </section><section class="imp-sec" id="isec3"><div class="sec-h"><span class="sec-n">3</span><div><h3>Antes y después</h3><p>¿La venta de estos productos cambió desde que existe la promesa?</p></div></div>
-     <div class="card"><div class="card-hdr"><div><div class="card-title">GB semanal por producto vs contrafactual</div><div class="card-sub" id="ppLnSub"></div></div></div>
-       <div class="ch" style="height:400px"><canvas id="cPpL"></canvas></div>
-       <div class="card-sub" id="ppLnRes" style="margin-top:10px;font-weight:600"></div>
-       <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">Línea llena = GB confirmado real de cada producto por semana. Línea punteada = contrafactual: recta ajustada a las semanas previas a la semana de la prendida (hasta 8) y extendida hacia adelante, con el mismo color que el producto. La línea vertical marca la semana del lanzamiento (la semana de la prendida cuenta como lanzamiento). Se muestran solo semanas completas. La recta no captura estacionalidad (octubre y noviembre) ni otras iniciativas, y una sola semana con un feriado o una campaña puede mover mucho una línea, por eso es una referencia y no una prueba de causalidad.</div></details></div>
-     <div class="card"><div class="card-hdr"><div><div class="card-title">GB confirmado diario: 8 semanas antes vs desde la prendida</div><div class="card-sub" id="ppBaSub"></div></div></div>
-       <div id="ppBa" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 4px"></div>
-       <div class="card-sub" id="ppBaNote" style="margin-top:8px;font-weight:600"></div>
-       <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">Promedio de GB confirmado por día en las 8 semanas previas a la prendida contra el promedio diario desde la prendida hasta el último día completo. Es una comparación simple: no ajusta por estacionalidad (octubre y noviembre) ni por otras iniciativas que se solaparon, así que muestra cómo se movió la venta pero no prueba que la promesa la haya causado. Parte de lo que se vende con promesa pudo haberse vendido igual con otro medio de pago.</div></details></div>
-    </section><section class="imp-sec" id="isec4"><div class="sec-h"><span class="sec-n">4</span><div><h3>Por producto y país</h3><p>Dónde se usa más la promesa</p></div></div>
-     <div class="card"><div class="card-hdr"><div><div class="card-title">Por producto</div><div class="card-sub">Desde la prendida, según el filtro de país</div></div></div>
-       <table class="stbl"><thead><tr><th>Producto</th><th class="num">Promesas</th><th class="num">Regularizadas</th><th class="num">Tasa de regularización</th><th class="num">GB con promesa</th><th class="num">% del GB del producto</th></tr></thead><tbody id="ppTbP"></tbody></table></div>
-     <div class="card"><div class="card-hdr"><div><div class="card-title">Por país</div><div class="card-sub">Desde la prendida, según el filtro de producto</div></div></div>
-       <table class="stbl"><thead><tr><th>País</th><th class="num">Promesas</th><th class="num">Regularizadas</th><th class="num">Tasa de regularización</th><th class="num">GB con promesa</th><th class="num">% del GB del producto</th></tr></thead><tbody id="ppTbC"></tbody></table></div>
-    </section><section class="imp-sec" id="isec5"><div class="sec-h"><span class="sec-n">5</span><div><h3>Agencias</h3><p>Cuántas agencias usan promesa de pago y cuántas son nuevas a ella</p></div></div>
+   `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · ¿Se usa más?"],["isec3","3 · ¿Dónde creció?"],["isec4","4 · ¿Es volumen nuevo?"],["isec5","5 · Agencias"],["isec6","6 · Qué falta validar"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>`+filt+
+   sec(1,"Key Metrics","La promesa se usa más desde la prendida, pero buena parte de las reservas todavía no se pagó",
+     card("Resumen del impacto","#ppSub",`<div id="ppKp" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 12px"></div><div id="ppSay" style="background:var(--panel2);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.55"></div>`+
+       meth(`Sale de la query de detalle de reservas y medios de pago del equipo (transacciones + medios de pago), canal HTML (classic, silver, gold y platinum), sin agencias "test". Promesa = medio de pago DEFERRED_PROMISE; producto = tipo de compra (Hoteles, Carrito, Autos, Traslados, Asistencia y Actividades); fecha = fecha de reserva. Se compara el período posterior a la prendida (${fdate(L)} hasta ayer, ${N} días) con los ${N} días inmediatamente anteriores. <b>Confirmada</b> = reserva pagada con GB. <b>Activa</b> = reservada, todavía sin pagar y dentro del plazo. Quedan fuera las canceladas. Hay reservas Confirmadas que la tabla trae sin GB (confirmadas en backoffice): por defecto se excluyen, igual que en el análisis del equipo, y se pueden incluir con el botón de arriba. El share es sobre las órdenes no canceladas de todos los medios de pago (todos los productos). El GB solo existe para lo confirmado.`)))+
+   sec(2,"¿Se usa más?","Uso total y solo confirmadas, semana a semana",
+     card("Share semanal de promesa de pago","Semanas completas de 7 días contadas desde la prendida · las líneas punteadas son el promedio de cada período",
+       `${cv("cPpShare",270)}<div class="card-sub" id="ppShareRd" style="margin-top:8px;font-weight:600"></div>`,
+       `<div class="gran" id="ppSM"><button data-m="tot">Uso total</button><button data-m="conf">Solo confirmadas</button><button data-m="gb">GB confirmado</button></div>`)+
+     card("Órdenes con promesa por semana: confirmadas y activas","Todos los productos · las activas de las semanas recientes todavía tienen plazo para pagar, por eso la última semana tiene casi todo activo",`${cv("cPpUse",270)}`))+
+   sec(3,"¿Dónde creció?","Promesa por producto",
+     card("Órdenes con promesa por semana, según producto","Confirmadas más activas",`${cv("cPpProd",300)}`)+
+     card("Promesa por producto, antes vs después","C = confirmadas, A = activas. Share = (C + A) sobre las órdenes no canceladas del producto",
+       `<table class="stbl"><thead><tr><th>Producto</th><th class="num">C antes</th><th class="num">A antes</th><th class="num">C después</th><th class="num">A después</th><th class="num">Share antes</th><th class="num">Share después</th></tr></thead><tbody id="ppTbP"></tbody></table><div class="card-sub" id="ppGbP" style="margin-top:10px;font-weight:600"></div>`)+
+     card("Por país","Reservas con promesa desde la prendida (todos los productos)",`<table class="stbl"><thead><tr><th>País</th><th class="num">Con promesa</th><th class="num">Confirmadas</th><th class="num">Activas</th><th class="num">Canceladas</th><th class="num">Tasa de regularización</th><th class="num">GB confirmado</th></tr></thead><tbody id="ppTbC"></tbody></table><div class="card-sub" style="margin-top:8px">Tasa de regularización = confirmadas sobre las ya cerradas (confirmadas + canceladas); las activas todavía pueden resolverse.</div>`))+
+   sec(4,"¿Es volumen nuevo?","Si la promesa generara demanda nueva, deberían subir las órdenes totales de esos productos",
+     card("Órdenes confirmadas semanales en productos nuevos","Todos los medios de pago, con y sin promesa",`${cv("cPpNew",260)}<div class="card-sub" id="ppNewRd" style="margin-top:8px;font-weight:600"></div>`)+
+     card("Cambio de mix de pago en productos nuevos","Variación en puntos porcentuales del share de órdenes confirmadas, después menos antes",`${cv("cPpMix",300)}<div class="card-sub" id="ppMixRd" style="margin-top:8px;font-weight:600"></div>`)+
+     card("GB confirmado por producto vs contrafactual","Línea llena = GB real; punteada = tendencia de los bloques previos a la prendida, extendida hacia adelante",`${cv("cPpCf",340)}<div class="card-sub" id="ppCfRd" style="margin-top:8px;font-weight:600"></div>`+
+       meth("Cada producto usa su GB confirmado semanal (todos los medios de pago), en bloques de 7 días desde la prendida. Contrafactual = recta ajustada a los bloques previos y extendida hacia adelante. No captura estacionalidad (octubre y noviembre) ni otras iniciativas, así que es una referencia y no una prueba de causalidad."))+
+     card("Prueba por agencia: tratadas vs control","Variación antes → después de las órdenes y el GB confirmados en productos nuevos",`<div id="ppTc"></div><div class="card-sub" id="ppTcRd" style="margin-top:10px;font-weight:600"></div>`+
+       meth("Tratadas = agencias que ya compraban productos nuevos antes de la prendida, siguen comprando después y usaron promesa en productos nuevos (confirmada o activa). Control = agencias que compraron en ambos períodos y no la usaron. Compara cómo evolucionó cada grupo; si la promesa generara demanda, las tratadas deberían crecer más que el control. Una agencia nueva en el período posterior no entra en esta comparación.")))+
+   `<section class="imp-sec" id="isec5"><div class="sec-h"><span class="sec-n">5</span><div><h3>Agencias</h3><p>Cuántas agencias usan promesa de pago y cuántas son nuevas a ella</p></div></div>
      <div class="card"><div class="card-hdr"><div><div class="card-title">Agencias con promesa: antes vs después de la prendida</div><div class="card-sub" id="ppAgSub"></div></div>
-       <div class="gran" id="ppAgM"><button data-m="all">Confirmadas + abiertas</button><button data-m="conf">Solo confirmadas</button></div></div>
+       <div class="gran" id="ppAgM"><button data-m="all">Confirmadas + activas</button><button data-m="conf">Solo confirmadas</button></div></div>
        <div id="ppAgK" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 12px"></div>
        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
          <div><div class="card-sub" style="font-weight:600;margin-bottom:6px">Quiénes entran y quiénes salen</div><div class="ch" style="height:240px"><canvas id="cPpAgF"></canvas></div></div>
          <div><div class="card-sub" style="font-weight:600;margin-bottom:6px">Agencias con promesa por semana</div><div class="ch" style="height:240px"><canvas id="cPpAgW"></canvas></div></div></div>
        <div class="card-sub" id="ppAgNote" style="margin-top:10px;font-weight:600"></div>
-       <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">Sale de la query de detalle de reservas y medios de pago del equipo (transacciones + medios de pago). Agencias únicas (partner_data_id, sin agencias "test") con al menos una reserva con medio de pago DEFERRED_PROMISE en el canal HTML, en AR, BR, CL, CO, MX y PE, por fecha de reserva. "Con promesa" = reserva Confirmada o Abierta (las canceladas no cuentan; en "Solo confirmadas" solo las ya pagadas). Se compara el período posterior a la prendida (desde el 13/10 hasta ayer) con el mismo número de días inmediatamente anterior. "Productos nuevos" = reservas con flujo de compra Autos o Servicios en destino (traslados, asistencias y actividades); el resto (Hoteles, Alquileres y Carrito) cuenta como hoteles, donde la promesa ya existía; un carrito con un producto nuevo adentro queda en hoteles. Hay rotación natural de agencias entre períodos, y las abiertas de las últimas semanas todavía pueden pagarse o cancelarse. Las semanas del gráfico son únicas por semana y no se pueden sumar.</div></details></div>
+       ${meth(`Agencias únicas (partner de la reserva, sin agencias "test") con al menos una reserva con promesa de pago, por fecha de reserva. En "Solo confirmadas" cuentan solo las ya pagadas. Productos nuevos = Autos, Traslados, Asistencia y Actividades; el resto (Hoteles, Carrito y otros) cuenta como hoteles, donde la promesa ya existía. Hay rotación natural de agencias entre períodos, y las activas de las últimas semanas todavía pueden pagarse o cancelarse. El gráfico semanal cuenta agencias únicas por semana y no se puede sumar.`)}</div>
      <div class="card"><div class="card-hdr"><div><div class="card-title">Cuántas agencias atribuimos a la prendida</div><div class="card-sub">Agencias que usaron promesa en productos nuevos desde el lanzamiento</div></div></div>
        <div id="ppAgFn"></div><div class="card-sub" id="ppAgFnN" style="margin-top:10px;font-weight:600"></div></div>
      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
@@ -1075,145 +1080,180 @@ function renderPp(d,cfg){
          <div class="card-sub" id="ppAgCon" style="margin-top:10px;font-weight:600"></div></div>
        <div class="card"><div class="card-hdr"><div><div class="card-title">Agencias por país</div><div class="card-sub">Con promesa en cualquier producto</div></div></div>
          <table class="stbl"><thead><tr><th>País</th><th class="num">Antes</th><th class="num">Después</th><th class="num">En productos nuevos</th></tr></thead><tbody id="ppAgT2"></tbody></table></div></div>
-    </section>`;
+   </section>`+
+   sec(6,"Qué falta validar","Cuántas de las reservas activas se van a pagar",
+     card("Estado actual de las reservas creadas con promesa","Todas las reservas creadas en cada período, por estado",`${cv("cPpSt",230)}<div class="card-sub" id="ppStRd" style="margin-top:8px;font-weight:600"></div>`)+
+     card("Por qué se cancelan las reservas con promesa","Motivo de cancelación de las que se cancelaron, en %",`${cv("cPpCa",270)}<div class="card-sub" id="ppCaRd" style="margin-top:8px;font-weight:600"></div>`+meth("Motivo según el tipo de cancelación de la reserva: la agencia cancela, vence sin pago (el cliente o el gestor no cobraron a tiempo), error de reserva u otros."))+
+     card("Para tener en cuenta","",`<ul class="card-sub" style="margin:0;padding-left:18px;line-height:1.6"><li>El GB de las reservas activas no está disponible: la tabla carga el GB recién al confirmarse.</li><li>Una reserva activa de la semana pasada todavía puede pagarse o cancelarse, por eso el aumento de las últimas semanas sobreestima lo que terminará confirmándose.</li><li>El "antes" y el "después" cubren el mismo número de días, pero el antes tiene reservas ya maduras y el después no: comparar confirmadas puede subestimar el efecto.</li><li>Hay rotación natural de agencias; que una agencia empiece a usar promesa no implica que lo haga por la prendida.</li></ul>`));
   $("impBack").onclick=()=>setPage("lista");
   $("impact").querySelectorAll(".sec-nav a").forEach(a=>a.onclick=()=>$(a.dataset.t).scrollIntoView({behavior:"smooth",block:"start"}));
-  const keyOf=(dd,g)=>g==="d"?dd:g==="w"?iso(mondayOf(new Date(dd+"T00:00:00Z"))):dd.slice(0,7);
-  const lblOf=(k,g)=>g==="d"?fdate(k):g==="w"?"Sem "+fdate(k):MONTHS_L[+k.slice(5)-1]+" "+k.slice(2,4);
-  const XT={d:"Día",w:"Semana (inicia el lunes)",m:"Mes"};
-  const grid={color:"rgba(100,116,139,.15)",borderDash:[4,4]};
-  const tt={backgroundColor:"#0F1834",padding:10,cornerRadius:8};
-  const addD=(dd,n)=>iso(new Date(new Date(dd+"T00:00:00Z").getTime()+n*864e5));
-  let gran="w",pg="ALL",pcty="ALL";
-  const rows=(g,c)=>cfg.daily.filter(r=>(g==="ALL"||r[2]===g)&&(c==="ALL"||r[1]===c));
-  // r: [fecha,país,grupo,n_conf,gb_conf,n_prom,n_prom_ok,gb_prom_ok,gb_prom,n_act,n_canc]
-  const post=r=>r[0]>=cfg.launch&&r[0]<cfg.partial;
-  const sum=a=>a.reduce((s,r)=>[s[0]+r[3],s[1]+r[4],s[2]+r[5],s[3]+r[6],s[4]+r[7],s[5]+r[9],s[6]+r[10]],[0,0,0,0,0,0,0]);
-  const kb=(l,v,sub)=>`<div style="background:var(--panel2);border-radius:10px;padding:10px 12px"><div class="kpi-lbl">${l}</div><div class="kpi-val" style="font-size:20px">${v}</div><div class="kpi-sub" style="font-size:11px;color:var(--mut)">${sub}</div></div>`;
-  const tr=(lbl,a,st)=>{const t=sum(a.filter(post));const cl=t[3]+t[6];return `<tr${st||""}><td>${lbl}</td><td class="num">${fmtN(t[2])}</td><td class="num">${fmtN(t[3])}</td><td class="num">${pc(t[3],cl)}</td><td class="num">USD ${fmtN(t[4])}</td><td class="num">${pc(t[4],t[1])}</td></tr>`;};
+  // ---- datos y helpers ----
+  let cc="ALL",kOn=false,shM="tot",agM="all";
+  const nb=Math.floor(N/7),blocks=[...Array(2*nb)].map((_,i)=>i-nb);
+  const bIdx=dd=>Math.floor((Date.parse(dd+"T00:00:00Z")-Date.parse(L+"T00:00:00Z"))/864e5/7);
+  const bLbl=i=>"Sem "+fdate(addD(L,7*i));
+  const isPre=x=>x[0]<L;
+  const rowsA=()=>cfg.a.filter(x=>cc==="ALL"||x[1]===cc);
+  const isConf=x=>x[3]==="C"||(kOn&&x[3]==="K"),isUse=x=>isConf(x)||x[3]==="A",isProm=x=>x[4]===1;
+  const cnt=(R,f)=>R.reduce((s,x)=>f(x)?s+x[5]:s,0),gbs=(R,f)=>R.reduce((s,x)=>f(x)?s+x[6]:s,0);
+  const byBlock=(R,f,fld)=>{const o=blocks.map(()=>0);R.forEach(x=>{if(!f(x))return;const i=bIdx(x[0])+nb;if(i>=0&&i<o.length)o[i]+=x[fld];});return o;};
+  const marker=(label)=>({id:"mk"+label.length,afterDatasetsDraw(c){const xs=c.scales.x,a=c.chartArea,g=c.ctx;const px=(xs.getPixelForValue(nb-1)+xs.getPixelForValue(nb))/2;g.save();g.setLineDash([5,4]);g.strokeStyle="#0F1834";g.globalAlpha=.55;g.lineWidth=1.5;g.beginPath();g.moveTo(px,a.top);g.lineTo(px,a.bottom);g.stroke();g.setLineDash([]);g.globalAlpha=1;g.fillStyle="#0F1834";g.font="600 11px Rubik,sans-serif";g.textAlign="left";g.fillText(label,px+6,a.top+12);g.restore();}});
+  const MK=marker("Lanzamiento "+fdate(L));
+  const lo=(extra)=>({...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11},filter:i=>!i.text.startsWith("_")}},tooltip:{...tt},vlabels:{on:false},stacklabels:{on:false},...(extra||{})}});
+  const sc2=(yfmt,ytitle,stk)=>({y:{stacked:!!stk,beginAtZero:true,grid,ticks:{callback:yfmt},title:{display:!!ytitle,text:ytitle||"",color:"#64748B",font:{size:11,weight:"600"}}},x:{stacked:!!stk,grid:{display:false},ticks:{maxRotation:0,autoSkip:true}}});
+  const avg=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:0;
   function draw(){
-    document.querySelectorAll("#ppG button").forEach(b=>b.classList.toggle("active",b.dataset.g===pg));
-    document.querySelectorAll("#ppC button").forEach(b=>b.classList.toggle("active",b.dataset.c===pcty));
-    document.querySelectorAll(".impGran").forEach(g=>[...g.children].forEach(b=>b.classList.toggle("active",b.dataset.g===gran)));
-    const ctyTxt=pcty==="ALL"?"todos los países":(CN[pcty]||pcty);
-    const sel=rows(pg,pcty),t=sum(sel.filter(post)),cl=t[3]+t[6];
-    $("ppSub").textContent=PN[pg]+", "+ctyTxt+", desde el "+fdate(cfg.launch);
-    $("ppK").innerHTML=kb("Promesas generadas",fmtN(t[2]),"reservas creadas con promesa de pago")+
-      kb("Regularizadas",fmtN(t[3]),pc(t[3],t[2])+" de las generadas ya se pagaron y están confirmadas")+
-      kb("Tasa de regularización",pc(t[3],cl),"sobre las "+fmtN(cl)+" ya cerradas (sin contar abiertas)")+
-      kb("Abiertas",fmtN(t[5]),"todavía dentro del plazo de pago")+
-      kb("Vencidas o canceladas",fmtN(t[6]),pc(t[6],t[2])+" de las generadas")+
-      kb("GB confirmado con promesa","USD "+fmtN(t[4]),pc(t[4],t[1])+" del GB confirmado del producto");
-    const m=new Map(),g2=new Map();
-    sel.forEach(r=>{if(!post(r))return;const k=keyOf(r[0],gran);const a=m.get(k)||[0,0,0];a[0]+=r[6];a[1]+=r[9];a[2]+=r[10];m.set(k,a);});
-    sel.forEach(r=>{if(r[0]>=cfg.partial)return;const k=keyOf(r[0],gran);const a=g2.get(k)||[0,0];a[0]+=r[7];a[1]+=r[4]-r[7];g2.set(k,a);});
-    const ks=[...m.keys()].sort(),ks2=[...g2.keys()].sort();
-    $("ppEvSub").textContent=PN[pg]+", "+ctyTxt+" · por "+(gran==="d"?"día":gran==="w"?"semana":"mes")+" de creación de la reserva · el último período es parcial y las abiertas todavía pueden cambiar de estado";
-    const bo=(stack)=>({...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11}}},tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+fmtN(c.parsed.y),footer:it=>"Total: "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}},vlabels:{on:false},stacklabels:{on:true,size:gran==="d"?9:11}},
-      scales:{y:{stacked:true,beginAtZero:true,grid,ticks:{callback:v=>stack?fmtN(v/1000)+"k":v},title:{display:true,text:stack?"GB (USD)":"Promesas",color:"#64748B",font:{size:11,weight:"600"}}},x:{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:XT[gran],color:"#64748B",font:{size:11,weight:"600"}}}}});
-    chart("cPpN",{type:"bar",data:{labels:ks.map(k=>lblOf(k,gran)),datasets:[
-      {label:"Regularizadas",data:ks.map(k=>m.get(k)[0]),backgroundColor:"#10B981",maxBarThickness:60},
-      {label:"Abiertas",data:ks.map(k=>m.get(k)[1]),backgroundColor:"#F7B955",maxBarThickness:60},
-      {label:"Vencidas o canceladas",data:ks.map(k=>m.get(k)[2]),backgroundColor:"#EF4444",borderRadius:{topLeft:6,topRight:6},maxBarThickness:60}]},options:bo(false)});
-    chart("cPpG",{type:"bar",data:{labels:ks2.map(k=>lblOf(k,gran)),datasets:[
-      {label:"Otros medios de pago",data:ks2.map(k=>Math.round(g2.get(k)[1])),backgroundColor:"#CBD5E1",maxBarThickness:60},
-      {label:"Con promesa de pago",data:ks2.map(k=>Math.round(g2.get(k)[0])),backgroundColor:"#ED8B08",borderRadius:{topLeft:6,topRight:6},maxBarThickness:60}]},options:bo(true)});
-    const pre=sel.filter(r=>r[0]<cfg.launch),pos=sel.filter(r=>r[0]>=cfg.launch&&r[0]<cfg.asof);
-    const dPre=new Set(pre.map(r=>r[0])).size;
-    const nPost=Math.max(0,Math.round((new Date(cfg.asof+"T00:00:00Z")-new Date(cfg.launch+"T00:00:00Z"))/864e5));
-    const gPre=pre.reduce((a,r)=>a+r[4],0),gPost=pos.reduce((a,r)=>a+r[4],0);
-    const aPre=dPre?gPre/dPre:0,aPost=nPost?gPost/nPost:0;
-    const nPre=pre.reduce((a,r)=>a+r[3],0)/(dPre||1),nPos=pos.reduce((a,r)=>a+r[3],0)/(nPost||1);
-    $("ppBaSub").textContent=PN[pg]+", "+ctyTxt+" · GB confirmado promedio por día";
-    $("ppBa").innerHTML=kb("Antes (8 sem previas)","USD "+fmtN(aPre)+"/día",dPre+" días")+kb("Desde la prendida","USD "+fmtN(aPost)+"/día",nPost+" días completos")+
-      kb("Diferencia","USD "+sg(aPost-aPre)+"/día",aPre?`<span style="color:${aPost>=aPre?"#059669":"#DC2626"}">${pf((aPost/aPre-1)*100)}</span> contra antes`:"-")+
-      kb("Reservas confirmadas por día",fmtN(nPos)+" vs "+fmtN(nPre),"desde la prendida vs antes");
-    $("ppBaNote").textContent=nPost<14?"Todavía hay "+nPost+" días desde la prendida: conviene esperar al menos 2 semanas.":"Comparación simple, sin ajustar por estacionalidad: la baja o suba puede deberse a otros factores y no a la promesa.";
-    // líneas por producto + contrafactual (recta sobre las semanas previas)
-    const PCOL={AU:"#ED8B08",TR:"#3B82F6",AS:"#10B981",AC:"#8B5CF6"},PL=PG.filter(x=>x[0]!=="ALL");
-    const lw=keyOf(cfg.launch,"w"),lastW=keyOf(addD(cfg.asof,-7),"w");   // última semana completa: la que arranca 7 días antes de hoy o antes
-    const wks=[];for(let w=keyOf(cfg.from_,"w");w<=lastW;w=addD(w,7))wks.push(w);
-    const li=wks.indexOf(lw),preN=Math.min(8,li);
-    const ser=Object.fromEntries(PL.map(([k])=>{const mm=new Map();rows(k,pcty).forEach(r=>{const w=keyOf(r[0],"w");mm.set(w,(mm.get(w)||0)+r[4]);});return [k,wks.map(w=>Math.round(mm.get(w)||0))];}));
-    const fitP=y=>{const n=y.length,xs=y.map((_,i)=>i),mx=(n-1)/2,my=y.reduce((a,b)=>a+b,0)/n;let sxy=0,sxx=0;xs.forEach(i=>{sxy+=(i-mx)*(y[i]-my);sxx+=(i-mx)**2;});const b=sxx?sxy/sxx:0;return x=>my+b*(x-mx);};
-    const dsL=[],res=[];
-    PL.forEach(([k,l])=>{
-      const y=ser[k],f=preN>=3?fitP(y.slice(li-preN,li)):null;
-      const proj=y.map((_,i)=>f&&i>=li?Math.max(0,Math.round(f(i-(li-preN)))):null);
-      dsL.push({label:l,data:y,borderColor:PCOL[k],backgroundColor:PCOL[k],borderWidth:3,pointRadius:3,tension:.25,_k:k});
-      dsL.push({label:l+" · contrafactual",data:proj,borderColor:PCOL[k],borderDash:[6,5],borderWidth:2,pointRadius:0,tension:0});
-      if(f){const a=y.slice(li).reduce((s,v)=>s+v,0),p=proj.slice(li).reduce((s,v)=>s+v,0);res.push(l+" "+(p?pf((a/p-1)*100):"-"));}
-    });
-    $("ppLnSub").textContent="GB confirmado por semana, "+ctyTxt+" · línea llena = real, punteada = contrafactual (tendencia de las "+preN+" semanas previas)";
-    $("ppLnRes").textContent=res.length?"Real vs contrafactual desde el lanzamiento: "+res.join("  ·  "):"No hay semanas previas suficientes para proyectar.";
-    chart("cPpL",{type:"line",data:{labels:wks.map(w=>"Sem "+fdate(w)),datasets:dsL},
-      options:{...baseOpts,plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11}}},
-        tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y)}},vlabels:{on:false},stacklabels:{on:false}},
-        scales:{y:{beginAtZero:true,grid,ticks:{callback:v=>fmtN(v/1000)+"k"},title:{display:true,text:"GB semanal (USD)",color:"#64748B",font:{size:11,weight:"600"}}},
-                x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true},title:{display:true,text:"Semana (inicia el lunes)",color:"#64748B",font:{size:11,weight:"600"}}}}},
-      plugins:[{id:"ppLaunch",afterDatasetsDraw(c){if(li<0)return;const x=c.scales.x.getPixelForValue(li),a=c.chartArea,g=c.ctx;g.save();g.strokeStyle="#0F1834";g.lineWidth=1.5;g.setLineDash([5,4]);g.beginPath();g.moveTo(x,a.top);g.lineTo(x,a.bottom);g.stroke();g.setLineDash([]);g.fillStyle="#0F1834";g.font="600 11px Rubik,sans-serif";g.textAlign="left";g.fillText("Lanzamiento "+fdate(cfg.launch),x+6,a.top+12);g.restore();}}]});
-    $("ppTbP").innerHTML=PG.filter(x=>x[0]!=="ALL").map(([k,l])=>tr(l,rows(k,pcty))).join("")+tr("Total",rows("ALL",pcty),' style="border-top:2px solid var(--line);font-weight:700"');
-    $("ppTbC").innerHTML=C.map(c=>tr(flag(c)+" "+(CN[c]||c),rows(pg,c))).join("")+tr("Total",rows(pg,"ALL"),' style="border-top:2px solid var(--line);font-weight:700"');
+    document.querySelectorAll("#ppC button").forEach(b=>b.classList.toggle("active",b.dataset.c===cc));
+    document.querySelectorAll("#ppK button").forEach(b=>b.classList.toggle("active",(b.dataset.k==="1")===kOn));
+    document.querySelectorAll("#ppSM button").forEach(b=>b.classList.toggle("active",b.dataset.m===shM));
+    const R=rowsA(),ctyTxt=cc==="ALL"?"todos los países":(CN[cc]||cc);
+    $("ppSub").textContent=ctyTxt+" · "+N+" días desde la prendida ("+fdate(L)+") contra los "+N+" días anteriores ("+fdate(cfg.pre_from)+" al "+fdate(addD(L,-1))+")";
+    const P=(f)=>cnt(R,x=>isPre(x)&&f(x)),Q=(f)=>cnt(R,x=>!isPre(x)&&f(x));
+    const use0=P(x=>isProm(x)&&isUse(x)),use1=Q(x=>isProm(x)&&isUse(x)),den0=P(isUse),den1=Q(isUse);
+    const cf0=P(x=>isProm(x)&&isConf(x)),cf1=Q(x=>isProm(x)&&isConf(x)),ac0=P(x=>isProm(x)&&x[3]==="A"),ac1=Q(x=>isProm(x)&&x[3]==="A");
+    const sh0=den0?use0/den0*100:0,sh1=den1?use1/den1*100:0,cs0=den0?cf0/den0*100:0,cs1=den1?cf1/den1*100:0;
+    const gbN=gbs(R,x=>!isPre(x)&&isProm(x)&&x[3]==="C"&&isNew(x)),gbH0=gbs(R,x=>isPre(x)&&isProm(x)&&x[3]==="C"&&x[2]==="HO"),gbH1=gbs(R,x=>!isPre(x)&&isProm(x)&&x[3]==="C"&&x[2]==="HO");
+    const ag=agCalc(),g=ag.pre.length?(ag.post.length/ag.pre.length-1)*100:0;
+    $("ppKp").innerHTML=kb("Órdenes con promesa (confirmadas + activas)",fmtN(use0)+" → "+fmtN(use1),use0?pf((use1/use0-1)*100)+" · ya existía en hoteles":"-","#ED8B08")+
+      kb("Share del uso total",sh0.toFixed(1).replace(".",",")+"% → "+sh1.toFixed(1).replace(".",",")+"%",pp1(sh1-sh0)+" sobre órdenes no canceladas","#ED8B08")+
+      kb("Solo confirmadas",fmtN(cf0)+" → "+fmtN(cf1),(cf0?pf((cf1/cf0-1)*100):"-")+" · share "+cs0.toFixed(1).replace(".",",")+"% → "+cs1.toFixed(1).replace(".",",")+"%","#10B981")+
+      kb("Activas con promesa (aún sin pagar)",fmtN(ac0)+" → "+fmtN(ac1),pc(ac0,den0)+" → "+pc(ac1,den1)+" de las órdenes","#F7B955")+
+      kb("Agencias con promesa",fmtN(ag.pre.length)+" → "+fmtN(ag.post.length),pf(g)+" · confirmadas + activas","#3B82F6")+
+      kb("GB confirmado con promesa, productos nuevos","0 → USD "+fmtN(gbN),"nuevo desde la prendida","#8B5CF6")+
+      kb("GB confirmado con promesa, hoteles","USD "+fmtN(gbH0)+" → "+fmtN(gbH1),"ya existía: "+(gbH0?pf((gbH1/gbH0-1)*100):"-"),"#64748B")+
+      kb("Tasa de regularización (período posterior)",pc(cf1,cf1+Q(x=>isProm(x)&&x[3]==="X")),"confirmadas sobre las ya cerradas (confirmadas + canceladas)","#10B981");
+    // "qué diría hoy"
+    const nC=Q(x=>isProm(x)&&isNew(x)&&isConf(x)),nA=Q(x=>isProm(x)&&isNew(x)&&x[3]==="A");
+    const nc0=P(x=>isConf(x)&&isNew(x)),nc1=Q(x=>isConf(x)&&isNew(x));
+    const tc=tcCalc();
+    $("ppSay").innerHTML=`<b>Qué diría hoy</b><ul style="margin:6px 0 0;padding-left:18px">
+      <li><b>Se usa:</b> las órdenes con promesa pasaron de ${fmtN(use0)} a ${fmtN(use1)}${use0?" ("+pf((use1/use0-1)*100)+")":""}. Productos nuevos suma ${fmtN(nC+nA)} órdenes: ${fmtN(nC)} confirmadas (USD ${fmtN(gbN)} de GB) y ${fmtN(nA)} activas.</li>
+      <li><b>Falta que se paguen:</b> el ${pc0(ac1,use1)} del uso del período posterior está activo, sin pagar. Esperamos que parte se confirme, pero no todas.</li>
+      <li><b>Atribución:</b> ${fmtN(ag.attr.length)} agencias nunca habían usado promesa antes y la usan en productos nuevos.</li>
+      <li><b>Volumen nuevo:</b> las órdenes confirmadas totales de productos nuevos pasaron de ${fmtN(nc0)} a ${fmtN(nc1)}${nc0?" ("+pf((nc1/nc0-1)*100)+")":""}. Por agencia, las que usan promesa evolucionan ${tc.t.pn?pf(tc.t.vn):"-"} contra ${tc.c.pn?pf(tc.c.vn):"-"} en órdenes confirmadas${tc.t.pn&&tc.c.pn?(tc.t.vn-tc.c.vn>3?": las tratadas crecen más que el control, una señal a validar (puede deberse al tamaño de las agencias).":": no hay diferencia clara, así que hoy la promesa parece reemplazar otros medios de pago más que sumar demanda."):"."}</li></ul>`;
+    // 2 · share semanal
+    const num=w=>R.filter(x=>isProm(x)&&(shM==="gb"?x[3]==="C":shM==="conf"?isConf(x):isUse(x))),dn=R.filter(x=>shM==="gb"?x[3]==="C":isUse(x));
+    const nu=byBlock(num(),()=>true,shM==="gb"?6:5),de=byBlock(dn,()=>true,shM==="gb"?6:5);
+    const sv=blocks.map((_,i)=>de[i]?nu[i]/de[i]*100:null);
+    const pre=sv.slice(0,nb),post=sv.slice(nb),ap=avg(pre.filter(v=>v!=null)),aq=avg(post.filter(v=>v!=null));
+    const lbl=blocks.map(bLbl);
+    const ln=(label,data,col,dash,pts)=>({label,data,borderColor:col,backgroundColor:col,borderWidth:dash?1.5:2.5,borderDash:dash?[6,5]:[],pointRadius:pts?4:0,tension:.25,spanGaps:false});
+    chart("cPpShare",{type:"line",data:{labels:lbl,datasets:[ln("Antes",sv.map((v,i)=>i<nb?v:null),"#94A3B8",0,1),ln("Después",sv.map((v,i)=>i>=nb?v:null),"#ED8B08",0,1),ln("Promedio antes",sv.map((v,i)=>i<nb?ap:null),"#94A3B8",1,0),ln("Promedio después",sv.map((v,i)=>i>=nb?aq:null),"#ED8B08",1,0)]},
+      options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+c.parsed.y.toFixed(1).replace(".",",")+"%"}}}),interaction:{mode:"index",intersect:false},scales:sc2(v=>v.toFixed(0)+"%","% de las órdenes")},plugins:[MK]});
+    $("ppShareRd").textContent="Medido en "+(shM==="gb"?"el GB confirmado":shM==="conf"?"las órdenes confirmadas":"el uso total (confirmadas + activas)")+", el promedio semanal pasó de "+ap.toFixed(1).replace(".",",")+"% a "+aq.toFixed(1).replace(".",",")+"% ("+pp1(aq-ap)+")."+(shM==="tot"?" Las activas de las semanas recientes todavía pueden pagarse o cancelarse.":shM==="gb"?" El GB de las activas no está disponible en la tabla.":"");
+    const uc=byBlock(R,x=>isProm(x)&&isConf(x),5),ua=byBlock(R,x=>isProm(x)&&x[3]==="A",5);
+    chart("cPpUse",{type:"bar",data:{labels:lbl,datasets:[{label:"Confirmadas",data:uc,backgroundColor:"#10B981"},{label:"Activas (sin pagar)",data:ua,backgroundColor:"#F7B955",borderRadius:{topLeft:6,topRight:6}}]},
+      options:{...lo({tooltip:{...tt,callbacks:{footer:it=>"Total: "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}}}),scales:sc2(v=>fmtN(v),"Órdenes",1)},plugins:[MK]});
+    // 3 · por producto
+    const PR=["HO","CA","AU","TR","AS","AC"];
+    chart("cPpProd",{type:"bar",data:{labels:lbl,datasets:PR.map(k=>({label:PNAME[k],data:byBlock(R,x=>isProm(x)&&isUse(x)&&x[2]===k,5),backgroundColor:PCOL[k]}))},
+      options:{...lo({tooltip:{...tt,callbacks:{footer:it=>"Total: "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}}}),scales:sc2(v=>fmtN(v),"Órdenes con promesa",1)},plugins:[MK]});
+    const row=(lbl2,f,st)=>{const c0=P(x=>f(x)&&isProm(x)&&isConf(x)),a0=P(x=>f(x)&&isProm(x)&&x[3]==="A"),c1=Q(x=>f(x)&&isProm(x)&&isConf(x)),a1=Q(x=>f(x)&&isProm(x)&&x[3]==="A"),d0=P(x=>f(x)&&isUse(x)),d1=Q(x=>f(x)&&isUse(x));
+      return `<tr${st||""}><td>${lbl2}</td><td class="num">${fmtN(c0)}</td><td class="num">${fmtN(a0)}</td><td class="num">${fmtN(c1)}</td><td class="num">${fmtN(a1)}</td><td class="num">${pc(c0+a0,d0)}</td><td class="num"><b>${pc(c1+a1,d1)}</b></td></tr>`;};
+    $("ppTbP").innerHTML=row("Hoteles",x=>x[2]==="HO")+row("<b>Productos nuevos</b>",isNew,' style="background:var(--panel2)"')+["TR","AC","AU","AS"].map(k=>row("&nbsp;&nbsp;"+PNAME[k],x=>x[2]===k)).join("")+row("Carrito",x=>x[2]==="CA");
+    const gbk=k=>gbs(R,x=>!isPre(x)&&isProm(x)&&x[3]==="C"&&x[2]===k);
+    $("ppGbP").textContent="GB confirmado con promesa en productos nuevos: USD "+fmtN(gbN)+" ("+pc(gbN,gbs(R,x=>!isPre(x)&&x[3]==="C"&&isNew(x)))+" del GB confirmado de esos productos): actividades "+fmtN(gbk("AC"))+", autos "+fmtN(gbk("AU"))+", traslados "+fmtN(gbk("TR"))+" y asistencia "+fmtN(gbk("AS"))+". Hoteles, donde ya existía: USD "+fmtN(gbH0)+" → "+fmtN(gbH1)+". Carrito (USD "+fmtN(gbk("CA"))+") queda aparte porque no se puede separar por producto.";
+    const cR=cfg.a.filter(x=>!isPre(x)&&isProm(x)),cn=c=>{const r=cR.filter(x=>x[1]===c),k=a=>r.reduce((s,x)=>x[3]===a?s+x[5]:s,0),cx=k("C")+(kOn?k("K"):0),ax=k("A"),xx=k("X");return [c,cx+ax+xx,cx,ax,xx,r.reduce((s,x)=>x[3]==="C"?s+x[6]:s,0)];};
+    $("ppTbC").innerHTML=C.map(cn).filter(r=>r[1]>0).map(([c,t,cx,ax,xx,gb])=>`<tr><td>${flag(c)} ${CN[c]||c}</td><td class="num">${fmtN(t)}</td><td class="num">${fmtN(cx)}</td><td class="num">${fmtN(ax)}</td><td class="num">${fmtN(xx)}</td><td class="num">${pc(cx,cx+xx)}</td><td class="num">USD ${fmtN(gb)}</td></tr>`).join("");
+    // 4 · volumen nuevo
+    const nv=byBlock(R,x=>isConf(x)&&isNew(x),5);
+    chart("cPpNew",{type:"bar",data:{labels:lbl,datasets:[{label:"Órdenes confirmadas",data:nv,backgroundColor:blocks.map((_,i)=>i<nb?"#CBD5E1":"#ED8B08"),borderRadius:{topLeft:6,topRight:6},maxBarThickness:60}]},
+      options:{...baseOpts,plugins:{legend:{display:false},tooltip:{...tt,displayColors:false,callbacks:{label:c=>fmtN(c.parsed.y)+" órdenes"}},vlabels:{on:true,size:10,fmt:v=>fmtN(v)},stacklabels:{on:false}},scales:sc2(v=>fmtN(v),"Órdenes")},plugins:[MK]});
+    const g0=gbs(R,x=>isPre(x)&&x[3]==="C"&&isNew(x)),g1=gbs(R,x=>!isPre(x)&&x[3]==="C"&&isNew(x));
+    const tk1=cnt(R,x=>!isPre(x)&&x[3]==="C"&&isNew(x)&&isProm(x)),tg1=gbs(R,x=>!isPre(x)&&x[3]==="C"&&isNew(x)&&isProm(x)),tk0=cnt(R,x=>!isPre(x)&&x[3]==="C"&&isNew(x)&&!isProm(x)),tg0=gbs(R,x=>!isPre(x)&&x[3]==="C"&&isNew(x)&&!isProm(x));
+    $("ppNewRd").textContent="Las órdenes confirmadas de productos nuevos pasaron de "+fmtN(nc0)+" a "+fmtN(nc1)+(nc0?" ("+pf((nc1/nc0-1)*100)+")":"")+" y su GB "+(g0?pf((g1/g0-1)*100):"-")+". Aun si las "+fmtN(nA)+" activas se confirmaran todas y fueran incrementales, el total llegaría a "+fmtN(nc1+nA)+" ("+(nc0?pf(((nc1+nA)/nc0-1)*100):"-")+" contra antes). Ticket confirmado: "+(tk1?"USD "+fmtN(tg1/tk1):"-")+" con promesa contra "+(tk0?"USD "+fmtN(tk0?tg0/tk0:0):"-")+" sin promesa.";
+    const MX=cfg.mix.filter(x=>cc==="ALL"||x[1]===cc),mn=(per)=>{const o={};MX.forEach(x=>{if((x[0]<L)===(per==="pre"))o[x[2]]=(o[x[2]]||0)+x[3];});return o;};
+    const m0=mn("pre"),m1=mn("post"),t0=Object.values(m0).reduce((a,b)=>a+b,0),t1=Object.values(m1).reduce((a,b)=>a+b,0);
+    const keys=[...new Set([...Object.keys(m0),...Object.keys(m1)])].map(k=>[k,t1?((m1[k]||0)/t1*100)-(t0?((m0[k]||0)/t0*100):0):0]).sort((a,b)=>a[1]-b[1]);
+    chart("cPpMix",{type:"bar",data:{labels:keys.map(k=>k[0]),datasets:[{data:keys.map(k=>Math.round(k[1]*100)/100),backgroundColor:keys.map(k=>k[0]==="Promesa de pago"?"#ED8B08":k[1]>=0?"#10B981":"#94A3B8"),borderRadius:6,maxBarThickness:34}]},
+      options:{...baseOpts,indexAxis:"y",plugins:{legend:{display:false},tooltip:{...tt,displayColors:false,callbacks:{label:c=>pp1(c.parsed.x)}},vlabels:{on:false},stacklabels:{on:false}},scales:{x:{grid,ticks:{callback:v=>v+" pp"}},y:{grid:{display:false}}}}});
+    const pr=keys.find(k=>k[0]==="Promesa de pago");
+    $("ppMixRd").textContent="Las órdenes confirmadas de productos nuevos (todos los medios de pago) son "+fmtN(t0)+" antes y "+fmtN(t1)+" después. La promesa pasó a ser "+((m1["Promesa de pago"]||0)&&t1?((m1["Promesa de pago"]/t1)*100).toFixed(1).replace(".",",")+"%":"0%")+" de las confirmadas"+(pr?" ("+pp1(pr[1])+")":"")+"; lo que más baja es "+(keys[0]?keys[0][0]+" ("+pp1(keys[0][1])+")":"-")+".";
+    // contrafactual por producto
+    const dsC=[],res=[];
+    NEWC.forEach(k=>{const y=byBlock(R,x=>x[3]==="C"&&x[2]===k,6),pre=y.slice(0,nb);
+      let f=null;if(nb>=3){const mx=(nb-1)/2,my=avg(pre);let sxy=0,sxx=0;pre.forEach((v,i)=>{sxy+=(i-mx)*(v-my);sxx+=(i-mx)**2;});const b=sxx?sxy/sxx:0;f=i=>my+b*(i-mx);}
+      const pj=y.map((_,i)=>f&&i>=nb?Math.max(0,Math.round(f(i))):null);
+      dsC.push({label:PNAME[k],data:y,borderColor:PCOL[k],backgroundColor:PCOL[k],borderWidth:3,pointRadius:3,tension:.25});
+      dsC.push({label:"_"+PNAME[k]+" contrafactual",data:pj,borderColor:PCOL[k],borderDash:[6,5],borderWidth:2,pointRadius:0,tension:0});
+      if(f){const a=y.slice(nb).reduce((s,v)=>s+v,0),p=pj.slice(nb).reduce((s,v)=>s+v,0);res.push(PNAME[k]+" "+(p?pf((a/p-1)*100):"-"));}});
+    chart("cPpCf",{type:"line",data:{labels:lbl,datasets:dsC},options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label.replace(/^_/,"")+": USD "+fmtN(c.parsed.y)}}}),scales:sc2(v=>fmtN(v/1000)+"k","GB semanal (USD)")},plugins:[MK]});
+    $("ppCfRd").textContent="Real vs contrafactual desde el lanzamiento: "+res.join("  ·  ")+". Las punteadas son la tendencia previa.";
+    // tratadas vs control
+    const row2=(l,a,b)=>`<tr><td>${l}</td><td class="num">${a}</td><td class="num">${b}</td></tr>`;
+    $("ppTc").innerHTML=`<table class="stbl"><thead><tr><th></th><th class="num">Tratadas (${fmtN(tc.t.n)} agencias)</th><th class="num">Control (${fmtN(tc.c.n)} agencias)</th></tr></thead><tbody>`+
+      row2("Órdenes antes → después",fmtN(tc.t.pn)+" → "+fmtN(tc.t.qn),fmtN(tc.c.pn)+" → "+fmtN(tc.c.qn))+row2("Variación de órdenes",`<b>${tc.t.pn?pf(tc.t.vn):"-"}</b>`,`<b>${tc.c.pn?pf(tc.c.vn):"-"}</b>`)+
+      row2("GB antes → después","USD "+fmtN(tc.t.pg)+" → "+fmtN(tc.t.qg),"USD "+fmtN(tc.c.pg)+" → "+fmtN(tc.c.qg))+row2("Variación de GB",`<b>${tc.t.pg?pf(tc.t.vg):"-"}</b>`,`<b>${tc.c.pg?pf(tc.c.vg):"-"}</b>`)+
+      row2("Agencias que suben / bajan",pc0(tc.t.up,tc.t.n)+" / "+pc0(tc.t.dn,tc.t.n),pc0(tc.c.up,tc.c.n)+" / "+pc0(tc.c.dn,tc.c.n))+
+      row2("Órdenes sin promesa antes → después",fmtN(tc.t.pn)+" → "+fmtN(tc.t.qn-tc.t.pm),fmtN(tc.c.pn)+" → "+fmtN(tc.c.qn))+row2("Órdenes con promesa después",fmtN(tc.t.pm),"0")+`</tbody></table>`;
+    $("ppTcRd").textContent=(tc.t.n&&tc.c.n?"Las órdenes confirmadas de las agencias que usan promesa evolucionan "+pf(tc.t.vn)+" contra "+pf(tc.c.vn)+" del control"+(tc.t.vn-tc.c.vn>3?": crecen más, aunque puede deberse al tamaño de las agencias y no alcanza para hablar de incremental. ":": no compran más que las que no la usan. "):"")+"De "+fmtN(tc.first)+" agencias que compraron productos nuevos por primera vez después, "+fmtN(tc.firstP)+" lo hicieron con promesa y "+fmtN(tc.first-tc.firstP)+" sin ella.";
+    // 6 · estado y cancelaciones
+    const grp=[["Hoteles, antes",x=>x[2]==="HO"&&isPre(x)],["Hoteles, después",x=>x[2]==="HO"&&!isPre(x)],["Productos nuevos, después",x=>isNew(x)&&!isPre(x)]];
+    const stK=[["Confirmadas con GB","C","#10B981"],...(kOn?[["Confirmadas sin GB","K","#34D399"]]:[]),["Activas","A","#F7B955"],["Canceladas","X","#EF4444"]];
+    const st=grp.map(([l,f])=>{const o={};stK.forEach(([,k])=>o[k]=cnt(R,x=>f(x)&&isProm(x)&&x[3]===k));const t=Object.values(o).reduce((a,b)=>a+b,0);return {l,o,t};});
+    chart("cPpSt",{type:"bar",data:{labels:st.map(s=>s.l),datasets:stK.map(([l,k,col])=>({label:l,data:st.map(s=>s.t?Math.round(s.o[k]/s.t*1000)/10:0),backgroundColor:col}))},
+      options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+c.parsed.x.toFixed(1).replace(".",",")+"%"}}}),indexAxis:"y",scales:{x:{stacked:true,max:100,grid,ticks:{callback:v=>v+"%"}},y:{stacked:true,grid:{display:false}}}}});
+    const s0=st[0],s2=st[2];
+    $("ppStRd").textContent="En hoteles del antes, el "+pc0(s0.o.C,s0.t)+" de las reservas creadas está confirmada con GB, el "+pc0(s0.o.A,s0.t)+" sigue activa y el "+pc0(s0.o.X,s0.t)+" se canceló: es una referencia para no esperar que todas las activas de hoy se confirmen. En productos nuevos, de "+fmtN(s2.t)+" reservas creadas, "+fmtN(s2.o.C)+" están confirmadas con GB, "+fmtN(s2.o.A)+" activas y "+fmtN(s2.o.X)+" canceladas.";
+    const CR=cfg.canc.filter(x=>cc==="ALL"||x[1]===cc),RS=["Cancela la agencia","Vence sin pago","Error de reserva","Otros"];
+    const cg=[["Hoteles, antes",x=>x[2]==="HO"&&x[0]<L],["Hoteles, después",x=>x[2]==="HO"&&x[0]>=L],["Productos nuevos, después",x=>x[2]==="NU"&&x[0]>=L]];
+    const cd=cg.map(([l,f])=>{const o={};RS.forEach(r=>o[r]=CR.reduce((s,x)=>f(x)&&x[3]===r?s+x[4]:s,0));return {l,o,t:Object.values(o).reduce((a,b)=>a+b,0)};});
+    chart("cPpCa",{type:"bar",data:{labels:RS,datasets:cd.map((c,i)=>({label:c.l,data:RS.map(r=>c.t?Math.round(c.o[r]/c.t*1000)/10:0),backgroundColor:["#94A3B8","#CBD5E1","#ED8B08"][i],borderRadius:4}))},
+      options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+c.parsed.y.toFixed(1).replace(".",",")+"%"}}}),scales:sc2(v=>v+"%","% de las canceladas")}});
+    const cr=(f)=>{const t=cnt(R,x=>!isPre(x)&&isNew(x)&&f(x)),xx=cnt(R,x=>!isPre(x)&&isNew(x)&&f(x)&&x[3]==="X");return t?xx/t*100:0;};
+    $("ppCaRd").textContent="En productos nuevos se canceló el "+cr(isProm).toFixed(0)+"% de las reservas con promesa, contra "+cr(x=>!isProm(x)).toFixed(0)+"% de las que no la usan. Las tasas del período posterior son menores porque muchas reservas siguen activas y todavía pueden cancelarse.";
+    drawAg();
   }
-  $("ppG").onclick=e=>{const b=e.target.closest("[data-g]");if(!b)return;pg=b.dataset.g;draw();};
-  $("ppC").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;pcty=b.dataset.c;draw();};
-  document.querySelectorAll(".impGran").forEach(el=>el.onclick=e=>{const g=e.target.dataset.g;if(!g)return;gran=g;draw();});
-  draw();
-  // ---- 5 · Agencias ----
-  let agM="all";
+  // ---- cálculos por agencia ----
+  function agCalc(){
+    const ag=cfg.ag,R=ag.rows.filter(r=>cc==="ALL"||r[1]===cc),cf=agM==="conf";
+    const q=(a,c,k)=>(cf?0:a)+c+(kOn?k:0);
+    const A=R.map(r=>({id:r[0],c:r[1],pre:q(r[2],r[3],r[4]),qh:q(r[5],r[6],r[7]),qn:q(r[8],r[9],r[10]),act:r[11]})).filter(a=>a.pre>0||a.qh+a.qn>0);
+    const pre=A.filter(a=>a.pre>0),post=A.filter(a=>a.qh+a.qn>0),preS=new Set(pre.map(a=>a.id)),postS=new Set(post.map(a=>a.id));
+    const nvo=A.filter(a=>a.qn>0);
+    return {A,pre,post,preS,postS,nvo,nvoPre:nvo.filter(a=>preS.has(a.id)),attr:nvo.filter(a=>!preS.has(a.id))};
+  }
+  function tcCalc(){
+    const Rc=cfg.ctl.filter(r=>cc==="ALL"||r[1]===cc);
+    const both=Rc.filter(r=>r[2]>0&&r[4]>0),T=both.filter(r=>r[6]>0),Cc=both.filter(r=>r[6]===0);
+    const agg=a=>{const pn=a.reduce((s,r)=>s+r[2],0),qn=a.reduce((s,r)=>s+r[4],0),pg=a.reduce((s,r)=>s+r[3],0),qg=a.reduce((s,r)=>s+r[5],0);return {n:a.length,pn,qn,pg,qg,vn:pn?(qn/pn-1)*100:0,vg:pg?(qg/pg-1)*100:0,up:a.filter(r=>r[4]>r[2]).length,dn:a.filter(r=>r[4]<r[2]).length,pm:a.reduce((s,r)=>s+r[7],0)};};
+    const fi=Rc.filter(r=>r[2]===0&&r[4]>0);
+    return {t:agg(T),c:agg(Cc),first:fi.length,firstP:fi.filter(r=>r[6]>0).length};
+  }
   function drawAg(){
-    const ag=cfg.ag;if(!ag||!ag.rows.length){$("isec5").style.display="none";return;}
+    if(!cfg.ag.rows.length){$("isec5").style.display="none";return;}
     document.querySelectorAll("#ppAgM button").forEach(b=>b.classList.toggle("active",b.dataset.m===agM));
-    const cf=agM==="conf",iPH=cf?3:2,iQH=cf?5:4,iQN=cf?7:6;
-    const R=ag.rows,n=ag.n;
-    const A=R.map(r=>({id:r[0],c:r[1],pre:r[iPH],qh:r[iQH],qn:r[iQN],act:r[8]})).filter(a=>a.pre>0||a.qh+a.qn>0);
-    const pre=A.filter(a=>a.pre>0),post=A.filter(a=>a.qh+a.qn>0);
-    const preS=new Set(pre.map(a=>a.id)),postS=new Set(post.map(a=>a.id));
+    const ag=agCalc(),{A,pre,post,preS,postS,nvo,nvoPre,attr}=ag,n=cfg.ag.n;
     const sig=pre.filter(a=>postS.has(a.id)).length,sal=pre.length-sig,nue=post.filter(a=>!preS.has(a.id));
-    const nvo=A.filter(a=>a.qn>0),nvoPre=nvo.filter(a=>preS.has(a.id)),attr=nvo.filter(a=>!preS.has(a.id));
     const attrAct=attr.filter(a=>a.act>0).length,attrOrd=attr.reduce((s,a)=>s+a.qh+a.qn,0),attrNew=attr.reduce((s,a)=>s+a.qn,0);
     const g=pre.length?(post.length/pre.length-1)*100:0;
-    const lblM=cf?"Solo reservas confirmadas":"Reservas confirmadas + abiertas";
-    $("ppAgSub").textContent=lblM+" · "+n+" días desde la prendida ("+fdate(cfg.launch)+") contra los "+n+" días anteriores ("+fdate(ag.pre_from)+" al "+fdate(addD(cfg.launch,-1))+")";
-    const kb2=(l,v,sub)=>`<div style="background:var(--panel2);border-radius:10px;padding:10px 12px"><div class="kpi-lbl">${l}</div><div class="kpi-val" style="font-size:20px">${v}</div><div class="kpi-sub" style="font-size:11px;color:var(--mut)">${sub}</div></div>`;
-    $("ppAgK").innerHTML=kb2("Agencias con promesa, antes",fmtN(pre.length),"en los "+n+" días previos")+kb2("Agencias con promesa, después",fmtN(post.length),pf(g)+" vs antes")+
-      kb2("Siguen usándola",pc(sig,pre.length),fmtN(sig)+" de las "+fmtN(pre.length)+" de antes")+kb2("Nuevas en productos nuevos",fmtN(attr.length),"no usaban promesa antes y la usaron fuera de hoteles");
+    $("ppAgSub").textContent=(agM==="conf"?"Solo reservas confirmadas":"Reservas confirmadas + activas")+(kOn?" (incluye confirmadas sin GB)":"")+" · "+n+" días desde la prendida ("+fdate(L)+") contra los "+n+" días anteriores";
+    $("ppAgK").innerHTML=kb("Agencias con promesa, antes",fmtN(pre.length),"en los "+n+" días previos")+kb("Agencias con promesa, después",fmtN(post.length),pf(g)+" vs antes")+kb("Siguen usándola",pc(sig,pre.length),fmtN(sig)+" de las "+fmtN(pre.length)+" de antes")+kb("Nuevas en productos nuevos",fmtN(attr.length),"no usaban promesa antes y la usaron fuera de hoteles");
     const f=[["Siguen",sig,"#10B981"],["Salieron (solo antes)",sal,"#94A3B8"],["Nuevas (solo después)",nue.length,"#ED8B08"]];
     chart("cPpAgF",{type:"bar",data:{labels:f.map(x=>x[0]),datasets:[{data:f.map(x=>x[1]),backgroundColor:f.map(x=>x[2]),borderRadius:6,maxBarThickness:46}]},
-      options:{...baseOpts,indexAxis:"y",plugins:{legend:{display:false},tooltip:{...tt,displayColors:false,callbacks:{label:c=>fmtN(c.parsed.x)+" agencias"}},vlabels:{on:false},stacklabels:{on:false}},
-        scales:{x:{beginAtZero:true,grid,ticks:{callback:v=>fmtN(v)}},y:{grid:{display:false}}}},
+      options:{...baseOpts,indexAxis:"y",plugins:{legend:{display:false},tooltip:{...tt,displayColors:false,callbacks:{label:c=>fmtN(c.parsed.x)+" agencias"}},vlabels:{on:false},stacklabels:{on:false}},scales:{x:{beginAtZero:true,grid,ticks:{callback:v=>fmtN(v)}},y:{grid:{display:false}}}},
       plugins:[{id:"agLbl",afterDatasetsDraw(c){const m=c.getDatasetMeta(0),g2=c.ctx;g2.save();g2.fillStyle="#0F1834";g2.font="700 12px Rubik,sans-serif";g2.textBaseline="middle";m.data.forEach((b,i)=>g2.fillText(fmtN(f[i][1]),b.x+6,b.y));g2.restore();}}]});
-    // semanas completas dentro de la ventana
-    const wk=ag.weeks.filter(w=>w[0]>=ag.pre_from&&addD(w[0],6)<cfg.asof);
-    const li=wk.findIndex(w=>w[0]>=cfg.launch);const lw=keyOf(cfg.launch,"w");const lix=wk.findIndex(w=>w[0]===lw);
-    const wv=wk.map(w=>cf?w[2]:w[1]);
-    chart("cPpAgW",{type:"bar",data:{labels:wk.map(w=>"Sem "+fdate(w[0])),datasets:[{data:wv,backgroundColor:wk.map(w=>w[0]<lw?"#CBD5E1":w[0]===lw?"#F7B955":"#ED8B08"),borderRadius:{topLeft:6,topRight:6},maxBarThickness:46}]},
-      options:{...baseOpts,plugins:{legend:{display:false},tooltip:{...tt,displayColors:false,callbacks:{label:c=>fmtN(c.parsed.y)+" agencias únicas"}},vlabels:{on:true,size:10,fmt:v=>fmtN(v)},stacklabels:{on:false}},
-        scales:{y:{beginAtZero:true,grace:"12%",grid},x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true}}}},
-      plugins:[{id:"agLaunch",afterDatasetsDraw(c){if(lix<0)return;const x=(c.scales.x.getPixelForValue(lix-1)+c.scales.x.getPixelForValue(lix))/2,a=c.chartArea,g2=c.ctx;g2.save();g2.strokeStyle="#0F1834";g2.lineWidth=1.5;g2.setLineDash([5,4]);g2.beginPath();g2.moveTo(x,a.top);g2.lineTo(x,a.bottom);g2.stroke();g2.restore();}}]});
-    const nuevoSoloH=nue.length-attr.length;
-    $("ppAgNote").textContent="Hay rotación natural de agencias entre períodos. De las "+fmtN(nue.length)+" agencias nuevas del después, "+fmtN(nuevoSoloH)+" usaron promesa solo en hoteles, así que no se atribuyen a la prendida.";
-    // embudo de atribución
+    const wk=cfg.ag.weeks.filter(w=>w[0]>=-nb&&w[0]<nb),wv=wk.map(w=>agM==="conf"?w[2]:(kOn?w[3]:w[1]));
+    chart("cPpAgW",{type:"bar",data:{labels:wk.map(w=>bLbl(w[0])),datasets:[{data:wv,backgroundColor:wk.map(w=>w[0]<0?"#CBD5E1":"#ED8B08"),borderRadius:{topLeft:6,topRight:6},maxBarThickness:46}]},
+      options:{...baseOpts,plugins:{legend:{display:false},tooltip:{...tt,displayColors:false,callbacks:{label:c=>fmtN(c.parsed.y)+" agencias únicas"}},vlabels:{on:true,size:10,fmt:v=>fmtN(v)},stacklabels:{on:false}},scales:{y:{beginAtZero:true,grace:"12%",grid},x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true}}}},
+      plugins:[{id:"agLaunch",afterDatasetsDraw(c){const xs=c.scales.x,ix=wk.findIndex(w=>w[0]>=0);if(ix<1)return;const px=(xs.getPixelForValue(ix-1)+xs.getPixelForValue(ix))/2,a=c.chartArea,g2=c.ctx;g2.save();g2.strokeStyle="#0F1834";g2.lineWidth=1.5;g2.setLineDash([5,4]);g2.beginPath();g2.moveTo(px,a.top);g2.lineTo(px,a.bottom);g2.stroke();g2.restore();}}]});
+    $("ppAgNote").textContent="Hay rotación natural de agencias entre períodos. De las "+fmtN(nue.length)+" agencias nuevas del después, "+fmtN(nue.length-attr.length)+" usaron promesa solo en hoteles, así que no se atribuyen a la prendida.";
     const mx=Math.max(nvo.length,1);
     const st=(w,col,v,t,ind)=>`<div style="margin-left:${ind*22}px;margin-bottom:8px"><div style="width:${Math.max(w,6)}%;background:${col};color:#fff;font-weight:700;border-radius:6px;padding:6px 10px;font-size:13px;white-space:nowrap">${fmtN(v)}</div><div class="card-sub" style="margin-top:2px">${t}</div></div>`;
-    $("ppAgFn").innerHTML=st(100,"#ED8B08",nvo.length,"usaron promesa en productos nuevos",0)+
-      st(nvoPre.length/mx*100,"#94A3B8",nvoPre.length,"ya usaban promesa antes: extensión de uso",1)+
-      st(attr.length/mx*100,"#ED8B08",attr.length,"<b>no usaban promesa antes: atribuibles a la prendida</b>",1)+
-      st(attrAct/mx*100,"#F7B955",attrAct,"estaban activas con otro medio de pago",2)+
-      st((attr.length-attrAct)/mx*100,"#F7B955",attr.length-attrAct,"sin ventas confirmadas en los días previos",2);
+    $("ppAgFn").innerHTML=st(100,"#ED8B08",nvo.length,"usaron promesa en productos nuevos",0)+st(nvoPre.length/mx*100,"#94A3B8",nvoPre.length,"ya usaban promesa antes: extensión de uso",1)+st(attr.length/mx*100,"#ED8B08",attr.length,"<b>no usaban promesa antes: atribuibles a la prendida</b>",1)+st(attrAct/mx*100,"#F7B955",attrAct,"estaban activas con otro medio de pago",2)+st((attr.length-attrAct)/mx*100,"#F7B955",attr.length-attrAct,"sin ventas confirmadas en los días previos",2);
     $("ppAgFnN").textContent="Las "+fmtN(attr.length)+" agencias atribuibles generaron "+fmtN(attrOrd)+" reservas con promesa, "+fmtN(attrNew)+" de ellas en productos nuevos. Es un techo: una agencia puede haber empezado a usarla por otras razones (por ejemplo, la promesa en hoteles).";
-    // tablas
     const postH=post.filter(a=>a.qh>0).length,postSoloN=post.filter(a=>a.qh===0&&a.qn>0).length;
     $("ppAgT1").innerHTML=`<tr><td>En hoteles</td><td class="num">${fmtN(pre.length)}</td><td class="num">${fmtN(postH)}</td></tr><tr><td>Sin usarla en hoteles</td><td class="num">0</td><td class="num"><b style="color:#059669">${fmtN(postSoloN)}</b></td></tr><tr style="border-top:2px solid var(--line);font-weight:700"><td>Total</td><td class="num">${fmtN(pre.length)}</td><td class="num">${fmtN(post.length)}</td></tr>`;
     const top=(arr,key)=>{const v=arr.map(key).sort((a,b)=>b-a),t=v.reduce((s,x)=>s+x,0),k=Math.max(1,Math.ceil(v.length*.1));return t?v.slice(0,k).reduce((s,x)=>s+x,0)/t*100:0;};
-    const t10a=top(pre,a=>a.pre),t10b=top(post,a=>a.qh+a.qn);
-    const m2a=pre.filter(a=>a.pre>=2).length,m2b=post.filter(a=>a.qh+a.qn>=2).length;
-    $("ppAgCon").textContent="Concentración: el 10% de las agencias reúne "+t10b.toFixed(0)+"% de las reservas con promesa ("+t10a.toFixed(0)+"% antes). Agencias con 2 o más reservas: "+fmtN(m2a)+" → "+fmtN(m2b)+".";
-    const cn=C.map(c=>[c,pre.filter(a=>a.c===c).length,post.filter(a=>a.c===c).length,nvo.filter(a=>a.c===c).length]).sort((a,b)=>b[2]-a[2]);
-    $("ppAgT2").innerHTML=cn.map(([c,a,b,z])=>`<tr><td>${flag(c)} ${CN[c]||c}</td><td class="num">${fmtN(a)}</td><td class="num">${fmtN(b)}</td><td class="num">${fmtN(z)}</td></tr>`).join("");
+    $("ppAgCon").textContent="Concentración: el 10% de las agencias reúne "+top(post,a=>a.qh+a.qn).toFixed(0)+"% de las reservas con promesa ("+top(pre,a=>a.pre).toFixed(0)+"% antes). Agencias con 2 o más reservas: "+fmtN(pre.filter(a=>a.pre>=2).length)+" → "+fmtN(post.filter(a=>a.qh+a.qn>=2).length)+".";
+    const cn2=C.map(c=>[c,pre.filter(a=>a.c===c).length,post.filter(a=>a.c===c).length,nvo.filter(a=>a.c===c).length]).filter(r=>r[1]+r[2]>0).sort((a,b)=>b[2]-a[2]);
+    $("ppAgT2").innerHTML=cn2.map(([c,a,b,z])=>`<tr><td>${flag(c)} ${CN[c]||c}</td><td class="num">${fmtN(a)}</td><td class="num">${fmtN(b)}</td><td class="num">${fmtN(z)}</td></tr>`).join("");
   }
+  $("ppC").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;cc=b.dataset.c;draw();};
+  $("ppK").onclick=e=>{const b=e.target.closest("[data-k]");if(!b)return;kOn=b.dataset.k==="1";draw();};
+  $("ppSM").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;shM=b.dataset.m;draw();};
   $("ppAgM").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;agM=b.dataset.m;drawAg();};
-  drawAg();
+  draw();
 }
 function renderGv(d,cfg){
   const C=cfg.countries;

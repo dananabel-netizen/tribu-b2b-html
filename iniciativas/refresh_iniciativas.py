@@ -421,40 +421,14 @@ def build_gv(cfg_old, r, today):
                ctr={g: [[str(x[0]), x[1]] + [num(v) for v in x[2:]] for x in r['gv_ctr_' + g]] for g in GV_CTR_PER})   # [período, país, usuarios con grilla, clic tab, clic celda, clic más barata]
     return cfg
 
-# ── Promesa de pago en otros productos (Autos, Traslados, Asistencias y Actividades), lanzada el 13/10 en todos los países salvo US y PA ──
-# Una reserva "con promesa" = tiene registro en chewie_deferred_condition con reason PROMISE-B2B (en todos sus estados: Activo = promesa abierta,
-# Confirmado = regularizada, Cancelado = vencida o cancelada). Se mira desde 8 semanas antes para tener base de comparación.
+# ── Promesa de pago en todos los productos (lanzada el 13/10 en Autos, Traslados, Asistencias y Actividades; en Hoteles ya existía) ──
+# Fuente: la query de detalle de reservas y medios de pago del equipo (bi_transactional_fact_transactions + prd_payment_methods_fact).
+# Promesa = medio de pago DEFERRED_PROMISE; producto = purchase_type; agencia = partner_data_id; fecha = reservation_date.
+# Estados: C = Confirmada con GB (is_confirmed_flg = 1), K = Confirmada sin GB en la tabla (is_confirmed_flg = 0, backoffice), A = Activa
+# (reservada y sin pagar), X = Cancelada. Ventana: N días desde la prendida (completos) contra los N días previos.
 PP_LAUNCH = '2026-10-13'
-PP_COUNTRIES = ['AR', 'BR', 'CL', 'CO', 'MX', 'PE']
-PP_FROM = (date.fromisoformat(PP_LAUNCH) - timedelta(days=56)).isoformat()
-
-Q_PP_DAILY = f"""
-select cast(bi.creation_date as varchar) d, bi.country_code c,
- case when bi.product='Autos' then 'AU' when bi.product='Traslados' then 'TR' when bi.product='Asistencia al viajero' then 'AS' else 'AC' end g,
- count(distinct case when bi.transaction_status='Confirmado' then bi.transaction_code end) n_conf,
- round(sum(case when bi.transaction_status='Confirmado' then bi.gb end)) gb_conf,
- count(distinct case when dc.reason='PROMISE-B2B' then bi.transaction_code end) n_prom,
- count(distinct case when dc.reason='PROMISE-B2B' and bi.transaction_status='Confirmado' then bi.transaction_code end) n_prom_ok,
- round(sum(case when dc.reason='PROMISE-B2B' and bi.transaction_status='Confirmado' then bi.gb end)) gb_prom_ok,
- round(sum(case when dc.reason='PROMISE-B2B' then bi.gb end)) gb_prom,
- count(distinct case when dc.reason='PROMISE-B2B' and bi.transaction_status='Activo' then bi.transaction_code end) n_prom_act,
- count(distinct case when dc.reason='PROMISE-B2B' and bi.transaction_status='Cancelado' then bi.transaction_code end) n_prom_canc
-from analytics.bi_sales_fact_sales_recognition bi
-left join data.lake.chewie_reservation c2 on cast(bi.transaction_code as varchar) = c2.id and c2.last_version = true
-left join data.lake.chewie_deferred_condition dc on dc.reservation_id = c2.oid
-where bi.channel in {CHANNELS}
-  and bi.creation_date >= date '{PP_FROM}' and bi.partition_period >= '{PP_FROM[:7]}'
-  and bi.product in ('Autos','Traslados','Asistencia al viajero','Excursiones','Espectáculos')
-  and bi.country_code in ({",".join("'" + x + "'" for x in PP_COUNTRIES)})
-  and lower(coalesce(bi.agency_name,'')) not like '%test%'
-group by 1, 2, 3
-"""
-
-# Agencias con promesa de pago. Fuente: la misma query de detalle de reservas y medios de pago del equipo (bi_transactional_fact_transactions +
-# prd_payment_methods_fact): promesa = medio de pago DEFERRED_PROMISE, agencia = partner_data_id, estado = tr.status, fecha = mdp.reservation_date.
-# Ventana: N días desde la prendida (completos) contra los N días previos. "Con promesa" = reserva Confirmada o Activa (no cuenta Cancelada).
-# "Productos nuevos" = flujo de compra Autos o Servicios en Destino; el resto (Hoteles, Alquileres y Cart) cuenta como hoteles, donde la promesa ya existía.
-_PP_NEWFS = "('Autos','Servicios en Destino')"
+_PP_CLS = ("case mdp.purchase_type when 'Hoteles' then 'HO' when 'Carrito' then 'CA' when 'Autos' then 'AU' when 'Traslados' then 'TR' "
+           "when 'Asistencia al viajero' then 'AS' when 'Actividades' then 'AC' when 'Alquileres' then 'AL' when 'Vuelos' then 'VU' else 'OT' end")
 
 
 def pp_window(today):
@@ -462,57 +436,113 @@ def pp_window(today):
     return n, (date.fromisoformat(PP_LAUNCH) - timedelta(days=n)).isoformat()
 
 
-def _pp_t(today, only_promise):
+def _pp_t(today):
     n, pre_from = pp_window(today)
-    pm = "and mdp.payment_method_ch_ev = 'DEFERRED_PROMISE'" if only_promise else ""
     return f"""
-  select tr.partner_data_id p, max(mdp.country_code) c, tr.transaction_code tx, max(mdp.reservation_date) d, max(tr.status) st,
-         max(case when tr.shopping_flow_source in {_PP_NEWFS} then 1 else 0 end) nw
+t as (
+  select tr.transaction_code tx, tr.partner_data_id p, max(mdp.country_code) c, max(mdp.reservation_date) d, max(tr.status) st,
+    max({_PP_CLS}) cls, max(mdp.is_confirmed_flg) emi, sum(mdp.gross_booking) gb,
+    max(case when mdp.payment_method_ch_ev = 'DEFERRED_PROMISE' then 1 else 0 end) prom,
+    max_by(mdp.payment_method_ch_ev, mdp.gross_booking) pm, max(tr.cancel_type) ct,
+    max(case when lower(coalesce(tr.agency_fantasy_name,'')) like '%test%' then 1 else 0 end) is_test
   from analytics.bi_transactional_fact_transactions tr
   join analytics.prd_payment_methods_fact mdp on tr.transaction_code = mdp.transaction_code
   where mdp.reservation_date >= date '{pre_from}' and mdp.reservation_date < date '{today.isoformat()}'
     and mdp.reservation_year_month >= date '{pre_from[:7]}-01' and tr.reservation_year_month >= date '{pre_from[:7]}-01'
-    and tr.channel in {CHANNELS} {pm}
-    and mdp.country_code in ({",".join("'" + x + "'" for x in PP_COUNTRIES)})
-    and lower(coalesce(tr.agency_fantasy_name,'')) not like '%test%'
-  group by tr.partner_data_id, tr.transaction_code"""
+    and tr.channel in {CHANNELS}
+  group by tr.transaction_code, tr.partner_data_id),
+v as (
+  select *, case when st = 'Cancelado' then 'X' when st = 'Activo' then 'A' when st = 'Confirmado' and emi = 1 then 'C'
+                 when st = 'Confirmado' then 'K' end sc,
+         case when cls in ('AU','TR','AS','AC') then 1 else 0 end nw
+  from t where is_test = 0)"""
 
 
+def q_pp(today, body):
+    return f"with {_pp_t(today).strip()}\n{body}"
+
+
+# a: todas las reservas por día, país, producto, estado y si usaron promesa
+def q_pp_a(today):
+    return q_pp(today, "select cast(d as varchar) d, c, cls, sc, prom, count(*) n, round(sum(gb)) gb from v where sc is not null group by 1, 2, 3, 4, 5")
+
+
+# m: mix de medio de pago de las confirmadas con GB en productos nuevos
+def q_pp_m(today):
+    return q_pp(today, """
+select cast(d as varchar) d, c,
+ case when pm = 'ONE_CARD_CREDIT' then 'Tarjeta crédito' when pm = 'DEFERRED_REMOTE' then 'Deferred Remote' when pm like 'FINANCED%' then 'Financiado'
+      when pm = 'ONE_CARD_DEBIT' then 'Tarjeta débito' when pm = 'CASH_TRANSFER_PIX' then 'PIX' when pm = 'CASH_TRANSFER_WALLET' then 'Wallet'
+      when pm = 'DEFERRED_PROMISE' then 'Promesa de pago' when pm like 'CASH_TRANSFER%' then 'Transf. cuenta' else 'Otros' end m,
+ count(*) n, round(sum(gb)) gb
+from v where sc = 'C' and nw = 1 group by 1, 2, 3""")
+
+
+# x: motivos de cancelación de las reservas con promesa
+def q_pp_x(today):
+    return q_pp(today, """
+select cast(d as varchar) d, c, case when cls in ('AU','TR','AS','AC') then 'NU' else cls end g,
+ case when ct = 'AGENCY_CANCELED' then 'Cancela la agencia' when ct like 'TIMEOUT%' then 'Vence sin pago' when ct = 'BOOKING_ERROR' then 'Error de reserva' else 'Otros' end r,
+ count(*) n
+from v where sc = 'X' and prom = 1 and cls in ('HO','CA','AU','TR','AS','AC') group by 1, 2, 3, 4""")
+
+
+# ctl: una fila por agencia con compras confirmadas en productos nuevos (prueba tratadas vs control)
+def q_pp_ctl(today):
+    return q_pp(today, f"""
+select p, max(c) c,
+ count(case when sc = 'C' and nw = 1 and d < date '{PP_LAUNCH}' then 1 end) pre_n, round(sum(case when sc = 'C' and nw = 1 and d < date '{PP_LAUNCH}' then gb end)) pre_gb,
+ count(case when sc = 'C' and nw = 1 and d >= date '{PP_LAUNCH}' then 1 end) post_n, round(sum(case when sc = 'C' and nw = 1 and d >= date '{PP_LAUNCH}' then gb end)) post_gb,
+ count(case when sc in ('C','A') and nw = 1 and prom = 1 and d >= date '{PP_LAUNCH}' then 1 end) post_prom,
+ count(case when sc = 'C' and nw = 1 and prom = 1 and d >= date '{PP_LAUNCH}' then 1 end) post_prom_c
+from v group by p having count(case when sc = 'C' and nw = 1 then 1 end) > 0""")
+
+
+# ag: una fila por agencia con promesa (A = activas, C = confirmadas con GB, K = confirmadas sin GB; h = hoteles y otros, n = productos nuevos)
 def q_pp_ag(today):
-    return f"""
-with t as ({_pp_t(today, True)}),
-a as ({_pp_t(today, False)}),
-act as (select p, count(distinct case when d < date '{PP_LAUNCH}' and st = 'Confirmado' then tx end) act_pre from a group by p)
-select t.p, max(t.c) c,
- count(distinct case when t.d < date '{PP_LAUNCH}' and t.st in ('Confirmado','Activo') and t.nw = 0 then t.tx end) pre_h,
- count(distinct case when t.d < date '{PP_LAUNCH}' and t.st = 'Confirmado' and t.nw = 0 then t.tx end) pre_h_c,
- count(distinct case when t.d >= date '{PP_LAUNCH}' and t.st in ('Confirmado','Activo') and t.nw = 0 then t.tx end) post_h,
- count(distinct case when t.d >= date '{PP_LAUNCH}' and t.st = 'Confirmado' and t.nw = 0 then t.tx end) post_h_c,
- count(distinct case when t.d >= date '{PP_LAUNCH}' and t.st in ('Confirmado','Activo') and t.nw = 1 then t.tx end) post_n,
- count(distinct case when t.d >= date '{PP_LAUNCH}' and t.st = 'Confirmado' and t.nw = 1 then t.tx end) post_n_c,
- max(coalesce(act.act_pre, 0)) act_pre
-from t left join act on act.p = t.p where t.st in ('Confirmado','Activo') group by t.p
-"""
+    return q_pp(today, f"""
+select p, max(c) c,
+ count(case when prom = 1 and nw = 0 and d <  date '{PP_LAUNCH}' and sc = 'A' then 1 end) pre_h_a,
+ count(case when prom = 1 and nw = 0 and d <  date '{PP_LAUNCH}' and sc = 'C' then 1 end) pre_h_c,
+ count(case when prom = 1 and nw = 0 and d <  date '{PP_LAUNCH}' and sc = 'K' then 1 end) pre_h_k,
+ count(case when prom = 1 and nw = 0 and d >= date '{PP_LAUNCH}' and sc = 'A' then 1 end) post_h_a,
+ count(case when prom = 1 and nw = 0 and d >= date '{PP_LAUNCH}' and sc = 'C' then 1 end) post_h_c,
+ count(case when prom = 1 and nw = 0 and d >= date '{PP_LAUNCH}' and sc = 'K' then 1 end) post_h_k,
+ count(case when prom = 1 and nw = 1 and d >= date '{PP_LAUNCH}' and sc = 'A' then 1 end) post_n_a,
+ count(case when prom = 1 and nw = 1 and d >= date '{PP_LAUNCH}' and sc = 'C' then 1 end) post_n_c,
+ count(case when prom = 1 and nw = 1 and d >= date '{PP_LAUNCH}' and sc = 'K' then 1 end) post_n_k,
+ count(case when sc = 'C' and d < date '{PP_LAUNCH}' then 1 end) act_pre
+from v group by p
+having count(case when prom = 1 and sc in ('A','C','K') then 1 end) > 0""")
 
 
+# agw: agencias únicas con promesa por bloque de 7 días contado desde la prendida
 def q_pp_agw(today):
-    return f"""
-with t as ({_pp_t(today, True)})
-select cast(date_trunc('week', d) as varchar) w, count(distinct p) ag, count(distinct case when st = 'Confirmado' then p end) ag_c
-from t where st in ('Confirmado','Activo') group by 1 order by 1
-"""
+    return q_pp(today, f"""
+select cast(floor(date_diff('day', date '{PP_LAUNCH}', d) / 7.0) as integer) w,
+ count(distinct case when sc in ('A','C') then p end) ag_ac, count(distinct case when sc = 'C' then p end) ag_c, count(distinct case when sc in ('A','C','K') then p end) ag_ack
+from v where prom = 1 group by 1 order by 1""")
 
 
 def build_pp(cfg_old, r, today):
-    # daily: [fecha, país, grupo, reservas conf, GB conf, promesas, promesas regularizadas, GB regularizado, GB promesas, abiertas, canceladas]
-    daily = [[row[0], row[1], row[2]] + [num(float(x)) if x is not None else 0 for x in row[3:]] for row in r['pp_daily']]
-    cfg = dict(cfg_old)
-    cfg.update(kind='pp', title=cfg_old.get('title', 'Promesa de pago en otros productos'), launch=PP_LAUNCH, from_=PP_FROM,
-               asof=today.isoformat(), partial=(today + timedelta(days=1)).isoformat(), countries=PP_COUNTRIES, daily=daily)
     n, pre_from = pp_window(today)
-    # ag.rows: [agencia, país, promesas pre hoteles, (conf), post hoteles, (conf), post productos nuevos, (conf), ventas confirmadas en el pre]
+    fl = lambda v: num(float(v)) if v is not None else 0   # los sum() de Trino vuelven como texto
+    A = [[str(x[0]), x[1], x[2], x[3], num(x[4]), num(x[5]), fl(x[6])] for x in r['pp_a']]   # [fecha, país, producto, estado, promesa, reservas, GB]
+    tot = {}
+    for x in A:
+        tot[x[1]] = tot.get(x[1], 0) + x[5]
+    countries = [c for c, _ in sorted(tot.items(), key=lambda kv: -kv[1]) if c]
+    cfg = dict(cfg_old)
+    for k in ('daily', 'from_'):
+        cfg.pop(k, None)
+    cfg.update(kind='pp', title='Promesa de pago (todos los productos)', launch=PP_LAUNCH, pre_from=pre_from, n=n,
+               asof=today.isoformat(), partial=(today + timedelta(days=1)).isoformat(), countries=countries, a=A,
+               mix=[[str(x[0]), x[1], x[2], num(x[3]), fl(x[4])] for x in r['pp_m']],
+               canc=[[str(x[0]), x[1], x[2], x[3], num(x[4])] for x in r['pp_x']],
+               ctl=[[str(x[0]), x[1], num(x[2]), fl(x[3]), num(x[4]), fl(x[5]), num(x[6]), num(x[7])] for x in r['pp_ctl']])
+    # ag.rows: [agencia, país, pre_h_a, pre_h_c, pre_h_k, post_h_a, post_h_c, post_h_k, post_n_a, post_n_c, post_n_k, ventas confirmadas en el pre]
     cfg['ag'] = dict(n=n, pre_from=pre_from, rows=[[str(x[0]), x[1]] + [num(v) for v in x[2:]] for x in r['pp_ag']],
-                     weeks=[[str(x[0]), num(x[1]), num(x[2])] for x in r['pp_agw']])
+                     weeks=[[num(x[0]), num(x[1]), num(x[2]), num(x[3])] for x in r['pp_agw']])
     return cfg
 
 
@@ -556,7 +586,10 @@ def fetch_all():
         out['pkg_daily'] = q('pkg_daily', Q_PKG_DAILY)
         out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
         out['gv_daily'] = q('gv_daily', Q_GV_DAILY)
-        out['pp_daily'] = q('pp_daily', Q_PP_DAILY)
+        out['pp_a'] = q('pp_a', q_pp_a(date.today()))
+        out['pp_m'] = q('pp_m', q_pp_m(date.today()))
+        out['pp_x'] = q('pp_x', q_pp_x(date.today()))
+        out['pp_ctl'] = q('pp_ctl', q_pp_ctl(date.today()))
         out['pp_ag'] = q('pp_ag', q_pp_ag(date.today()))
         out['pp_agw'] = q('pp_agw', q_pp_agw(date.today()))
         for g, per in GV_CTR_PER.items():

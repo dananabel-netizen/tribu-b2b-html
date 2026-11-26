@@ -1033,7 +1033,7 @@ function renderPp(d,cfg){
   const filt=`<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="gran" id="ppG">${PG.map(([k,l])=>`<button data-g="${k}">${l}</button>`).join("")}</div>
       <div class="gran" id="ppC"><button data-c="ALL">Todos</button>${C.map(c=>`<button data-c="${c}" title="${CN[c]||c}">${flag(c)}</button>`).join("")}</div></div>`;
   $("impact").innerHTML=head+
-   `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · Evolución"],["isec3","3 · Antes y después"],["isec4","4 · Por producto y país"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>
+   `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · Evolución"],["isec3","3 · Antes y después"],["isec4","4 · Por producto y país"],["isec5","5 · Agencias"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>
     <section class="imp-sec" id="isec1"><div class="sec-h"><span class="sec-n">1</span><div><h3>Key Metrics</h3><p>Reservas de Autos, Traslados, Asistencias y Actividades que se generaron con promesa de pago</p></div></div>
      <div class="card"><div class="card-hdr"><div><div class="card-title">Promesas de pago desde la prendida</div><div class="card-sub" id="ppSub"></div></div>${filt}</div>
        <div id="ppK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:2px 0 4px"></div>
@@ -1058,6 +1058,23 @@ function renderPp(d,cfg){
        <table class="stbl"><thead><tr><th>Producto</th><th class="num">Promesas</th><th class="num">Regularizadas</th><th class="num">Tasa de regularización</th><th class="num">GB con promesa</th><th class="num">% del GB del producto</th></tr></thead><tbody id="ppTbP"></tbody></table></div>
      <div class="card"><div class="card-hdr"><div><div class="card-title">Por país</div><div class="card-sub">Desde la prendida, según el filtro de producto</div></div></div>
        <table class="stbl"><thead><tr><th>País</th><th class="num">Promesas</th><th class="num">Regularizadas</th><th class="num">Tasa de regularización</th><th class="num">GB con promesa</th><th class="num">% del GB del producto</th></tr></thead><tbody id="ppTbC"></tbody></table></div>
+    </section><section class="imp-sec" id="isec5"><div class="sec-h"><span class="sec-n">5</span><div><h3>Agencias</h3><p>Cuántas agencias usan promesa de pago y cuántas son nuevas a ella</p></div></div>
+     <div class="card"><div class="card-hdr"><div><div class="card-title">Agencias con promesa: antes vs después de la prendida</div><div class="card-sub" id="ppAgSub"></div></div>
+       <div class="gran" id="ppAgM"><button data-m="all">Confirmadas + abiertas</button><button data-m="conf">Solo confirmadas</button></div></div>
+       <div id="ppAgK" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 12px"></div>
+       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+         <div><div class="card-sub" style="font-weight:600;margin-bottom:6px">Quiénes entran y quiénes salen</div><div class="ch" style="height:240px"><canvas id="cPpAgF"></canvas></div></div>
+         <div><div class="card-sub" style="font-weight:600;margin-bottom:6px">Agencias con promesa por semana</div><div class="ch" style="height:240px"><canvas id="cPpAgW"></canvas></div></div></div>
+       <div class="card-sub" id="ppAgNote" style="margin-top:10px;font-weight:600"></div>
+       <details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">Agencias únicas (partner de la reserva, sin agencias "test") con al menos una reserva con promesa de pago en el canal HTML, en AR, BR, CL, CO, MX y PE. "Con promesa" = reserva Confirmada o Abierta con registro PROMISE-B2B (las canceladas no cuentan; en "Solo confirmadas" solo las ya pagadas). Se compara el período posterior a la prendida (desde el 13/10 hasta ayer) con el mismo número de días inmediatamente anterior. "Productos nuevos" = Autos, Traslados, Asistencias y Actividades; el resto (hoteles y alquileres) cuenta como hoteles, donde la promesa ya existía. Hay rotación natural de agencias entre períodos, y las abiertas de las últimas semanas todavía pueden pagarse o cancelarse. Las semanas del gráfico son únicas por semana y no se pueden sumar.</div></details></div>
+     <div class="card"><div class="card-hdr"><div><div class="card-title">Cuántas agencias atribuimos a la prendida</div><div class="card-sub">Agencias que usaron promesa en productos nuevos desde el lanzamiento</div></div></div>
+       <div id="ppAgFn"></div><div class="card-sub" id="ppAgFnN" style="margin-top:10px;font-weight:600"></div></div>
+     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+       <div class="card"><div class="card-hdr"><div><div class="card-title">Agencias que usan promesa fuera de hoteles</div><div class="card-sub">Según si la usan o no en hoteles</div></div></div>
+         <table class="stbl"><thead><tr><th>Agencias</th><th class="num">Antes</th><th class="num">Después</th></tr></thead><tbody id="ppAgT1"></tbody></table>
+         <div class="card-sub" id="ppAgCon" style="margin-top:10px;font-weight:600"></div></div>
+       <div class="card"><div class="card-hdr"><div><div class="card-title">Agencias por país</div><div class="card-sub">Con promesa en cualquier producto</div></div></div>
+         <table class="stbl"><thead><tr><th>País</th><th class="num">Antes</th><th class="num">Después</th><th class="num">En productos nuevos</th></tr></thead><tbody id="ppAgT2"></tbody></table></div></div>
     </section>`;
   $("impBack").onclick=()=>setPage("lista");
   $("impact").querySelectorAll(".sec-nav a").forEach(a=>a.onclick=()=>$(a.dataset.t).scrollIntoView({behavior:"smooth",block:"start"}));
@@ -1142,6 +1159,61 @@ function renderPp(d,cfg){
   $("ppC").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;pcty=b.dataset.c;draw();};
   document.querySelectorAll(".impGran").forEach(el=>el.onclick=e=>{const g=e.target.dataset.g;if(!g)return;gran=g;draw();});
   draw();
+  // ---- 5 · Agencias ----
+  let agM="all";
+  function drawAg(){
+    const ag=cfg.ag;if(!ag||!ag.rows.length){$("isec5").style.display="none";return;}
+    document.querySelectorAll("#ppAgM button").forEach(b=>b.classList.toggle("active",b.dataset.m===agM));
+    const cf=agM==="conf",iPH=cf?3:2,iQH=cf?5:4,iQN=cf?7:6;
+    const R=ag.rows,n=ag.n;
+    const A=R.map(r=>({id:r[0],c:r[1],pre:r[iPH],qh:r[iQH],qn:r[iQN],act:r[8]})).filter(a=>a.pre>0||a.qh+a.qn>0);
+    const pre=A.filter(a=>a.pre>0),post=A.filter(a=>a.qh+a.qn>0);
+    const preS=new Set(pre.map(a=>a.id)),postS=new Set(post.map(a=>a.id));
+    const sig=pre.filter(a=>postS.has(a.id)).length,sal=pre.length-sig,nue=post.filter(a=>!preS.has(a.id));
+    const nvo=A.filter(a=>a.qn>0),nvoPre=nvo.filter(a=>preS.has(a.id)),attr=nvo.filter(a=>!preS.has(a.id));
+    const attrAct=attr.filter(a=>a.act>0).length,attrOrd=attr.reduce((s,a)=>s+a.qh+a.qn,0),attrNew=attr.reduce((s,a)=>s+a.qn,0);
+    const g=pre.length?(post.length/pre.length-1)*100:0;
+    const lblM=cf?"Solo reservas confirmadas":"Reservas confirmadas + abiertas";
+    $("ppAgSub").textContent=lblM+" · "+n+" días desde la prendida ("+fdate(cfg.launch)+") contra los "+n+" días anteriores ("+fdate(ag.pre_from)+" al "+fdate(addD(cfg.launch,-1))+")";
+    const kb2=(l,v,sub)=>`<div style="background:var(--panel2);border-radius:10px;padding:10px 12px"><div class="kpi-lbl">${l}</div><div class="kpi-val" style="font-size:20px">${v}</div><div class="kpi-sub" style="font-size:11px;color:var(--mut)">${sub}</div></div>`;
+    $("ppAgK").innerHTML=kb2("Agencias con promesa, antes",fmtN(pre.length),"en los "+n+" días previos")+kb2("Agencias con promesa, después",fmtN(post.length),pf(g)+" vs antes")+
+      kb2("Siguen usándola",pc(sig,pre.length),fmtN(sig)+" de las "+fmtN(pre.length)+" de antes")+kb2("Nuevas en productos nuevos",fmtN(attr.length),"no usaban promesa antes y la usaron fuera de hoteles");
+    const f=[["Siguen",sig,"#10B981"],["Salieron (solo antes)",sal,"#94A3B8"],["Nuevas (solo después)",nue.length,"#ED8B08"]];
+    chart("cPpAgF",{type:"bar",data:{labels:f.map(x=>x[0]),datasets:[{data:f.map(x=>x[1]),backgroundColor:f.map(x=>x[2]),borderRadius:6,maxBarThickness:46}]},
+      options:{...baseOpts,indexAxis:"y",plugins:{legend:{display:false},tooltip:{...tt,displayColors:false,callbacks:{label:c=>fmtN(c.parsed.x)+" agencias"}},vlabels:{on:false},stacklabels:{on:false}},
+        scales:{x:{beginAtZero:true,grid,ticks:{callback:v=>fmtN(v)}},y:{grid:{display:false}}}},
+      plugins:[{id:"agLbl",afterDatasetsDraw(c){const m=c.getDatasetMeta(0),g2=c.ctx;g2.save();g2.fillStyle="#0F1834";g2.font="700 12px Rubik,sans-serif";g2.textBaseline="middle";m.data.forEach((b,i)=>g2.fillText(fmtN(f[i][1]),b.x+6,b.y));g2.restore();}}]});
+    // semanas completas dentro de la ventana
+    const wk=ag.weeks.filter(w=>w[0]>=ag.pre_from&&addD(w[0],6)<cfg.asof);
+    const li=wk.findIndex(w=>w[0]>=cfg.launch);const lw=keyOf(cfg.launch,"w");const lix=wk.findIndex(w=>w[0]===lw);
+    const wv=wk.map(w=>cf?w[2]:w[1]);
+    chart("cPpAgW",{type:"bar",data:{labels:wk.map(w=>"Sem "+fdate(w[0])),datasets:[{data:wv,backgroundColor:wk.map(w=>w[0]<lw?"#CBD5E1":w[0]===lw?"#F7B955":"#ED8B08"),borderRadius:{topLeft:6,topRight:6},maxBarThickness:46}]},
+      options:{...baseOpts,plugins:{legend:{display:false},tooltip:{...tt,displayColors:false,callbacks:{label:c=>fmtN(c.parsed.y)+" agencias únicas"}},vlabels:{on:true,size:10,fmt:v=>fmtN(v)},stacklabels:{on:false}},
+        scales:{y:{beginAtZero:true,grace:"12%",grid},x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true}}}},
+      plugins:[{id:"agLaunch",afterDatasetsDraw(c){if(lix<0)return;const x=(c.scales.x.getPixelForValue(lix-1)+c.scales.x.getPixelForValue(lix))/2,a=c.chartArea,g2=c.ctx;g2.save();g2.strokeStyle="#0F1834";g2.lineWidth=1.5;g2.setLineDash([5,4]);g2.beginPath();g2.moveTo(x,a.top);g2.lineTo(x,a.bottom);g2.stroke();g2.restore();}}]});
+    const nuevoSoloH=nue.length-attr.length;
+    $("ppAgNote").textContent="Hay rotación natural de agencias entre períodos. De las "+fmtN(nue.length)+" agencias nuevas del después, "+fmtN(nuevoSoloH)+" usaron promesa solo en hoteles, así que no se atribuyen a la prendida.";
+    // embudo de atribución
+    const mx=Math.max(nvo.length,1);
+    const st=(w,col,v,t,ind)=>`<div style="margin-left:${ind*22}px;margin-bottom:8px"><div style="width:${Math.max(w,6)}%;background:${col};color:#fff;font-weight:700;border-radius:6px;padding:6px 10px;font-size:13px;white-space:nowrap">${fmtN(v)}</div><div class="card-sub" style="margin-top:2px">${t}</div></div>`;
+    $("ppAgFn").innerHTML=st(100,"#ED8B08",nvo.length,"usaron promesa en productos nuevos",0)+
+      st(nvoPre.length/mx*100,"#94A3B8",nvoPre.length,"ya usaban promesa antes: extensión de uso",1)+
+      st(attr.length/mx*100,"#ED8B08",attr.length,"<b>no usaban promesa antes: atribuibles a la prendida</b>",1)+
+      st(attrAct/mx*100,"#F7B955",attrAct,"estaban activas con otro medio de pago",2)+
+      st((attr.length-attrAct)/mx*100,"#F7B955",attr.length-attrAct,"sin ventas confirmadas en los días previos",2);
+    $("ppAgFnN").textContent="Las "+fmtN(attr.length)+" agencias atribuibles generaron "+fmtN(attrOrd)+" reservas con promesa, "+fmtN(attrNew)+" de ellas en productos nuevos. Es un techo: una agencia puede haber empezado a usarla por otras razones (por ejemplo, la promesa en hoteles).";
+    // tablas
+    const postH=post.filter(a=>a.qh>0).length,postSoloN=post.filter(a=>a.qh===0&&a.qn>0).length;
+    $("ppAgT1").innerHTML=`<tr><td>En hoteles</td><td class="num">${fmtN(pre.length)}</td><td class="num">${fmtN(postH)}</td></tr><tr><td>Sin usarla en hoteles</td><td class="num">0</td><td class="num"><b style="color:#059669">${fmtN(postSoloN)}</b></td></tr><tr style="border-top:2px solid var(--line);font-weight:700"><td>Total</td><td class="num">${fmtN(pre.length)}</td><td class="num">${fmtN(post.length)}</td></tr>`;
+    const top=(arr,key)=>{const v=arr.map(key).sort((a,b)=>b-a),t=v.reduce((s,x)=>s+x,0),k=Math.max(1,Math.ceil(v.length*.1));return t?v.slice(0,k).reduce((s,x)=>s+x,0)/t*100:0;};
+    const t10a=top(pre,a=>a.pre),t10b=top(post,a=>a.qh+a.qn);
+    const m2a=pre.filter(a=>a.pre>=2).length,m2b=post.filter(a=>a.qh+a.qn>=2).length;
+    $("ppAgCon").textContent="Concentración: el 10% de las agencias reúne "+t10b.toFixed(0)+"% de las reservas con promesa ("+t10a.toFixed(0)+"% antes). Agencias con 2 o más reservas: "+fmtN(m2a)+" → "+fmtN(m2b)+".";
+    const cn=C.map(c=>[c,pre.filter(a=>a.c===c).length,post.filter(a=>a.c===c).length,nvo.filter(a=>a.c===c).length]).sort((a,b)=>b[2]-a[2]);
+    $("ppAgT2").innerHTML=cn.map(([c,a,b,z])=>`<tr><td>${flag(c)} ${CN[c]||c}</td><td class="num">${fmtN(a)}</td><td class="num">${fmtN(b)}</td><td class="num">${fmtN(z)}</td></tr>`).join("");
+  }
+  $("ppAgM").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;agM=b.dataset.m;drawAg();};
+  drawAg();
 }
 function renderGv(d,cfg){
   const C=cfg.countries;

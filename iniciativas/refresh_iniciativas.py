@@ -450,6 +450,64 @@ where bi.channel in {CHANNELS}
 group by 1, 2, 3
 """
 
+# Agencias con promesa de pago (desde el partner de la reserva). Ventana: N días desde la prendida (completos) contra los N días previos.
+# "Con promesa" = reserva Confirmada o Activa con registro PROMISE-B2B en chewie_deferred_condition. "Productos nuevos" = los 5 productos de la iniciativa;
+# el resto (hoteles, alquileres) cuenta como hoteles. Se trae una fila por agencia con alguna promesa en la ventana.
+_PP_NEW = "('Autos','Traslados','Asistencia al viajero','Excursiones','Espectáculos')"
+
+
+def pp_window(today):
+    n = (today - date.fromisoformat(PP_LAUNCH)).days
+    return n, (date.fromisoformat(PP_LAUNCH) - timedelta(days=n)).isoformat()
+
+
+def q_pp_ag(today):
+    n, pre_from = pp_window(today)
+    return f"""
+with t as (
+  select bi.partner_id p, bi.country_code c, bi.transaction_code tx, bi.creation_date d, bi.transaction_status st,
+    case when bi.product in {_PP_NEW} then 1 else 0 end nw,
+    max(case when dc.reason = 'PROMISE-B2B' then 1 else 0 end) prom
+  from analytics.bi_sales_fact_sales_recognition bi
+  left join data.lake.chewie_reservation c2 on cast(bi.transaction_code as varchar) = c2.id and c2.last_version = true
+  left join data.lake.chewie_deferred_condition dc on dc.reservation_id = c2.oid
+  where bi.channel in {CHANNELS}
+    and bi.creation_date >= date '{pre_from}' and bi.creation_date < date '{today.isoformat()}' and bi.partition_period >= '{pre_from[:7]}'
+    and bi.country_code in ({",".join("'" + x + "'" for x in PP_COUNTRIES)})
+    and lower(coalesce(bi.agency_name,'')) not like '%test%'
+  group by 1, 2, 3, 4, 5, 6)
+select p, max(c) c,
+ count(distinct case when d < date '{PP_LAUNCH}' and prom = 1 and st in ('Confirmado','Activo') and nw = 0 then tx end) pre_h,
+ count(distinct case when d < date '{PP_LAUNCH}' and prom = 1 and st = 'Confirmado' and nw = 0 then tx end) pre_h_c,
+ count(distinct case when d >= date '{PP_LAUNCH}' and prom = 1 and st in ('Confirmado','Activo') and nw = 0 then tx end) post_h,
+ count(distinct case when d >= date '{PP_LAUNCH}' and prom = 1 and st = 'Confirmado' and nw = 0 then tx end) post_h_c,
+ count(distinct case when d >= date '{PP_LAUNCH}' and prom = 1 and st in ('Confirmado','Activo') and nw = 1 then tx end) post_n,
+ count(distinct case when d >= date '{PP_LAUNCH}' and prom = 1 and st = 'Confirmado' and nw = 1 then tx end) post_n_c,
+ count(distinct case when d < date '{PP_LAUNCH}' and st = 'Confirmado' then tx end) act_pre
+from t group by 1
+having count(distinct case when prom = 1 and st in ('Confirmado','Activo') then tx end) > 0
+"""
+
+
+def q_pp_agw(today):
+    n, pre_from = pp_window(today)
+    return f"""
+with t as (
+  select bi.partner_id p, bi.transaction_code tx, bi.creation_date d, bi.transaction_status st,
+    max(case when dc.reason = 'PROMISE-B2B' then 1 else 0 end) prom
+  from analytics.bi_sales_fact_sales_recognition bi
+  left join data.lake.chewie_reservation c2 on cast(bi.transaction_code as varchar) = c2.id and c2.last_version = true
+  left join data.lake.chewie_deferred_condition dc on dc.reservation_id = c2.oid
+  where bi.channel in {CHANNELS}
+    and bi.creation_date >= date '{pre_from}' and bi.creation_date < date '{today.isoformat()}' and bi.partition_period >= '{pre_from[:7]}'
+    and bi.country_code in ({",".join("'" + x + "'" for x in PP_COUNTRIES)})
+    and lower(coalesce(bi.agency_name,'')) not like '%test%'
+  group by 1, 2, 3, 4)
+select cast(date_trunc('week', d) as varchar) w, count(distinct p) ag, count(distinct case when st = 'Confirmado' then p end) ag_c
+from t where prom = 1 and st in ('Confirmado','Activo') group by 1 order by 1
+"""
+
+
 
 def build_pp(cfg_old, r, today):
     # daily: [fecha, país, grupo, reservas conf, GB conf, promesas, promesas regularizadas, GB regularizado, GB promesas, abiertas, canceladas]
@@ -457,6 +515,10 @@ def build_pp(cfg_old, r, today):
     cfg = dict(cfg_old)
     cfg.update(kind='pp', title=cfg_old.get('title', 'Promesa de pago en otros productos'), launch=PP_LAUNCH, from_=PP_FROM,
                asof=today.isoformat(), partial=(today + timedelta(days=1)).isoformat(), countries=PP_COUNTRIES, daily=daily)
+    n, pre_from = pp_window(today)
+    # ag.rows: [agencia, país, promesas pre hoteles, (conf), post hoteles, (conf), post productos nuevos, (conf), ventas confirmadas en el pre]
+    cfg['ag'] = dict(n=n, pre_from=pre_from, rows=[[str(x[0]), x[1]] + [num(v) for v in x[2:]] for x in r['pp_ag']],
+                     weeks=[[str(x[0]), num(x[1]), num(x[2])] for x in r['pp_agw']])
     return cfg
 
 
@@ -501,6 +563,8 @@ def fetch_all():
         out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
         out['gv_daily'] = q('gv_daily', Q_GV_DAILY)
         out['pp_daily'] = q('pp_daily', Q_PP_DAILY)
+        out['pp_ag'] = q('pp_ag', q_pp_ag(date.today()))
+        out['pp_agw'] = q('pp_agw', q_pp_agw(date.today()))
         for g, per in GV_CTR_PER.items():
             out['gv_ctr_' + g] = q('gv_ctr_' + g, q_gv_ctr(per))
         out['hdo_tot'] = q('hdo_tot', Q_HDO_TOT)

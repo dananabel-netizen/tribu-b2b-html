@@ -1045,7 +1045,11 @@ function renderPp(d,cfg){
    `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · ¿Se usa más?"],["isec3","3 · ¿Dónde creció?"],["isec4","4 · ¿Es volumen nuevo?"],["isec5","5 · Agencias"],["isec6","6 · Qué falta validar"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>`+filt+
    sec(1,"Key Metrics","La promesa se usa más desde la prendida, pero buena parte de las reservas todavía no se pagó",
      card("Resumen del impacto","#ppSub",`<div id="ppKp" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 12px"></div><div id="ppSay" style="background:var(--panel2);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.55"></div>`+
-       meth(`Sale de la query de detalle de reservas y medios de pago del equipo (transacciones + medios de pago), canal HTML (classic, silver, gold y platinum), sin agencias "test". Promesa = medio de pago DEFERRED_PROMISE; producto = tipo de compra (Hoteles, Carrito, Autos, Traslados, Asistencia y Actividades); fecha = fecha de reserva. Se compara el período posterior a la prendida (${fdate(L)} hasta ayer, ${N} días) con los ${N} días inmediatamente anteriores. <b>Confirmada</b> = reserva pagada con GB. <b>Activa</b> = reservada, todavía sin pagar y dentro del plazo. Quedan fuera las canceladas. Hay reservas Confirmadas que la tabla trae sin GB (confirmadas en backoffice): por defecto se excluyen, igual que en el análisis del equipo, y se pueden incluir con el botón de arriba. El share es sobre las órdenes no canceladas de todos los medios de pago (todos los productos). El GB solo existe para lo confirmado.`)))+
+       meth(`Sale de la query de detalle de reservas y medios de pago del equipo (transacciones + medios de pago), canal HTML (classic, silver, gold y platinum), sin agencias "test". Promesa = medio de pago DEFERRED_PROMISE; producto = tipo de compra (Hoteles, Carrito, Autos, Traslados, Asistencia y Actividades); fecha = fecha de reserva. Se compara el período posterior a la prendida (${fdate(L)} hasta ayer, ${N} días) con los ${N} días inmediatamente anteriores. <b>Confirmada</b> = reserva pagada con GB. <b>Activa</b> = reservada, todavía sin pagar y dentro del plazo. Quedan fuera las canceladas. Hay reservas Confirmadas que la tabla trae sin GB (confirmadas en backoffice): por defecto se excluyen, igual que en el análisis del equipo, y se pueden incluir con el botón de arriba. El share es sobre las órdenes no canceladas de todos los medios de pago (todos los productos). El GB solo existe para lo confirmado.`))+
+     card("Prendida el "+fdate(L)+" en Autos, Traslados, Asistencias y Actividades","#ppNpSub",`<div id="ppNpK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:2px 0 12px"></div>
+       <div class="card-sub" style="font-weight:600;margin:4px 0 6px">Agencias compradoras de productos nuevos</div><div id="ppNpA" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 4px"></div>`+
+       meth(`Reservas con promesa de pago creadas desde la prendida en los países donde ya está prendida (los que tienen reservas con promesa en productos nuevos), por producto. Generadas = confirmadas + activas + canceladas. Tasa de regularización = confirmadas sobre las ya cerradas (confirmadas + canceladas); las activas todavía pueden resolverse. GB confirmado con promesa: solo reservas confirmadas con GB en la tabla. <b>Agencias compradoras</b> = agencias con al menos una reserva confirmada (con cualquier medio de pago) en Autos, Traslados, Asistencia o Actividades; "usaron promesa" = además tuvieron al menos una reserva con promesa (confirmada o activa) en esos productos. Las agencias compradoras no se filtran por producto: cuentan los 4 productos nuevos juntos.`),
+       `<div class="gran" id="ppNp"><button data-p="ALL">Todos</button><button data-p="AU">Autos</button><button data-p="TR">Traslados</button><button data-p="AS">Asistencias</button><button data-p="AC">Actividades</button></div>`))+
    sec(2,"¿Se usa más?","Uso total y solo confirmadas, semana a semana",
      card("Share semanal de promesa de pago","Semanas completas de 7 días contadas desde la prendida · las líneas punteadas son el promedio de cada período",
        `${cv("cPpShare",270)}<div class="card-sub" id="ppShareRd" style="margin-top:8px;font-weight:600"></div>`,
@@ -1088,7 +1092,8 @@ function renderPp(d,cfg){
   $("impBack").onclick=()=>setPage("lista");
   $("impact").querySelectorAll(".sec-nav a").forEach(a=>a.onclick=()=>$(a.dataset.t).scrollIntoView({behavior:"smooth",block:"start"}));
   // ---- datos y helpers ----
-  let cc="ALL",kOn=false,shM="tot",agM="all";
+  let cc="ALL",kOn=false,shM="tot",agM="all",npP="ALL";
+  const ONS=new Set(cfg.a.filter(x=>NEWC.includes(x[2])&&x[4]===1&&x[0]>=L&&x[5]>0).map(x=>x[1]));   // países con promesa en productos nuevos = prendidos
   const nb=Math.floor(N/7),blocks=[...Array(2*nb)].map((_,i)=>i-nb);
   const bIdx=dd=>Math.floor((Date.parse(dd+"T00:00:00Z")-Date.parse(L+"T00:00:00Z"))/864e5/7);
   const bLbl=i=>"Sem "+fdate(addD(L,7*i));
@@ -1131,6 +1136,20 @@ function renderPp(d,cfg){
       <li><b>Falta que se paguen:</b> el ${pc0(ac1,use1)} del uso del período posterior está activo, sin pagar. Esperamos que parte se confirme, pero no todas.</li>
       <li><b>Atribución:</b> ${fmtN(ag.attr.length)} agencias nunca habían usado promesa antes y la usan en productos nuevos.</li>
       <li><b>Volumen nuevo:</b> las órdenes confirmadas totales de productos nuevos pasaron de ${fmtN(nc0)} a ${fmtN(nc1)}${nc0?" ("+pf((nc1/nc0-1)*100)+")":""}. Por agencia, las que usan promesa evolucionan ${tc.t.pn?pf(tc.t.vn):"-"} contra ${tc.c.pn?pf(tc.c.vn):"-"} en órdenes confirmadas${tc.t.pn&&tc.c.pn?(tc.t.vn-tc.c.vn>3?": las tratadas crecen más que el control, una señal a validar (puede deberse al tamaño de las agencias).":": no hay diferencia clara, así que hoy la promesa parece reemplazar otros medios de pago más que sumar demanda."):"."}</li></ul>`;
+    // prendida en productos nuevos (países prendidos)
+    document.querySelectorAll("#ppNp button").forEach(b=>b.classList.toggle("active",b.dataset.p===npP));
+    const inOn=x=>ONS.has(x[1])&&(cc==="ALL"||x[1]===cc);
+    const RN=cfg.a.filter(x=>isNew(x)&&!isPre(x)&&inOn(x)&&(npP==="ALL"||x[2]===npP));
+    const kN=s=>RN.reduce((a,x)=>isProm(x)&&x[3]===s?a+x[5]:a,0);
+    const nReg=kN("C")+(kOn?kN("K"):0),nAct=kN("A"),nCan=kN("X"),nGen=nReg+nAct+nCan;
+    const nGb=gbs(RN,x=>isProm(x)&&x[3]==="C"),nGbT=gbs(RN,x=>x[3]==="C");
+    const onTxt=[...ONS].filter(c=>cc==="ALL"||c===cc).map(c=>flag(c)+" "+(CN[c]||c)).join(", ")||"ninguno";
+    $("ppNpSub").innerHTML=(npP==="ALL"?"Productos nuevos":PNAME[npP])+" · países prendidos: "+onTxt+" · desde el "+fdate(L);
+    $("ppNpK").innerHTML=kb("Promesas generadas",fmtN(nGen),"reservas creadas con promesa de pago","#ED8B08")+kb("Regularizadas",fmtN(nReg),pc(nReg,nGen)+" de las generadas ya se pagaron y están confirmadas","#10B981")+kb("Tasa de regularización",pc(nReg,nReg+nCan),"sobre las "+fmtN(nReg+nCan)+" ya cerradas (sin contar activas)","#10B981")+
+      kb("Activas",fmtN(nAct),"todavía dentro del plazo de pago","#F7B955")+kb("Vencidas o canceladas",fmtN(nCan),pc(nCan,nGen)+" de las generadas","#EF4444")+kb("GB confirmado con promesa","USD "+fmtN(nGb),pc(nGb,nGbT)+" del GB confirmado del producto","#8B5CF6");
+    const CT=cfg.ctl.filter(r=>ONS.has(r[1])&&(cc==="ALL"||r[1]===cc));
+    const bPost=CT.filter(r=>r[4]>0),bPre=CT.filter(r=>r[2]>0),bPromo=bPost.filter(r=>r[6]>0),bNew=bPost.filter(r=>r[2]===0),bNewP=bNew.filter(r=>r[6]>0);
+    $("ppNpA").innerHTML=kb("Agencias compradoras, después",fmtN(bPost.length),"con al menos una reserva confirmada · antes: "+fmtN(bPre.length),"#3B82F6")+kb("Usaron promesa",fmtN(bPromo.length),pc(bPromo.length,bPost.length)+" de las compradoras","#ED8B08")+kb("No usaron promesa",fmtN(bPost.length-bPromo.length),pc(bPost.length-bPromo.length,bPost.length)+" de las compradoras","#94A3B8")+kb("Compradoras nuevas",fmtN(bNew.length),fmtN(bNewP.length)+" con promesa y "+fmtN(bNew.length-bNewP.length)+" sin ella","#10B981");
     // 2 · share semanal
     const num=w=>R.filter(x=>isProm(x)&&(shM==="gb"?x[3]==="C":shM==="conf"?isConf(x):isUse(x))),dn=R.filter(x=>shM==="gb"?x[3]==="C":isUse(x));
     const nu=byBlock(num(),()=>true,shM==="gb"?6:5),de=byBlock(dn,()=>true,shM==="gb"?6:5);
@@ -1251,6 +1270,7 @@ function renderPp(d,cfg){
   }
   $("ppC").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;cc=b.dataset.c;draw();};
   $("ppK").onclick=e=>{const b=e.target.closest("[data-k]");if(!b)return;kOn=b.dataset.k==="1";draw();};
+  $("ppNp").onclick=e=>{const b=e.target.closest("[data-p]");if(!b)return;npP=b.dataset.p;draw();};
   $("ppSM").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;shM=b.dataset.m;draw();};
   $("ppAgM").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;agM=b.dataset.m;drawAg();};
   draw();

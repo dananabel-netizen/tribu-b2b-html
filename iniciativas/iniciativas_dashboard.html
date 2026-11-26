@@ -1043,13 +1043,18 @@ function renderPp(d,cfg){
       <div style="display:flex;gap:8px;align-items:center"><span class="card-sub">Confirmadas sin GB en la tabla (backoffice):</span><div class="gran" id="ppK"><button data-k="0">Excluir</button><button data-k="1">Incluir</button></div></div></div>`;
   $("impact").innerHTML=head+
    `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · ¿Se usa más?"],["isec3","3 · ¿Dónde creció?"],["isec4","4 · ¿Es volumen nuevo?"],["isec5","5 · Agencias"],["isec6","6 · Qué falta validar"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>`+filt+
-   sec(1,"Key Metrics","La promesa se usa más desde la prendida, pero buena parte de las reservas todavía no se pagó",
-     card("Resumen del impacto","#ppSub",`<div id="ppKp" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 12px"></div><div id="ppSay" style="background:var(--panel2);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.55"></div>`+
-       meth(`Sale de la query de detalle de reservas y medios de pago del equipo (transacciones + medios de pago), canal HTML (classic, silver, gold y platinum), sin agencias "test". Promesa = medio de pago DEFERRED_PROMISE; producto = tipo de compra (Hoteles, Carrito, Autos, Traslados, Asistencia y Actividades); fecha = fecha de reserva. Se compara el período posterior a la prendida (${fdate(L)} hasta ayer, ${N} días) con los ${N} días inmediatamente anteriores. <b>Confirmada</b> = reserva pagada con GB. <b>Activa</b> = reservada, todavía sin pagar y dentro del plazo. Quedan fuera las canceladas. Hay reservas Confirmadas que la tabla trae sin GB (confirmadas en backoffice): por defecto se excluyen, igual que en el análisis del equipo, y se pueden incluir con el botón de arriba. El share es sobre las órdenes no canceladas de todos los medios de pago (todos los productos). El GB solo existe para lo confirmado.`))+
-     card("Prendida el "+fdate(L)+" en Autos, Traslados, Asistencias y Actividades","#ppNpSub",`<div id="ppNpK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:2px 0 12px"></div>
-       <div class="card-sub" style="font-weight:600;margin:4px 0 6px">Agencias compradoras de productos nuevos</div><div id="ppNpA" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 4px"></div>`+
+   sec(1,"Key Metrics","Qué pasó con la promesa de pago desde la prendida: conclusiones, productos nuevos y uso total",
+     card("Qué diría hoy","#ppSub",`<div id="ppSay" style="background:var(--panel2);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.55"></div>`)+
+     card("Prendida el "+fdate(L)+" en Autos, Traslados, Asistencias y Actividades","#ppNpSub",
+       `<div class="card-sub" style="font-weight:600;margin:4px 0 6px">Reservas con promesa de pago</div><div id="ppNpK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
+        <div class="card-sub" style="font-weight:600;margin:16px 0 6px">Agencias compradoras de productos nuevos</div><div id="ppNpA" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>`+
        meth(`Reservas con promesa de pago creadas desde la prendida en los países donde ya está prendida (los que tienen reservas con promesa en productos nuevos), por producto. Generadas = confirmadas + activas + canceladas. Tasa de regularización = confirmadas sobre las ya cerradas (confirmadas + canceladas); las activas todavía pueden resolverse. GB confirmado con promesa: solo reservas confirmadas con GB en la tabla. <b>Agencias compradoras</b> = agencias con al menos una reserva confirmada (con cualquier medio de pago) en Autos, Traslados, Asistencia o Actividades; "usaron promesa" = además tuvieron al menos una reserva con promesa (confirmada o activa) en esos productos. Las agencias compradoras no se filtran por producto: cuentan los 4 productos nuevos juntos.`),
-       `<div class="gran" id="ppNp"><button data-p="ALL">Todos</button><button data-p="AU">Autos</button><button data-p="TR">Traslados</button><button data-p="AS">Asistencias</button><button data-p="AC">Actividades</button></div>`))+
+       `<div class="gran" id="ppNp"><button data-p="ALL">Todos</button><button data-p="AU">Autos</button><button data-p="TR">Traslados</button><button data-p="AS">Asistencias</button><button data-p="AC">Actividades</button></div>`)+
+     card("Uso total de la promesa, antes vs después","Todos los productos (hoteles incluidos), según el filtro de país de arriba",
+       `<div class="card-sub" style="font-weight:600;margin:4px 0 6px">Uso</div><div id="ppKpU" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
+        <div class="card-sub" style="font-weight:600;margin:16px 0 6px">Cómo terminan las reservas</div><div id="ppKpE" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
+        <div class="card-sub" style="font-weight:600;margin:16px 0 6px">GB confirmado con promesa</div><div id="ppKpG" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"></div>`+
+       meth(`Sale de la query de detalle de reservas y medios de pago del equipo (transacciones + medios de pago), canal HTML (classic, silver, gold y platinum), sin agencias "test". Promesa = medio de pago DEFERRED_PROMISE; producto = tipo de compra (Hoteles, Carrito, Autos, Traslados, Asistencia y Actividades); fecha = fecha de reserva. Se compara el período posterior a la prendida (${fdate(L)} hasta ayer, ${N} días) con los ${N} días inmediatamente anteriores. <b>Confirmada</b> = reserva pagada con GB. <b>Activa</b> = reservada, todavía sin pagar y dentro del plazo. Quedan fuera las canceladas. Hay reservas Confirmadas que la tabla trae sin GB (confirmadas en backoffice): por defecto se excluyen, igual que en el análisis del equipo, y se pueden incluir con el botón de arriba. El share es sobre las órdenes no canceladas de todos los medios de pago (todos los productos). El GB solo existe para lo confirmado.`)))+
    sec(2,"¿Se usa más?","Uso total y solo confirmadas, semana a semana",
      card("Share semanal de promesa de pago","Semanas completas de 7 días contadas desde la prendida · las líneas punteadas son el promedio de cada período",
        `${cv("cPpShare",270)}<div class="card-sub" id="ppShareRd" style="margin-top:8px;font-weight:600"></div>`,
@@ -1119,14 +1124,14 @@ function renderPp(d,cfg){
     const sh0=den0?use0/den0*100:0,sh1=den1?use1/den1*100:0,cs0=den0?cf0/den0*100:0,cs1=den1?cf1/den1*100:0;
     const gbN=gbs(R,x=>!isPre(x)&&isProm(x)&&x[3]==="C"&&isNew(x)),gbH0=gbs(R,x=>isPre(x)&&isProm(x)&&x[3]==="C"&&x[2]==="HO"),gbH1=gbs(R,x=>!isPre(x)&&isProm(x)&&x[3]==="C"&&x[2]==="HO");
     const ag=agCalc(),g=ag.pre.length?(ag.post.length/ag.pre.length-1)*100:0;
-    $("ppKp").innerHTML=kb("Órdenes con promesa (confirmadas + activas)",fmtN(use0)+" → "+fmtN(use1),use0?pf((use1/use0-1)*100)+" · ya existía en hoteles":"-","#ED8B08")+
+    $("ppKpU").innerHTML=kb("Órdenes con promesa (confirmadas + activas)",fmtN(use0)+" → "+fmtN(use1),use0?pf((use1/use0-1)*100)+" · ya existía en hoteles":"-","#ED8B08")+
       kb("Share del uso total",sh0.toFixed(1).replace(".",",")+"% → "+sh1.toFixed(1).replace(".",",")+"%",pp1(sh1-sh0)+" sobre órdenes no canceladas","#ED8B08")+
-      kb("Solo confirmadas",fmtN(cf0)+" → "+fmtN(cf1),(cf0?pf((cf1/cf0-1)*100):"-")+" · share "+cs0.toFixed(1).replace(".",",")+"% → "+cs1.toFixed(1).replace(".",",")+"%","#10B981")+
+      kb("Agencias con promesa",fmtN(ag.pre.length)+" → "+fmtN(ag.post.length),pf(g)+" · confirmadas + activas","#3B82F6");
+    $("ppKpE").innerHTML=kb("Solo confirmadas",fmtN(cf0)+" → "+fmtN(cf1),(cf0?pf((cf1/cf0-1)*100):"-")+" · share "+cs0.toFixed(1).replace(".",",")+"% → "+cs1.toFixed(1).replace(".",",")+"%","#10B981")+
       kb("Activas con promesa (aún sin pagar)",fmtN(ac0)+" → "+fmtN(ac1),pc(ac0,den0)+" → "+pc(ac1,den1)+" de las órdenes","#F7B955")+
-      kb("Agencias con promesa",fmtN(ag.pre.length)+" → "+fmtN(ag.post.length),pf(g)+" · confirmadas + activas","#3B82F6")+
-      kb("GB confirmado con promesa, productos nuevos","0 → USD "+fmtN(gbN),"nuevo desde la prendida","#8B5CF6")+
-      kb("GB confirmado con promesa, hoteles","USD "+fmtN(gbH0)+" → "+fmtN(gbH1),"ya existía: "+(gbH0?pf((gbH1/gbH0-1)*100):"-"),"#64748B")+
       kb("Tasa de regularización (período posterior)",pc(cf1,cf1+Q(x=>isProm(x)&&x[3]==="X")),"confirmadas sobre las ya cerradas (confirmadas + canceladas)","#10B981");
+    $("ppKpG").innerHTML=kb("Productos nuevos","0 → USD "+fmtN(gbN),"nuevo desde la prendida","#8B5CF6")+
+      kb("Hoteles","USD "+fmtN(gbH0)+" → "+fmtN(gbH1),"ya existía: "+(gbH0?pf((gbH1/gbH0-1)*100):"-"),"#64748B");
     // "qué diría hoy"
     const nC=Q(x=>isProm(x)&&isNew(x)&&isConf(x)),nA=Q(x=>isProm(x)&&isNew(x)&&x[3]==="A");
     const nc0=P(x=>isConf(x)&&isNew(x)),nc1=Q(x=>isConf(x)&&isNew(x));

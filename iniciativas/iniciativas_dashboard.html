@@ -1044,13 +1044,12 @@ function renderPp(d,cfg){
   $("impact").innerHTML=head+
    `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · ¿Se usa más?"],["isec3","3 · ¿Dónde creció?"],["isec4","4 · ¿Es volumen nuevo?"],["isec5","5 · Agencias"],["isec6","6 · Qué falta validar"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>`+filt+
    sec(1,"Key Metrics","Qué pasó con la promesa de pago desde la prendida: conclusiones, productos nuevos y uso total",
-     card("Qué diría hoy","#ppSub",`<div id="ppSay" style="background:var(--panel2);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.55"></div>`)+
      card("Prendida el "+fdate(L)+" en Autos, Traslados, Asistencias y Actividades","#ppNpSub",
        `<div class="card-sub" style="font-weight:600;margin:4px 0 6px">Reservas con promesa de pago</div><div id="ppNpK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
         <div class="card-sub" style="font-weight:600;margin:16px 0 6px">Agencias compradoras de productos nuevos</div><div id="ppNpA" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>`+
        meth(`Reservas con promesa de pago creadas desde la prendida en los países donde ya está prendida (los que tienen reservas con promesa en productos nuevos), por producto. Generadas = confirmadas + activas + canceladas. Tasa de regularización = confirmadas sobre las ya cerradas (confirmadas + canceladas); las activas todavía pueden resolverse. GB confirmado con promesa: solo reservas confirmadas con GB en la tabla. <b>Agencias compradoras</b> = agencias con al menos una reserva confirmada (con cualquier medio de pago) en Autos, Traslados, Asistencia o Actividades; "usaron promesa" = además tuvieron al menos una reserva con promesa (confirmada o activa) en esos productos. Las agencias compradoras no se filtran por producto: cuentan los 4 productos nuevos juntos.`),
        `<div class="gran" id="ppNp"><button data-p="ALL">Todos</button><button data-p="AU">Autos</button><button data-p="TR">Traslados</button><button data-p="AS">Asistencias</button><button data-p="AC">Actividades</button></div>`)+
-     card("Uso total de la promesa, antes vs después","Todos los productos (hoteles incluidos), según el filtro de país de arriba",
+     card("Uso total de la promesa, antes vs después","#ppSub",
        `<div class="card-sub" style="font-weight:600;margin:4px 0 6px">Uso</div><div id="ppKpU" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
         <div class="card-sub" style="font-weight:600;margin:16px 0 6px">Cómo terminan las reservas</div><div id="ppKpE" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
         <div class="card-sub" style="font-weight:600;margin:16px 0 6px">GB confirmado con promesa</div><div id="ppKpG" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"></div>`+
@@ -1117,7 +1116,7 @@ function renderPp(d,cfg){
     document.querySelectorAll("#ppK button").forEach(b=>b.classList.toggle("active",(b.dataset.k==="1")===kOn));
     document.querySelectorAll("#ppSM button").forEach(b=>b.classList.toggle("active",b.dataset.m===shM));
     const R=rowsA(),ctyTxt=cc==="ALL"?"todos los países":(CN[cc]||cc);
-    $("ppSub").textContent=ctyTxt+" · "+N+" días desde la prendida ("+fdate(L)+") contra los "+N+" días anteriores ("+fdate(cfg.pre_from)+" al "+fdate(addD(L,-1))+")";
+    $("ppSub").textContent="Todos los productos (hoteles incluidos) · "+ctyTxt+" · "+N+" días desde la prendida ("+fdate(L)+") contra los "+N+" días anteriores ("+fdate(cfg.pre_from)+" al "+fdate(addD(L,-1))+")";
     const P=(f)=>cnt(R,x=>isPre(x)&&f(x)),Q=(f)=>cnt(R,x=>!isPre(x)&&f(x));
     const use0=P(x=>isProm(x)&&isUse(x)),use1=Q(x=>isProm(x)&&isUse(x)),den0=P(isUse),den1=Q(isUse);
     const cf0=P(x=>isProm(x)&&isConf(x)),cf1=Q(x=>isProm(x)&&isConf(x)),ac0=P(x=>isProm(x)&&x[3]==="A"),ac1=Q(x=>isProm(x)&&x[3]==="A");
@@ -1136,11 +1135,6 @@ function renderPp(d,cfg){
     const nC=Q(x=>isProm(x)&&isNew(x)&&isConf(x)),nA=Q(x=>isProm(x)&&isNew(x)&&x[3]==="A");
     const nc0=P(x=>isConf(x)&&isNew(x)),nc1=Q(x=>isConf(x)&&isNew(x));
     const tc=tcCalc();
-    $("ppSay").innerHTML=`<b>Qué diría hoy</b><ul style="margin:6px 0 0;padding-left:18px">
-      <li><b>Se usa:</b> las órdenes con promesa pasaron de ${fmtN(use0)} a ${fmtN(use1)}${use0?" ("+pf((use1/use0-1)*100)+")":""}. Productos nuevos suma ${fmtN(nC+nA)} órdenes: ${fmtN(nC)} confirmadas (USD ${fmtN(gbN)} de GB) y ${fmtN(nA)} activas.</li>
-      <li><b>Falta que se paguen:</b> el ${pc0(ac1,use1)} del uso del período posterior está activo, sin pagar. Esperamos que parte se confirme, pero no todas.</li>
-      <li><b>Atribución:</b> ${fmtN(ag.attr.length)} agencias nunca habían usado promesa antes y la usan en productos nuevos.</li>
-      <li><b>Volumen nuevo:</b> las órdenes confirmadas totales de productos nuevos pasaron de ${fmtN(nc0)} a ${fmtN(nc1)}${nc0?" ("+pf((nc1/nc0-1)*100)+")":""}. Por agencia, las que usan promesa evolucionan ${tc.t.pn?pf(tc.t.vn):"-"} contra ${tc.c.pn?pf(tc.c.vn):"-"} en órdenes confirmadas${tc.t.pn&&tc.c.pn?(tc.t.vn-tc.c.vn>3?": las tratadas crecen más que el control, una señal a validar (puede deberse al tamaño de las agencias).":": no hay diferencia clara, así que hoy la promesa parece reemplazar otros medios de pago más que sumar demanda."):"."}</li></ul>`;
     // prendida en productos nuevos (países prendidos)
     document.querySelectorAll("#ppNp button").forEach(b=>b.classList.toggle("active",b.dataset.p===npP));
     const inOn=x=>ONS.has(x[1])&&(cc==="ALL"||x[1]===cc);

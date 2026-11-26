@@ -450,10 +450,11 @@ where bi.channel in {CHANNELS}
 group by 1, 2, 3
 """
 
-# Agencias con promesa de pago (desde el partner de la reserva). Ventana: N días desde la prendida (completos) contra los N días previos.
-# "Con promesa" = reserva Confirmada o Activa con registro PROMISE-B2B en chewie_deferred_condition. "Productos nuevos" = los 5 productos de la iniciativa;
-# el resto (hoteles, alquileres) cuenta como hoteles. Se trae una fila por agencia con alguna promesa en la ventana.
-_PP_NEW = "('Autos','Traslados','Asistencia al viajero','Excursiones','Espectáculos')"
+# Agencias con promesa de pago. Fuente: la misma query de detalle de reservas y medios de pago del equipo (bi_transactional_fact_transactions +
+# prd_payment_methods_fact): promesa = medio de pago DEFERRED_PROMISE, agencia = partner_data_id, estado = tr.status, fecha = mdp.reservation_date.
+# Ventana: N días desde la prendida (completos) contra los N días previos. "Con promesa" = reserva Confirmada o Activa (no cuenta Cancelada).
+# "Productos nuevos" = flujo de compra Autos o Servicios en Destino; el resto (Hoteles, Alquileres y Cart) cuenta como hoteles, donde la promesa ya existía.
+_PP_NEWFS = "('Autos','Servicios en Destino')"
 
 
 def pp_window(today):
@@ -461,52 +462,45 @@ def pp_window(today):
     return n, (date.fromisoformat(PP_LAUNCH) - timedelta(days=n)).isoformat()
 
 
-def q_pp_ag(today):
+def _pp_t(today, only_promise):
     n, pre_from = pp_window(today)
+    pm = "and mdp.payment_method_ch_ev = 'DEFERRED_PROMISE'" if only_promise else ""
     return f"""
-with t as (
-  select bi.partner_id p, bi.country_code c, bi.transaction_code tx, bi.creation_date d, bi.transaction_status st,
-    case when bi.product in {_PP_NEW} then 1 else 0 end nw,
-    max(case when dc.reason = 'PROMISE-B2B' then 1 else 0 end) prom
-  from analytics.bi_sales_fact_sales_recognition bi
-  left join data.lake.chewie_reservation c2 on cast(bi.transaction_code as varchar) = c2.id and c2.last_version = true
-  left join data.lake.chewie_deferred_condition dc on dc.reservation_id = c2.oid
-  where bi.channel in {CHANNELS}
-    and bi.creation_date >= date '{pre_from}' and bi.creation_date < date '{today.isoformat()}' and bi.partition_period >= '{pre_from[:7]}'
-    and bi.country_code in ({",".join("'" + x + "'" for x in PP_COUNTRIES)})
-    and lower(coalesce(bi.agency_name,'')) not like '%test%'
-  group by 1, 2, 3, 4, 5, 6)
-select p, max(c) c,
- count(distinct case when d < date '{PP_LAUNCH}' and prom = 1 and st in ('Confirmado','Activo') and nw = 0 then tx end) pre_h,
- count(distinct case when d < date '{PP_LAUNCH}' and prom = 1 and st = 'Confirmado' and nw = 0 then tx end) pre_h_c,
- count(distinct case when d >= date '{PP_LAUNCH}' and prom = 1 and st in ('Confirmado','Activo') and nw = 0 then tx end) post_h,
- count(distinct case when d >= date '{PP_LAUNCH}' and prom = 1 and st = 'Confirmado' and nw = 0 then tx end) post_h_c,
- count(distinct case when d >= date '{PP_LAUNCH}' and prom = 1 and st in ('Confirmado','Activo') and nw = 1 then tx end) post_n,
- count(distinct case when d >= date '{PP_LAUNCH}' and prom = 1 and st = 'Confirmado' and nw = 1 then tx end) post_n_c,
- count(distinct case when d < date '{PP_LAUNCH}' and st = 'Confirmado' then tx end) act_pre
-from t group by 1
-having count(distinct case when prom = 1 and st in ('Confirmado','Activo') then tx end) > 0
+  select tr.partner_data_id p, max(mdp.country_code) c, tr.transaction_code tx, max(mdp.reservation_date) d, max(tr.status) st,
+         max(case when tr.shopping_flow_source in {_PP_NEWFS} then 1 else 0 end) nw
+  from analytics.bi_transactional_fact_transactions tr
+  join analytics.prd_payment_methods_fact mdp on tr.transaction_code = mdp.transaction_code
+  where mdp.reservation_date >= date '{pre_from}' and mdp.reservation_date < date '{today.isoformat()}'
+    and mdp.reservation_year_month >= date '{pre_from[:7]}-01' and tr.reservation_year_month >= date '{pre_from[:7]}-01'
+    and tr.channel in {CHANNELS} {pm}
+    and mdp.country_code in ({",".join("'" + x + "'" for x in PP_COUNTRIES)})
+    and lower(coalesce(tr.agency_fantasy_name,'')) not like '%test%'
+  group by tr.partner_data_id, tr.transaction_code"""
+
+
+def q_pp_ag(today):
+    return f"""
+with t as ({_pp_t(today, True)}),
+a as ({_pp_t(today, False)}),
+act as (select p, count(distinct case when d < date '{PP_LAUNCH}' and st = 'Confirmado' then tx end) act_pre from a group by p)
+select t.p, max(t.c) c,
+ count(distinct case when t.d < date '{PP_LAUNCH}' and t.st in ('Confirmado','Activo') and t.nw = 0 then t.tx end) pre_h,
+ count(distinct case when t.d < date '{PP_LAUNCH}' and t.st = 'Confirmado' and t.nw = 0 then t.tx end) pre_h_c,
+ count(distinct case when t.d >= date '{PP_LAUNCH}' and t.st in ('Confirmado','Activo') and t.nw = 0 then t.tx end) post_h,
+ count(distinct case when t.d >= date '{PP_LAUNCH}' and t.st = 'Confirmado' and t.nw = 0 then t.tx end) post_h_c,
+ count(distinct case when t.d >= date '{PP_LAUNCH}' and t.st in ('Confirmado','Activo') and t.nw = 1 then t.tx end) post_n,
+ count(distinct case when t.d >= date '{PP_LAUNCH}' and t.st = 'Confirmado' and t.nw = 1 then t.tx end) post_n_c,
+ max(coalesce(act.act_pre, 0)) act_pre
+from t left join act on act.p = t.p where t.st in ('Confirmado','Activo') group by t.p
 """
 
 
 def q_pp_agw(today):
-    n, pre_from = pp_window(today)
     return f"""
-with t as (
-  select bi.partner_id p, bi.transaction_code tx, bi.creation_date d, bi.transaction_status st,
-    max(case when dc.reason = 'PROMISE-B2B' then 1 else 0 end) prom
-  from analytics.bi_sales_fact_sales_recognition bi
-  left join data.lake.chewie_reservation c2 on cast(bi.transaction_code as varchar) = c2.id and c2.last_version = true
-  left join data.lake.chewie_deferred_condition dc on dc.reservation_id = c2.oid
-  where bi.channel in {CHANNELS}
-    and bi.creation_date >= date '{pre_from}' and bi.creation_date < date '{today.isoformat()}' and bi.partition_period >= '{pre_from[:7]}'
-    and bi.country_code in ({",".join("'" + x + "'" for x in PP_COUNTRIES)})
-    and lower(coalesce(bi.agency_name,'')) not like '%test%'
-  group by 1, 2, 3, 4)
+with t as ({_pp_t(today, True)})
 select cast(date_trunc('week', d) as varchar) w, count(distinct p) ag, count(distinct case when st = 'Confirmado' then p end) ag_c
-from t where prom = 1 and st in ('Confirmado','Activo') group by 1 order by 1
+from t where st in ('Confirmado','Activo') group by 1 order by 1
 """
-
 
 
 def build_pp(cfg_old, r, today):

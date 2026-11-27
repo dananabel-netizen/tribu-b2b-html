@@ -502,19 +502,34 @@ select p, max(c) c,
 from v group by p having count(distinct case when st = 'C' and nw = 1 then tx end) > 0""")
 
 
-# ag: una fila por agencia con promesa (A = activas, C = confirmadas; h = hoteles y otros, n = productos nuevos)
+# ag: una fila por agencia con promesa (A = activas, C = confirmadas; h = hoteles y otros, n = productos nuevos).
+# hist = 1 si la agencia ya había usado promesa antes de la ventana de comparación (desde que existe la promesa nativa, feb-2024).
 def q_pp_ag(today):
-    return q_pp(today, f"""
-select p, max(c) c,
- count(distinct case when prom = 1 and nw = 0 and d <  date '{PP_LAUNCH}' and st = 'A' then tx end) pre_h_a,
- count(distinct case when prom = 1 and nw = 0 and d <  date '{PP_LAUNCH}' and st = 'C' then tx end) pre_h_c,
- count(distinct case when prom = 1 and nw = 0 and d >= date '{PP_LAUNCH}' and st = 'A' then tx end) post_h_a,
- count(distinct case when prom = 1 and nw = 0 and d >= date '{PP_LAUNCH}' and st = 'C' then tx end) post_h_c,
- count(distinct case when prom = 1 and nw = 1 and d >= date '{PP_LAUNCH}' and st = 'A' then tx end) post_n_a,
- count(distinct case when prom = 1 and nw = 1 and d >= date '{PP_LAUNCH}' and st = 'C' then tx end) post_n_c,
- count(distinct case when st = 'C' and d < date '{PP_LAUNCH}' then tx end) act_pre
-from v group by p
-having count(distinct case when prom = 1 and st in ('A','C') then tx end) > 0""")
+    n, pre_from = pp_window(today)
+    hist = f"""
+hist as (
+  select distinct bi.partner_id p
+  from analytics.bi_sales_fact_sales_recognition bi
+  join (select c2.id tc from data.lake.chewie_reservation c2
+        join data.lake.chewie_deferred_condition dc on dc.reservation_id = c2.oid and dc.reason = 'PROMISE-B2B'
+        where c2.last_version = true and c2.channel like 'hoteldo%' and c2.date >= date '2024-01-01' and c2.date < date '{pre_from}'
+        group by c2.id) h on h.tc = cast(bi.transaction_code as varchar)
+  where bi.channel in {CHANNELS} and bi.creation_date < date '{pre_from}' and bi.partition_period >= '2024-01'
+    and lower(coalesce(bi.agency_name,'')) not like '%test%')"""
+    body = f"""
+select v.p, max(v.c) c,
+ count(distinct case when v.prom = 1 and v.nw = 0 and v.d <  date '{PP_LAUNCH}' and v.st = 'A' then v.tx end) pre_h_a,
+ count(distinct case when v.prom = 1 and v.nw = 0 and v.d <  date '{PP_LAUNCH}' and v.st = 'C' then v.tx end) pre_h_c,
+ count(distinct case when v.prom = 1 and v.nw = 0 and v.d >= date '{PP_LAUNCH}' and v.st = 'A' then v.tx end) post_h_a,
+ count(distinct case when v.prom = 1 and v.nw = 0 and v.d >= date '{PP_LAUNCH}' and v.st = 'C' then v.tx end) post_h_c,
+ count(distinct case when v.prom = 1 and v.nw = 1 and v.d >= date '{PP_LAUNCH}' and v.st = 'A' then v.tx end) post_n_a,
+ count(distinct case when v.prom = 1 and v.nw = 1 and v.d >= date '{PP_LAUNCH}' and v.st = 'C' then v.tx end) post_n_c,
+ count(distinct case when v.st = 'C' and v.d < date '{PP_LAUNCH}' then v.tx end) act_pre,
+ max(case when h.p is not null then 1 else 0 end) hist_prom
+from v left join hist h on h.p = v.p
+group by v.p
+having count(distinct case when v.prom = 1 and v.st in ('A','C') then v.tx end) > 0"""
+    return f"with {_pp_t(today).strip()},{hist}\n{body}"
 
 
 # agw: agencias únicas con promesa por bloque de 7 días contado desde la prendida
@@ -542,7 +557,7 @@ def build_pp(cfg_old, r, today):
                mix=[[str(x[0]), x[1], x[2], num(x[3]), fl(x[4])] for x in r['pp_m']],
                canc=[[str(x[0]), x[1], x[2], x[3], num(x[4])] for x in r['pp_x']],
                ctl=[[str(x[0]), x[1], num(x[2]), fl(x[3]), num(x[4]), fl(x[5]), num(x[6]), num(x[7])] for x in r['pp_ctl']])
-    # ag.rows: [agencia, país, pre_h_a, pre_h_c, post_h_a, post_h_c, post_n_a, post_n_c, ventas confirmadas en el pre]
+    # ag.rows: [agencia, país, pre_h_a, pre_h_c, post_h_a, post_h_c, post_n_a, post_n_c, ventas confirmadas en el pre, usó promesa antes de la ventana (1/0)]
     cfg['ag'] = dict(n=n, pre_from=pre_from, rows=[[str(x[0]), x[1]] + [num(v) for v in x[2:]] for x in r['pp_ag']],
                      weeks=[[num(x[0]), num(x[1]), num(x[2])] for x in r['pp_agw']])
     return cfg

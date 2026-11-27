@@ -1049,9 +1049,9 @@ function renderPp(d,cfg){
      card("Uso de la promesa en productos nuevos","",`<div id="ppNpK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>`+
        meth(`Reservas con promesa de pago creadas desde la prendida en los países donde ya está prendida (los que tienen reservas con promesa en productos nuevos), por producto. Generadas = confirmadas + activas + canceladas. Tasa de confirmación = confirmadas sobre las ya cerradas (confirmadas + canceladas); las activas todavía pueden resolverse. GB confirmado con promesa: solo reservas confirmadas. GB activas: el GB de las reservas con promesa que todavía no se pagaron (puede pagarse o cancelarse); el porcentaje es sobre el GB de todas las reservas activas de esos productos, con cualquier medio de pago. Share de las reservas confirmadas = reservas confirmadas con promesa sobre todas las reservas confirmadas de esos productos, con todos los medios de pago. ${GEN}`),
        `<div class="gran" id="ppNp"><button data-p="ALL">Todos</button><button data-p="AU">Autos</button><button data-p="TR">Traslados</button><button data-p="AS">Asistencias</button><button data-p="AC">Actividades</button></div>`)+
-     card("Agencias","Agencias con promesa y agencias compradoras de productos nuevos",`<div id="ppAgKm" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>`+
-       meth(`Agencias con promesa = agencias con al menos una reserva con promesa (confirmada o activa) en cualquier producto, en los ${N} días de cada período. Agencias compradoras = agencias con al menos una reserva confirmada (con cualquier medio de pago) en Autos, Traslados, Asistencia o Actividades; "usaron promesa" = además tuvieron al menos una reserva con promesa en esos productos, y "nuevas" = no habían comprado esos productos antes. Países prendidos.`))+
-     card("Efecto sobre la venta","#ppSub",`<div id="ppNd" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>${rd("ppNdRd")}`+
+     card("Agencias","Agencias con promesa y agencias nuevas a la promesa que compraron en la iniciativa",`<div id="ppAgKm" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>`+
+       meth(`Agencias con promesa = agencias con al menos una reserva con promesa (confirmada o activa) en cualquier producto, en los ${N} días de cada período. <b>Nunca habían usado la promesa</b> = agencias con promesa en el período posterior que no tuvieron ninguna reserva con promesa (confirmada o activa) antes de la prendida, ni en hoteles: se mira todo el historial desde que existe la promesa nativa (feb-2024). <b>Compradoras de la iniciativa</b> = agencias con al menos una reserva con promesa (confirmada o activa) en Autos, Traslados, Asistencia o Actividades.`))+
+     card("Promesa de pago en otros productos: efecto sobre la venta","",`<div id="ppNd" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>${rd("ppNdRd")}`+
        meth(`GB y reservas confirmadas de todos los productos. <b>Productos nuevos</b> = Autos, Traslados, Asistencia y Actividades (Excursiones y Espectáculos). <b>Sin promesa (control)</b> = Vuelos, Parques (Disney, Universal, SeaWorld y Busch Gardens), Seguros de autos y otros: productos donde no existe la promesa y que sirven de referencia de cómo se movió el mercado en el mismo período. La diferencia entre los productos nuevos y el control es una referencia, no una prueba de causalidad: no ajusta por estacionalidad ni por otras iniciativas. ${GEN}`)))+
    sec(2,"¿Se usa más?","Cuánto pesa la promesa sobre las reservas y cuántas ya se pagaron",
      card("Share semanal de promesa de pago","Bloques de 7 días contados desde la prendida · las líneas punteadas son el promedio de cada período",`${cv("cPpShare",270)}${rd("ppShareRd")}`,
@@ -1131,12 +1131,13 @@ function renderPp(d,cfg){
     $("ppNpK").innerHTML=kb("Promesas generadas",fmtN(nGen),"reservas creadas con promesa de pago","#ED8B08")+kb("Confirmadas",fmtN(nReg),pc(nReg,nGen)+" de las generadas · share de las reservas confirmadas: "+pc(nReg,nConfAll),"#10B981")+kb("Tasa de confirmación",pc(nReg,nReg+nCan),"sobre las "+fmtN(nReg+nCan)+" ya cerradas (sin contar activas)","#10B981")+
       kb("Activas",fmtN(nAct),"todavía dentro del plazo de pago","#F7B955")+kb("GB activas (sin pagar)","USD "+fmtN(nGbA),pc(nGbA,nGbAT)+" del GB activo de esos productos (todos los medios de pago)","#F7B955")+kb("GB confirmado con promesa","USD "+fmtN(nGb),pc(nGb,nGbT)+" del GB confirmado de esos productos","#8B5CF6");
     // ---- 1 · agencias ----
-    const CT=cfg.ctl.filter(r=>ONS.has(r[1])&&(cc==="ALL"||r[1]===cc));
-    const bPost=CT.filter(r=>r[4]>0),bPre=CT.filter(r=>r[2]>0),bPromo=bPost.filter(r=>r[6]>0),bNew=bPost.filter(r=>r[2]===0),bNewP=bNew.filter(r=>r[6]>0);
-    const ag=agCalc(),gAg=ag.pre.length?(ag.post.length/ag.pre.length-1)*100:0;
-    $("ppAgKm").innerHTML=kb("Agencias con promesa",fmtN(ag.pre.length)+" → "+fmtN(ag.post.length),pf(gAg)+" · confirmadas + activas · todos los productos","#3B82F6")+kb("Agencias compradoras, después",fmtN(bPost.length),"de productos nuevos · antes: "+fmtN(bPre.length),"#3B82F6")+kb("Usaron promesa",fmtN(bPromo.length),pc(bPromo.length,bPost.length)+" de las compradoras","#ED8B08")+kb("Compradoras nuevas",fmtN(bNew.length),fmtN(bNewP.length)+" con promesa y "+fmtN(bNew.length-bNewP.length)+" sin ella","#10B981");
+    const agm=agCalc("all"),gAg=agm.pre.length?(agm.post.length/agm.pre.length-1)*100:0;
+    const nunca=agm.post.filter(a=>!a.hist&&a.pre===0),nuncaIni=nunca.filter(a=>a.qn>0),iniAll=agm.post.filter(a=>a.qn>0);
+    $("ppAgKm").innerHTML=kb("Agencias con promesa",fmtN(agm.pre.length)+" → "+fmtN(agm.post.length),pf(gAg)+" · confirmadas + activas · todos los productos","#3B82F6")+
+      kb("Nunca habían usado la promesa",fmtN(nunca.length),pc(nunca.length,agm.post.length)+" de las "+fmtN(agm.post.length)+" · ni siquiera en hoteles","#10B981")+
+      kb("Compradoras de la iniciativa",fmtN(iniAll.length),pc(iniAll.length,agm.post.length)+" de las "+fmtN(agm.post.length)+" usaron promesa en Autos, Traslados, Asistencia o Actividades","#ED8B08")+
+      kb("Nuevas a la promesa y compradoras",fmtN(nuncaIni.length),pc(nuncaIni.length,nunca.length)+" de las "+fmtN(nunca.length)+" que nunca la habían usado compraron en la iniciativa","#8B5CF6");
     // ---- 1 · efecto sobre la venta ----
-    $("ppSub").textContent="GB y reservas confirmadas de todos los productos · "+ctyTxt+per;
     const T=x=>x[2]==="TT"&&conf(x),gT0=P(T,6),gT1=Q(T,6),oT0=P(T,5),oT1=Q(T,5);
     const nw=x=>NEWC.includes(x[2])&&conf(x),ct=x=>CTRC.includes(x[2])&&conf(x);
     const gN0=P(nw,6),gN1=Q(nw,6),gC0=P(ct,6),gC1=Q(ct,6);
@@ -1226,10 +1227,10 @@ function renderPp(d,cfg){
     drawAg();
   }
   // ---- 5 · agencias ----
-  function agCalc(){
-    const ag=cfg.ag,R=ag.rows.filter(r=>cc==="ALL"||r[1]===cc),cf=agM==="conf";
+  function agCalc(mode){
+    const ag=cfg.ag,R=ag.rows.filter(r=>cc==="ALL"||r[1]===cc),cf=(mode||agM)==="conf";
     const q=(a,c)=>(cf?0:a)+c;
-    const A=R.map(r=>({id:r[0],c:r[1],pre:q(r[2],r[3]),qh:q(r[4],r[5]),qn:q(r[6],r[7]),act:r[8]})).filter(a=>a.pre>0||a.qh+a.qn>0);
+    const A=R.map(r=>({id:r[0],c:r[1],pre:q(r[2],r[3]),qh:q(r[4],r[5]),qn:q(r[6],r[7]),act:r[8],hist:r[9]})).filter(a=>a.pre>0||a.qh+a.qn>0);
     const pre=A.filter(a=>a.pre>0),post=A.filter(a=>a.qh+a.qn>0),preS=new Set(pre.map(a=>a.id)),postS=new Set(post.map(a=>a.id));
     const nvo=A.filter(a=>a.qn>0);
     return {A,pre,post,preS,postS,nvo,nvoPre:nvo.filter(a=>preS.has(a.id)),attr:nvo.filter(a=>!preS.has(a.id))};

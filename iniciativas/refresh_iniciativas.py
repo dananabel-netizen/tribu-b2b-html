@@ -449,25 +449,46 @@ pm as (
 b as (
   select bi.creation_date d, bi.country_code c, bi.partner_id p, bi.transaction_code tx, {_PP_G} g,
          case bi.transaction_status when 'Confirmado' then 'C' when 'Activo' then 'A' when 'Cancelado' then 'X' end st, bi.gb gb,
-         case when pm.tc is not null then 1 else 0 end prom
+         case when pm.tc is not null then 1 else 0 end prom, bp.payment_methods pmt, bp.cancellation_reason cr
   from analytics.bi_sales_fact_sales_recognition bi
   left join pm on pm.tc = cast(bi.transaction_code as varchar)
+  left join lake.channels_bo_product bp on bi.origin_product_id = bp.transaction_id
   where bi.channel in {CHANNELS}
     and bi.creation_date >= date '{pre_from}' and bi.creation_date < date '{today.isoformat()}' and bi.partition_period >= '{pre_from[:7]}'
     and lower(coalesce(bi.agency_name,'')) not like '%test%'),
-v as (select *, case when g in ('AU','TR','AS','AC') then 1 else 0 end nw from b where st is not null and (prom = 1 or st = 'C'))"""
+v as (select *, case when g in ('AU','TR','AS','AC') then 1 else 0 end nw from b where st is not null and (prom = 1 or st in ('C','A') or g in ('AU','TR','AS','AC')))"""
 
 
 def q_pp(today, body):
     return f"with {_pp_t(today).strip()}\n{body}"
 
 
-# a: venta por día, país, grupo de producto, estado y si usó promesa (TT = todos los productos, reservas únicas). Sin promesa solo se guardan las confirmadas.
+# a: venta por día, país, grupo de producto, estado y si usó promesa (TT = todos los productos, reservas únicas). Sin promesa se guardan confirmadas y activas (y las canceladas solo de productos nuevos).
 def q_pp_a(today):
     return q_pp(today, """
 select cast(d as varchar) d, c, g, st, prom, count(distinct tx) n, round(sum(gb)) gb from v group by 1, 2, 3, 4, 5
 union all
 select cast(d as varchar) d, c, 'TT' g, st, prom, count(distinct tx) n, round(sum(gb)) gb from v group by 1, 2, 4, 5""")
+
+
+# m: mix de medio de pago de las reservas confirmadas en productos nuevos (la promesa se separa por la condición diferida, porque al pagarse deja de figurar como medio)
+def q_pp_m(today):
+    return q_pp(today, """
+select cast(d as varchar) d, c,
+ case when prom = 1 then 'Promesa de pago' when pmt like '%REMOTE%' then 'Link de pago' when pmt like '%CREDIT_CARD%' then 'Tarjeta crédito'
+      when pmt like '%DEBIT%' then 'Tarjeta débito' when pmt = 'CASH' then 'Efectivo' when pmt = 'AGENCY_ACCOUNT' then 'Cuenta de la agencia'
+      when pmt = 'WALLET' then 'Wallet' when pmt like 'DEFERRED%' then 'Diferido / gestor' else 'Otros' end m,
+ count(distinct tx) n, round(sum(gb)) gb
+from v where st = 'C' and nw = 1 group by 1, 2, 3""")
+
+
+# x: motivos de cancelación de las reservas canceladas con promesa (NU = productos nuevos, HO = hoteles y alquileres)
+def q_pp_x(today):
+    return q_pp(today, """
+select cast(d as varchar) d, c, case when nw = 1 then 'NU' when g in ('HO','AL') then 'HO' else 'OT' end g2,
+ case when cr = 'AGENCY_CANCELED' then 'Cancela la agencia' when cr like 'TIMEOUT%' then 'Vence sin pago' when cr = 'BOOKING_ERROR' then 'Error de reserva' else 'Otros' end r,
+ count(distinct tx) n
+from v where st = 'X' and prom = 1 group by 1, 2, 3, 4""")
 
 
 # ctl: una fila por agencia con compras confirmadas en productos nuevos (prueba tratadas vs control)
@@ -514,10 +535,12 @@ def build_pp(cfg_old, r, today):
             tot[x[1]] = tot.get(x[1], 0) + x[6]
     countries = [c for c, _ in sorted(tot.items(), key=lambda kv: -kv[1]) if c]
     cfg = dict(cfg_old)
-    for k in ('daily', 'from_', 'mix', 'canc'):
+    for k in ('daily', 'from_'):
         cfg.pop(k, None)
     cfg.update(kind='pp', title='Promesa de pago (todos los productos)', launch=PP_LAUNCH, pre_from=pre_from, n=n,
                asof=today.isoformat(), partial=(today + timedelta(days=1)).isoformat(), countries=countries, a=A,
+               mix=[[str(x[0]), x[1], x[2], num(x[3]), fl(x[4])] for x in r['pp_m']],
+               canc=[[str(x[0]), x[1], x[2], x[3], num(x[4])] for x in r['pp_x']],
                ctl=[[str(x[0]), x[1], num(x[2]), fl(x[3]), num(x[4]), fl(x[5]), num(x[6]), num(x[7])] for x in r['pp_ctl']])
     # ag.rows: [agencia, país, pre_h_a, pre_h_c, post_h_a, post_h_c, post_n_a, post_n_c, ventas confirmadas en el pre]
     cfg['ag'] = dict(n=n, pre_from=pre_from, rows=[[str(x[0]), x[1]] + [num(v) for v in x[2:]] for x in r['pp_ag']],
@@ -566,6 +589,8 @@ def fetch_all():
         out['hdo_daily'] = q('hdo_daily', Q_HDO_DAILY)
         out['gv_daily'] = q('gv_daily', Q_GV_DAILY)
         out['pp_a'] = q('pp_a', q_pp_a(date.today()))
+        out['pp_m'] = q('pp_m', q_pp_m(date.today()))
+        out['pp_x'] = q('pp_x', q_pp_x(date.today()))
         out['pp_ctl'] = q('pp_ctl', q_pp_ctl(date.today()))
         out['pp_ag'] = q('pp_ag', q_pp_ag(date.today()))
         out['pp_agw'] = q('pp_agw', q_pp_agw(date.today()))

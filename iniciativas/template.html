@@ -1024,7 +1024,6 @@ function renderPp(d,cfg){
   const GN={HO:"Hoteles",AL:"Alquileres",AU:"Autos",TR:"Traslados",AS:"Asistencia",AC:"Actividades",VU:"Vuelos",PQ:"Parques",SA:"Seguros de autos",OT:"Otros"};
   const GCOL={HO:"#64748B",AL:"#94A3B8",AU:"#ED8B08",TR:"#3B82F6",AS:"#10B981",AC:"#8B5CF6",VU:"#0EA5E9",PQ:"#F43F5E",SA:"#A3A3A3",OT:"#CBD5E1"};
   const NEWC=["AU","TR","AS","AC"],OLDC=["HO","AL"],CTRC=["VU","PQ","SA","OT"];
-  const CL={NEW:["Productos nuevos",NEWC],OLD:["Hoteles y alquileres",OLDC],ALL:["Todos los productos",[...NEWC,...OLDC,...CTRC]]};
   const pf=v=>(v>=0?"+":"")+v.toFixed(1).replace(".",",")+"%";
   const pp1=v=>(v>=0?"+":"")+v.toFixed(1).replace(".",",")+" pp";
   const pc=(a,n)=>n?(a/n*100).toFixed(1).replace(".",",")+"%":"-";
@@ -1041,31 +1040,40 @@ function renderPp(d,cfg){
   const card=(t,sub,body,extra)=>`<div class="card"><div class="card-hdr"><div><div class="card-title">${t}</div><div class="card-sub" ${sub&&sub[0]==="#"?`id="${sub.slice(1)}"`:""}>${sub&&sub[0]!=="#"?sub:""}</div></div>${extra||""}</div>${body}</div>`;
   const cv=(id,h)=>`<div class="ch" style="height:${h||280}px"><canvas id="${id}"></canvas></div>`;
   const meth=t=>`<details class="meth"><summary>Cómo se calcula</summary><div class="card-sub" style="margin-top:6px">${t}</div></details>`;
-  const sub=t=>`<div class="card-sub" style="font-weight:600;margin:16px 0 6px">${t}</div>`;
+  const rd=id=>`<div class="card-sub" id="${id}" style="margin-top:8px;font-weight:600"></div>`;
   const filt=`<div class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="gran" id="ppC"><button data-c="ALL">Todos los países</button>${C.map(c=>`<button data-c="${c}" title="${CN[c]||c}">${flag(c)}</button>`).join("")}</div></div>`;
-  const GEN=`Fuente: venta del canal HTML (classic, silver, gold y platinum) por línea de producto, sin agencias "test", por fecha de creación de la reserva. Una reserva es "con promesa" si tiene registro de condición diferida con motivo PROMISE-B2B. Se compara el período posterior a la prendida (${fdate(L)} hasta ayer, ${N} días) con los ${N} días inmediatamente anteriores.`;
+  const GEN=`Fuente: venta del canal HTML (classic, silver, gold y platinum) por línea de producto, sin agencias "test", por fecha de creación de la reserva. Una reserva es "con promesa" si tiene registro de condición diferida con motivo PROMISE-B2B. Se compara el período posterior a la prendida (${fdate(L)} hasta ayer, ${N} días) con los ${N} días inmediatamente anteriores. <b>Confirmada</b> = reserva pagada con GB. <b>Activa</b> = reservada, todavía sin pagar y dentro del plazo. Las canceladas no cuentan como uso.`;
   $("impact").innerHTML=head+
-   `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · ¿Movió la aguja?"],["isec3","3 · Uso de la promesa"],["isec4","4 · Agencias"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>`+filt+
-   sec(1,"Key Metrics","Qué pasó con la venta total y cuánto se usa la promesa en los productos nuevos",
-     card("¿Movió la aguja?","#ppSub",`<div id="ppNd" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div><div class="card-sub" id="ppNdRd" style="margin-top:10px;font-weight:600"></div>`+
-       meth(GEN+` Se mira el GB y las reservas confirmadas de todos los productos. <b>Productos nuevos</b> = Autos, Traslados, Asistencia y Actividades (Excursiones y Espectáculos). <b>Sin promesa (control)</b> = Vuelos, Parques (Disney, Universal, SeaWorld y Busch Gardens), Seguros de autos y otros: productos donde no existe la promesa y que sirven de referencia de cómo se movió el mercado en el mismo período. La diferencia entre los productos nuevos y el control es una referencia, no una prueba de causalidad: no ajusta por estacionalidad ni por otras iniciativas.`))+
-     card("Prendida el "+fdate(L)+" en Autos, Traslados, Asistencias y Actividades","#ppNpSub",
-       `${sub("Reservas con promesa de pago").replace("margin:16px","margin:4px")}<div id="ppNpK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
-        ${sub("Agencias compradoras de productos nuevos")}<div id="ppNpA" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>`+
-       meth(`Reservas con promesa de pago creadas desde la prendida en los países donde ya está prendida (los que tienen reservas con promesa en productos nuevos), por producto. Generadas = confirmadas + activas (reservadas, sin pagar) + canceladas. Tasa de regularización = confirmadas sobre las ya cerradas (confirmadas + canceladas); las activas todavía pueden resolverse. GB confirmado con promesa: solo reservas confirmadas. <b>Agencias compradoras</b> = agencias con al menos una reserva confirmada (con cualquier medio de pago) en los 4 productos nuevos; "usaron promesa" = además tuvieron al menos una reserva con promesa (confirmada o activa) en esos productos. Las agencias no se filtran por producto.`),
-       `<div class="gran" id="ppNp"><button data-p="ALL">Todos</button><button data-p="AU">Autos</button><button data-p="TR">Traslados</button><button data-p="AS">Asistencias</button><button data-p="AC">Actividades</button></div>`))+
-   sec(2,"¿Movió la aguja?","Todos los productos: la venta total y cada producto, antes y después de la prendida",
-     card("GB confirmado semanal, todos los productos","Línea llena = real · punteada = tendencia de las semanas previas extendida hacia adelante (contrafactual)",`${cv("cPpTot",300)}<div class="card-sub" id="ppTotRd" style="margin-top:8px;font-weight:600"></div>`+
-       meth("Bloques de 7 días contados desde la prendida; solo bloques completos. Contrafactual = recta ajustada a los bloques previos y extendida hacia adelante. No captura estacionalidad (octubre y noviembre) ni otras iniciativas, así que es una referencia y no una prueba de causalidad."))+
-     card("Índice de GB por grupo de producto","Promedio de los bloques previos a la prendida = 100. Si la promesa moviera la aguja, los productos nuevos se separarían de la línea de control",`${cv("cPpIdx",300)}<div class="card-sub" id="ppIdxRd" style="margin-top:8px;font-weight:600"></div>`)+
-     card("Antes vs después por producto","GB y reservas confirmadas, "+N+" días contra "+N+" días",`<table class="stbl"><thead><tr><th>Producto</th><th>Promesa</th><th class="num">GB antes</th><th class="num">GB después</th><th class="num">Variación</th><th class="num">Reservas antes</th><th class="num">Reservas después</th><th class="num">Variación</th></tr></thead><tbody id="ppTbG"></tbody></table><div class="card-sub" style="margin-top:8px">En los subtotales, las reservas se suman por línea de producto: un paquete con hotel y vuelo cuenta en cada uno. Solo el total cuenta reservas únicas.</div>`)+
-     card("GB confirmado por producto nuevo vs contrafactual","Línea llena = GB real; punteada = tendencia previa extendida",`${cv("cPpCf",320)}<div class="card-sub" id="ppCfRd" style="margin-top:8px;font-weight:600"></div>`))+
-   sec(3,"Uso de la promesa","Cuántas reservas se hacen con promesa, cómo terminan y cuánto GB aportan",
-     card("Reservas con promesa por semana, según estado","#ppUsSub",`${cv("cPpUs",280)}`,`<div class="gran" id="ppCl"><button data-k="NEW">Productos nuevos</button><button data-k="OLD">Hoteles y alquileres</button><button data-k="ALL">Todos</button></div>`)+
-     card("GB confirmado: con promesa vs otros medios de pago","Mismos productos, por semana",`${cv("cPpUg",280)}`)+
-     card("Por producto","Reservas con promesa desde la prendida",`<table class="stbl"><thead><tr><th>Producto</th><th class="num">Con promesa</th><th class="num">Confirmadas</th><th class="num">Activas</th><th class="num">Canceladas</th><th class="num">Tasa de regularización</th><th class="num">GB con promesa</th><th class="num">% del GB del producto</th></tr></thead><tbody id="ppTbP"></tbody></table>`)+
+   `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · ¿Se usa más?"],["isec3","3 · ¿Dónde creció?"],["isec4","4 · ¿Es volumen nuevo?"],["isec5","5 · ¿Qué agencias?"],["isec6","6 · Qué falta validar"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>`+filt+
+   sec(1,"Key Metrics","Uso de la promesa, agencias y efecto sobre la venta",
+     card("Uso de la promesa en productos nuevos","#ppNpSub",`<div id="ppNpK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>`+
+       meth(`Reservas con promesa de pago creadas desde la prendida en los países donde ya está prendida (los que tienen reservas con promesa en productos nuevos), por producto. Generadas = confirmadas + activas + canceladas. Tasa de regularización = confirmadas sobre las ya cerradas (confirmadas + canceladas); las activas todavía pueden resolverse. GB confirmado con promesa: solo reservas confirmadas. Share = reservas con promesa (confirmadas + activas) sobre las reservas no canceladas del producto, con todos los medios de pago. ${GEN}`),
+       `<div class="gran" id="ppNp"><button data-p="ALL">Todos</button><button data-p="AU">Autos</button><button data-p="TR">Traslados</button><button data-p="AS">Asistencias</button><button data-p="AC">Actividades</button></div>`)+
+     card("Agencias","Agencias con promesa y agencias compradoras de productos nuevos",`<div id="ppAgKm" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>`+
+       meth(`Agencias con promesa = agencias con al menos una reserva con promesa (confirmada o activa) en cualquier producto, en los ${N} días de cada período. Agencias compradoras = agencias con al menos una reserva confirmada (con cualquier medio de pago) en Autos, Traslados, Asistencia o Actividades; "usaron promesa" = además tuvieron al menos una reserva con promesa en esos productos, y "nuevas" = no habían comprado esos productos antes. Países prendidos.`))+
+     card("Efecto sobre la venta","#ppSub",`<div id="ppNd" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>${rd("ppNdRd")}`+
+       meth(`GB y reservas confirmadas de todos los productos. <b>Productos nuevos</b> = Autos, Traslados, Asistencia y Actividades (Excursiones y Espectáculos). <b>Sin promesa (control)</b> = Vuelos, Parques (Disney, Universal, SeaWorld y Busch Gardens), Seguros de autos y otros: productos donde no existe la promesa y que sirven de referencia de cómo se movió el mercado en el mismo período. La diferencia entre los productos nuevos y el control es una referencia, no una prueba de causalidad: no ajusta por estacionalidad ni por otras iniciativas. ${GEN}`)))+
+   sec(2,"¿Se usa más?","Cuánto pesa la promesa sobre las reservas y cuántas ya se pagaron",
+     card("Share semanal de promesa de pago","Bloques de 7 días contados desde la prendida · las líneas punteadas son el promedio de cada período",`${cv("cPpShare",270)}${rd("ppShareRd")}`,
+       `<div class="gran" id="ppSM"><button data-m="tot">Uso total</button><button data-m="conf">Solo confirmadas</button><button data-m="gb">GB confirmado</button></div>`)+
+     card("Reservas con promesa por semana: confirmadas y activas","Todos los productos · las activas de las semanas recientes todavía tienen plazo para pagar, por eso la última semana tiene casi todo activo",`${cv("cPpUse",270)}`))+
+   sec(3,"¿Dónde creció?","Promesa por producto y por país",
+     card("Reservas con promesa por semana, según producto","Confirmadas más activas",`${cv("cPpProd",300)}`)+
+     card("Promesa por producto, antes vs después","C = confirmadas, A = activas. Share = (C + A) sobre las reservas no canceladas del producto",
+       `<table class="stbl"><thead><tr><th>Producto</th><th class="num">C antes</th><th class="num">A antes</th><th class="num">C después</th><th class="num">A después</th><th class="num">Share antes</th><th class="num">Share después</th></tr></thead><tbody id="ppTbP"></tbody></table>${rd("ppGbP")}`)+
      card("Por país","Reservas con promesa desde la prendida (todos los productos)",`<table class="stbl"><thead><tr><th>País</th><th class="num">Con promesa</th><th class="num">Confirmadas</th><th class="num">Activas</th><th class="num">Canceladas</th><th class="num">Tasa de regularización</th><th class="num">GB con promesa</th></tr></thead><tbody id="ppTbC"></tbody></table><div class="card-sub" style="margin-top:8px">Tasa de regularización = confirmadas sobre las ya cerradas (confirmadas + canceladas); las activas todavía pueden resolverse.</div>`))+
-   `<section class="imp-sec" id="isec4"><div class="sec-h"><span class="sec-n">4</span><div><h3>Agencias</h3><p>Cuántas agencias usan promesa, cuántas son nuevas y si compran más</p></div></div>
+   sec(4,"¿Es volumen nuevo?","Si la promesa generara demanda, deberían subir las ventas totales: se mira todo el canal, producto por producto",
+     card("GB confirmado semanal, todos los productos","Línea llena = real · punteada = tendencia de las semanas previas extendida hacia adelante (contrafactual)",`${cv("cPpTot",290)}${rd("ppTotRd")}`+
+       meth("Bloques de 7 días contados desde la prendida; solo bloques completos. Contrafactual = recta ajustada a los bloques previos y extendida hacia adelante. No captura estacionalidad (octubre y noviembre) ni otras iniciativas, así que es una referencia y no una prueba de causalidad."))+
+     card("Índice de GB por grupo de producto","Promedio de los bloques previos a la prendida = 100. Si la promesa moviera la aguja, los productos nuevos se separarían de la línea de control",`${cv("cPpIdx",290)}${rd("ppIdxRd")}`)+
+     card("Antes vs después por producto","GB y reservas confirmadas, "+N+" días contra "+N+" días",`<table class="stbl"><thead><tr><th>Producto</th><th>Promesa</th><th class="num">GB antes</th><th class="num">GB después</th><th class="num">Variación</th><th class="num">Reservas antes</th><th class="num">Reservas después</th><th class="num">Variación</th></tr></thead><tbody id="ppTbG"></tbody></table><div class="card-sub" style="margin-top:8px">En los subtotales, las reservas se suman por línea de producto: un paquete con hotel y vuelo cuenta en cada uno. Solo el total cuenta reservas únicas.</div>`)+
+     card("GB confirmado por producto nuevo vs contrafactual","Línea llena = GB real; punteada = tendencia previa extendida",`${cv("cPpCf",320)}${rd("ppCfRd")}`)+
+     card("Reservas confirmadas semanales en productos nuevos","Todos los medios de pago, con y sin promesa",`${cv("cPpNew",250)}${rd("ppNewRd")}`)+
+     card("Cambio de mix de pago en productos nuevos","Variación en puntos porcentuales del share de reservas confirmadas, después menos antes",`${cv("cPpMix",300)}${rd("ppMixRd")}`+
+       meth("Medio de pago declarado de cada reserva confirmada en productos nuevos (Tarjeta de crédito, Link de pago, Efectivo, etc.). La promesa se identifica por su condición diferida y no por el medio declarado, porque al pagarse deja de figurar como medio. Una reserva con varios medios cuenta en el grupo que figura en la tabla de productos del canal."))+
+     card("Prueba por agencia: tratadas vs control","Variación antes → después de las reservas y el GB confirmados en productos nuevos",`<div id="ppTc"></div>${rd("ppTcRd")}`+
+       meth("Tratadas = agencias que ya compraban productos nuevos antes de la prendida, siguen comprando después y usaron promesa en productos nuevos (confirmada o activa). Control = agencias que compraron en ambos períodos y no la usaron. Si la promesa generara demanda, las tratadas deberían crecer más que el control. Una agencia nueva en el período posterior no entra en esta comparación.")))+
+   `<section class="imp-sec" id="isec5"><div class="sec-h"><span class="sec-n">5</span><div><h3>¿Qué agencias?</h3><p>Cuántas agencias usan promesa, cuántas son nuevas y quiénes la concentran</p></div></div>
      <div class="card"><div class="card-hdr"><div><div class="card-title">Agencias con promesa: antes vs después de la prendida</div><div class="card-sub" id="ppAgSub"></div></div>
        <div class="gran" id="ppAgM"><button data-m="all">Confirmadas + activas</button><button data-m="conf">Solo confirmadas</button></div></div>
        <div id="ppAgK" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 12px"></div>
@@ -1082,13 +1090,15 @@ function renderPp(d,cfg){
          <div class="card-sub" id="ppAgCon" style="margin-top:10px;font-weight:600"></div></div>
        <div class="card"><div class="card-hdr"><div><div class="card-title">Agencias por país</div><div class="card-sub">Con promesa en cualquier producto</div></div></div>
          <table class="stbl"><thead><tr><th>País</th><th class="num">Antes</th><th class="num">Después</th><th class="num">En productos nuevos</th></tr></thead><tbody id="ppAgT2"></tbody></table></div></div>
-     ${card("Prueba por agencia: tratadas vs control","Variación antes → después de las órdenes y el GB confirmados en productos nuevos",`<div id="ppTc"></div><div class="card-sub" id="ppTcRd" style="margin-top:10px;font-weight:600"></div>`+
-       meth("Tratadas = agencias que ya compraban productos nuevos antes de la prendida, siguen comprando después y usaron promesa en productos nuevos (confirmada o activa). Control = agencias que compraron en ambos períodos y no la usaron. Si la promesa generara demanda, las tratadas deberían crecer más que el control. Una agencia nueva en el período posterior no entra en esta comparación."))}
-   </section>`;
+   </section>`+
+   sec(6,"Qué falta validar","Cuántas de las reservas activas se van a pagar y por qué se cancelan",
+     card("Estado actual de las reservas creadas con promesa","Todas las reservas creadas en cada período, por estado",`${cv("cPpSt",230)}${rd("ppStRd")}`)+
+     card("Por qué se cancelan las reservas con promesa","Motivo de cancelación de las que se cancelaron, en %",`${cv("cPpCa",270)}${rd("ppCaRd")}`+meth("Motivo según el campo de cancelación de la tabla de productos del canal: la agencia cancela, vence sin pago (el cliente o el gestor no cobraron a tiempo), error de reserva u otros."))+
+     card("Para tener en cuenta","",`<ul class="card-sub" style="margin:0;padding-left:18px;line-height:1.6"><li>El GB de las reservas activas no se cuenta: solo se mide el GB de lo confirmado.</li><li>Una reserva activa de la semana pasada todavía puede pagarse o cancelarse, por eso el aumento de las últimas semanas sobreestima lo que terminará confirmándose.</li><li>El "antes" y el "después" cubren el mismo número de días, pero el antes tiene reservas ya maduras y el después no: comparar confirmadas puede subestimar el efecto.</li><li>Hay rotación natural de agencias; que una agencia empiece a usar promesa no implica que lo haga por la prendida.</li><li>Los productos de control no son perfectos (por ejemplo, Parques cae por otras razones): la comparación es una referencia, no una prueba.</li></ul>`));
   $("impBack").onclick=()=>setPage("lista");
   $("impact").querySelectorAll(".sec-nav a").forEach(a=>a.onclick=()=>$(a.dataset.t).scrollIntoView({behavior:"smooth",block:"start"}));
   // ---- datos y helpers ----
-  let cc="ALL",agM="all",npP="ALL",usK="NEW";
+  let cc="ALL",agM="all",npP="ALL",shM="tot";
   const ONS=new Set(cfg.a.filter(x=>NEWC.includes(x[2])&&x[4]===1&&x[0]>=L&&x[5]>0).map(x=>x[1]));   // países con promesa en productos nuevos = prendidos
   const nb=Math.floor(N/7),blocks=[...Array(2*nb)].map((_,i)=>i-nb);
   const bIdx=dd=>Math.floor((Date.parse(dd+"T00:00:00Z")-Date.parse(L+"T00:00:00Z"))/864e5/7);
@@ -1107,59 +1117,79 @@ function renderPp(d,cfg){
   function draw(){
     document.querySelectorAll("#ppC button").forEach(b=>b.classList.toggle("active",b.dataset.c===cc));
     document.querySelectorAll("#ppNp button").forEach(b=>b.classList.toggle("active",b.dataset.p===npP));
-    document.querySelectorAll("#ppCl button").forEach(b=>b.classList.toggle("active",b.dataset.k===usK));
+    document.querySelectorAll("#ppSM button").forEach(b=>b.classList.toggle("active",b.dataset.m===shM));
     const R=rowsA(),ctyTxt=cc==="ALL"?"todos los países":(CN[cc]||cc);
-    const conf=x=>x[3]==="C",isProm=x=>x[4]===1,isG=(gs)=>x=>gs.includes(x[2]);
+    const conf=x=>x[3]==="C",isProm=x=>x[4]===1,use=x=>x[3]==="C"||x[3]==="A";
     const P=(f,fld)=>S(R,x=>isPre(x)&&f(x),fld),Q=(f,fld)=>S(R,x=>!isPre(x)&&f(x),fld);
     const per=" · "+N+" días desde la prendida ("+fdate(L)+") contra los "+N+" días anteriores ("+fdate(cfg.pre_from)+" al "+fdate(addD(L,-1))+")";
-    // ---- 1 · ¿movió la aguja? ----
-    $("ppSub").textContent="GB y reservas confirmadas de todos los productos · "+ctyTxt+per;
-    const T=x=>x[2]==="TT"&&conf(x),gT0=P(T,6),gT1=Q(T,6),oT0=P(T,5),oT1=Q(T,5);
-    const nw=x=>NEWC.includes(x[2])&&conf(x),ct=x=>CTRC.includes(x[2])&&conf(x);
-    const gN0=P(nw,6),gN1=Q(nw,6),gC0=P(ct,6),gC1=Q(ct,6);
-    const vT=gT0?(gT1/gT0-1)*100:0,vN=gN0?(gN1/gN0-1)*100:0,vC=gC0?(gC1/gC0-1)*100:0,vO=oT0?(oT1/oT0-1)*100:0,dif=vN-vC;
-    const gP=Q(x=>nw(x)&&isProm(x),6);
-    const vs=(a,b)=>`<span style="color:${col(b/a-1)}">${a?pf((b/a-1)*100):"-"}</span>`;
-    $("ppNd").innerHTML=kb("GB confirmado, todos los productos","USD "+fmtN(gT0)+" → "+fmtN(gT1),vs(gT0,gT1)+" vs antes","#0F1834")+
-      kb("Reservas confirmadas, todos los productos",fmtN(oT0)+" → "+fmtN(oT1),vs(oT0,oT1)+" vs antes (reservas únicas)","#0F1834")+
-      kb("GB de productos nuevos","USD "+fmtN(gN0)+" → "+fmtN(gN1),vs(gN0,gN1)+" · Autos, Traslados, Asistencia y Actividades","#ED8B08")+
-      kb("GB de productos sin promesa (control)","USD "+fmtN(gC0)+" → "+fmtN(gC1),vs(gC0,gC1)+" · Vuelos, Parques, Seguros","#94A3B8")+
-      kb("Productos nuevos vs control",pp1(dif),"variación de los nuevos menos variación del control","#3B82F6")+
-      kb("GB confirmado con promesa en productos nuevos","USD "+fmtN(gP),pc(gP,gN1)+" del GB de esos productos desde la prendida","#10B981");
-    $("ppNdRd").textContent="Los productos nuevos variaron "+pf(vN)+" y los productos sin promesa "+pf(vC)+" ("+pp1(dif)+" de diferencia). "+(Math.abs(dif)<3?"No se ve que los productos con promesa se hayan separado del resto.":dif>0?"Los productos con promesa crecieron más que el control: una señal a validar.":"Los productos con promesa crecieron menos que el control.")+" Es una referencia, no una prueba de causalidad.";
-    // ---- 1 · prendida en productos nuevos (países prendidos) ----
+    // ---- 1 · uso en productos nuevos (países prendidos) ----
     const inOn=x=>ONS.has(x[1])&&(cc==="ALL"||x[1]===cc);
     const RN=cfg.a.filter(x=>NEWC.includes(x[2])&&!isPre(x)&&inOn(x)&&(npP==="ALL"||x[2]===npP));
     const kN=s=>S(RN,x=>isProm(x)&&x[3]===s,5);
     const nReg=kN("C"),nAct=kN("A"),nCan=kN("X"),nGen=nReg+nAct+nCan,nGb=S(RN,x=>isProm(x)&&x[3]==="C",6),nGbT=S(RN,x=>x[3]==="C",6);
+    const nDen=S(RN,use,5),nUse=nReg+nAct;
     const onTxt=[...ONS].filter(c=>cc==="ALL"||c===cc).map(c=>flag(c)+" "+(CN[c]||c)).join(", ")||"ninguno";
     $("ppNpSub").innerHTML=(npP==="ALL"?"Productos nuevos":GN[npP])+" · países prendidos: "+onTxt+" · desde el "+fdate(L);
     $("ppNpK").innerHTML=kb("Promesas generadas",fmtN(nGen),"reservas creadas con promesa de pago","#ED8B08")+kb("Regularizadas",fmtN(nReg),pc(nReg,nGen)+" de las generadas ya se pagaron y están confirmadas","#10B981")+kb("Tasa de regularización",pc(nReg,nReg+nCan),"sobre las "+fmtN(nReg+nCan)+" ya cerradas (sin contar activas)","#10B981")+
-      kb("Activas",fmtN(nAct),"todavía dentro del plazo de pago","#F7B955")+kb("Vencidas o canceladas",fmtN(nCan),pc(nCan,nGen)+" de las generadas","#EF4444")+kb("GB confirmado con promesa","USD "+fmtN(nGb),pc(nGb,nGbT)+" del GB confirmado del producto","#8B5CF6");
+      kb("Activas",fmtN(nAct),"todavía dentro del plazo de pago","#F7B955")+kb("Vencidas o canceladas",fmtN(nCan),pc(nCan,nGen)+" de las generadas","#EF4444")+kb("GB confirmado con promesa","USD "+fmtN(nGb),pc(nGb,nGbT)+" del GB confirmado · share del uso "+pc(nUse,nDen),"#8B5CF6");
+    // ---- 1 · agencias ----
     const CT=cfg.ctl.filter(r=>ONS.has(r[1])&&(cc==="ALL"||r[1]===cc));
     const bPost=CT.filter(r=>r[4]>0),bPre=CT.filter(r=>r[2]>0),bPromo=bPost.filter(r=>r[6]>0),bNew=bPost.filter(r=>r[2]===0),bNewP=bNew.filter(r=>r[6]>0);
-    $("ppNpA").innerHTML=kb("Agencias compradoras, después",fmtN(bPost.length),"con al menos una reserva confirmada · antes: "+fmtN(bPre.length),"#3B82F6")+kb("Usaron promesa",fmtN(bPromo.length),pc(bPromo.length,bPost.length)+" de las compradoras","#ED8B08")+kb("No usaron promesa",fmtN(bPost.length-bPromo.length),pc(bPost.length-bPromo.length,bPost.length)+" de las compradoras","#94A3B8")+kb("Compradoras nuevas",fmtN(bNew.length),fmtN(bNewP.length)+" con promesa y "+fmtN(bNew.length-bNewP.length)+" sin ella","#10B981");
-    // ---- 2 · total semanal con contrafactual ----
+    const ag=agCalc(),gAg=ag.pre.length?(ag.post.length/ag.pre.length-1)*100:0;
+    $("ppAgKm").innerHTML=kb("Agencias con promesa",fmtN(ag.pre.length)+" → "+fmtN(ag.post.length),pf(gAg)+" · confirmadas + activas · todos los productos","#3B82F6")+kb("Agencias compradoras, después",fmtN(bPost.length),"de productos nuevos · antes: "+fmtN(bPre.length),"#3B82F6")+kb("Usaron promesa",fmtN(bPromo.length),pc(bPromo.length,bPost.length)+" de las compradoras","#ED8B08")+kb("Compradoras nuevas",fmtN(bNew.length),fmtN(bNewP.length)+" con promesa y "+fmtN(bNew.length-bNewP.length)+" sin ella","#10B981");
+    // ---- 1 · efecto sobre la venta ----
+    $("ppSub").textContent="GB y reservas confirmadas de todos los productos · "+ctyTxt+per;
+    const T=x=>x[2]==="TT"&&conf(x),gT0=P(T,6),gT1=Q(T,6),oT0=P(T,5),oT1=Q(T,5);
+    const nw=x=>NEWC.includes(x[2])&&conf(x),ct=x=>CTRC.includes(x[2])&&conf(x);
+    const gN0=P(nw,6),gN1=Q(nw,6),gC0=P(ct,6),gC1=Q(ct,6);
+    const vN=gN0?(gN1/gN0-1)*100:0,vC=gC0?(gC1/gC0-1)*100:0,dif=vN-vC;
+    const gP=Q(x=>nw(x)&&isProm(x),6);
+    const vs=(a,b)=>`<span style="color:${col(b/a-1)}">${a?pf((b/a-1)*100):"-"}</span>`;
+    $("ppNd").innerHTML=kb("GB confirmado, todos los productos","USD "+fmtN(gT0)+" → "+fmtN(gT1),vs(gT0,gT1)+" vs antes","#0F1834")+
+      kb("Reservas confirmadas, todos los productos",fmtN(oT0)+" → "+fmtN(oT1),vs(oT0,oT1)+" vs antes (reservas únicas)","#0F1834")+
+      kb("Productos nuevos vs control",pp1(dif),"variación de los nuevos menos variación del control","#3B82F6")+
+      kb("GB de productos nuevos","USD "+fmtN(gN0)+" → "+fmtN(gN1),vs(gN0,gN1)+" · Autos, Traslados, Asistencia y Actividades","#ED8B08")+
+      kb("GB de productos sin promesa (control)","USD "+fmtN(gC0)+" → "+fmtN(gC1),vs(gC0,gC1)+" · Vuelos, Parques, Seguros","#94A3B8")+
+      kb("GB con promesa en productos nuevos","USD "+fmtN(gP),pc(gP,gN1)+" del GB de esos productos desde la prendida","#10B981");
+    $("ppNdRd").textContent="Los productos nuevos variaron "+pf(vN)+" y los productos sin promesa "+pf(vC)+" ("+pp1(dif)+" de diferencia). "+(Math.abs(dif)<3?"No se ve que los productos con promesa se hayan separado del resto.":dif>0?"Los productos con promesa crecieron más que el control: una señal a validar.":"Los productos con promesa crecieron menos que el control.")+" Es una referencia, no una prueba de causalidad.";
+    // ---- 2 · share semanal ----
+    const nuf=x=>isProm(x)&&(shM==="gb"?x[3]==="C":shM==="conf"?x[3]==="C":use(x));
+    const dnf=x=>shM==="gb"?x[3]==="C":use(x),fld=shM==="gb"?6:5;
+    const nu=byBlock(R,x=>x[2]==="TT"&&nuf(x),fld),de=byBlock(R,x=>x[2]==="TT"&&dnf(x),fld);
+    const sv=blocks.map((_,i)=>de[i]?nu[i]/de[i]*100:null),pre=sv.slice(0,nb).filter(v=>v!=null),post=sv.slice(nb).filter(v=>v!=null),ap=avg(pre),aq=avg(post);
+    const ln=(label,data,c,dash,pts)=>({label,data,borderColor:c,backgroundColor:c,borderWidth:dash?1.5:2.5,borderDash:dash?[6,5]:[],pointRadius:pts?4:0,tension:.25,spanGaps:false});
+    chart("cPpShare",{type:"line",data:{labels:lbl,datasets:[ln("Antes",sv.map((v,i)=>i<nb?v:null),"#94A3B8",0,1),ln("Después",sv.map((v,i)=>i>=nb?v:null),"#ED8B08",0,1),ln("Promedio antes",sv.map((v,i)=>i<nb?ap:null),"#94A3B8",1,0),ln("Promedio después",sv.map((v,i)=>i>=nb?aq:null),"#ED8B08",1,0)]},
+      options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+c.parsed.y.toFixed(1).replace(".",",")+"%"}}}),interaction:{mode:"index",intersect:false},scales:sc2(v=>v.toFixed(0)+"%","% de las reservas")},plugins:[MK]});
+    $("ppShareRd").textContent="Medido en "+(shM==="gb"?"el GB confirmado":shM==="conf"?"las reservas confirmadas":"el uso total (confirmadas + activas)")+", el promedio semanal pasó de "+ap.toFixed(1).replace(".",",")+"% a "+aq.toFixed(1).replace(".",",")+"% ("+pp1(aq-ap)+")."+(shM==="tot"?" Las activas de las semanas recientes todavía pueden pagarse o cancelarse.":shM==="gb"?" El GB de las activas no se cuenta.":"");
+    const uc=byBlock(R,x=>x[2]==="TT"&&isProm(x)&&x[3]==="C",5),ua=byBlock(R,x=>x[2]==="TT"&&isProm(x)&&x[3]==="A",5);
+    chart("cPpUse",{type:"bar",data:{labels:lbl,datasets:[{label:"Confirmadas",data:uc,backgroundColor:"#10B981"},{label:"Activas (sin pagar)",data:ua,backgroundColor:"#F7B955",borderRadius:{topLeft:6,topRight:6}}]},
+      options:{...lo({tooltip:{...tt,callbacks:{footer:it=>"Total: "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}}}),scales:sc2(v=>fmtN(v),"Reservas",1)},plugins:[MK]});
+    // ---- 3 · por producto y país ----
+    const PR=["HO","AL","AU","TR","AS","AC"];
+    chart("cPpProd",{type:"bar",data:{labels:lbl,datasets:PR.map(k=>({label:GN[k],data:byBlock(R,x=>isProm(x)&&use(x)&&x[2]===k,5),backgroundColor:GCOL[k]}))},
+      options:{...lo({tooltip:{...tt,callbacks:{footer:it=>"Total: "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}}}),scales:sc2(v=>fmtN(v),"Reservas con promesa",1)},plugins:[MK]});
+    const row=(l,f,st)=>{const c0=P(x=>f(x)&&isProm(x)&&x[3]==="C",5),a0=P(x=>f(x)&&isProm(x)&&x[3]==="A",5),c1=Q(x=>f(x)&&isProm(x)&&x[3]==="C",5),a1=Q(x=>f(x)&&isProm(x)&&x[3]==="A",5),d0=P(x=>f(x)&&use(x),5),d1=Q(x=>f(x)&&use(x),5);
+      return `<tr${st||""}><td>${l}</td><td class="num">${fmtN(c0)}</td><td class="num">${fmtN(a0)}</td><td class="num">${fmtN(c1)}</td><td class="num">${fmtN(a1)}</td><td class="num">${pc(c0+a0,d0)}</td><td class="num"><b>${pc(c1+a1,d1)}</b></td></tr>`;};
+    $("ppTbP").innerHTML=row("Hoteles",x=>x[2]==="HO")+row("Alquileres",x=>x[2]==="AL")+row("<b>Productos nuevos</b>",x=>NEWC.includes(x[2]),' style="background:var(--panel2)"')+["TR","AC","AU","AS"].map(k=>row("&nbsp;&nbsp;"+GN[k],x=>x[2]===k)).join("");
+    const gbk=k=>Q(x=>isProm(x)&&x[3]==="C"&&x[2]===k,6);
+    $("ppGbP").textContent="GB confirmado con promesa en productos nuevos: USD "+fmtN(gP)+" ("+pc(gP,gN1)+" del GB de esos productos): actividades "+fmtN(gbk("AC"))+", autos "+fmtN(gbk("AU"))+", traslados "+fmtN(gbk("TR"))+" y asistencia "+fmtN(gbk("AS"))+". Hoteles, donde ya existía: USD "+fmtN(gbk("HO"))+" desde la prendida.";
+    const prC=c=>{const k=s=>cfg.a.reduce((a,x)=>x[1]===c&&!isPre(x)&&x[2]!=="TT"&&isProm(x)&&x[3]===s?a+x[5]:a,0),c2=k("C"),a=k("A"),x2=k("X"),gb=cfg.a.reduce((s,x)=>x[1]===c&&!isPre(x)&&x[2]!=="TT"&&isProm(x)&&x[3]==="C"?s+x[6]:s,0);return [c,c2+a+x2,c2,a,x2,gb];};
+    $("ppTbC").innerHTML=C.map(prC).filter(r=>r[1]>0).map(([c,t,c2,a,x2,gb])=>`<tr><td>${flag(c)} ${CN[c]||c}</td><td class="num">${fmtN(t)}</td><td class="num">${fmtN(c2)}</td><td class="num">${fmtN(a)}</td><td class="num">${fmtN(x2)}</td><td class="num">${pc(c2,c2+x2)}</td><td class="num">USD ${fmtN(gb)}</td></tr>`).join("");
+    // ---- 4 · total semanal con contrafactual ----
     const yT=byBlock(R,T,6),fT=fit(yT),pT=yT.map((_,i)=>fT&&i>=nb?Math.max(0,Math.round(fT(i))):null);
     chart("cPpTot",{type:"line",data:{labels:lbl,datasets:[{label:"GB real",data:yT,borderColor:"#0F1834",backgroundColor:"#0F1834",borderWidth:3,pointRadius:3,tension:.25},{label:"Contrafactual (tendencia previa)",data:pT,borderColor:"#64748B",borderDash:[6,5],borderWidth:2,pointRadius:0,tension:0}]},
       options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y)}}}),scales:sc2(v=>fmtN(v/1000)+"k","GB semanal (USD)")},plugins:[MK]});
     const aT=yT.slice(nb).reduce((s,v)=>s+v,0),cT=pT.slice(nb).reduce((s,v)=>s+(v||0),0);
     $("ppTotRd").textContent=fT?"Desde el lanzamiento, el GB real de todos los productos fue USD "+fmtN(aT)+" contra USD "+fmtN(cT)+" de la tendencia previa ("+(cT?pf((aT/cT-1)*100):"-")+").":"";
-    // índice por grupo
-    const idxS=(name,gs,colr)=>{const y=byBlock(R,x=>gs.includes(x[2])&&conf(x),6),b=avg(y.slice(0,nb));return {label:name,data:y.map(v=>b?Math.round(v/b*1000)/10:null),borderColor:colr,backgroundColor:colr,borderWidth:3,pointRadius:3,tension:.25};};
+    const idxS=(name,gs,c)=>{const y=byBlock(R,x=>gs.includes(x[2])&&conf(x),6),b=avg(y.slice(0,nb));return {label:name,data:y.map(v=>b?Math.round(v/b*1000)/10:null),borderColor:c,backgroundColor:c,borderWidth:3,pointRadius:3,tension:.25};};
     const sI=[idxS("Productos nuevos",NEWC,"#ED8B08"),idxS("Hoteles y alquileres",OLDC,"#64748B"),idxS("Sin promesa (control)",CTRC,"#0EA5E9"),idxS("Total",["TT"],"#0F1834")];
-    chart("cPpIdx",{type:"line",data:{labels:lbl,datasets:sI},options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+c.parsed.y.toFixed(1).replace(".",",")}}}),scales:{y:{grid,ticks:{callback:v=>v},title:{display:true,text:"Índice (antes = 100)",color:"#64748B",font:{size:11,weight:"600"}}},x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true}}}},plugins:[MK]});
-    const lastAvg=s=>avg(s.data.slice(nb).filter(v=>v!=null));
-    $("ppIdxRd").textContent="Promedio de los bloques posteriores: "+sI.map(s=>s.label+" "+lastAvg(s).toFixed(1).replace(".",",")).join("  ·  ")+".";
-    // tabla por producto
-    const gRow=(g)=>{const g0=P(x=>x[2]===g&&conf(x),6),g1=Q(x=>x[2]===g&&conf(x),6),o0=P(x=>x[2]===g&&conf(x),5),o1=Q(x=>x[2]===g&&conf(x),5);return {g0,g1,o0,o1};};
+    chart("cPpIdx",{type:"line",data:{labels:lbl,datasets:sI},options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+c.parsed.y.toFixed(1).replace(".",",")}}}),scales:{y:{grid,title:{display:true,text:"Índice (antes = 100)",color:"#64748B",font:{size:11,weight:"600"}}},x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true}}}},plugins:[MK]});
+    $("ppIdxRd").textContent="Promedio de los bloques posteriores: "+sI.map(s=>s.label+" "+avg(s.data.slice(nb).filter(v=>v!=null)).toFixed(1).replace(".",",")).join("  ·  ")+".";
+    const gRow=(g)=>({g0:P(x=>x[2]===g&&conf(x),6),g1:Q(x=>x[2]===g&&conf(x),6),o0:P(x=>x[2]===g&&conf(x),5),o1:Q(x=>x[2]===g&&conf(x),5)});
     const trg=(nm,tag,a,st)=>`<tr${st||""}><td>${nm}</td><td>${tag}</td><td class="num">${fmtN(a.g0)}</td><td class="num">${fmtN(a.g1)}</td><td class="num"><b style="color:${col(a.g1-a.g0)}">${a.g0?pf((a.g1/a.g0-1)*100):"-"}</b></td><td class="num">${fmtN(a.o0)}</td><td class="num">${fmtN(a.o1)}</td><td class="num"><b style="color:${col(a.o1-a.o0)}">${a.o0?pf((a.o1/a.o0-1)*100):"-"}</b></td></tr>`;
     const sumR=gs=>gs.map(gRow).reduce((a,b)=>({g0:a.g0+b.g0,g1:a.g1+b.g1,o0:a.o0+b.o0,o1:a.o1+b.o1}),{g0:0,g1:0,o0:0,o1:0});
-    const grp=(title,gs,tag)=>{const rs=gs.filter(g=>{const a=gRow(g);return a.g0+a.g1+a.o0+a.o1>0;});return trg("<b>"+title+"</b>","",sumR(gs),' style="background:var(--panel2)"')+rs.map(g=>trg("&nbsp;&nbsp;"+GN[g],tag(g),gRow(g))).join("");};
-    const tagN=()=>'<span style="color:#ED8B08;font-weight:600">Nueva</span>',tagO=()=>"Ya existía",tagC=()=>'<span style="color:#64748B">Sin promesa</span>';
-    const tT=gRow("TT");
-    $("ppTbG").innerHTML=grp("Productos nuevos",NEWC,tagN)+grp("Con promesa desde antes",OLDC,tagO)+grp("Sin promesa (control)",CTRC,tagC)+trg("Total (todos los productos)","",tT,' style="border-top:2px solid var(--line);font-weight:700"');
-    // contrafactual por producto nuevo
+    const grp=(title,gs,tag)=>{const rs=gs.filter(g=>{const a=gRow(g);return a.g0+a.g1+a.o0+a.o1>0;});return trg("<b>"+title+"</b>","",sumR(gs),' style="background:var(--panel2)"')+rs.map(g=>trg("&nbsp;&nbsp;"+GN[g],tag,gRow(g))).join("");};
+    $("ppTbG").innerHTML=grp("Productos nuevos",NEWC,'<span style="color:#ED8B08;font-weight:600">Nueva</span>')+grp("Con promesa desde antes",OLDC,"Ya existía")+grp("Sin promesa (control)",CTRC,'<span style="color:#64748B">Sin promesa</span>')+trg("Total (todos los productos)","",gRow("TT"),' style="border-top:2px solid var(--line);font-weight:700"');
     const dsC=[],res=[];
     NEWC.forEach(k=>{const y=byBlock(R,x=>x[2]===k&&conf(x),6),f=fit(y),pj=y.map((_,i)=>f&&i>=nb?Math.max(0,Math.round(f(i))):null);
       dsC.push({label:GN[k],data:y,borderColor:GCOL[k],backgroundColor:GCOL[k],borderWidth:3,pointRadius:3,tension:.25});
@@ -1167,24 +1197,37 @@ function renderPp(d,cfg){
       if(f){const a=y.slice(nb).reduce((s,v)=>s+v,0),p=pj.slice(nb).reduce((s,v)=>s+(v||0),0);res.push(GN[k]+" "+(p?pf((a/p-1)*100):"-"));}});
     chart("cPpCf",{type:"line",data:{labels:lbl,datasets:dsC},options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label.replace(/^_/,"")+": USD "+fmtN(c.parsed.y)}}}),scales:sc2(v=>fmtN(v/1000)+"k","GB semanal (USD)")},plugins:[MK]});
     $("ppCfRd").textContent="Real vs contrafactual desde el lanzamiento: "+res.join("  ·  ")+". Una recta no captura estacionalidad: si el GB venía subiendo antes, cualquier semana normal queda por debajo.";
-    // ---- 3 · uso de la promesa ----
-    const gs=CL[usK][1],inG=x=>gs.includes(x[2]);
-    $("ppUsSub").textContent=CL[usK][0]+" · "+ctyTxt+" · bloques de 7 días desde la prendida · las activas de las semanas recientes todavía pueden pagarse o cancelarse";
-    const mk=s=>byBlock(R,x=>inG(x)&&isProm(x)&&x[3]===s,5);
-    chart("cPpUs",{type:"bar",data:{labels:lbl,datasets:[{label:"Confirmadas",data:mk("C"),backgroundColor:"#10B981"},{label:"Activas (sin pagar)",data:mk("A"),backgroundColor:"#F7B955"},{label:"Canceladas",data:mk("X"),backgroundColor:"#EF4444",borderRadius:{topLeft:6,topRight:6}}]},
-      options:{...lo({tooltip:{...tt,callbacks:{footer:it=>"Total: "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}}}),scales:sc2(v=>fmtN(v),"Reservas con promesa",1)},plugins:[MK]});
-    const gp=byBlock(R,x=>inG(x)&&conf(x)&&isProm(x),6),go=byBlock(R,x=>inG(x)&&conf(x)&&!isProm(x),6);
-    chart("cPpUg",{type:"bar",data:{labels:lbl,datasets:[{label:"Otros medios de pago",data:go.map(Math.round),backgroundColor:"#CBD5E1"},{label:"Con promesa",data:gp.map(Math.round),backgroundColor:"#ED8B08",borderRadius:{topLeft:6,topRight:6}}]},
-      options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": USD "+fmtN(c.parsed.y),footer:it=>"Total: USD "+fmtN(it.reduce((a,x)=>a+x.parsed.y,0))}}}),scales:sc2(v=>fmtN(v/1000)+"k","GB (USD)",1)},plugins:[MK]});
-    const pr=(f)=>{const k=s=>S(R,x=>!isPre(x)&&f(x)&&isProm(x)&&x[3]===s,5),c=k("C"),a=k("A"),xx=k("X"),gb=S(R,x=>!isPre(x)&&f(x)&&isProm(x)&&x[3]==="C",6),gt=S(R,x=>!isPre(x)&&f(x)&&x[3]==="C",6);return [c+a+xx,c,a,xx,gb,gt];};
-    const trp=(nm,v,st)=>`<tr${st||""}><td>${nm}</td><td class="num">${fmtN(v[0])}</td><td class="num">${fmtN(v[1])}</td><td class="num">${fmtN(v[2])}</td><td class="num">${fmtN(v[3])}</td><td class="num">${pc(v[1],v[1]+v[3])}</td><td class="num">USD ${fmtN(v[4])}</td><td class="num">${pc(v[4],v[5])}</td></tr>`;
-    const pg=[...NEWC,...OLDC].filter(g=>pr(x=>x[2]===g)[0]>0);
-    $("ppTbP").innerHTML=pg.map(g=>trp(GN[g]+(NEWC.includes(g)?"":" (ya existía)"),pr(x=>x[2]===g))).join("")+trp("Total",pr(x=>[...NEWC,...OLDC].includes(x[2])),' style="border-top:2px solid var(--line);font-weight:700"');
-    const prC=c=>{const k=s=>cfg.a.reduce((a,x)=>x[1]===c&&!isPre(x)&&x[2]!=="TT"&&isProm(x)&&x[3]===s?a+x[5]:a,0),cc2=k("C"),a=k("A"),xx=k("X"),gb=cfg.a.reduce((s,x)=>x[1]===c&&!isPre(x)&&x[2]!=="TT"&&isProm(x)&&x[3]==="C"?s+x[6]:s,0);return [c,cc2+a+xx,cc2,a,xx,gb];};
-    $("ppTbC").innerHTML=C.map(prC).filter(r=>r[1]>0).map(([c,t,c2,a,x2,gb])=>`<tr><td>${flag(c)} ${CN[c]||c}</td><td class="num">${fmtN(t)}</td><td class="num">${fmtN(c2)}</td><td class="num">${fmtN(a)}</td><td class="num">${fmtN(x2)}</td><td class="num">${pc(c2,c2+x2)}</td><td class="num">USD ${fmtN(gb)}</td></tr>`).join("");
+    // reservas confirmadas semanales en productos nuevos + mix
+    const nv=byBlock(R,x=>NEWC.includes(x[2])&&conf(x),5),nc0=P(x=>NEWC.includes(x[2])&&conf(x),5),nc1=Q(x=>NEWC.includes(x[2])&&conf(x),5),nA1=Q(x=>NEWC.includes(x[2])&&isProm(x)&&x[3]==="A",5);
+    chart("cPpNew",{type:"bar",data:{labels:lbl,datasets:[{label:"Reservas confirmadas",data:nv,backgroundColor:blocks.map((_,i)=>i<nb?"#CBD5E1":"#ED8B08"),borderRadius:{topLeft:6,topRight:6},maxBarThickness:60}]},
+      options:{...baseOpts,plugins:{legend:{display:false},tooltip:{...tt,displayColors:false,callbacks:{label:c=>fmtN(c.parsed.y)+" reservas"}},vlabels:{on:true,size:10,fmt:v=>fmtN(v)},stacklabels:{on:false}},scales:sc2(v=>fmtN(v),"Reservas")},plugins:[MK]});
+    const tk=(f)=>{const n=Q(x=>NEWC.includes(x[2])&&conf(x)&&f(x),5),g=Q(x=>NEWC.includes(x[2])&&conf(x)&&f(x),6);return n?g/n:0;};
+    $("ppNewRd").textContent="Las reservas confirmadas de productos nuevos pasaron de "+fmtN(nc0)+" a "+fmtN(nc1)+(nc0?" ("+pf((nc1/nc0-1)*100)+")":"")+" y su GB "+(gN0?pf((gN1/gN0-1)*100):"-")+". Aun si las "+fmtN(nA1)+" activas se confirmaran todas y fueran incrementales, el total llegaría a "+fmtN(nc1+nA1)+" ("+(nc0?pf(((nc1+nA1)/nc0-1)*100):"-")+" contra antes). Ticket confirmado: USD "+fmtN(tk(isProm))+" con promesa contra USD "+fmtN(tk(x=>!isProm(x)))+" sin promesa.";
+    const MX=cfg.mix.filter(x=>cc==="ALL"||x[1]===cc),mn=(per2)=>{const o={};MX.forEach(x=>{if((x[0]<L)===(per2==="pre"))o[x[2]]=(o[x[2]]||0)+x[3];});return o;};
+    const m0=mn("pre"),m1=mn("post"),t0=Object.values(m0).reduce((a,b)=>a+b,0),t1=Object.values(m1).reduce((a,b)=>a+b,0);
+    const keys=[...new Set([...Object.keys(m0),...Object.keys(m1)])].map(k=>[k,(t1?((m1[k]||0)/t1*100):0)-(t0?((m0[k]||0)/t0*100):0)]).sort((a,b)=>a[1]-b[1]);
+    chart("cPpMix",{type:"bar",data:{labels:keys.map(k=>k[0]),datasets:[{data:keys.map(k=>Math.round(k[1]*100)/100),backgroundColor:keys.map(k=>k[0]==="Promesa de pago"?"#ED8B08":k[1]>=0?"#10B981":"#94A3B8"),borderRadius:6,maxBarThickness:34}]},
+      options:{...baseOpts,indexAxis:"y",plugins:{legend:{display:false},tooltip:{...tt,displayColors:false,callbacks:{label:c=>pp1(c.parsed.x)}},vlabels:{on:false},stacklabels:{on:false}},scales:{x:{grid,ticks:{callback:v=>v+" pp"}},y:{grid:{display:false}}}}});
+    const prm=keys.find(k=>k[0]==="Promesa de pago");
+    $("ppMixRd").textContent="Las reservas confirmadas de productos nuevos (todos los medios de pago) son "+fmtN(t0)+" antes y "+fmtN(t1)+" después. La promesa pasó a ser "+(t1?((m1["Promesa de pago"]||0)/t1*100).toFixed(1).replace(".",","):"0")+"% de las confirmadas"+(prm?" ("+pp1(prm[1])+")":"")+"; lo que más baja es "+(keys[0]?keys[0][0]+" ("+pp1(keys[0][1])+")":"-")+".";
+    // ---- 6 · estado, cancelaciones ----
+    const grpS=[["Hoteles, antes",x=>x[2]==="HO"&&isPre(x)],["Hoteles, después",x=>x[2]==="HO"&&!isPre(x)],["Productos nuevos, después",x=>NEWC.includes(x[2])&&!isPre(x)]];
+    const stK=[["Confirmadas","C","#10B981"],["Activas","A","#F7B955"],["Canceladas","X","#EF4444"]];
+    const st=grpS.map(([l,f])=>{const o={};stK.forEach(([,k])=>o[k]=S(R,x=>f(x)&&isProm(x)&&x[3]===k,5));return {l,o,t:Object.values(o).reduce((a,b)=>a+b,0)};});
+    chart("cPpSt",{type:"bar",data:{labels:st.map(s=>s.l),datasets:stK.map(([l,k,c])=>({label:l,data:st.map(s=>s.t?Math.round(s.o[k]/s.t*1000)/10:0),backgroundColor:c}))},
+      options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+c.parsed.x.toFixed(1).replace(".",",")+"%"}}}),indexAxis:"y",scales:{x:{stacked:true,max:100,grid,ticks:{callback:v=>v+"%"}},y:{stacked:true,grid:{display:false}}}}});
+    const s0=st[0],s2=st[2];
+    $("ppStRd").textContent="En hoteles del antes, el "+pc0(s0.o.C,s0.t)+" de las reservas creadas con promesa está confirmada, el "+pc0(s0.o.A,s0.t)+" sigue activa y el "+pc0(s0.o.X,s0.t)+" se canceló: es una referencia para no esperar que todas las activas de hoy se confirmen. En productos nuevos, de "+fmtN(s2.t)+" reservas creadas, "+fmtN(s2.o.C)+" están confirmadas, "+fmtN(s2.o.A)+" activas y "+fmtN(s2.o.X)+" canceladas.";
+    const CR=cfg.canc.filter(x=>cc==="ALL"||x[1]===cc),RS=["Cancela la agencia","Vence sin pago","Error de reserva","Otros"];
+    const cg=[["Hoteles, antes",x=>x[2]==="HO"&&x[0]<L],["Hoteles, después",x=>x[2]==="HO"&&x[0]>=L],["Productos nuevos, después",x=>x[2]==="NU"&&x[0]>=L]];
+    const cd=cg.map(([l,f])=>{const o={};RS.forEach(r=>o[r]=CR.reduce((s,x)=>f(x)&&x[3]===r?s+x[4]:s,0));return {l,o,t:Object.values(o).reduce((a,b)=>a+b,0)};});
+    chart("cPpCa",{type:"bar",data:{labels:RS,datasets:cd.map((c,i)=>({label:c.l,data:RS.map(r=>c.t?Math.round(c.o[r]/c.t*1000)/10:0),backgroundColor:["#94A3B8","#CBD5E1","#ED8B08"][i],borderRadius:4}))},
+      options:{...lo({tooltip:{...tt,callbacks:{label:c=>c.dataset.label+": "+c.parsed.y.toFixed(1).replace(".",",")+"%"}}}),scales:sc2(v=>v+"%","% de las canceladas")}});
+    const crt=(f)=>{const t=Q(x=>NEWC.includes(x[2])&&f(x),5),xx=Q(x=>NEWC.includes(x[2])&&f(x)&&x[3]==="X",5);return t?xx/t*100:0;};
+    $("ppCaRd").textContent="En productos nuevos se canceló el "+crt(isProm).toFixed(0)+"% de las reservas con promesa, contra "+crt(x=>!isProm(x)).toFixed(0)+"% de las que no la usan. Las tasas del período posterior son menores porque muchas reservas siguen activas y todavía pueden cancelarse.";
     drawAg();
   }
-  // ---- 4 · agencias ----
+  // ---- 5 · agencias ----
   function agCalc(){
     const ag=cfg.ag,R=ag.rows.filter(r=>cc==="ALL"||r[1]===cc),cf=agM==="conf";
     const q=(a,c)=>(cf?0:a)+c;
@@ -1201,7 +1244,7 @@ function renderPp(d,cfg){
     return {t:agg(T),c:agg(Cc),first:fi.length,firstP:fi.filter(r=>r[6]>0).length};
   }
   function drawAg(){
-    if(!cfg.ag.rows.length){$("isec4").style.display="none";return;}
+    if(!cfg.ag.rows.length){$("isec5").style.display="none";return;}
     document.querySelectorAll("#ppAgM button").forEach(b=>b.classList.toggle("active",b.dataset.m===agM));
     const ag=agCalc(),{A,pre,post,preS,postS,nvo,nvoPre,attr}=ag,n=cfg.ag.n;
     const sig=pre.filter(a=>postS.has(a.id)).length,sal=pre.length-sig,nue=post.filter(a=>!preS.has(a.id));
@@ -1228,18 +1271,18 @@ function renderPp(d,cfg){
     $("ppAgCon").textContent="Concentración: el 10% de las agencias reúne "+top(post,a=>a.qh+a.qn).toFixed(0)+"% de las reservas con promesa ("+top(pre,a=>a.pre).toFixed(0)+"% antes). Agencias con 2 o más reservas: "+fmtN(pre.filter(a=>a.pre>=2).length)+" → "+fmtN(post.filter(a=>a.qh+a.qn>=2).length)+".";
     const cn2=C.map(c=>[c,pre.filter(a=>a.c===c).length,post.filter(a=>a.c===c).length,nvo.filter(a=>a.c===c).length]).filter(r=>r[1]+r[2]>0).sort((a,b)=>b[2]-a[2]);
     $("ppAgT2").innerHTML=cn2.map(([c,a,b,z])=>`<tr><td>${flag(c)} ${CN[c]||c}</td><td class="num">${fmtN(a)}</td><td class="num">${fmtN(b)}</td><td class="num">${fmtN(z)}</td></tr>`).join("");
-    // tratadas vs control
+    // 4 · tratadas vs control
     const tc=tcCalc(),row2=(l,a,b)=>`<tr><td>${l}</td><td class="num">${a}</td><td class="num">${b}</td></tr>`;
     $("ppTc").innerHTML=`<table class="stbl"><thead><tr><th></th><th class="num">Tratadas (${fmtN(tc.t.n)} agencias)</th><th class="num">Control (${fmtN(tc.c.n)} agencias)</th></tr></thead><tbody>`+
-      row2("Órdenes antes → después",fmtN(tc.t.pn)+" → "+fmtN(tc.t.qn),fmtN(tc.c.pn)+" → "+fmtN(tc.c.qn))+row2("Variación de órdenes",`<b>${tc.t.pn?pf(tc.t.vn):"-"}</b>`,`<b>${tc.c.pn?pf(tc.c.vn):"-"}</b>`)+
+      row2("Reservas antes → después",fmtN(tc.t.pn)+" → "+fmtN(tc.t.qn),fmtN(tc.c.pn)+" → "+fmtN(tc.c.qn))+row2("Variación de reservas",`<b>${tc.t.pn?pf(tc.t.vn):"-"}</b>`,`<b>${tc.c.pn?pf(tc.c.vn):"-"}</b>`)+
       row2("GB antes → después","USD "+fmtN(tc.t.pg)+" → "+fmtN(tc.t.qg),"USD "+fmtN(tc.c.pg)+" → "+fmtN(tc.c.qg))+row2("Variación de GB",`<b>${tc.t.pg?pf(tc.t.vg):"-"}</b>`,`<b>${tc.c.pg?pf(tc.c.vg):"-"}</b>`)+
       row2("Agencias que suben / bajan",pc0(tc.t.up,tc.t.n)+" / "+pc0(tc.t.dn,tc.t.n),pc0(tc.c.up,tc.c.n)+" / "+pc0(tc.c.dn,tc.c.n))+
-      row2("Órdenes sin promesa antes → después",fmtN(tc.t.pn)+" → "+fmtN(tc.t.qn-tc.t.pm),fmtN(tc.c.pn)+" → "+fmtN(tc.c.qn))+row2("Órdenes con promesa después",fmtN(tc.t.pm),"0")+`</tbody></table>`;
-    $("ppTcRd").textContent=(tc.t.n&&tc.c.n?"Las órdenes confirmadas de las agencias que usan promesa evolucionan "+pf(tc.t.vn)+" contra "+pf(tc.c.vn)+" del control"+(tc.t.vn-tc.c.vn>3?": crecen más, aunque puede deberse al tamaño de las agencias y no alcanza para hablar de incremental. ":": no compran más que las que no la usan. "):"")+"De "+fmtN(tc.first)+" agencias que compraron productos nuevos por primera vez después, "+fmtN(tc.firstP)+" lo hicieron con promesa y "+fmtN(tc.first-tc.firstP)+" sin ella.";
+      row2("Reservas sin promesa antes → después",fmtN(tc.t.pn)+" → "+fmtN(tc.t.qn-tc.t.pm),fmtN(tc.c.pn)+" → "+fmtN(tc.c.qn))+row2("Reservas con promesa después",fmtN(tc.t.pm),"0")+`</tbody></table>`;
+    $("ppTcRd").textContent=(tc.t.n&&tc.c.n?"Las reservas confirmadas de las agencias que usan promesa evolucionan "+pf(tc.t.vn)+" contra "+pf(tc.c.vn)+" del control"+(tc.t.vn-tc.c.vn>3?": crecen más, aunque puede deberse al tamaño de las agencias y no alcanza para hablar de incremental. ":": no compran más que las que no la usan. "):"")+"De "+fmtN(tc.first)+" agencias que compraron productos nuevos por primera vez después, "+fmtN(tc.firstP)+" lo hicieron con promesa y "+fmtN(tc.first-tc.firstP)+" sin ella.";
   }
   $("ppC").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;cc=b.dataset.c;draw();};
   $("ppNp").onclick=e=>{const b=e.target.closest("[data-p]");if(!b)return;npP=b.dataset.p;draw();};
-  $("ppCl").onclick=e=>{const b=e.target.closest("[data-k]");if(!b)return;usK=b.dataset.k;draw();};
+  $("ppSM").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;shM=b.dataset.m;draw();};
   $("ppAgM").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;agM=b.dataset.m;drawAg();};
   draw();
 }

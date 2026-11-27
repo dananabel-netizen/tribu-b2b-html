@@ -1046,7 +1046,7 @@ function renderPp(d,cfg){
   $("impact").innerHTML=head+
    `<div class="sec-nav">${[["isec1","1 · Key Metrics"],["isec2","2 · ¿Se usa más?"],["isec3","3 · ¿Dónde creció?"],["isec4","4 · ¿Es volumen nuevo?"],["isec5","5 · ¿Qué agencias?"],["isec6","6 · Qué falta validar"]].map(([i,t])=>`<a data-t="${i}">${t}</a>`).join("")}</div>`+filt+
    sec(1,"Key Metrics","Uso de la promesa, agencias y efecto sobre la venta",
-     card("Uso de la promesa en productos nuevos","#ppNpSub",`<div id="ppNpK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>`+
+     card("Uso de la promesa en productos nuevos","",`<div id="ppNpK" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>`+
        meth(`Reservas con promesa de pago creadas desde la prendida en los países donde ya está prendida (los que tienen reservas con promesa en productos nuevos), por producto. Generadas = confirmadas + activas + canceladas. Tasa de confirmación = confirmadas sobre las ya cerradas (confirmadas + canceladas); las activas todavía pueden resolverse. GB confirmado con promesa: solo reservas confirmadas. Share = reservas con promesa (confirmadas + activas) sobre las reservas no canceladas del producto, con todos los medios de pago. ${GEN}`),
        `<div class="gran" id="ppNp"><button data-p="ALL">Todos</button><button data-p="AU">Autos</button><button data-p="TR">Traslados</button><button data-p="AS">Asistencias</button><button data-p="AC">Actividades</button></div>`)+
      card("Agencias","Agencias con promesa y agencias compradoras de productos nuevos",`<div id="ppAgKm" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>`+
@@ -1128,8 +1128,6 @@ function renderPp(d,cfg){
     const kN=s=>S(RN,x=>isProm(x)&&x[3]===s,5);
     const nReg=kN("C"),nAct=kN("A"),nCan=kN("X"),nGen=nReg+nAct+nCan,nGb=S(RN,x=>isProm(x)&&x[3]==="C",6),nGbT=S(RN,x=>x[3]==="C",6);
     const nDen=S(RN,use,5),nUse=nReg+nAct;
-    const onTxt=[...ONS].filter(c=>cc==="ALL"||c===cc).map(c=>flag(c)+" "+(CN[c]||c)).join(", ")||"ninguno";
-    $("ppNpSub").innerHTML=(npP==="ALL"?"Productos nuevos":GN[npP])+" · países prendidos: "+onTxt+" · desde el "+fdate(L);
     $("ppNpK").innerHTML=kb("Promesas generadas",fmtN(nGen),"reservas creadas con promesa de pago","#ED8B08")+kb("Confirmadas",fmtN(nReg),pc(nReg,nGen)+" de las generadas ya se pagaron y están confirmadas","#10B981")+kb("Tasa de confirmación",pc(nReg,nReg+nCan),"sobre las "+fmtN(nReg+nCan)+" ya cerradas (sin contar activas)","#10B981")+
       kb("Activas",fmtN(nAct),"todavía dentro del plazo de pago","#F7B955")+kb("Vencidas o canceladas",fmtN(nCan),pc(nCan,nGen)+" de las generadas","#EF4444")+kb("GB confirmado con promesa","USD "+fmtN(nGb),pc(nGb,nGbT)+" del GB confirmado · share del uso "+pc(nUse,nDen),"#8B5CF6");
     // ---- 1 · agencias ----

@@ -2,6 +2,20 @@
  "updated": "2026-11-26",
  "initiatives": [
   [
+   "Cambio en seleccionar Medio de devolución (visual)",
+   "2026-11-25",
+   "Todos",
+   "",
+   "Se prendio la nueva visual de *Cambio en seleccionar Medio de devolución (visual)*"
+  ],
+  [
+   "Rollout  (Prefondeo) Anticipo HDO Pay PE-BR",
+   "2026-11-27",
+   "BR,PE",
+   "",
+   "HDOPay ya permite a las agencias de viaje *Anticipar su cuenta mediante transferencias bancarias* — el agente registra el depósito como Anticipo, adjunta el comprobante y el equipo de HotelDO lo valida para que el saldo quede disponible en el checkout de cualquier producto."
+  ],
+  [
    "HDO Academy USA",
    "2026-11-25",
    "US,PA",

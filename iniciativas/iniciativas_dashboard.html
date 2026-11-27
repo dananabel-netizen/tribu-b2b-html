@@ -1130,7 +1130,7 @@ function renderPp(d,cfg){
     const nDen=S(RN,use,5),nUse=nReg+nAct;
     const onTxt=[...ONS].filter(c=>cc==="ALL"||c===cc).map(c=>flag(c)+" "+(CN[c]||c)).join(", ")||"ninguno";
     $("ppNpSub").innerHTML=(npP==="ALL"?"Productos nuevos":GN[npP])+" · países prendidos: "+onTxt+" · desde el "+fdate(L);
-    $("ppNpK").innerHTML=kb("Promesas generadas",fmtN(nGen),"reservas creadas con promesa de pago","#ED8B08")+kb("Regularizadas",fmtN(nReg),pc(nReg,nGen)+" de las generadas ya se pagaron y están confirmadas","#10B981")+kb("Tasa de regularización",pc(nReg,nReg+nCan),"sobre las "+fmtN(nReg+nCan)+" ya cerradas (sin contar activas)","#10B981")+
+    $("ppNpK").innerHTML=kb("Promesas generadas",fmtN(nGen),"reservas creadas con promesa de pago","#ED8B08")+kb("Confirmadas",fmtN(nReg),pc(nReg,nGen)+" de las generadas ya se pagaron y están confirmadas","#10B981")+kb("Tasa de regularización",pc(nReg,nReg+nCan),"sobre las "+fmtN(nReg+nCan)+" ya cerradas (sin contar activas)","#10B981")+
       kb("Activas",fmtN(nAct),"todavía dentro del plazo de pago","#F7B955")+kb("Vencidas o canceladas",fmtN(nCan),pc(nCan,nGen)+" de las generadas","#EF4444")+kb("GB confirmado con promesa","USD "+fmtN(nGb),pc(nGb,nGbT)+" del GB confirmado · share del uso "+pc(nUse,nDen),"#8B5CF6");
     // ---- 1 · agencias ----
     const CT=cfg.ctl.filter(r=>ONS.has(r[1])&&(cc==="ALL"||r[1]===cc));
